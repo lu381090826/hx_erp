@@ -1,6 +1,6 @@
 <?php
 
-class HX_MODEL extends CI_Model
+class HX_Model extends CI_Model
 {
 
     protected $total_num = 0;
