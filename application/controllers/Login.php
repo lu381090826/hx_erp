@@ -16,7 +16,7 @@ class Login extends CI_Controller {
 
     public function confirm()
     {
-        $this->load->model('User_model', 'user');
+        $this->load->model('user_model', 'user');
         $res = $this->user->get_user_info();
 
         if (!$res) {
