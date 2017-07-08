@@ -125,6 +125,9 @@
                     <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span class="am-icon-dollar"></span> 财务管理</button>
                 </div>
                 <div class="am-topbar-right">
+                    <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span class="am-icon-scissors"></span> 生产管理</button>
+                </div>
+                <div class="am-topbar-right">
                     <a href="/sys"><button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span class="am-icon-cogs"></span> 系统管理</button></a>
                 </div>
 

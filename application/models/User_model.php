@@ -18,9 +18,9 @@ class User_model extends HX_Model
     }
 
 
-    public function get_user_info()
+    public function get_user_info_by_password()
     {
-        $s = "SELECT * FROM {$this->table} WHERE Fmobile = ? AND Fpassword = ? ;";
+        $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1 AND Fmobile = ? AND Fpassword = ? ;";
 
         $ret = $this->db->query($s, [
             $this->input->post('mobile'),
@@ -32,7 +32,7 @@ class User_model extends HX_Model
 
     public function check_mobile_available($request)
     {
-        $s = "SELECT * FROM {$this->table} WHERE Fmobile = ? ;";
+        $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1  AND Fmobile = ? ;";
 
         $ret = $this->db->query($s, [
             $request['mobile']
@@ -45,18 +45,26 @@ class User_model extends HX_Model
 
     public function get_user_list($page)
     {
-        $s = "SELECT * FROM {$this->table}";
+        $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1";
         $ret = $this->db->query($s);
         $this->total_num = $ret->num_rows();
 
-        $s = "SELECT * FROM {$this->table}  LIMIT ? , ?;";
+        $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1 LIMIT ? , ?;";
         $this->offset = 0;
         $this->limit = 10;
         $ret = $this->db->query($s, [
             $this->offset + ($page - 1) * $this->limit,
             $this->limit
         ]);
+
         return $this->suc_out_put($ret->result('array'));
+    }
+
+    public function get_user_row_by_uid($uid)
+    {
+        $s = "SELECT * FROM {$this->table}  WHERE Fstatus = 1 AND Fuid = ? LIMIT 1;";
+        $ret = $this->db->query($s, [$uid]);
+        return $this->suc_out_put($ret->row(0,'array'));
     }
 
     private function insert_user_check($request)

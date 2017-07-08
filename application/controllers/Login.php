@@ -17,7 +17,7 @@ class Login extends CI_Controller {
     public function confirm()
     {
         $this->load->model('user_model', 'user');
-        $res = $this->user->get_user_info();
+        $res = $this->user->get_user_info_by_password();
 
         if (!$res) {
             show_error('登录失败，请检查用户名和密码');
