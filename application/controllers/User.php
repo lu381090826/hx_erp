@@ -11,11 +11,10 @@ class User extends HX_Controller
 
     public function user_detail($uid)
     {
-        $user_info = $this->m_user->get_user_row_by_uid($uid);
+        $user_info = $this->m_user->get_row_by_uid($uid);
 
         $this->load->library('parser');
-        $this->parser->parse('sys/user/userDetail', $user_info['result_rows']);
-//        $this->load->view('sys/user/userDetail');
+        $this->parser->parse('sys/user/detail', $user_info['result_rows']);
     }
 
 }

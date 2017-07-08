@@ -10,8 +10,11 @@ $this->load->view('head');
     <option value="get_roles">角色管理</option>
     <option value="get_auths">权限管理</option>
 </select>
-<button type="button" class="am-btn am-btn-success" onclick="window.location.href='/sys/action_add_user'">添加用户
-</button>
+<br>
+<br>
+<div id="from_buttons">
+
+</div>
 <hr>
 <!--表格子-->
 <table class="am-table">
@@ -30,7 +33,7 @@ $this->load->view('head');
 <script type="text/javascript" src="/assets/js/amazeui.page.js"></script>
 <script>
     var controller = 'sys';
-    var method = 'get_users';
+    var method = $('#sys_select').val();
     var from_thead = $('#from_thead');
     var from_contant = $('#from_contant');
     var from_buttons = $('#from_buttons');
@@ -47,7 +50,7 @@ $this->load->view('head');
     }
 
     $(document).ready(function () {
-        fromLoad()
+        fromLoad();
     });
 
     //展示分页
@@ -99,7 +102,7 @@ $this->load->view('head');
             });
         }, 'JSON');
         content = "<button type=\"button\" class=\"am-btn am-btn-success\" onclick=\"window.location.href='/sys/action_add_user'\">添加用户 </button>";
-
+        from_buttons.append(content)
     }
 
     function get_roles(curr) {
@@ -109,10 +112,10 @@ $this->load->view('head');
         $.get(getContentUrl() + curr, function (result) {
             $.each(result.result_rows, function (i, o) {
                 var content = "<tr>" +
-                    "<td>" + o.uid + "</td>" +
-                    "<td>" + o.name + "</td>" +
-                    "<td>" + o.mobile + "</td>" +
-                    "<td><a href='/user/user_detail/" + o.uid + "'>查询详情</a></td>" +
+                    "<td>" + o.id + "</td>" +
+                    "<td>" + o.role_name + "</td>" +
+                    "<td>" + o.create_time + "</td>" +
+                    "<td><a href='/role/role_detail/" + o.id + "'>查询详情</a></td>" +
                     "</tr>";
                 from_contant.append(content)
             });

@@ -60,7 +60,7 @@ class User_model extends HX_Model
         return $this->suc_out_put($ret->result('array'));
     }
 
-    public function get_user_row_by_uid($uid)
+    public function get_row_by_uid($uid)
     {
         $s = "SELECT * FROM {$this->table}  WHERE Fstatus = 1 AND Fuid = ? LIMIT 1;";
         $ret = $this->db->query($s, [$uid]);

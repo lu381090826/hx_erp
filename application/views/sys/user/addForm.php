@@ -2,6 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 $this->load->view('head');
 ?>
+<input type="button" name="Submit" class="am-btn am-btn-default" onclick="javascript:history.back(-1);" value="返回上一页">
 <form action="/sys/add_users" class="am-form" id="doc-vld-msg" method="post">
     <fieldset>
         <legend>添加用户</legend>
@@ -41,6 +42,7 @@ $this->load->view('head');
 
 <?php $this->load->view('footer'); ?>
 <script>
+    //校验逻辑
     $(function () {
         $('#doc-vld-msg').validator({
             onValid: function (validity) {
