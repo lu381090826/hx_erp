@@ -87,7 +87,7 @@ $this->load->view('head');
     });
 
     function get_users(curr) {
-        var content = "<tr> <th>id</th> <th>用户名</th> <th>手机号</th> <th>操作</th> </tr>";
+        var content = "<tr> <th>id</th> <th>用户名</th> <th>手机号</th> <th>角色</th> <th>操作</th> </tr>";
         from_thead.append(content);
 
         $.get(getContentUrl() + curr, function (result) {
@@ -96,12 +96,13 @@ $this->load->view('head');
                     "<td>" + o.uid + "</td>" +
                     "<td>" + o.name + "</td>" +
                     "<td>" + o.mobile + "</td>" +
+                    "<td>" + o.role_name + "</td>" +
                     "<td><a href='/user/user_detail/" + o.uid + "'>查询详情</a></td>" +
                     "</tr>";
                 from_contant.append(content)
             });
         }, 'JSON');
-        content = "<button type=\"button\" class=\"am-btn am-btn-success\" onclick=\"window.location.href='/sys/action_add_user'\">添加用户 </button>";
+        content = "<button type=\"button\" class=\"am-btn am-btn-success\" onclick=\"window.location.href='/user/action_add_user'\">添加用户 </button>";
         from_buttons.append(content)
     }
 

@@ -1,11 +1,16 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Welcome extends HX_Controller
+/*
+ * 商品管理
+ * */
+
+class Goods extends HX_Controller
 {
 
     public function index()
     {
-        $this->load->view('landing');
+        $this->load->view('/goods/');
     }
+
 }

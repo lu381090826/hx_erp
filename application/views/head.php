@@ -98,7 +98,7 @@
 <header class="am-topbar am-topbar-fixed-top">
     <div class="am-container">
         <h1 class="am-topbar-brand">
-            <a href="/">韩迅系统-<?php echo $this->session->name;?></a>
+            <a href="/">韩迅系统-<?php echo $this->session->name; ?></a>
         </h1>
 
         <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-secondary am-show-sm-only"
@@ -107,34 +107,56 @@
 
         <div class="am-collapse am-topbar-collapse" id="collapse-head">
 
-            <?php if(!$this->session->name){?>
+            <?php if (!$this->session->name) { ?>
                 <div class="am-topbar-right">
-                    <a href="login"><button class="am-btn am-btn-primary am-topbar-btn am-btn-sm"><span class="am-icon-user"></span> 登录</button></a>
+                    <a href="login">
+                        <button class="am-btn am-btn-primary am-topbar-btn am-btn-sm"><span class="am-icon-user"></span>
+                            登录
+                        </button>
+                    </a>
                 </div>
-            <?php }else{?>
+            <?php } else { ?>
                 <div class="am-topbar-right">
-                    <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span class="am-icon-female"></span> 销售管理</button>
-                </div>
-                <div class="am-topbar-right">
-                    <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span class="am-icon-shopping-bag"></span> 商品管理</button>
-                </div>
-                <div class="am-topbar-right">
-                    <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span class="am-icon-cube"></span> 仓库管理</button>
-                </div>
-                <div class="am-topbar-right">
-                    <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span class="am-icon-dollar"></span> 财务管理</button>
+                    <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span class="am-icon-female"></span>
+                        销售管理
+                    </button>
                 </div>
                 <div class="am-topbar-right">
-                    <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span class="am-icon-scissors"></span> 生产管理</button>
+                    <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span
+                            class="am-icon-shopping-bag"></span> 商品管理
+                    </button>
                 </div>
                 <div class="am-topbar-right">
-                    <a href="/sys"><button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span class="am-icon-cogs"></span> 系统管理</button></a>
+                    <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span class="am-icon-cube"></span>
+                        仓库管理
+                    </button>
+                </div>
+                <div class="am-topbar-right">
+                    <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span class="am-icon-dollar"></span>
+                        财务管理
+                    </button>
+                </div>
+                <div class="am-topbar-right">
+                    <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span class="am-icon-scissors"></span>
+                        生产管理
+                    </button>
+                </div>
+                <div class="am-topbar-right">
+                    <a href="/sys">
+                        <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span class="am-icon-cogs"></span>
+                            系统管理
+                        </button>
+                    </a>
                 </div>
 
                 <div class="am-topbar-right">
-                    <a href="/login/login_out"><button class="am-btn am-btn-primary am-topbar-btn am-btn-sm"><span class="am-icon-user"></span> 退出登录</button></a>
+                    <a href="/login/login_out">
+                        <button class="am-btn am-btn-primary am-topbar-btn am-btn-sm"><span class="am-icon-user"></span>
+                            退出登录
+                        </button>
+                    </a>
                 </div>
-            <?php }?>
+            <?php } ?>
 
         </div>
 

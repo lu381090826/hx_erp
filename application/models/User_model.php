@@ -49,7 +49,7 @@ class User_model extends HX_Model
         $ret = $this->db->query($s);
         $this->total_num = $ret->num_rows();
 
-        $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1 LIMIT ? , ?;";
+        $s = "SELECT r.Frole_name,u.* FROM t_user u LEFT JOIN t_role r ON r.Fid = u.Frole_id WHERE u.Fstatus = 1  LIMIT ? , ?";
         $this->offset = 0;
         $this->limit = 10;
         $ret = $this->db->query($s, [
@@ -62,9 +62,9 @@ class User_model extends HX_Model
 
     public function get_row_by_uid($uid)
     {
-        $s = "SELECT * FROM {$this->table}  WHERE Fstatus = 1 AND Fuid = ? LIMIT 1;";
+        $s = "SELECT r.Frole_name,u.* FROM t_user u LEFT JOIN t_role r ON r.Fid = u.Frole_id WHERE u.Fstatus = 1 AND Fuid = ? LIMIT 1;";
         $ret = $this->db->query($s, [$uid]);
-        return $this->suc_out_put($ret->row(0,'array'));
+        return $this->suc_out_put($ret->row(0, 'array'));
     }
 
     private function insert_user_check($request)

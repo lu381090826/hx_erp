@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $this->load->view('head');
 ?>
 <input type="button" name="Submit" class="am-btn am-btn-default" onclick="javascript:history.back(-1);" value="返回上一页">
-<form action="/sys/add_users" class="am-form" id="doc-vld-msg" method="post">
+<form action="/user/add_users" class="am-form" id="doc-vld-msg" method="post">
     <fieldset>
         <legend>添加用户</legend>
         <div class="am-form-group">
@@ -31,7 +31,9 @@ $this->load->view('head');
             <div class="am-form-group">
                 <label for="doc-select-1">角色</label>
                 <select id="doc-select-1" name="role_id" required>
-                    <option value="1">管理员</option>
+                    <?php foreach ((array)$role_list as $r) { ?>
+                        <option value="<?=$r['id'];?>"><?=$r['role_name'];?></option>
+                    <?php } ?>
                 </select>
                 <span class="am-form-caret"></span>
             </div>

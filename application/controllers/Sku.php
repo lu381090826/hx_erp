@@ -8,5 +8,4 @@ class Sku extends HX_Controller  {
 
     }
 
-
 }
