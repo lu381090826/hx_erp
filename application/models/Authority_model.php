@@ -19,16 +19,19 @@ class Authority_model extends HX_Model
 
     public function get_all_by_auth_ids($ids)
     {
-        $s = "SELECT * FROM {$this->table}  WHERE Fstatus = 1 AND Fid in(" . implode(',', $ids) . ") LIMIT 1;";
+        $s = "SELECT * FROM {$this->table}  WHERE Fstatus = 1 AND Fid in(" . implode(',', array_unique($ids)) . ");";
         $ret = $this->db->query($s)->result('array');
 
         return $this->suc_out_put($ret);
     }
 
-    //可以添加的角色
-    public function can_add_role()
+    //查出所有子权限
+    public function get_all_by_auth_pids($ids)
     {
-        $ret = $this->get_all_by_auth_ids($this->session->auths);
+        $s = "SELECT * FROM {$this->table}  WHERE Fstatus = 1 AND Fpid in(" . implode(',', array_unique($ids)) . ");";
+        $ret = $this->db->query($s)->result('array');
 
+        return $this->suc_out_put($ret);
     }
+
 }

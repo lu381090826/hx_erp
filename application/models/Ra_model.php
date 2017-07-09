@@ -36,4 +36,26 @@ class Ra_model extends HX_Model
         return $auths_info;
     }
 
+    /*
+     * request :
+     * [
+     *  role_id = '',
+     *  auth_ids = []
+     * ]
+     * 插入新角色对应的权限*/
+    public function insert_new_ra($request)
+    {
+        if (!isset($request['auth_ids']) || !isset($request['role_id'])) {
+            return 0;
+        }
+        $insert_arr = [];
+        foreach ((array)$request['auth_ids'] as $row) {
+            $insert_arr[] = [
+                'Frole_id' => $request['role_id'],
+                'Fauth_id' => $row,
+                'Fstatus' => 1,
+            ];
+        }
+        $this->db->insert_batch($this->table, $insert_arr);
+    }
 }

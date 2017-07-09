@@ -141,17 +141,20 @@
                         生产管理
                     </button>
                 </div>
-                <div class="am-topbar-right">
-                    <a href="/sys">
-                        <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span class="am-icon-cogs"></span>
-                            系统管理
-                        </button>
-                    </a>
-                </div>
-
+                <?php if (check_auth(6)) { ?>
+                    <div class="am-topbar-right">
+                        <a href="/sys">
+                            <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span
+                                    class="am-icon-cogs"></span>
+                                系统管理
+                            </button>
+                        </a>
+                    </div>
+                <?php } ?>
                 <div class="am-topbar-right">
                     <a href="/login/login_out">
-                        <button class="am-btn am-btn-primary am-topbar-btn am-btn-sm"><span class="am-icon-user"></span>
+                        <button class="am-btn am-btn-primary am-topbar-btn am-btn-sm"><span
+                                class="am-icon-user"></span>
                             退出登录
                         </button>
                     </a>

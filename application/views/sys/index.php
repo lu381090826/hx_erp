@@ -121,5 +121,7 @@ $this->load->view('head');
                 from_contant.append(content)
             });
         }, 'JSON');
+        content = "<button type=\"button\" class=\"am-btn am-btn-success\" onclick=\"window.location.href='/role/action_add_role'\">添加角色 </button>";
+        from_buttons.append(content)
     }
 </script>
