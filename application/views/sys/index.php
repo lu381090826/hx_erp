@@ -87,13 +87,13 @@ $this->load->view('head');
     });
 
     function get_users(curr) {
-        var content = "<tr> <th>id</th> <th>用户名</th> <th>手机号</th> <th>角色</th> <th>操作</th> </tr>";
+        var content = "<tr> <th>用户名</th> <th>手机号</th> <th>角色</th> <th>操作</th> </tr>";
         from_thead.append(content);
 
         $.get(getContentUrl() + curr, function (result) {
             $.each(result.result_rows, function (i, o) {
                 content = "<tr>" +
-                    "<td>" + o.uid + "</td>" +
+//                    "<td>" + o.uid + "</td>" +
                     "<td>" + o.name + "</td>" +
                     "<td>" + o.mobile + "</td>" +
                     "<td>" + o.role_name + "</td>" +
@@ -107,13 +107,13 @@ $this->load->view('head');
     }
 
     function get_roles(curr) {
-        var content = "<tr> <th>id</th> <th>角色名</th>  <th>操作</th> </tr>";
+        var content = "<tr> <th>角色名</th>  <th>操作</th> </tr>";
         from_thead.append(content);
 
         $.get(getContentUrl() + curr, function (result) {
             $.each(result.result_rows, function (i, o) {
                 var content = "<tr>" +
-                    "<td>" + o.id + "</td>" +
+//                    "<td>" + o.id + "</td>" +
                     "<td>" + o.role_name + "</td>" +
                     "<td><a href='/role/role_detail/" + o.id + "'>查询详情</a></td>" +
                     "</tr>";
