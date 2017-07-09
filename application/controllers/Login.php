@@ -73,7 +73,7 @@ class Login extends CI_Controller
         $auth_ids = [];
         if (isset($auths['result_rows'])) {
             foreach ($auths['result_rows'] as $row) {
-                $auth_ids[] = $row['auth'];
+                $auth_ids[] = $row['id'];
             }
             return $auth_ids;
         }

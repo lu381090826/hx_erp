@@ -116,31 +116,48 @@
                     </a>
                 </div>
             <?php } else { ?>
-                <div class="am-topbar-right">
-                    <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span class="am-icon-female"></span>
-                        销售管理
-                    </button>
-                </div>
-                <div class="am-topbar-right">
-                    <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span
-                            class="am-icon-shopping-bag"></span> 商品管理
-                    </button>
-                </div>
-                <div class="am-topbar-right">
-                    <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span class="am-icon-cube"></span>
-                        仓库管理
-                    </button>
-                </div>
-                <div class="am-topbar-right">
-                    <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span class="am-icon-dollar"></span>
-                        财务管理
-                    </button>
-                </div>
-                <div class="am-topbar-right">
-                    <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span class="am-icon-scissors"></span>
-                        生产管理
-                    </button>
-                </div>
+                <?php if (check_auth(8)) { ?>
+                    <div class="am-topbar-right">
+                        <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span
+                                class="am-icon-female"></span>
+                            销售管理
+                        </button>
+                    </div>
+                <?php } ?>
+                <?php if (check_auth(2)) { ?>
+                    <div class="am-topbar-right">
+                        <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span
+                                class="am-icon-shopping-bag"></span> 商品管理
+                        </button>
+                    </div>
+                <?php } ?>
+
+                <?php if (check_auth(3)) { ?>
+                    <div class="am-topbar-right">
+                        <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span class="am-icon-cube"></span>
+                            仓库管理
+                        </button>
+                    </div>
+                <?php } ?>
+
+                <?php if (check_auth(4)) { ?>
+                    <div class="am-topbar-right">
+                        <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span
+                                class="am-icon-dollar"></span>
+                            财务管理
+                        </button>
+                    </div>
+                <?php } ?>
+
+                <?php if (check_auth(5)) { ?>
+                    <div class="am-topbar-right">
+                        <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span
+                                class="am-icon-scissors"></span>
+                            生产管理
+                        </button>
+                    </div>
+                <?php } ?>
+
                 <?php if (check_auth(6)) { ?>
                     <div class="am-topbar-right">
                         <a href="/sys">
