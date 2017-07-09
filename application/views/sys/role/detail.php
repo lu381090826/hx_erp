@@ -3,8 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $this->load->view('head');
 ?>
 <input type="button" name="Submit" class="am-btn am-btn-default" onclick="javascript:history.back(-1);" value="返回上一页">
-<input type="button" name="Submit" class="am-btn am-btn-default" onclick="" value="编辑">
-<input type="button" name="Submit" class="am-btn am-btn-default" onclick="" value="删除">
+<!--<input type="button" name="Submit" class="am-btn am-btn-default" onclick="" value="编辑">-->
+<!--<input type="button" name="Submit" class="am-btn am-btn-default" onclick="" value="删除">-->
 <table class="am-table">
 
     <thead>

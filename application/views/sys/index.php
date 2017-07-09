@@ -8,7 +8,7 @@ $this->load->view('head');
 <select data-am-selected id="sys_select" title="选择功能">
     <option value="get_users" selected>用户管理</option>
     <option value="get_roles">角色管理</option>
-    <option value="get_auths">权限管理</option>
+    <!--    <option value="get_auths">权限管理</option>-->
 </select>
 <br>
 <br>
@@ -107,7 +107,7 @@ $this->load->view('head');
     }
 
     function get_roles(curr) {
-        var content = "<tr> <th>id</th> <th>角色名</th> <th>创建时间</th> <th>操作</th> </tr>";
+        var content = "<tr> <th>id</th> <th>角色名</th>  <th>操作</th> </tr>";
         from_thead.append(content);
 
         $.get(getContentUrl() + curr, function (result) {
@@ -115,7 +115,6 @@ $this->load->view('head');
                 var content = "<tr>" +
                     "<td>" + o.id + "</td>" +
                     "<td>" + o.role_name + "</td>" +
-                    "<td>" + o.create_time + "</td>" +
                     "<td><a href='/role/role_detail/" + o.id + "'>查询详情</a></td>" +
                     "</tr>";
                 from_contant.append(content)
