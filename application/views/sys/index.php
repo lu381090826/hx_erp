@@ -3,6 +3,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $this->load->view('head');
 ?>
 <link rel="stylesheet" type="text/css" href="/assets/css/amazeui.page.css">
+<style>
+    .other-select {
+        display: none;
+    }
+</style>
 <br>
 <!--功能选项-->
 <select data-am-selected id="sys_select" title="选择功能">
@@ -12,8 +17,15 @@ $this->load->view('head');
 </select>
 <br>
 <br>
-<div id="from_buttons">
-
+<div class="other-select div-get_users">
+    <button type="button" class="am-btn am-btn-success"
+            onclick="window.location.href='/user/action_add_user'">添加用户
+    </button>
+</div>
+<div class="other-select div-get_roles">
+    <button type="button" class="am-btn am-btn-success"
+            onclick="window.location.href='/role/action_add_role'">添加角色
+    </button>
 </div>
 <hr>
 <!--表格子-->
@@ -36,7 +48,8 @@ $this->load->view('head');
     var method = $('#sys_select').val();
     var from_thead = $('#from_thead');
     var from_contant = $('#from_contant');
-    var from_buttons = $('#from_buttons');
+    var other_select_div = $('.div-' + method);
+    var other_select = $('.other-select');
 
     function getContentUrl() {
         return '/' + controller + '/' + method + '/';
@@ -46,10 +59,11 @@ $this->load->view('head');
     function fromClean() {
         from_thead.empty();
         from_contant.empty();
-        from_buttons.empty();
+        other_select.hide();
     }
 
     $(document).ready(function () {
+        fromClean();
         fromLoad();
     });
 
@@ -72,6 +86,7 @@ $this->load->view('head');
                 eval(method + '(1)');
             }
         }, 'JSON');
+        other_select_div.show()
     }
 
 
@@ -81,8 +96,10 @@ $this->load->view('head');
         $selected.on('change', function () {
             fromClean();
             method = $(this).val();
+            other_select_div = $('.div-' + method);
             //用字符串执行方法
             eval(method + '(1)');
+            other_select_div.show()
         });
     });
 
@@ -102,8 +119,6 @@ $this->load->view('head');
                 from_contant.append(content)
             });
         }, 'JSON');
-        content = "<button type=\"button\" class=\"am-btn am-btn-success\" onclick=\"window.location.href='/user/action_add_user'\">添加用户 </button>";
-        from_buttons.append(content)
     }
 
     function get_roles(curr) {
@@ -120,7 +135,5 @@ $this->load->view('head');
                 from_contant.append(content)
             });
         }, 'JSON');
-        content = "<button type=\"button\" class=\"am-btn am-btn-success\" onclick=\"window.location.href='/role/action_add_role'\">添加角色 </button>";
-        from_buttons.append(content)
     }
 </script>
