@@ -83,7 +83,7 @@ $this->load->view('head');
         }, 'JSON');
     }
     function get_color(curr) {
-        var content = "<tr> <th>颜色</th> <th>颜色编码</th> <th>颜色代码</th>  <th>操作</th> </tr>";
+        var content = "<tr> <th>颜色</th> <th>颜色编码</th> <th>颜色展示</th>  <th>操作</th> </tr>";
         from_thead.append(content);
 
         $.get(getContentUrl() + curr, function (result) {
@@ -91,7 +91,7 @@ $this->load->view('head');
                 content = "<tr>" +
                     "<td>" + o.name + "</td>" +
                     "<td>" + o.color_num + "</td>" +
-                    "<td>" + o.color_code + "</td>" +
+                    "<td><span class='am-badge'"+"style='background: #"+o.color_code+"'>s</span></td>" +
                     "<td><a href='/color/delete_color/" + o.id + "'>删除</a></td>" +
                     "</tr>";
                 from_contant.append(content)
