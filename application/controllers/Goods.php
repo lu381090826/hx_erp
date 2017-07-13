@@ -22,4 +22,11 @@ class Goods extends HX_Controller
     {
         $this->output->set_output(json_encode([]));
     }
+    public function get_color($page = 0)
+    {
+        $this->load->model('color_model', 'm_color');
+        $result = $this->m_color->get_color_list($page);
+
+        $this->output->set_output(json_encode($result));
+    }
 }

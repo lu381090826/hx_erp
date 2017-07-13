@@ -374,3 +374,17 @@ CREATE TABLE `HanXun`.`t_color` (
   UNIQUE `color_num` (`Fcolor_num`)
 )
   ENGINE = InnoDB;
+
+CREATE TABLE `HanXun`.`t_size` (
+  `Fid`          INT                                  NOT NULL AUTO_INCREMENT,
+  `Fsize_info`   VARCHAR(20)                          NOT NULL DEFAULT '',
+  `Fstatus`      BOOLEAN                              NOT NULL DEFAULT TRUE,
+  `Fversion`     INT                                  NOT NULL DEFAULT '0',
+  `Fmemo`        VARCHAR(20)                          NOT NULL DEFAULT '',
+  `Fop_id`       INT                                  NOT NULL DEFAULT '0',
+  `Fcreate_time` DATETIME                             NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `Fmodify_time` DATETIME ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`Fid`),
+  UNIQUE `size_info` (`Fsize_info`)
+)
+  ENGINE = InnoDB;

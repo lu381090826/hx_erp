@@ -32,6 +32,8 @@ function fromLoad(controller) {
                 next: '>', //若不显示，设置false即可，默认为下一页
                 groups: 3, //连续显示分页数
                 jump: function (context, first) {
+                    from_thead.empty();
+                    from_contant.empty();
                     eval(method + '(' + context.option.curr + ')');
                 }
             })
@@ -50,7 +52,8 @@ $(function () {
         method = $(this).val();
         other_select_div = $('.div-' + method);
         //用字符串执行方法
-        eval(method + '(1)');
-        other_select_div.show()
+        // eval(method + '(1)');
+        other_select_div.show();
+        fromLoad(__CONTROLLER__)
     });
 });
