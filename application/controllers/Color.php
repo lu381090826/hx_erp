@@ -20,6 +20,6 @@ class Color extends HX_Controller
         $this->m_color->insert_color($post);
 
         $this->load->helper('url');
-        redirect("Success");
+        redirect("success");
     }
 }

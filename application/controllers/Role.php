@@ -46,8 +46,9 @@ class Role extends HX_Controller
             $req['auth_ids'] = empty($post['auth_ids']) ? [] : $post['auth_ids'];
             $this->m_ra->insert_new_ra($req);
         }
+
         $this->load->helper('url');
-        redirect('/role/role_detail/' . $insert_id);
+        redirect("success");
     }
 
 }

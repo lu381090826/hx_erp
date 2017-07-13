@@ -25,6 +25,8 @@ class User extends HX_Controller
     {
         $this->load->model('user_model', 'm_user');
         $this->m_user->insert_user($this->input->post());
-        $this->load->view('sys/index');
+
+        $this->load->helper('url');
+        redirect("success");
     }
 }
