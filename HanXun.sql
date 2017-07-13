@@ -370,8 +370,7 @@ CREATE TABLE `HanXun`.`t_color` (
   `Fmemo`        VARCHAR(20)                          NOT NULL DEFAULT '',
   `Fcreate_time` DATETIME                             NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `Fmodify_time` DATETIME ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`Fid`),
-  UNIQUE `color_num` (`Fcolor_num`)
+  PRIMARY KEY (`Fid`)
 )
   ENGINE = InnoDB;
 
