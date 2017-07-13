@@ -92,6 +92,10 @@
             text-align: center;
             background: #2d3e50;
         }
+
+        .other-select {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -125,16 +129,19 @@
                     </div>
                 <?php } ?>
                 <?php if (check_auth(2)) { ?>
-                    <div class="am-topbar-right">
-                        <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span
-                                class="am-icon-shopping-bag"></span> 商品管理
-                        </button>
-                    </div>
+                    <a href="goods">
+                        <div class="am-topbar-right">
+                            <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span
+                                    class="am-icon-shopping-bag"></span> 商品管理
+                            </button>
+                        </div>
+                    </a>
                 <?php } ?>
 
                 <?php if (check_auth(3)) { ?>
                     <div class="am-topbar-right">
-                        <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span class="am-icon-cube"></span>
+                        <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span
+                                class="am-icon-cube"></span>
                             仓库管理
                         </button>
                     </div>
