@@ -92,7 +92,7 @@ $this->load->view('head');
                     "<td>" + o.name + "</td>" +
                     "<td>" + o.color_num + "</td>" +
                     "<td>" + o.color_code + "</td>" +
-                    "<td><a href='/user/user_detail/" + o.uid + "'>查询详情</a></td>" +
+                    "<td><a href='/color/delete_color/" + o.id + "'>删除</a></td>" +
                     "</tr>";
                 from_contant.append(content)
             });

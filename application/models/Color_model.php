@@ -18,6 +18,11 @@ class Color_model extends HX_Model
     }
 
 
+    public function color_delete_by_id($id)
+    {
+        return $this->db->update($this->table, ['Fstatus' => 0], ['Fid' => $id]);
+    }
+
     public function get_color_list($page = 1)
     {
         $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1";
