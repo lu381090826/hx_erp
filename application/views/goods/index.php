@@ -94,7 +94,7 @@ $this->load->view('head');
         var content = "<tr> <th>尺码</th> <th>尺码代码</th>  <th>操作</th> </tr>";
         from_thead.append(content);
 
-        $.get(getContentUrl() + curr, function (result) {
+        $.get(getContentUrl() + curr + '?v=' + Math.random(), function (result) {
             $.each(result.result_rows, function (i, o) {
                 content = "<tr>" +
                     "<td>" + o.size_info + "</td>" +
