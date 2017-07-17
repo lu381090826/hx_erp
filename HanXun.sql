@@ -387,3 +387,11 @@ CREATE TABLE `HanXun`.`t_size` (
   UNIQUE `size_info` (`Fsize_info`)
 )
   ENGINE = InnoDB;
+
+ALTER TABLE `t_size`
+  ADD `Fsize_num` VARCHAR(5) NOT NULL DEFAULT ''
+COMMENT '尺码号'
+  AFTER `Fsize_info`;
+
+ALTER TABLE `t_size`
+  DROP INDEX `size_info`;
