@@ -75,7 +75,7 @@ $this->load->view('head');
         }, 'JSON');
     }
     function get_color(curr) {
-        var content = "<tr> <th>颜色</th> <th>颜色编码</th> <th>颜色展示</th>  <th>操作</th> </tr>";
+        var content = "<tr> <th>颜色</th> <th>颜色代码</th> <th>颜色展示</th>  <th>操作</th> </tr>";
         from_thead.append(content);
 
         $.get(getContentUrl() + curr, function (result) {
@@ -91,7 +91,7 @@ $this->load->view('head');
         }, 'JSON');
     }
     function get_size(curr) {
-        var content = "<tr> <th>尺码号</th> <th>尺码</th> <th>操作</th> </tr>";
+        var content = "<tr> <th>尺码</th> <th>尺码代码</th>  <th>操作</th> </tr>";
         from_thead.append(content);
 
         $.get(getContentUrl() + curr, function (result) {

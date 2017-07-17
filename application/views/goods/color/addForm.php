@@ -19,7 +19,7 @@ $this->load->view('head');
                    required/>
         </div>
         <div class="am-form-group">
-            <label for="doc-vld-color-num">颜色号码：</label>
+            <label for="doc-vld-color-num">颜色代码：</label>
             <input type="text" id="doc-vld-color-num" minlength="1" placeholder="输入颜色号码" name="color_num"
                    class="am-form-field"
                    required/>
