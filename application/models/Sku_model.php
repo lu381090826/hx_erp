@@ -53,7 +53,7 @@ class Sku_model extends HX_Model
         if (!$ret->row(0)) {
             return $this->suc_out_put();
         }
-        return $this->fail_out_put(1000, "尺码号已存在");
+        return $this->fail_out_put(1000, "商品已存在");
     }
 
     private function insert_sku_check($request)

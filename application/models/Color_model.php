@@ -53,7 +53,7 @@ class Color_model extends HX_Model
         if (!$ret->row(0)) {
             return $this->suc_out_put();
         }
-        return $this->fail_out_put(1000, "颜色号已存在");
+        return $this->fail_out_put(1000, "颜色代码已存在");
     }
 
     private function insert_color_check($request)
@@ -63,7 +63,7 @@ class Color_model extends HX_Model
             $msg = "颜色名不能为空";
         }
         if (!isset($request['color_num'])) {
-            $msg = "颜色号不能为空";
+            $msg = "颜色代码不能为空";
         }
         if (!isset($request['color_code'])) {
             $msg = "颜色代码不能为空";

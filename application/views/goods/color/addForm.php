@@ -14,13 +14,13 @@ $this->load->view('head');
         </div>
         <div class="am-form-group">
             <label for="doc-vld-name">颜色名：</label>
-            <input type="text" id="doc-vld-name" minlength="1" placeholder="输入颜色名，如：酒红色" name="name"
+            <input type="text" id="doc-vld-name" minlength="1" placeholder="输入颜色名，如：红色" name="name"
                    class="am-form-field"
                    required/>
         </div>
         <div class="am-form-group">
             <label for="doc-vld-color-num">颜色代码：</label>
-            <input type="text" id="doc-vld-color-num" minlength="1" placeholder="输入颜色号码" name="color_num"
+            <input type="text" id="doc-vld-color-num" minlength="1" placeholder="输入颜色代码" name="color_num"
                    class="am-form-field"
                    required/>
         </div>

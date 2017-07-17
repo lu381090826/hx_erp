@@ -390,7 +390,7 @@ CREATE TABLE `HanXun`.`t_size` (
 
 ALTER TABLE `t_size`
   ADD `Fsize_num` VARCHAR(5) NOT NULL DEFAULT ''
-COMMENT '尺码号'
+COMMENT '尺码代码'
   AFTER `Fsize_info`;
 
 ALTER TABLE `t_size`

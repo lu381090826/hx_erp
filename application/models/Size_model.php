@@ -53,7 +53,7 @@ class Size_model extends HX_Model
         if (!$ret->row(0)) {
             return $this->suc_out_put();
         }
-        return $this->fail_out_put(1000, "尺码号已存在");
+        return $this->fail_out_put(1000, "尺码代码已存在");
     }
 
     private function insert_size_check($request)
@@ -63,7 +63,7 @@ class Size_model extends HX_Model
             $msg = "尺码信息不能为空";
         }
         if (!isset($request['size_num'])) {
-            $msg = "尺码号不能为空";
+            $msg = "尺码代码不能为空";
         }
 
         $ret = $this->check_size_num_available($request);

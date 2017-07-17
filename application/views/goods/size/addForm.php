@@ -15,7 +15,7 @@ $this->load->view('head');
         </div>
         <div class="am-form-group">
             <label for="doc-vld-color-num">尺码代码：</label>
-            <input type="text" id="doc-vld-color-num" minlength="1" placeholder="输入尺码号" name="size_num"
+            <input type="text" id="doc-vld-color-num" minlength="1" placeholder="输入尺码代码" name="size_num"
                    class="am-form-field"
                    required/>
         </div>
