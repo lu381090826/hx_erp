@@ -5,29 +5,22 @@ $this->load->view('head');
 <br>
 <!--功能选项-->
 <select data-am-selected id="method_select" title="选择功能">
-    <option value="get_info_list" selected>商品信息</option>
-    <option value="get_category">商品设置</option>
+    <option value="get_sku">商品设置</option>
     <option value="get_color">颜色设置</option>
     <option value="get_size">尺码设置</option>
-    <!--    <option value="get_auths">权限管理</option>-->
 </select>
 <br>
 <br>
-<div class="other-select div-get_users">
-    <button type="button" class="am-btn am-btn-success"
-            onclick="window.location.href='/user/action_add_user'">新建商品
-    </button>
-</div>
-<div class="other-select div-get_roles">
-    <button type="button" class="am-btn am-btn-success"
-            onclick="window.location.href='/role/action_add_role'">新建分类
-    </button>
-</div>
-<div class="other-select div-get_color">
-    <button type="button" class="am-btn am-btn-success"
-            onclick="window.location.href='/color/action_add_color'">添加颜色
-    </button>
-</div>
+<button type="button" class="am-btn am-btn-success other-select div-get_sku"
+        onclick="window.location.href='/sku/action_add_sku'">新建商品
+</button>
+<button type="button" class="am-btn am-btn-success other-select div-get_color"
+        onclick="window.location.href='/color/action_add_color'">添加颜色
+</button>
+<button type="button" class="am-btn am-btn-success other-select div-get_size"
+        onclick="window.location.href='/size/action_add_size'">添加尺码
+</button>
+
 <hr>
 <!--表格子-->
 <table class="am-table">
@@ -48,18 +41,17 @@ $this->load->view('head');
         fromLoad('goods');
     });
 
-    function get_info_list(curr) {
-        var content = "<tr> <th>商品名</th> <th>手机号</th> <th>角色</th> <th>操作</th> </tr>";
+    function get_sku(curr) {
+        var content = "<tr> <th>小图</th> <th>商品名</th> <th>商品号</th> <th>操作</th> </tr>";
         from_thead.append(content);
 
         $.get(getContentUrl() + curr, function (result) {
             $.each(result.result_rows, function (i, o) {
                 content = "<tr>" +
-//                    "<td>" + o.uid + "</td>" +
+                    "<td>" + o.pic + "</td>" +
                     "<td>" + o.name + "</td>" +
-                    "<td>" + o.mobile + "</td>" +
-                    "<td>" + o.role_name + "</td>" +
-                    "<td><a href='/user/user_detail/" + o.uid + "'>查询详情</a></td>" +
+                    "<td>" + o.product_number + "</td>" +
+                    "<td><a href='/suk/sku_detail/" + o.id + "'>查询详情</a></td>" +
                     "</tr>";
                 from_contant.append(content)
             });
@@ -91,8 +83,23 @@ $this->load->view('head');
                 content = "<tr>" +
                     "<td>" + o.name + "</td>" +
                     "<td>" + o.color_num + "</td>" +
-                    "<td><span class='am-badge'"+"style='background: #"+o.color_code+"'>s</span></td>" +
+                    "<td><span class='am-badge'" + "style='background: #" + o.color_code + "'>s</span></td>" +
                     "<td><a href='/color/delete_color/" + o.id + "'>删除</a></td>" +
+                    "</tr>";
+                from_contant.append(content)
+            });
+        }, 'JSON');
+    }
+    function get_size(curr) {
+        var content = "<tr> <th>尺码号</th> <th>尺码</th> <th>操作</th> </tr>";
+        from_thead.append(content);
+
+        $.get(getContentUrl() + curr, function (result) {
+            $.each(result.result_rows, function (i, o) {
+                content = "<tr>" +
+                    "<td>" + o.size_info + "</td>" +
+                    "<td>" + o.size_num + "</td>" +
+                    "<td><a href='/size/delete_size/" + o.id + "'>删除</a></td>" +
                     "</tr>";
                 from_contant.append(content)
             });

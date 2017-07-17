@@ -1,26 +1,139 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: lujagan
  * Date: 2017/6/25
  * Time: 下午10:17
  */
-class Sku_model extends CI_Model {
+class Sku_model extends HX_Model
+{
+
+
+    private $table = "t_sku";
 
     public function __construct()
     {
         parent::__construct();
-        // Your own constructor code
-        $this->load->database('old',true);
+        $this->load->database();
     }
 
-    public function getFirstInfo()
+    public function sku_delete_by_id($id)
     {
-        $s="SELECT * FROM V_SKUINFO LIMIT 10;";
+        return $this->db->update($this->table, ['Fstatus' => 0], ['Fid' => $id]);
+    }
 
-        $ret=$this->old->query($s);
+    public function get_sku_list($page = 1)
+    {
+        $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1";
+        $ret = $this->db->query($s);
+        $this->total_num = $ret->num_rows();
 
-        return $ret->row(0);
+        $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1  LIMIT ? , ?";
+        $this->offset = 0;
+        $this->limit = 10;
+        if ($page < 1) {
+            $page = 1;
+        }
+        $ret = $this->db->query($s, [
+            $this->offset + ($page - 1) * $this->limit,
+            $this->limit
+        ]);
+
+        return $this->suc_out_put($ret->result('array'));
+    }
+
+    public function check_sku_num_available($request)
+    {
+        $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1  AND Fsku_num = ? ;";
+
+        $ret = $this->db->query($s, [
+            $request['sku_num']
+        ]);
+        if (!$ret->row(0)) {
+            return $this->suc_out_put();
+        }
+        return $this->fail_out_put(1000, "尺码号已存在");
+    }
+
+    private function insert_sku_check($request)
+    {
+        $msg = "";
+        if (!isset($request['name'])) {
+            $msg = "商品名不能为空";
+        }
+        if (!isset($request['product_number'])) {
+            $msg = "商品号不能为空";
+        }
+        if (!isset($request['bar_code'])) {
+            $msg = "条形码不能为空";
+        }
+        if (!isset($request['record_number'])) {
+            $msg = "备案号不能为空";
+        }
+        if (!isset($request['brand_id'])) {
+            $msg = "品牌不能为空";
+        }
+        if (!isset($request['category_id'])) {
+            $msg = "商品类别不能为空";
+        }
+        if (!isset($request['property_id'])) {
+            $msg = "商品属性不能为空";
+        }
+        if (!isset($request['price'])) {
+            $msg = "价格不能为空";
+        }
+        if (!isset($request['source_area'])) {
+            $msg = "原产地不能为空";
+        }
+//        if (!isset($request['import'])) { $msg = "请选择是否进口"; }
+        if (!isset($request['unit'])) {
+            $msg = "单位不能为空";
+        }
+        if (!isset($request['weight'])) {
+            $msg = "重量不能为空";
+        }
+        if (!isset($request['pic'])) {
+            $msg = "图片不能为空";
+        }
+//        if (!isset($request['color_id'])) { $msg = "颜色不能为空"; }
+//        if (!isset($request['size_id'])) { $msg = "尺码不能为空"; }
+        if (!isset($request['memo'])) {
+            $msg = "描述不能为空";
+        }
+
+        $ret = $this->check_sku_num_available($request);
+        if ($ret['result'] != 0) {
+            $msg = $ret['res_info'];
+        }
+        if ($msg)
+            show_error($msg);
+    }
+
+    public function insert_sku($request)
+    {
+        $this->insert_sku_check($request);
+
+        $insert_arr = [
+            'Fname' => $request['name'],
+            'Fproduct_number' => $request['product_number'],
+            'Fbar_code' => $request['bar_code'],
+            'Frecord_number' => $request['record_number'],
+            'Fbrand_id' => $request['brand_id'],
+            'Fcategory_id' => $request['category_id'],
+            'Fproperty_id' => $request['property_id'],
+            'Fprice' => $request['price'],
+            'Fsource_area' => $request['source_area'],
+            'Fimport' => $request['import'],
+            'Funit' => $request['unit'],
+            'Fweight' => $request['weight'],
+            'Fpic' => $request['pic'],
+            'Fcolor_id' => $request['color_id'],
+            'Fsize_id' => $request['size_id'],
+            'Fmemo' => $request['memo'],
+            'Fstatus' => 1,
+        ];
+        $this->db->insert($this->table, $insert_arr);
     }
 
 }

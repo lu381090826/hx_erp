@@ -1,31 +1,35 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Sku extends HX_Controller
+/*
+ * 尺码管理
+ * */
+
+class Size extends HX_Controller
 {
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('sku_model', 'm_sku');
+        $this->load->model('size_model', 'm_size');
     }
 
-    public function action_add_sku()
+    public function action_add_size()
     {
-        $this->load->view('goods/sku/addForm');
+        $this->load->view('goods/size/addForm');
     }
 
-    public function add_sku()
+    public function add_size()
     {
         $post = $this->input->post();
-        $this->m_sku->insert_sku($post);
+        $this->m_size->insert_size($post);
 
         $this->load->helper('url');
         redirect("success");
     }
 
-    public function delete_sku($id)
+    public function delete_size($id)
     {
-        $this->m_sku->sku_delete_by_id($id);
+        $this->m_size->size_delete_by_id($id);
 
         $this->load->helper('url');
         redirect("success");

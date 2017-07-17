@@ -5,6 +5,7 @@ var from_thead = $('#from_thead');
 var from_contant = $('#from_contant');
 var other_select_div = $('.div-' + method);
 var other_select = $('.other-select');
+var page = $('#page');
 
 function getContentUrl() {
     return '/' + __CONTROLLER__ + '/' + method + '/';
@@ -14,6 +15,7 @@ function getContentUrl() {
 function fromClean() {
     from_thead.empty();
     from_contant.empty();
+    page.empty();
     other_select.hide();
 }
 
