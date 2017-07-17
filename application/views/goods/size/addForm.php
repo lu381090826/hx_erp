@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $this->load->view('head');
 ?>
 
-<input type="button" name="Submit" class="am-btn am-btn-default" onclick="javascript:history.back(-1);location.reload();method='get_size';" value="返回上一页">
+<input type="button" name="Submit" class="am-btn am-btn-default" onclick="javascript:history.back(-1);method='get_size';" value="返回上一页">
 <form action="/size/add_size" class="am-form" id="doc-vld-msg" method="post">
     <fieldset>
         <legend>添加尺码</legend>

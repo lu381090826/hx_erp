@@ -1,5 +1,4 @@
 var __CONTROLLER__ = '';
-
 var method = $('#method_select').val();
 var from_thead = $('#from_thead');
 var from_contant = $('#from_contant');
