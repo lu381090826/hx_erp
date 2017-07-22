@@ -2,8 +2,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 $this->load->view('head');
 ?>
-<link rel="stylesheet" type="text/css" href="/assets/js/common/uploadUtils/webuploader.css">
-
 
 <input type="button" name="Submit" class="am-btn am-btn-default" onclick="javascript:history.back(-1);"
        value="返回上一页">
@@ -87,4 +85,3 @@ $this->load->view('head');
 </form>
 
 <?php $this->load->view('footer'); ?>
-<script type="text/javascript" src="/assets/js/common/uploadUtils/webuploader.js"></script>
