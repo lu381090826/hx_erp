@@ -48,7 +48,7 @@ $this->load->view('head');
         $.get(getContentUrl() + curr, function (result) {
             $.each(result.result_rows, function (i, o) {
                 content = "<tr>" +
-                    "<td>" + o.pic + "</td>" +
+                    "<td><img style='width: 50px' src='" + o.pic + "'></td>" +
                     "<td>" + o.name + "</td>" +
                     "<td>" + o.product_number + "</td>" +
                     "<td><a href='/suk/sku_detail/" + o.id + "'>查询详情</a></td>" +

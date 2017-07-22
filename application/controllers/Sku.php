@@ -38,7 +38,11 @@ class Sku extends HX_Controller
      */
     private function upload_file()
     {
-        $config['upload_path'] = '/uploads/' . date("Ymd") . '/sku_pic/' . '/';
+        $file_path = '/sku_pic_uploads/' . date("Ymd") . '/';
+        if (!file_exists(FCPATH . 'sku_pic_uploads/')) {
+            mkdir(FCPATH . 'sku_pic_uploads/');
+        }
+        $config['upload_path'] = FCPATH . 'sku_pic_uploads/' . date("Ymd") . '/';
         if (!file_exists($config['upload_path'])) {
             mkdir($config['upload_path']);
         }
@@ -51,7 +55,8 @@ class Sku extends HX_Controller
             show_error($error);
         } else {
             $data = array('upload_data' => $this->upload->data());
-            return $data['upload_data']['full_path'];
+            $real_path = $file_path . $data['upload_data']['file_name'];
+            return $real_path;
         }
     }
 }
