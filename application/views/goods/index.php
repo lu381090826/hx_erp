@@ -3,6 +3,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $this->load->view('head');
 ?>
 <br>
+<style>
+    .am-table > tbody > tr > td {
+        vertical-align: middle;
+    }
+</style>
 <!--功能选项-->
 <select data-am-selected id="method_select" title="选择功能">
     <option value="get_sku">商品设置</option>
@@ -48,10 +53,10 @@ $this->load->view('head');
         $.get(getContentUrl() + curr, function (result) {
             $.each(result.result_rows, function (i, o) {
                 content = "<tr>" +
-                    "<td><img style='width: 50px' src='" + o.pic + "'></td>" +
+                    "<td><img style='width: 150px' src='" + o.pic + "'></td>" +
                     "<td>" + o.name + "</td>" +
                     "<td>" + o.product_number + "</td>" +
-                    "<td><a href='/suk/sku_detail/" + o.id + "'>查询详情</a></td>" +
+                    "<td><a href='/sku/sku_detail/" + o.id + "'>查询详情</a>  <a href='/color/delete_color/" + o.id + "'>删除</a></td>" +
                     "</tr>";
                 from_contant.append(content)
             });
@@ -83,7 +88,7 @@ $this->load->view('head');
                 content = "<tr>" +
                     "<td>" + o.name + "</td>" +
                     "<td>" + o.color_num + "</td>" +
-                    "<td><span class='am-badge'" + "style='background: #" + o.color_code + "'>s</span></td>" +
+                    "<td><span class='am-badge'" + "style='background: #" + o.color_code + "'>c</span></td>" +
                     "<td><a href='/color/delete_color/" + o.id + "'>删除</a></td>" +
                     "</tr>";
                 from_contant.append(content)

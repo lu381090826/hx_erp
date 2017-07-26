@@ -59,4 +59,11 @@ class Sku extends HX_Controller
             return $real_path;
         }
     }
+
+    public function sku_detail($id)
+    {
+        $sku_info = $this->m_sku->get_row_by_id($id);
+
+        $this->load->view('/goods/goods/detail', $sku_info['result_rows']);
+    }
 }

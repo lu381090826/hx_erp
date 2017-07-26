@@ -151,4 +151,10 @@ class Sku_model extends HX_Model
 
     }
 
+    public function get_row_by_id($uid)
+    {
+        $s = "SELECT * FROM {$this->table} u  WHERE u.Fstatus = 1 AND Fid = ? LIMIT 1;";
+        $ret = $this->db->query($s, [$uid]);
+        return $this->suc_out_put($ret->row(0, 'array'));
+    }
 }
