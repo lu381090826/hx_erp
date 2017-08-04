@@ -81,6 +81,8 @@ $this->load->view('head');
 
 
         <button class="am-btn am-btn-secondary" id="submit" type="submit">开始上传</button>
+        <input type="button" name="Submit" class="am-btn am-btn-default" onclick="javascript:history.back(-1);"
+               value="返回">
     </fieldset>
 </form>
 

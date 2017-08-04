@@ -102,7 +102,7 @@
 <header class="am-topbar am-topbar-fixed-top">
     <div class="am-container">
         <h1 class="am-topbar-brand">
-            <a href="/">韩迅系统-<?php echo $this->session->name; ?></a>
+            <a href="/">韩迅-<?php echo $this->session->name; ?></a>
         </h1>
 
         <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-secondary am-show-sm-only"

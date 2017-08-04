@@ -1,6 +1,6 @@
 
 <footer class="footer">
-    <p>联系邮箱：381090826@qq.com</p>
+    <p>韩迅系统</p>
 </footer>
 
 <!--[if lt IE 9]>

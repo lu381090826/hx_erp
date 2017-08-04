@@ -10,22 +10,21 @@ $this->load->view('head');
 </style>
 <!--功能选项-->
 <select data-am-selected id="method_select" title="选择功能">
-    <option value="get_sku">商品设置</option>
-    <option value="get_color">颜色设置</option>
-    <option value="get_size">尺码设置</option>
+    <option value="get_sku">商品管理</option>
+    <option value="get_color">颜色管理</option>
+    <option value="get_size">尺码管理</option>
 </select>
-<br>
-<br>
-<button type="button" class="am-btn am-btn-success other-select div-get_sku"
-        onclick="window.location.href='/sku/action_add_sku'">新建商品
-</button>
-<button type="button" class="am-btn am-btn-success other-select div-get_color"
-        onclick="window.location.href='/color/action_add_color'">添加颜色
-</button>
-<button type="button" class="am-btn am-btn-success other-select div-get_size"
-        onclick="window.location.href='/size/action_add_size'">添加尺码
-</button>
-
+<div class="am-btn-group am-btn-group-xs">
+    <button type="button" class="am-btn am-btn-default other-select div-get_sku"
+            onclick="window.location.href='/sku/action_add_sku'"><span class="am-icon-plus"></span>新建商品
+    </button>
+    <button type="button" class="am-btn am-btn-default other-select div-get_color"
+            onclick="window.location.href='/color/action_add_color'"><span class="am-icon-plus"></span>添加颜色
+    </button>
+    <button type="button" class="am-btn am-btn-default other-select div-get_size"
+            onclick="window.location.href='/size/action_add_size'"><span class="am-icon-plus"></span>添加尺码
+    </button>
+</div>
 <hr>
 <!--表格子-->
 <table class="am-table">
@@ -53,10 +52,10 @@ $this->load->view('head');
         $.get(getContentUrl() + curr, function (result) {
             $.each(result.result_rows, function (i, o) {
                 content = "<tr>" +
-                    "<td><img style='width: 150px' src='" + o.pic + "'></td>" +
+                    "<td><img style='width: 60px' src='" + o.pic + "'></td>" +
                     "<td>" + o.name + "</td>" +
                     "<td>" + o.product_number + "</td>" +
-                    "<td><a href='/sku/sku_detail/" + o.id + "'>查询详情</a>  <a href='/color/delete_color/" + o.id + "'>删除</a></td>" +
+                    "<td><a href='/sku/sku_detail/" + o.id + "'>详情</a> <a href='/sku/sku_detail/" + o.id + "'>库存</a> <a href='/color/delete_color/" + o.id + "'>删除</a></td>" +
                     "</tr>";
                 from_contant.append(content)
             });

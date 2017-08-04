@@ -75,14 +75,6 @@ $this->load->view('head');
         <td><img src="<?= $pic ?>"></td>
     </tr>
     <tr>
-        <td>颜色</td>
-        <td><?= $color_id ?></td>
-    </tr>
-    <tr>
-        <td>尺码</td>
-        <td><?= $size_id ?></td>
-    </tr>
-    <tr>
         <td>备注</td>
         <td><?= $memo ?></td>
     </tr>
