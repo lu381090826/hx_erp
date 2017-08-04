@@ -30,7 +30,7 @@ class Sku_model extends HX_Model
         $ret = $this->db->query($s);
         $this->total_num = $ret->num_rows();
 
-        $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1  LIMIT ? , ?";
+        $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1  ORDER BY Fcreate_time DESC LIMIT ? , ?";
         $this->offset = 0;
         $this->limit = 10;
         if ($page < 1) {
@@ -108,7 +108,7 @@ class Sku_model extends HX_Model
         }
         if (!isset($request['pic'])) {
 //            $msg = "图片不能为空";
-            $request['pic'] = 0;
+            $request['pic'] = '';
         }
         if (!isset($request['color_id'])) {
 //            $msg = "颜色不能为空";

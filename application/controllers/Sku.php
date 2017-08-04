@@ -17,7 +17,8 @@ class Sku extends HX_Controller
     public function add_sku()
     {
         $post = $this->input->post();
-        $post['pic'] = $this->upload_file();
+        $post['pic'] = $this->upload_file()['small_path'];
+        $post['pic_normal'] = $this->upload_file()['normal_path'];
         $this->m_sku->insert_sku($post);
 
 
@@ -55,52 +56,38 @@ class Sku extends HX_Controller
             show_error($error);
         } else {
             $data = array('upload_data' => $this->upload->data());
-            $real_path = $file_path . $data['upload_data']['file_name'];
-            $this->resize_image($real_path, 120, 120, $data['upload_data']['file_name']);
-            return $real_path;
+            $real_path = FCPATH . $file_path . $data['upload_data']['file_name'];
+            $new_real_path = $this->resize_image($real_path, 80, 100, $data['upload_data']['file_name'], $config['upload_path']);
+            return ['small_path' => $new_real_path, 'normal_path' => $file_path . $data['upload_data']['file_name']];
         }
     }
 
-
-    private function resize_image($uploadfile, $maxwidth, $maxheight, $name)
+    /*
+     * 切割图片
+     * */
+    private function resize_image($uploadfile, $maxwidth, $maxheight, $name, $path)
     {
-        //取得当前图片大小
-        $width = imagesx($uploadfile);
-        $height = imagesy($uploadfile);
-        $i = 0.5;
-        //生成缩略图的大小
-        if (($width > $maxwidth) || ($height > $maxheight)) {
-            /*
-            $widthratio = $maxwidth/$width;
-            $heightratio = $maxheight/$height;
+        $uploadedfile = $uploadfile;
+        $src = imagecreatefromjpeg($uploadedfile);
 
-            if($widthratio < $heightratio)
-            {
-             $ratio = $widthratio;
-            }
-            else
-            {
-              $ratio = $heightratio;
-            }
+        list($width, $height) = getimagesize($uploadedfile);
 
-            $newwidth = $width * $ratio;
-            $newheight = $height * $ratio;
-            */
-            $newwidth = $width * $i;
-            $newheight = $height * $i;
-            if (function_exists("imagecopyresampled")) {
-                $uploaddir_resize = imagecreatetruecolor($newwidth, $newheight);
-                imagecopyresampled($uploaddir_resize, $uploadfile, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
-            } else {
-                $uploaddir_resize = imagecreate($newwidth, $newheight);
-                imagecopyresized($uploaddir_resize, $uploadfile, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
-            }
+        $newwidth = $maxwidth;
+        $newheight = ($height / $width) * $maxheight;
+        $tmp = imagecreatetruecolor($newwidth, $newheight);
 
-            ImageJpeg($uploaddir_resize, $name);
-            ImageDestroy($uploaddir_resize);
-        } else {
-            ImageJpeg($uploadfile, $name);
+        imagecopyresampled($tmp, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+
+        $newPath = $path . "small_images/";
+        if (!file_exists($newPath)) {
+            mkdir($newPath);
         }
+        $filename = $newPath . $name;
+        imagejpeg($tmp, $filename, 100);
+        imagedestroy($src);
+        imagedestroy($tmp);
+
+        return '/sku_pic_uploads/' . date("Ymd") . '/small_images/' . $name;
     }
 
     public

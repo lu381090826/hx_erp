@@ -72,7 +72,7 @@ $this->load->view('head');
     </tr>
     <tr>
         <td>图片</td>
-        <td><img src="<?= $pic ?>"></td>
+        <td><img src="<?= $pic_normal ?>"></td>
     </tr>
     <tr>
         <td>备注</td>
