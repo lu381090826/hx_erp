@@ -55,7 +55,7 @@ $this->load->view('head');
                     "<td><img style='width: 60px' src='" + o.pic + "'></td>" +
                     "<td>" + o.name + "</td>" +
                     "<td>" + o.product_number + "</td>" +
-                    "<td><a href='/sku/sku_detail/" + o.id + "'>详情</a> <a href='/sku/sku_detail/" + o.id + "'>库存</a> <a href='/color/delete_color/" + o.id + "'>删除</a></td>" +
+                    "<td><a href='/sku/sku_detail/" + o.id + "'>详情</a> <a href='/sku/sku_detail/" + o.id + "'>库存</a> <a href='/sku/delete_sku/" + o.id + "'>删除</a></td>" +
                     "</tr>";
                 from_contant.append(content)
             });

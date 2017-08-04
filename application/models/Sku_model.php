@@ -21,7 +21,7 @@ class Sku_model extends HX_Model
 
     public function sku_delete_by_id($id)
     {
-        return $this->db->update($this->table, ['Fstatus' => 0], ['Fid' => $id]);
+        return $this->db->update($this->table, ['Fstatus' => 0, 'Fop_uid' => $this->session->uid], ['Fid' => $id]);
     }
 
     public function get_sku_list($page = 1)
@@ -124,6 +124,8 @@ class Sku_model extends HX_Model
         if (!isset($request['status'])) {
             $request['status'] = 1;
         }
+
+        $request['op_uid'] = $this->session->uid;
 
         foreach ($request as $key => $row) {
             $request[$this->table_prefixes . $key] = $row;

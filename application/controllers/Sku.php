@@ -90,8 +90,7 @@ class Sku extends HX_Controller
         return '/sku_pic_uploads/' . date("Ymd") . '/small_images/' . $name;
     }
 
-    public
-    function sku_detail($id)
+    public function sku_detail($id)
     {
         $sku_info = $this->m_sku->get_row_by_id($id);
 
