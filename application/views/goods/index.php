@@ -16,12 +16,16 @@ $this->load->view('head');
 <!--功能选项-->
 <select data-am-selected id="method_select" title="选择功能">
     <option value="get_sku">商品管理</option>
+    <option value="get_category">分类管理</option>
     <option value="get_color">颜色管理</option>
     <option value="get_size">尺码管理</option>
 </select>
 <div class="am-btn-group am-btn-group-xs">
     <button type="button" class="am-btn am-btn-default other-select div-get_sku"
             onclick="window.location.href='/sku/action_add_sku'"><span class="am-icon-plus"></span>新建商品
+    </button>
+    <button type="button" class="am-btn am-btn-default other-select div-get_category"
+            onclick="window.location.href='/category/action_add_category'"><span class="am-icon-plus"></span>添加分类
     </button>
     <button type="button" class="am-btn am-btn-default other-select div-get_color"
             onclick="window.location.href='/color/action_add_color'"><span class="am-icon-plus"></span>添加颜色
@@ -71,16 +75,15 @@ $this->load->view('head');
     }
 
     function get_category(curr) {
-        var content = "<tr> <th>用户名</th> <th>手机号</th> <th>角色</th> <th>操作</th> </tr>";
+        var content = "<tr> <th>id</th> <th>类别</th> <th>操作</th> </tr>";
         from_thead.append(content);
 
         $.get(getContentUrl() + curr, function (result) {
             $.each(result.result_rows, function (i, o) {
                 content = "<tr>" +
-                    "<td>" + o.name + "</td>" +
-                    "<td>" + o.mobile + "</td>" +
-                    "<td>" + o.role_name + "</td>" +
-                    "<td><a href='/user/user_detail/" + o.uid + "'>查询详情</a></td>" +
+                    "<td>" + o.id + "</td>" +
+                    "<td>" + o.category_name + "</td>" +
+                    "<td><a href='/category/delete_category/" + o.id + "'>删除</a></td>" +
                     "</tr>";
                 from_contant.append(content)
             });
@@ -95,7 +98,7 @@ $this->load->view('head');
                 content = "<tr>" +
                     "<td>" + o.name + "</td>" +
                     "<td>" + o.color_num + "</td>" +
-                    "<td><span class='am-badge'" + "style='background: #" + o.color_code + ";color: #"+o.color_code+"'>c</span></td>" +
+                    "<td><span class='am-badge'" + "style='background: #" + o.color_code + ";color: #" + o.color_code + "'>c</span></td>" +
                     "<td><a href='/color/delete_color/" + o.id + "'>删除</a></td>" +
                     "</tr>";
                 from_contant.append(content)

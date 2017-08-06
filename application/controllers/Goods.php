@@ -13,9 +13,12 @@ class Goods extends HX_Controller
         $this->load->view('goods/index');
     }
 
-    public function get_category()
+    public function get_category($page = 1)
     {
-        $this->output->set_output(json_encode([]));
+        $this->load->model('category_model', 'm_cagegory');
+        $result = $this->m_cagegory->get_list($page);
+
+        $this->output->set_output(json_encode($result));
     }
 
     public function get_color($page = 0)

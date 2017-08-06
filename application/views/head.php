@@ -8,7 +8,9 @@
           content="width=device-width, initial-scale=1">
     <meta name="format-detection" content="telephone=no">
     <meta name="renderer" content="webkit">
-    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <meta HTTP-EQUIV="pragma" CONTENT="no-cache">
+    <meta HTTP-EQUIV="Cache-Control" CONTENT="no-siteapp,no-cache, must-revalidate">
+    <meta HTTP-EQUIV="expires" CONTENT="0">
     <link rel="alternate icon" type="image/png" href="/assets/i/favicon.png">
     <link rel="stylesheet" href="/assets/css/amazeui.min.css"/>
     <style>

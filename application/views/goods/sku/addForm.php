@@ -33,10 +33,15 @@ $this->load->view('head');
             <input type="text" id="doc-vld-brand_id" minlength="1" placeholder="输入" name="brand_id"
                    class="am-form-field" required/>
         </div>
+
         <div class="am-form-group">
-            <label for="doc-vld-category_id">商品分类：</label>
-            <input type="text" id="doc-vld-category_id" minlength="1" placeholder="输入" name="category_id"
-                   class="am-form-field" required/>
+            <label for="doc-select-1">分类:</label>
+            <select id="doc-select-1" name="category_id">
+                <?php foreach ($category_list as $category): ?>
+                    <option value="<?= $category['id'] ?>"><?= $category['category_name'] ?></option>
+                <?php endforeach; ?>
+            </select>
+            <span class="am-form-caret"></span>
         </div>
         <!--        <div class="am-form-group">-->
         <!--            <label for="doc-vld-property_id">属性：</label>-->
@@ -55,8 +60,8 @@ $this->load->view('head');
         </div>
         <div class="am-form-group">
             <label for="doc-vld-import">进口：</label>
-            <input type="text" id="doc-vld-import" placeholder="输入" name="import" class="am-form-field"
-                   required/>
+            <input type="radio" id="doc-vld-import1" name="import" class="am-radio-inline" checked>否
+            <input type="radio" id="doc-vld-import2" name="import" class="am-radio-inline">是
         </div>
         <div class="am-form-group">
             <label for="doc-vld-weight">重量：</label>
