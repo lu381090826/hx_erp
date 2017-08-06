@@ -23,6 +23,14 @@ class Color_model extends HX_Model
         return $this->db->update($this->table, ['Fstatus' => 0], ['Fid' => $id]);
     }
 
+    public function get_color_list_all()
+    {
+        $s = "SELECT Fid,Fname,Fcolor_num,Fcolor_code FROM {$this->table} WHERE Fstatus = 1";
+        $ret = $this->db->query($s);
+
+        return $this->suc_out_put($ret->result('array'));
+    }
+
     public function get_color_list($page = 1)
     {
         $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1";

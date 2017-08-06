@@ -413,5 +413,55 @@ CHARACTER SET utf8
 COLLATE utf8_general_ci NOT NULL DEFAULT '',
   CHANGE `Fcreate_time` `Fcreate_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CHANGE `Fmodify_time` `Fmodify_time` DATETIME ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
-ALTER TABLE `t_sku` ADD `Fpic_normal` VARCHAR(500) NOT NULL DEFAULT '' COMMENT '大图' AFTER `Fpic`;
-ALTER TABLE `t_sku` ADD `Fop_uid` INT NOT NULL DEFAULT '0' AFTER `Fstatus`;
+ALTER TABLE `t_sku`
+  ADD `Fpic_normal` VARCHAR(500) NOT NULL DEFAULT ''
+COMMENT '大图'
+  AFTER `Fpic`;
+ALTER TABLE `t_sku`
+  ADD `Fop_uid` INT NOT NULL DEFAULT '0'
+  AFTER `Fstatus`;
+
+
+/*
+库存表
+*/
+CREATE TABLE `HanXun`.`t_stock` (
+  `Fstock_id`    VARCHAR(32)                          NOT NULL DEFAULT '',
+  `Fsku_id`      VARCHAR(20)                          NOT NULL DEFAULT '',
+  `Fcolor_id`    INT UNSIGNED                         NOT NULL DEFAULT '0',
+  `Fsize_id`     INT UNSIGNED                         NOT NULL DEFAULT '0',
+  `Fstock_num`   INT UNSIGNED                         NOT NULL DEFAULT '0',
+  `Fstatus`      BOOLEAN                              NOT NULL DEFAULT TRUE,
+  `Fversion`     INT UNSIGNED                         NOT NULL DEFAULT '0',
+  `Fop_uid`      INT UNSIGNED                         NOT NULL DEFAULT '0',
+  `Fcreate_time` DATETIME                             NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `Fmodify_time` DATETIME ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`Fstock_id`),
+  INDEX `sku_id` (`Fsku_id`)
+)
+  ENGINE = InnoDB;
+ALTER TABLE `HanXun`.`t_stock`
+  ADD UNIQUE `stock_index` (`Fsku_id`, `Fcolor_id`, `Fsize_id`);
+
+ALTER TABLE `t_sku`
+  CHANGE `Fproduct_number` `Fproduct_number` VARCHAR(32)
+CHARACTER SET utf8
+COLLATE utf8_general_ci NOT NULL DEFAULT ''
+COMMENT '货号';
+
+ALTER TABLE `t_stock`
+  ADD `Fproduct_number` VARCHAR(32) NOT NULL DEFAULT ''
+  AFTER `Fsku_id`;
+
+ALTER TABLE `HanXun`.`t_stock`
+  DROP INDEX `stock_index`,
+  ADD UNIQUE `stock_index` (`Fsku_id`, `Fcolor_id`, `Fsize_id`, `Fproduct_number`) USING BTREE;
+
+ALTER TABLE `t_stock`
+  ADD `Fmemo` VARCHAR(200) NOT NULL DEFAULT ''
+  AFTER `Fop_uid`;
+
+ALTER TABLE `t_stock`
+  CHANGE `Fstock_id` `Fstock_id` VARCHAR(128)
+CHARACTER SET utf8
+COLLATE utf8_general_ci NOT NULL DEFAULT '';

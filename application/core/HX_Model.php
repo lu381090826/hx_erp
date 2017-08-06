@@ -33,4 +33,12 @@ class HX_Model extends CI_Model
         $res['res_info'] = $res_info;
         return $res;
     }
+
+    protected function get_offset($page)
+    {
+        if ($page < 1) {
+            $page = 1;
+        }
+        return $this->offset + ($page - 1) * $this->limit;
+    }
 }

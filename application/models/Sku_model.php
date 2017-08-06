@@ -138,7 +138,7 @@ class Sku_model extends HX_Model
 
     private function get_sku_id()
     {
-        $sku_id = "G" . date("Ymd") . time();
+        $sku_id = "S" . date("Ymd") . time();
         return $sku_id;
     }
 
@@ -157,6 +157,13 @@ class Sku_model extends HX_Model
     {
         $s = "SELECT * FROM {$this->table} u  WHERE u.Fstatus = 1 AND Fid = ? LIMIT 1;";
         $ret = $this->db->query($s, [$uid]);
+        return $this->suc_out_put($ret->row(0, 'array'));
+    }
+
+    public function get_by_sku_id($sku_id)
+    {
+        $s = "SELECT * FROM {$this->table} u  WHERE u.Fstatus = 1 AND Fsku_id = ? LIMIT 1;";
+        $ret = $this->db->query($s, [$sku_id]);
         return $this->suc_out_put($ret->row(0, 'array'));
     }
 }

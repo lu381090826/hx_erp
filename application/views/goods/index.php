@@ -7,6 +7,11 @@ $this->load->view('head');
     .am-table > tbody > tr > td {
         vertical-align: middle;
     }
+
+    .pic {
+        width: 80px;
+        height: 100px;
+    }
 </style>
 <!--功能选项-->
 <select data-am-selected id="method_select" title="选择功能">
@@ -25,7 +30,6 @@ $this->load->view('head');
             onclick="window.location.href='/size/action_add_size'"><span class="am-icon-plus"></span>添加尺码
     </button>
 </div>
-<hr>
 <!--表格子-->
 <table class="am-table">
     <thead id="from_thead">
@@ -36,7 +40,8 @@ $this->load->view('head');
 <br>
 
 <!--分页-->
-<div id="page"></div>
+<div id="page">
+</div>
 <?php $this->load->view('footer'); ?>
 <script type="text/javascript" src="/assets/js/amazeui.page.js"></script>
 <script type="text/javascript" src="/assets/js/common/from.js"></script>
@@ -46,16 +51,19 @@ $this->load->view('head');
     });
 
     function get_sku(curr) {
-        var content = "<tr> <th>小图</th> <th>商品名</th> <th>商品号</th> <th>操作</th> </tr>";
+        var content = "<tr style='text-align: center'> <th style='width: 80px'>小图</th> <th>商品号</th> <th style='text-align: center'>操作</th> </tr>";
         from_thead.append(content);
 
         $.get(getContentUrl() + curr, function (result) {
             $.each(result.result_rows, function (i, o) {
                 content = "<tr>" +
-                    "<td><img style='width: 60px' src='" + o.pic + "'></td>" +
-                    "<td>" + o.name + "</td>" +
+                    "<td><img class='pic' src='" + o.pic + "'></td>" +
                     "<td>" + o.product_number + "</td>" +
-                    "<td><a href='/sku/sku_detail/" + o.id + "'>详情</a> <a href='/sku/sku_detail/" + o.id + "'>库存</a> <a href='/sku/delete_sku/" + o.id + "'>删除</a></td>" +
+                    "<td align='center' valign='middle' style='word-break:break-all'>" +
+                    "<div><a href='/sku/sku_detail/" + o.id + "'>详情</a><div>" +
+                    "<div><a href='/stock/get_by_sku_id/" + o.sku_id + "'>库存</a></div>" +
+                    "<div><a href='/sku/delete_sku/" + o.id + "'>删除</a></div>" +
+                    "</td>" +
                     "</tr>";
                 from_contant.append(content)
             });
@@ -87,7 +95,7 @@ $this->load->view('head');
                 content = "<tr>" +
                     "<td>" + o.name + "</td>" +
                     "<td>" + o.color_num + "</td>" +
-                    "<td><span class='am-badge'" + "style='background: #" + o.color_code + "'>c</span></td>" +
+                    "<td><span class='am-badge'" + "style='background: #" + o.color_code + ";color: #"+o.color_code+"'>c</span></td>" +
                     "<td><a href='/color/delete_color/" + o.id + "'>删除</a></td>" +
                     "</tr>";
                 from_contant.append(content)
