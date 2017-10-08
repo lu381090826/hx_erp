@@ -44,4 +44,23 @@ class Goods extends HX_Controller
 
         $this->output->set_output(json_encode($result));
     }
+
+    public function goods_detail($goods_id)
+    {
+        $this->load->model('goods_model', 'goods_m');
+        $data = $this->goods_m->get_row_by_id($goods_id);
+
+        $this->load->model('sku_model', 'sku_m');
+        $data['result_rows']['sku_list'] = $this->sku_m->get_sku_list_by_goods_id($goods_id);
+
+        $this->load->view('/goods/goods/detail', $data['result_rows']);
+    }
+
+    public function get_goods($page = 0)
+    {
+        $this->load->model('goods_model', 'goods_m');
+        $result = $this->goods_m->get_goods_list($page);
+
+        $this->output->set_output(json_encode($result));
+    }
 }

@@ -465,3 +465,44 @@ ALTER TABLE `t_stock`
   CHANGE `Fstock_id` `Fstock_id` VARCHAR(128)
 CHARACTER SET utf8
 COLLATE utf8_general_ci NOT NULL DEFAULT '';
+ALTER TABLE `t_goods`
+  CHANGE `Fid` `Fid` INT(11) NOT NULL AUTO_INCREMENT,
+  CHANGE `Fname` `Fname` VARCHAR(126)
+CHARACTER SET utf8
+COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  CHANGE `Fsku_id` `Fproduct_num` VARCHAR(32) NOT NULL DEFAULT '0',
+  CHANGE `Fmemo` `Fmemo` VARCHAR(126)
+CHARACTER SET utf8
+COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  CHANGE `Fcreate_time` `Fcreate_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CHANGE `Fmodify_time` `Fmodify_time` DATETIME ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE `t_sku`
+  DROP `Fproduct_number`;
+ALTER TABLE `t_goods`
+  CHANGE `Fproduct_num` `Fgoods_id` VARCHAR(32)
+CHARACTER SET utf8
+COLLATE utf8_general_ci NOT NULL DEFAULT '0';
+
+ALTER TABLE `t_goods`
+  ADD `Fprice` VARCHAR(32) NOT NULL DEFAULT ''
+  AFTER `Fgoods_id`,
+  ADD `Fpic` VARCHAR(256) NOT NULL DEFAULT ''
+  AFTER `Fprice`,
+  ADD `Frecord_number` VARCHAR(32) NOT NULL DEFAULT ''
+  AFTER `Fpic`,
+  ADD `Fbrand` VARCHAR(32) NOT NULL DEFAULT ''
+  AFTER `Frecord_number`,
+  ADD `Fcategory_id` INT NOT NULL DEFAULT 0
+  AFTER `Fbrand`,
+  ADD `Fcategory` VARCHAR(32) NOT NULL DEFAULT ''
+  AFTER `Fcategory_id`;
+ALTER TABLE `t_goods`
+  DROP `Fid`;
+ALTER TABLE `t_goods`
+  ADD PRIMARY KEY (`Fgoods_id`);
+ALTER TABLE `t_sku`
+  ADD `Fbrand` VARCHAR(50) NOT NULL DEFAULT ''
+  AFTER `Fbrand_id`;
+ALTER TABLE `t_goods`
+  ADD `Fpic_normal` VARCHAR(256) NOT NULL DEFAULT ''
+  AFTER `Fpic`;

@@ -24,6 +24,17 @@ class Sku_model extends HX_Model
         return $this->db->update($this->table, ['Fstatus' => 0, 'Fop_uid' => $this->session->uid], ['Fid' => $id]);
     }
 
+    public function get_sku_list_by_goods_id($goods_id)
+    {
+        $s = "SELECT Fsku_id FROM {$this->table} WHERE Fgoods_id = ? AND Fstatus = 1  ORDER BY Fcreate_time DESC";
+        $ret = $this->db->query($s, [$goods_id]);
+        $sku_list = [];
+        foreach ($ret->result('array') as $row) {
+            array_push($sku_list, $row['sku_id']);
+        }
+        return $this->suc_out_put($sku_list);
+    }
+
     public function get_sku_list($page = 1)
     {
         $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1";
@@ -54,101 +65,73 @@ class Sku_model extends HX_Model
         return $this->suc_out_put($ret->row(0, 'array'));
     }
 
-    private function insert_sku_check(&$request)
+    private function insert_sku_pararm($request)
     {
-        $ret = $this->check_product_number_available($request);
-
-        if (isset($ret['result_rows']) && count($ret['result_rows']) > 0) {
-            $this->reentry = $ret['result_rows']['id'];
-
-            $request['sku_id'] = $ret['result_rows']['sku_id'];
+        $params = [];
+        if (isset($request['goods_id']) && isset($request['color']) && isset($request['size'])) {
+            $params = $this->get_sku_id($request, $request['color'], $request['size']);
+        } else {
+            show_error('缺少颜色或尺码');
         }
-
-        $msg = "";
-        if (!isset($request['name'])) {
-            $msg = "商品名不能为空";
-        }
-        if (!isset($request['sku_id'])) {
-            $request['sku_id'] = $this->get_sku_id();
-        }
-        if (!isset($request['product_number'])) {
-            $msg = "商品号不能为空";
-        }
-        if (!isset($request['bar_code'])) {
-            $msg = "条形码不能为空";
-        }
-        if (!isset($request['record_number'])) {
-            $msg = "备案号不能为空";
-        }
-        if (!isset($request['brand_id'])) {
-            $msg = "品牌不能为空";
-        }
-        if (!isset($request['category_id'])) {
-            $msg = "商品类别不能为空";
-        }
-        if (!isset($request['property_id'])) {
-//            $msg = "商品属性不能为空";
-            $request['property_id'] = 0;
-        }
-        if (!isset($request['price'])) {
-            $msg = "价格不能为空";
-        }
-        if (!isset($request['source_area'])) {
-            $msg = "原产地不能为空";
-        }
-        if (!isset($request['import'])) {
-//            $msg = "请选择是否进口";
-            $request['import'] = 0;
-        }
-        if (!isset($request['unit'])) {
-            $msg = "单位不能为空";
-        }
-        if (!isset($request['weight'])) {
-            $msg = "重量不能为空";
-        }
-        if (!isset($request['pic'])) {
-//            $msg = "图片不能为空";
-            $request['pic'] = '';
-        }
-        if (!isset($request['color_id'])) {
-//            $msg = "颜色不能为空";
-            $request['color_id'] = 0;
-        }
-        if (!isset($request['size_id'])) {
-//            $msg = "尺码不能为空";
-            $request['size_id'] = 0;
-        }
-        if (!isset($request['memo'])) {
-            $msg = "描述不能为空";
-        }
-        if (!isset($request['status'])) {
-            $request['status'] = 1;
-        }
-
-        $request['op_uid'] = $this->session->uid;
-
-        foreach ($request as $key => $row) {
-            $request[$this->table_prefixes . $key] = $row;
-            unset($request[$key]);
-        }
-
-        if ($msg)
-            show_error($msg);
+        return $params;
     }
 
-    private function get_sku_id()
+    private function get_sku_id($request, $color_id_array, $size_id_array)
     {
-        $sku_id = "S" . date("Ymd") . time();
+        $sku_id = [];
+        $sku_id_list = $this->get_sku_list_by_goods_id($request['goods_id'])['result_rows'];
+        foreach ($color_id_array as $k => $color_row) {
+            foreach ($size_id_array as $size_row) {
+                $curr_sku_id = $request['goods_id'] . $color_row . $size_row;
+                if (in_array($curr_sku_id, $sku_id_list)) {
+                    continue;
+                }
+                $sku_id[$k]['Fsku_id'] = $curr_sku_id;
+                $sku_id[$k]['Fgoods_id'] = $request['goods_id'];
+
+
+                if (isset($request['price'])) {
+                    $sku_id[$k]['Fprice'] = $request['price'];
+                }
+                if (isset($request['pic'])) {
+                    $sku_id[$k]['Fpic'] = $request['pic'];
+                }
+                if (isset($request['record_number'])) {
+                    $sku_id[$k]['Frecord_number'] = $request['record_number'];
+                }
+                if (isset($request['brand'])) {
+                    $sku_id[$k]['Fbrand'] = $request['brand'];
+                }
+                if (isset($request['category_id'])) {
+                    $sku_id[$k]['Fcategory_id'] = $request['category_id'];
+                }
+                if (isset($request['category'])) {
+                    $sku_id[$k]['Fcategory'] = $request['category'];
+                }
+                if (isset($request['memo'])) {
+                    $sku_id[$k]['Fmemo'] = $request['memo'];
+                }
+                if (isset($request['op_uid'])) {
+                    $sku_id[$k]['Fop_uid'] = $this->session->uid;
+                }
+                if (isset($request['status'])) {
+                    $sku_id[$k]['Fstatus'] = $request['status'];
+                } else {
+                    $sku_id[$k]['Fstatus'] = 1;
+                }
+            }
+        }
+
         return $sku_id;
     }
 
-    public function insert_sku($request)
+    public function modify_sku($request)
     {
-        $this->insert_sku_check($request);
+        $params = $this->insert_sku_pararm($request);
         if ($this->reentry) {
-            $this->db->update($this->table, $request, ['Fid' => $this->reentry]);
+            $this->db->update($this->table, $params, ['Fid' => $this->reentry]);
         } else {
-            $this->db->insert($this->table, $request);
+            $this->db->insert_batch($this->table, $params);
         }
 
     }

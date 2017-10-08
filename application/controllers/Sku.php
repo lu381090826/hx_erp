@@ -14,15 +14,26 @@ class Sku extends HX_Controller
         $this->load->model('category_model', 'm_category');
         $data['category_list'] = $this->m_category->get_all_list()['result_rows'];
 
+        $this->load->model('color_model', 'color_m');
+        $data['color_list'] = $this->color_m->get_color_list_all()['result_rows'];
+
+        $this->load->model('size_model', 'size_m');
+        $data['size_list'] = $this->size_m->get_size_list_all()['result_rows'];
+
         $this->load->view('goods/sku/addForm', $data);
     }
 
     public function add_sku()
     {
+        $this->load->model('goods_model', 'goods_m');
+
         $post = $this->input->post();
-        $post['pic'] = $this->upload_file()['small_path'];
-        $post['pic_normal'] = $this->upload_file()['normal_path'];
-        $this->m_sku->insert_sku($post);
+        if (!empty($_FILES['pic']['size'])) {
+            $post['pic'] = $this->upload_file()['small_path'];
+            $post['pic_normal'] = $this->upload_file()['normal_path'];
+        }
+        $this->goods_m->modify_goods($post);
+        $this->m_sku->modify_sku($post);
 
 
         $this->load->helper('url');
@@ -98,5 +109,12 @@ class Sku extends HX_Controller
         $sku_info = $this->m_sku->get_row_by_id($id);
 
         $this->load->view('/goods/goods/detail', $sku_info['result_rows']);
+    }
+
+    public function sku_detail_edit($id)
+    {
+        $sku_info = $this->m_sku->get_row_by_id($id);
+
+        $this->load->view('/goods/goods/detail_edit', $sku_info['result_rows']);
     }
 }

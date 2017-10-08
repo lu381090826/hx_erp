@@ -15,13 +15,13 @@ $this->load->view('head');
 </style>
 <!--功能选项-->
 <select data-am-selected id="method_select" title="选择功能">
-    <option value="get_sku">商品管理</option>
+    <option value="get_goods">商品管理</option>
     <option value="get_category">分类管理</option>
     <option value="get_color">颜色管理</option>
     <option value="get_size">尺码管理</option>
 </select>
 <div class="am-btn-group am-btn-group-xs">
-    <button type="button" class="am-btn am-btn-default other-select div-get_sku"
+    <button type="button" class="am-btn am-btn-default other-select div-get_goods"
             onclick="window.location.href='/sku/action_add_sku'"><span class="am-icon-plus"></span>新建商品
     </button>
     <button type="button" class="am-btn am-btn-default other-select div-get_category"
@@ -54,7 +54,7 @@ $this->load->view('head');
         fromLoad('goods');
     });
 
-    function get_sku(curr) {
+    function get_goods(curr) {
         var content = "<tr style='text-align: center'> <th style='width: 80px'>小图</th> <th>商品号</th> <th style='text-align: center'>操作</th> </tr>";
         from_thead.append(content);
 
@@ -62,11 +62,10 @@ $this->load->view('head');
             $.each(result.result_rows, function (i, o) {
                 content = "<tr>" +
                     "<td><img class='pic' src='" + o.pic + "'></td>" +
-                    "<td>" + o.product_number + "</td>" +
+                    "<td>" + o.goods_id + "</td>" +
                     "<td align='center' valign='middle' style='word-break:break-all'>" +
-                    "<div><a href='/sku/sku_detail/" + o.id + "'>详情</a><div>" +
-                    "<div><a href='/stock/get_by_sku_id/" + o.sku_id + "'>库存</a></div>" +
-                    "<div><a href='/sku/delete_sku/" + o.id + "'>删除</a></div>" +
+                    "<div><a href='/goods/goods_detail/" + o.goods_id + "'>详情</a><div>" +
+                    "<div><a href='/sku/delete_sku/" + o.goods_id + "'>删除</a></div>" +
                     "</td>" +
                     "</tr>";
                 from_contant.append(content)
