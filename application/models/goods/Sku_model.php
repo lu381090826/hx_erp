@@ -35,6 +35,17 @@ class Sku_model extends HX_Model
         return $this->suc_out_put($sku_list);
     }
 
+    public function get_sku_list_info_by_goods_id($goods_id)
+    {
+        $s = "SELECT * FROM {$this->table} WHERE Fgoods_id = ? AND Fstatus = 1  ORDER BY Fcreate_time DESC";
+        $ret = $this->db->query($s, [$goods_id]);
+        $sku_list = [];
+        foreach ($ret->result('array') as $row) {
+            array_push($sku_list, $row);
+        }
+        return $this->suc_out_put($sku_list);
+    }
+
     public function get_sku_list($page = 1)
     {
         $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1";
@@ -78,51 +89,55 @@ class Sku_model extends HX_Model
 
     private function get_sku_id($request, $color_id_array, $size_id_array)
     {
-        $sku_id = [];
+        $sku_info = [];
         $sku_id_list = $this->get_sku_list_by_goods_id($request['goods_id'])['result_rows'];
+        $i = 0;
         foreach ($color_id_array as $k => $color_row) {
-            foreach ($size_id_array as $size_row) {
-                $curr_sku_id = $request['goods_id'] . $color_row . $size_row;
+            foreach ($size_id_array as $z => $size_row) {
+
+                $curr_sku_id = $request['goods_id'] . 'C' . $color_row . 'S' . $size_row;
                 if (in_array($curr_sku_id, $sku_id_list)) {
                     continue;
                 }
-                $sku_id[$k]['Fsku_id'] = $curr_sku_id;
-                $sku_id[$k]['Fgoods_id'] = $request['goods_id'];
+                $sku_info[$i]['Fsku_id'] = $curr_sku_id;
+                $sku_info[$i]['Fgoods_id'] = $request['goods_id'];
+                $sku_info[$i]['Fcolor_id'] = $color_row;
+                $sku_info[$i]['Fsize_id'] = $size_row;
 
 
                 if (isset($request['price'])) {
-                    $sku_id[$k]['Fprice'] = $request['price'];
+                    $sku_info[$i]['Fprice'] = $request['price'];
                 }
                 if (isset($request['pic'])) {
-                    $sku_id[$k]['Fpic'] = $request['pic'];
+                    $sku_info[$i]['Fpic'] = $request['pic'];
                 }
                 if (isset($request['record_number'])) {
-                    $sku_id[$k]['Frecord_number'] = $request['record_number'];
+                    $sku_info[$i]['Frecord_number'] = $request['record_number'];
                 }
                 if (isset($request['brand'])) {
-                    $sku_id[$k]['Fbrand'] = $request['brand'];
+                    $sku_info[$i]['Fbrand'] = $request['brand'];
                 }
                 if (isset($request['category_id'])) {
-                    $sku_id[$k]['Fcategory_id'] = $request['category_id'];
+                    $sku_info[$i]['Fcategory_id'] = $request['category_id'];
                 }
                 if (isset($request['category'])) {
-                    $sku_id[$k]['Fcategory'] = $request['category'];
+                    $sku_info[$i]['Fcategory'] = $request['category'];
                 }
                 if (isset($request['memo'])) {
-                    $sku_id[$k]['Fmemo'] = $request['memo'];
+                    $sku_info[$i]['Fmemo'] = $request['memo'];
                 }
                 if (isset($request['op_uid'])) {
-                    $sku_id[$k]['Fop_uid'] = $this->session->uid;
+                    $sku_info[$i]['Fop_uid'] = $this->session->uid;
                 }
                 if (isset($request['status'])) {
-                    $sku_id[$k]['Fstatus'] = $request['status'];
+                    $sku_info[$i]['Fstatus'] = $request['status'];
                 } else {
-                    $sku_id[$k]['Fstatus'] = 1;
+                    $sku_info[$i]['Fstatus'] = 1;
                 }
+                $i++;
             }
         }
-
-        return $sku_id;
+        return $sku_info;
     }
 
     public function modify_sku($request)

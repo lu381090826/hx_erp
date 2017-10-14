@@ -66,7 +66,7 @@ class Goods_model extends HX_Model
             $insert_params['Fcategory_id'] = $request['category_id'];
         }
         if (!empty($request['memo'])) {
-            $insert_params['memo'] = $request['memo'];
+            $insert_params['Fmemo'] = $request['memo'];
         }
         if (!empty($request['status'])) {
             $insert_params['Fstatus'] = $request['status'];
