@@ -1,4 +1,4 @@
-#商品模块接口
+#商品模块Model
 ###获取spu列表
 ```php
 model:goods/goods_model
