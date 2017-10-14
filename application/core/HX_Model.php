@@ -23,7 +23,7 @@ class HX_Model extends CI_Model
         $res['total_num'] = $this->total_num;
         $res['pages'] = (int)ceil($this->total_num / $this->limit);
         $res['result_rows'] = $result;
-print_r($res);
+
         return $res;
     }
 
