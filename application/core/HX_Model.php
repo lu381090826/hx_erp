@@ -23,7 +23,7 @@ class HX_Model extends CI_Model
         $res['total_num'] = $this->total_num;
         $res['pages'] = (int)ceil($this->total_num / $this->limit);
         $res['result_rows'] = $result;
-
+print_r($res);
         return $res;
     }
 
@@ -40,5 +40,21 @@ class HX_Model extends CI_Model
             $page = 1;
         }
         return $this->offset + ($page - 1) * $this->limit;
+    }
+
+    /**
+     * @param $request
+     * @return array
+     */
+    protected function pageUtils($request)
+    {
+        if (!isset($request['page']) || $request['page'] < 1) {
+            $page = 1;
+        } else {
+            $page = $request['page'];
+        }
+        $offset = $this->offset + ($page - 1) * $this->limit;
+        $limit = isset($request['limit']) ? $request['limit'] : 10;
+        return array($offset, $limit);
     }
 }

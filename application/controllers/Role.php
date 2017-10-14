@@ -9,7 +9,7 @@ class Role extends HX_Controller
         $this->load->model('role_model', 'm_role');
         $role_info = $this->m_role->get_row_by_id($id);
 
-        $this->load->model('ra_model', 'm_ra');
+        $this->load->model('admin/ra_model', 'm_ra');
         $auths = $this->m_ra->get_all_by_role_id($id);
 
         if (!empty($auths)) {
@@ -22,7 +22,7 @@ class Role extends HX_Controller
     //添加角色页
     public function action_add_role()
     {
-        $this->load->model('authority_model', 'm_authority');
+        $this->load->model('admin/authority_model', 'm_authority');
         $data['auth_list'] = $this->m_authority->get_all_by_auth_pids($this->session->auths);
 
         $this->load->view('sys/role/addForm', $data);
@@ -41,7 +41,7 @@ class Role extends HX_Controller
         $insert_id = $this->m_role->add_new_role($post);
 
         if ($insert_id) {
-            $this->load->model('ra_model', 'm_ra');
+            $this->load->model('admin/ra_model', 'm_ra');
             $req['role_id'] = $insert_id;
             $req['auth_ids'] = empty($post['auth_ids']) ? [] : $post['auth_ids'];
             $this->m_ra->insert_new_ra($req);

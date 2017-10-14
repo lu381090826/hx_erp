@@ -29,8 +29,8 @@ class Ra_model extends HX_Model
 
         $auths_info = [];
         if (!empty($auths)) {
-            $this->load->model('authority_model', 'm_authority_model');
-            $auths_info = $this->m_authority_model->get_all_by_auth_ids($auths);
+            $this->load->model('admin/authority_model', 'authority_m');
+            $auths_info = $this->authority_m->get_all_by_auth_ids($auths);
         }
 
         return $auths_info;

@@ -51,7 +51,7 @@ class Login extends CI_Controller
      */
     private function checkPassword()
     {
-        $this->load->model('user_model', 'user');
+        $this->load->model('admin/user_model', 'user');
         $res = $this->user->get_user_info_by_password();
 
         if (!$res) {
@@ -67,7 +67,7 @@ class Login extends CI_Controller
      */
     private function getAuthIds($role_id)
     {
-        $this->load->model('ra_model', 'm_ra');
+        $this->load->model('admin/ra_model', 'm_ra');
         $auths = $this->m_ra->get_all_by_role_id($role_id);
 
         $auth_ids = [];

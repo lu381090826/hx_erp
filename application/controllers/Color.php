@@ -10,7 +10,7 @@ class Color extends HX_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('color_model', 'm_color');
+        $this->load->model('goods/color_model', 'm_color');
     }
 
     public function action_add_color()

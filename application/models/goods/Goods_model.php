@@ -88,23 +88,23 @@ class Goods_model extends HX_Model
 
     }
 
-    public function get_goods_list($page = 1)
+    public function get_goods_list($request)
     {
         $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1";
         $ret = $this->db->query($s);
         $this->total_num = $ret->num_rows();
 
         $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1  ORDER BY Fcreate_time DESC LIMIT ? , ?";
-        $this->offset = 0;
-        $this->limit = 10;
-        if ($page < 1) {
-            $page = 1;
-        }
+
+        list($offset, $limit) = parent::pageUtils($request);
+
         $ret = $this->db->query($s, [
-            $this->offset + ($page - 1) * $this->limit,
-            $this->limit
+            $offset,
+            $limit
         ]);
 
         return $this->suc_out_put($ret->result('array'));
     }
+
+
 }

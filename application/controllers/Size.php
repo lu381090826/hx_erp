@@ -10,7 +10,7 @@ class Size extends HX_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('size_model', 'm_size');
+        $this->load->model('goods/size_model', 'm_size');
     }
 
     public function action_add_size()

@@ -5,7 +5,7 @@ class User extends HX_Controller
 {
     public function user_detail($uid)
     {
-        $this->load->model('user_model', 'm_user');
+        $this->load->model('admin/user_model', 'm_user');
         $user_info = $this->m_user->get_row_by_uid($uid);
 
         $this->load->library('parser');
@@ -23,7 +23,7 @@ class User extends HX_Controller
 
     public function add_users()
     {
-        $this->load->model('user_model', 'm_user');
+        $this->load->model('admin/user_model', 'm_user');
         $this->m_user->insert_user($this->input->post());
 
         $this->load->helper('url');

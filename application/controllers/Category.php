@@ -10,7 +10,7 @@ class Category extends HX_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('category_model', 'm_category');
+        $this->load->model('goods/category_model', 'm_category');
     }
 
     public function action_add_category()

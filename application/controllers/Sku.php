@@ -6,18 +6,18 @@ class Sku extends HX_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('sku_model', 'm_sku');
+        $this->load->model('goods/sku_model', 'sku_m');
     }
 
     public function action_add_sku()
     {
-        $this->load->model('category_model', 'm_category');
+        $this->load->model('goods/category_model', 'm_category');
         $data['category_list'] = $this->m_category->get_all_list()['result_rows'];
 
-        $this->load->model('color_model', 'color_m');
+        $this->load->model('goods/color_model', 'color_m');
         $data['color_list'] = $this->color_m->get_color_list_all()['result_rows'];
 
-        $this->load->model('size_model', 'size_m');
+        $this->load->model('goods/size_model', 'size_m');
         $data['size_list'] = $this->size_m->get_size_list_all()['result_rows'];
 
         $this->load->view('goods/sku/addForm', $data);
@@ -25,7 +25,7 @@ class Sku extends HX_Controller
 
     public function add_sku()
     {
-        $this->load->model('goods_model', 'goods_m');
+        $this->load->model('goods/goods_model', 'goods_m');
 
         $post = $this->input->post();
         if (!empty($_FILES['pic']['size'])) {
@@ -33,7 +33,7 @@ class Sku extends HX_Controller
             $post['pic_normal'] = $this->upload_file()['normal_path'];
         }
         $this->goods_m->modify_goods($post);
-        $this->m_sku->modify_sku($post);
+        $this->sku_m->modify_sku($post);
 
 
         $this->load->helper('url');
@@ -42,7 +42,7 @@ class Sku extends HX_Controller
 
     public function delete_sku($id)
     {
-        $this->m_sku->sku_delete_by_id($id);
+        $this->sku_m->sku_delete_by_id($id);
 
         $this->load->helper('url');
         redirect("success");
@@ -106,14 +106,14 @@ class Sku extends HX_Controller
 
     public function sku_detail($id)
     {
-        $sku_info = $this->m_sku->get_row_by_id($id);
+        $sku_info = $this->sku_m->get_row_by_id($id);
 
         $this->load->view('/goods/goods/detail', $sku_info['result_rows']);
     }
 
     public function sku_detail_edit($id)
     {
-        $sku_info = $this->m_sku->get_row_by_id($id);
+        $sku_info = $this->sku_m->get_row_by_id($id);
 
         $this->load->view('/goods/goods/detail_edit', $sku_info['result_rows']);
     }

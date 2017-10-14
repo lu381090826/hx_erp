@@ -10,7 +10,7 @@ class Sys extends HX_Controller
 
     public function get_users($page = 0)
     {
-        $this->load->model('user_model', 'm_user');
+        $this->load->model('admin/user_model', 'm_user');
         $result = $this->m_user->get_user_list($page);
 
         $this->output->set_output(json_encode($result));
@@ -26,7 +26,7 @@ class Sys extends HX_Controller
     //检查手机号是否可用
     public function check_mobile_available()
     {
-        $this->load->model('user_model', 'm_user');
+        $this->load->model('admin/user_model', 'm_user');
         $result = $this->m_user->check_mobile_available($this->input->get());
 
         $this->output->set_output(json_encode($result));

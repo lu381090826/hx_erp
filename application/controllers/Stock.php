@@ -6,21 +6,21 @@ class Stock extends HX_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('stock_model', 'm_stock');
-        $this->load->model('sku_model', 'm_sku');
-        $this->load->model('color_model', 'm_color');
-        $this->load->model('size_model', 'm_size');
+        $this->load->model('goods/stock_model', 'stock_m');
+        $this->load->model('goods/sku_model', 'sku_m');
+        $this->load->model('goods/color_model', 'color_m');
+        $this->load->model('goods/size_model', 'size_m');
     }
 
     public function get_by_sku_id($sku_id, $page = 1)
     {
 
-        $data['sku_info'] = $this->m_sku->get_by_sku_id($sku_id)['result_rows'];
-        $data['stock_list'] = $this->m_stock->get_list_by_sku_id($sku_id, $page);
+        $data['sku_info'] = $this->sku_m->get_by_sku_id($sku_id)['result_rows'];
+        $data['stock_list'] = $this->stock_m->get_list_by_sku_id($sku_id, $page);
 
 
-        $data['color_list'] = $this->m_color->get_color_list_all()['result_rows'];
-        $data['size_list'] = $this->m_size->get_size_list_all()['result_rows'];
+        $data['color_list'] = $this->color_m->get_color_list_all()['result_rows'];
+        $data['size_list'] = $this->size_m->get_size_list_all()['result_rows'];
         $data['pagination'] = parent::pagination('/stock/get_by_sku_id/' . $sku_id, $data['stock_list']['total_num'], 10);
 
         foreach ($data['stock_list']['result_rows'] as &$row) {
@@ -54,7 +54,7 @@ class Stock extends HX_Controller
                 show_error("提交条数过多，请一次不要超过5条");
             }
             foreach ($post['stock'] as $stock) {
-                $this->m_stock->modify_stock($stock);
+                $this->stock_m->modify_stock($stock);
             }
         }
 
@@ -63,7 +63,7 @@ class Stock extends HX_Controller
                 show_error("修改条数过多，请一次不要超过10条");
             }
             foreach ($post['update_stock'] as $stock) {
-                $this->m_stock->update_num($stock['stock_id'], $stock['num']);
+                $this->stock_m->update_num($stock['stock_id'], $stock['num']);
             }
         }
 
