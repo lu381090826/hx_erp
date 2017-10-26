@@ -106,5 +106,55 @@ class Goods_model extends HX_Model
         return $this->suc_out_put($ret->result('array'));
     }
 
+    private function searchParams($request){
+        $sql = "";
+        if (isset($request['goods_id'])) {
+            $sql .= " AND Fgoods_id LIKE '%{$request['goods_id']}%' ";
+        }
+        if(isset($request['price_max'])){
+            $sql .= " AND Fprice <= {$request['price_max']} ";
+        }
+        if(isset($request['price_min'])){
+            $sql .= " AND Fprice >= {$request['price_min']} ";
+        }
+        if(isset($request['record_number'])){
+            $sql .= " AND Frecord_number LIKE '%{$request['record_number']}%' ";
+        }
+        if(isset($request['brand'])){
+            $sql .= " AND Fbrand LIKE '%{$request['brand']}%' ";
+        }
+        if(isset($request['category_id'])){
+            $sql .= " AND Fcategory_id = {$request['Fcategory_id']} ";
+        }
+        if(isset($request['category'])){
+            $sql .= " AND Fcategory LIKE '%{$request['category']}%' ";
+        }
+        if(isset($request['begin_time'])){
+            $sql .= " AND Fcreate_time >= '{$request['begin_time']}' ";
+        }
+        if(isset($request['end_time'])){
+            $sql .= " AND Fcreate_time <= '{$request['end_time']}' ";
+        }
+
+        return $sql;
+    }
+
+    public function search_goods($request){
+        $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1";
+        $ret = $this->db->query($s);
+        $this->total_num = $ret->num_rows();
+
+        $params = $this->searchParams($request);
+
+        $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1 {$params} ORDER BY Fcreate_time DESC LIMIT ? , ?";
+
+        list($offset, $limit) = parent::pageUtils($request);
+
+        $ret = $this->db->query($s, [
+            $offset,
+            $limit
+        ]);
+        return $this->suc_out_put($ret->result('array'));
+    }
 
 }

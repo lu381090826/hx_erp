@@ -72,4 +72,14 @@ class Goods extends HX_Controller
 
         $this->output->set_output(json_encode($result));
     }
+
+    public function search_goods(){
+        $this->load->model('goods/goods_model', 'goods_m');
+
+        $request = $this->input->post();
+
+        $result = $this->goods_m->search_goods($request);
+
+        $this->output->set_output(json_encode($result));
+    }
 }
