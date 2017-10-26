@@ -87,3 +87,20 @@ Array
         )
 )
 ```
+###商品搜索
+```php
+model:goods/goods_model
+method:search_goods
+request:
+
+goods_id  货号
+price_max  最大价格
+price_min  最小价格
+record_number  备案号
+brand  品牌
+category_id  分类id
+category    分类
+begin_time   开始时间
+end_time     结束时间
+
+```
