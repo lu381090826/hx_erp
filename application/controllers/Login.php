@@ -22,7 +22,7 @@ class Login extends CI_Controller
         $res = $this->checkPassword();
 
         //获取全部的权限id
-        $auth_ids = $this->getAuthIds($res->role_id);
+        $auth_ids = $this->getAuthIds($res['role_id']);
 
         $this->session->set_userdata(
             [
@@ -51,8 +51,8 @@ class Login extends CI_Controller
      */
     private function checkPassword()
     {
-        $this->load->model('admin/user_model', 'user');
-        $res = $this->user->get_user_info_by_password();
+        $this->load->model('admin/user_model', 'user_m');
+        $res = $this->user_m->get_user_info_by_password();
 
         if (!$res) {
             show_error('登录失败，请检查用户名和密码');

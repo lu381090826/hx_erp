@@ -27,7 +27,7 @@ class User_model extends HX_Model
             md5($this->input->post('password'))
         ]);
 
-        return $ret->row(0);
+        return $ret->row(0,'array');
     }
 
     public function check_mobile_available($request)
