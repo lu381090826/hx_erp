@@ -26,10 +26,10 @@ class Login extends CI_Controller
 
         $this->session->set_userdata(
             [
-                'name' => $res->name,
-                'mobile' => $res->mobile,
-                'uid' => $res->uid,
-                'role_id' => $res->role_id,
+                'name' => $res['name'],
+                'mobile' => $res['mobile'],
+                'uid' => $res['uid'],
+                'role_id' => $res['role_id'],
                 'auths' => $auth_ids,
             ]
         );
