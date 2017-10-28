@@ -1,0 +1,49 @@
+/*全局设置*/
+.form-content{
+    padding: 12px;
+}
+
+/*合成项相关*/
+.input-compose{
+    display: flex;
+    justify-content: space-between;
+}
+.input-compose div{
+    width: 100%;
+}
+
+/*项相关*/
+.panel-heading{
+}
+.panel-heading a{
+    color: white;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+.panel-heading a[aria-expanded=true] .glyphicon-plus-sign{
+    display: none;
+}
+.panel-heading a[aria-expanded=false] .glyphicon-minus-sign{
+    display: none;
+}
+
+/*sku内容相关*/
+.sku-content img{
+    width: 100%;
+}
+.sku-table{
+    margin-top: 6px;
+}
+.sku-table input{
+    max-width: 75px;
+}
+.sku-actions{
+    display: flex;
+    justify-content: space-between;
+}
+
+/*提交按钮*/
+.from-submit{
+    width: 100%;
+}

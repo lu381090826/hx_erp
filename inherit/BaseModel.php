@@ -42,12 +42,18 @@ class BaseModel extends CI_Model {
      * 获取模型
      */
     public function get($id){
+        //按照加官，使用sql前所有字段加F
+        $this->addPrefixGet();
+
         //获取查询结果
         $result = $this->db->get_where($this->table,array($this->pk => $id))->first_row();
 
         //加载到参数
         if(!empty($result))
             $this->load((array)$result);
+
+        //还原F前缀
+        $this->delPrefixGet();
 
         //返回
         return $this;
@@ -72,9 +78,13 @@ class BaseModel extends CI_Model {
      * @return object
      */
     public function search($page=1,$size=20,$condition=[],$sort=[]){
+        //按照加官，使用sql前所有字段加F
+        $condition = $this->addPrefixKeyValue($condition);
+        $sort = $this->addPrefixKeyValue($sort);
+
         //查找数量
-        $count = $this->db->where($condition)->count_all_results($this->table);
-        //$count = $this->db->count_all_results($this->table);
+        //$count = $this->db->where($condition)->count_all_results($this->table);
+        $count = $this->getCount($condition);
 
         //条件筛选
         $start = ($page-1)*$size;
@@ -112,8 +122,13 @@ class BaseModel extends CI_Model {
      * @return object
      */
     public function searchAll($condition=[],$sort=[]){
+        //按照加官，使用sql前所有字段加F
+        $condition = $this->addPrefixKeyValue($condition);
+        $sort = $this->addPrefixKeyValue($sort);
+
         //查找数量
-        $count = $this->db->where($condition)->count_all_results($this->table);
+        //$count = $this->db->where($condition)->count_all_results($this->table);
+        $count = $this->getCount($condition);
 
         //条件筛选
         $select = $this->db
@@ -144,10 +159,14 @@ class BaseModel extends CI_Model {
 
     /**
      * @param $param
+     * @return bool
      * 插入一行数据
      */
     public function insert($param)
     {
+        //生命周期：保存前
+        $this->beforeSave();
+
         //载入参数
         $this->load($param);
 
@@ -161,6 +180,11 @@ class BaseModel extends CI_Model {
 
         //事务提交
         $this->db->trans_complete();
+
+        //生命周期：保存后
+        $this->afterSave();
+
+        return true;
     }
 
     /**
@@ -169,12 +193,19 @@ class BaseModel extends CI_Model {
      */
     public function update()
     {
+        //生命周期：保存前
+        $this->beforeSave();
+
         //判断是否存在对应模型
         if(empty($this->{$pk}))
             return false;
 
         //更改到数据库
         $bool = $this->db->update($this->table, $this, array($this->pk => $this->{$pk}));
+
+
+        //生命周期：保存后
+        $this->afterSave();
 
         //返回
         return $bool;
@@ -186,12 +217,18 @@ class BaseModel extends CI_Model {
      */
     public function delete()
     {
+        //生命周期：保存前
+        $this->beforeSave();
+
         //判断是否存在对应模型
         if(empty($this->{$this->pk}))
             return false;
 
         //更改到数据库
         $bool = $this->db->delete($this->table, array($this->pk => $this->{$this->pk}));
+
+        //生命周期：保存后
+        $this->afterSave();
 
         //返回结果
         return $bool;
@@ -209,8 +246,9 @@ class BaseModel extends CI_Model {
         $bool = $this->db->replace($this->table, $this);
 
         //修改自增id
-        if(empty($this->{$this->pk}))
+        if(empty($this->{$this->pk})) {
             $this->{$this->pk} = $this->db->insert_id();
+        }
 
         //生命周期：保存后
         $this->afterSave();
@@ -227,14 +265,16 @@ class BaseModel extends CI_Model {
      * 保全前执行
      */
     protected function beforeSave(){
-
+        //按照加官，使用sql前所有字段加F
+        $this->addPrefix();
     }
 
     /**
      * 保全后执行
      */
     protected function afterSave(){
-
+        //按照加官，使用sql后全部字段削去F
+        $this->delPrefix();
     }
 
     //endregion;
@@ -271,4 +311,79 @@ class BaseModel extends CI_Model {
     }
 
     //endregion
+
+    //region 内核应对
+
+    //获取数量
+    private function getCount($condition){
+        $query = $this->db->select('COUNT(*) AS `Fnums`')->where($condition)->get($this->table);;
+        $result = $query->row();
+        $count = $result->nums;
+        return $count;
+    }
+
+    //添加前置
+    private function addPrefix(){
+        //按照加官，使用sql前所有字段加F
+        foreach($this as $key=>$value){
+            //跳过表名
+            if($key == "table") continue;
+            //跳过已经加过的
+            if($key[0] == "F") continue;
+
+            //主键特殊处理
+            if($key == "pk"){
+                $this->{$key} = "F".$value;
+                continue;
+            }
+
+            //为字段属性添加F
+            $this->{"F".$key} = $value;
+            //删除原属性
+            unset($this->{$key});
+        }
+    }
+
+    //删除前缀
+    private function delPrefix(){
+        //按照加官，使用sql后全部字段削去F
+        foreach($this as $key=>$value){
+            //跳过表名
+            if($key == "table") continue;
+
+            //主键特殊处理
+            if($key == "pk"){
+                $this->{$key} = substr($value,1);
+                continue;
+            }
+
+            //跳过非F开头的
+            if($key[0] != "F") continue;
+            //还原原属性
+            $this->{substr($key,1)} = $value;
+            //删除F属性
+            unset($this->{$key});
+        }
+    }
+
+    //get
+    private function addPrefixGet(){
+        $this->pk = "F".$this->pk;
+    }
+
+    //get
+    private function delPrefixGet(){
+        $this->pk = substr($this->pk,1);
+    }
+
+    //sort 和 condition
+    private function addPrefixKeyValue($array){
+        $result = array();
+        foreach($array as $key=>$value){
+            $result["F".$key] = $value;
+        }
+        return $result;
+    }
+
+    //endregion;
 }

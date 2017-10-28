@@ -124,10 +124,12 @@
             <?php } else { ?>
                 <?php if (check_auth(8)) { ?>
                     <div class="am-topbar-right">
-                        <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span
-                                class="am-icon-female"></span>
-                            销售管理
-                        </button>
+                        <a href="/sell/form/Form">
+                            <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span
+                                    class="am-icon-female"></span>
+                                销售管理
+                            </button>
+                        </a>
                     </div>
                 <?php } ?>
                 <?php if (check_auth(2)) { ?>

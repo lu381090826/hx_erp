@@ -1,0 +1,1 @@
+<?=ViewComponent::FieldInput($model,"id");?><?=ViewComponent::FieldInput($model,"name");?><?=ViewComponent::FieldInput($model,"phone");?><?=ViewComponent::FieldInput($model,"addr");?>    
