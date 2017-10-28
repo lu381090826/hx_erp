@@ -7,7 +7,7 @@ class HX_Controller extends CI_Controller
         parent::__construct();
     }
 
-    protected function pagination($base_url,$total,$per)
+    protected function pagination($base_url,$total,$per=10)
     {
         $this->load->library('pagination');
         $config['base_url'] = $base_url;

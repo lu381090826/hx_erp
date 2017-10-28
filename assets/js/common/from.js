@@ -22,13 +22,30 @@ function tableClean() {
     from_contant.empty()
 }
 
+function getFormJson(frm) {
+    var o = {};
+    var a = $(frm).serializeArray();
+    $.each(a, function () {
+        if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+}
+
 //展示分页
 function fromLoad(controller) {
     fromClean();
     __CONTROLLER__ = controller;
 
     $.get(getContentUrl() + "1", function (result) {
-        if (result.pages > 1) {
+        console.log(result.total_num)
+        if (result.total_num > 1) {
             $("#page").page({
                 pages: result.pages,
                 first: "首页", //设置false则不显示，默认为false

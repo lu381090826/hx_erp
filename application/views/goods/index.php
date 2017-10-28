@@ -28,11 +28,11 @@ $this->load->view('head');
         <button type="button" class="am-btn am-btn-default"
                 onclick="window.location.href='/sku/action_add_sku'"><span class="am-icon-plus"></span>新建商品
         </button>
-        <button type="button" class="am-btn am-btn-default" data-am-collapse="{parent: '#accordion', target: '#search_form'}"><span class="am-icon-search"></span></button>
+        <button type="button" class="am-btn am-btn-default" data-am-collapse="{parent: '#accordion', target: '#goods_search'}"><span class="am-icon-search"></span></button>
         <div class="am-panel-group" id="accordion">
-            <div class="am-collapse" id="search_form">
+            <div class="am-collapse" id="goods_search">
                 <hr>
-                <form class="am-form" id="">
+                <form class="am-form" id="goods_search_form">
 
                     <div class="am-form-group">
                         <label class="am-u-sm-3 am-form-label">款号</label>
@@ -45,6 +45,7 @@ $this->load->view('head');
                     <div class="am-form-group">
                         <label class="am-u-sm-3 am-form-label">分类</label>
                         <select id="search_category_id" name="category_id">
+                            <option value="">全部</option>
                             <?php foreach ($category_list as $category): ?>
                                 <option value="<?= $category['id'] ?>"><?= $category['category_name'] ?></option>
                             <?php endforeach; ?>
@@ -121,7 +122,7 @@ $this->load->view('head');
 </div>
 <!--表格子-->
 <table class="am-table" id="from_table">
-    <thead id="from_thead">
+    <thead id="from_thead" class="am-text-nowrap">
     </thead>
     <tbody id="from_contant">
     </tbody>
@@ -141,28 +142,33 @@ $this->load->view('head');
 
     function get_goods(curr) {
         tableClean();
-        var goods_content = "<tr style='text-align: center'> <th style='width: 80px'>小图</th> <th>款号</th><th>价格</th><th>库存</th><th>发布时间</th> <th style='text-align: center'>操作</th> </tr>";
+        var goods_content = "<tr style='text-align: center'> <th style='width: 80px'>小图</th> <th>款号</th><th>价格</th><th>库存</th><th>发布时间</th> <th style='text-align: center;width: 80px' class='am-text-nowrap'>操作</th> </tr>";
         from_thead.append(goods_content);
-        if($('#search_goods_id').val()){
-            console.log($('#search_goods_id').val())
-        }
+        var data = getFormJson($('#goods_search_form'))
+        console.log(data);
+        $.ajax(
+            {
+                url:getContentUrl() + curr,
+                type:'post',
+                data:data,
+                success:function (result) {
+                    $.each(result.result_rows, function (i, o) {
+                        goods_content = "<tr>" +
+                            "<td><img class='pic' src='" + o.pic + "'></td>" +
+                            "<td>" + o.goods_id + "</td>" +
+                            "<td>¥" + o.price + "</td>" +
+                            "<td>" + 0 + "</td>" +
+                            "<td>" + o.create_time + "</td>" +
+                            "<td align='center' valign='middle' style='word-break:break-all'>" +
+                            "<div><a href='/goods/goods_detail/" + o.goods_id + "'>详情</a><div>" +
+                            "<div><a href='/sku/delete_sku/" + o.goods_id + "'>删除</a></div>" +
+                            "</td>" +
+                            "</tr>";
+                        from_contant.append(goods_content)
+                    });
+                }
+            })
 
-        $.get(getContentUrl() + curr, function (result) {
-            $.each(result.result_rows, function (i, o) {
-                goods_content = "<tr>" +
-                    "<td><img class='pic' src='" + o.pic + "'></td>" +
-                    "<td>" + o.goods_id + "</td>" +
-                    "<td>¥" + o.price + "</td>" +
-                    "<td>" + 0 + "</td>" +
-                    "<td>" + o.create_time + "</td>" +
-                    "<td align='center' valign='middle' style='word-break:break-all'>" +
-                    "<div><a href='/goods/goods_detail/" + o.goods_id + "'>详情</a><div>" +
-                    "<div><a href='/sku/delete_sku/" + o.goods_id + "'>删除</a></div>" +
-                    "</td>" +
-                    "</tr>";
-                from_contant.append(goods_content)
-            });
-        }, 'JSON');
     }
 
     function get_category(curr) {
