@@ -55,7 +55,7 @@ $this->load->view('head');
     });
 
     function get_goods(curr) {
-        var content = "<tr style='text-align: center'> <th style='width: 80px'>小图</th> <th>商品号</th> <th style='text-align: center'>操作</th> </tr>";
+        var content = "<tr style='text-align: center'> <th style='width: 80px'>小图</th> <th>款号</th><th>价格</th><th>库存</th><th>发布时间</th> <th style='text-align: center'>操作</th> </tr>";
         from_thead.append(content);
 
         $.get(getContentUrl() + curr, function (result) {
@@ -63,6 +63,9 @@ $this->load->view('head');
                 content = "<tr>" +
                     "<td><img class='pic' src='" + o.pic + "'></td>" +
                     "<td>" + o.goods_id + "</td>" +
+                    "<td>¥" + o.price + "</td>" +
+                    "<td>" + 0 + "</td>" +
+                    "<td>" + o.create_time + "</td>" +
                     "<td align='center' valign='middle' style='word-break:break-all'>" +
                     "<div><a href='/goods/goods_detail/" + o.goods_id + "'>详情</a><div>" +
                     "<div><a href='/sku/delete_sku/" + o.goods_id + "'>删除</a></div>" +

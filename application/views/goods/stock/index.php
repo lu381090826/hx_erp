@@ -19,7 +19,7 @@ $this->load->view('head');
 <div class="am-cf am-padding am-padding-bottom-0">
     <div class="am-fl am-cf" onclick="javascript:history.back(-1);method='get_size';">
         <strong class="am-text-primary am-text-lg">库存配置</strong> /
-        <small>商品号： <?= $sku_info['product_number'] ?></small>
+        <small>款号： <?= $sku_info['product_number'] ?></small>
     </div>
 </div>
 <hr>

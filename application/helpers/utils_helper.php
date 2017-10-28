@@ -22,3 +22,13 @@ if (!function_exists('check_auth')) {
         }
     }
 }
+
+if (!function_exists('json_out_put')) {
+    function json_out_put($arr)
+    {
+        $CI = &get_instance();
+        $CI->output->set_header('Cache-Control: no-cache');
+        $CI->output->set_header('Content-type:application/json;charset=utf-8');
+        $CI->output->set_output(json_encode($arr,JSON_UNESCAPED_UNICODE));
+    }
+}
