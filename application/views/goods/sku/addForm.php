@@ -37,6 +37,12 @@ $this->load->view('head');
         </div>
 
         <div class="am-form-group">
+            <label for="doc-vld-cost">成本（单位元）<span style="color: red">*</span>：</label>
+            <input type="text" id="doc-vld-cost" minlength="1" placeholder="输入" name="cost" class="am-form-field"
+                   required/>
+        </div>
+
+        <div class="am-form-group">
             <label>颜色：</label>
             <?php foreach ($color_list as $row): ?>
                 <div class="am-checkbox">

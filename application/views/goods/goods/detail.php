@@ -11,8 +11,13 @@ $this->load->view('head');
         <legend>款号 <strong><?= $goods_id ?></strong></legend>
 
         <div class="am-form-group">
+            <label>成本</label>
+            ¥<?= $cost ?>
+        </div>
+
+        <div class="am-form-group">
             <label>价格</label>
-            <?= $price ?>
+            ¥<?= $price ?>
         </div>
 
         <div class="am-form-group">

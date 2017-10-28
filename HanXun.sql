@@ -506,3 +506,7 @@ ALTER TABLE `t_sku`
 ALTER TABLE `t_goods`
   ADD `Fpic_normal` VARCHAR(256) NOT NULL DEFAULT ''
   AFTER `Fpic`;
+
+ALTER TABLE `t_goods` ADD `Fcost` VARCHAR(32) NOT NULL AFTER `Fgoods_id`;
+ALTER TABLE `t_goods` CHANGE `Fcost` `Fcost` DECIMAL(32) NOT NULL, CHANGE `Fprice` `Fprice` DECIMAL(32) NOT NULL;
+ALTER TABLE `t_sku` ADD `Fcost` DECIMAL NOT NULL AFTER `Fproperty_id`;

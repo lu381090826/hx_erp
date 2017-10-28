@@ -17,6 +17,10 @@ function fromClean() {
     page.empty();
     other_select.hide();
 }
+function tableClean() {
+    from_thead.empty()
+    from_contant.empty()
+}
 
 //展示分页
 function fromLoad(controller) {

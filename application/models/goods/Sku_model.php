@@ -95,7 +95,7 @@ class Sku_model extends HX_Model
         foreach ($color_id_array as $k => $color_row) {
             foreach ($size_id_array as $z => $size_row) {
 
-                $curr_sku_id = $request['goods_id'] . 'C' . $color_row . 'S' . $size_row;
+                $curr_sku_id = $request['goods_id'] . str_pad($color_row,2,"0",STR_PAD_LEFT) . str_pad($size_row,2,"0",STR_PAD_LEFT) ;
                 if (in_array($curr_sku_id, $sku_id_list)) {
                     continue;
                 }
@@ -105,6 +105,9 @@ class Sku_model extends HX_Model
                 $sku_info[$i]['Fsize_id'] = $size_row;
 
 
+                if (isset($request['cost'])) {
+                    $sku_info[$i]['Fcost'] = $request['cost'];
+                }
                 if (isset($request['price'])) {
                     $sku_info[$i]['Fprice'] = $request['price'];
                 }

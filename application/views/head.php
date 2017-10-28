@@ -87,13 +87,20 @@
             text-align: center;
         }
 
-        .footer p {
-            color: #7f8c8d;
-            margin: 0;
-            padding: 15px 0;
-            text-align: center;
-            background: #2d3e50;
+        .footer {
+            position: fixed;
+            right: 0;
+            left: 0;
+            z-index: 1030;
+            bottom: 0;
+            margin-bottom: 0;
+            border-width: 1px 0 0;
+            background: #f8f8f8;
+            color: #666666;
+            vertical-align: middle;
+            padding-left: 150px;
         }
+
 
         .other-select {
             display: none;

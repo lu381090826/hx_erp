@@ -10,7 +10,10 @@ class Goods extends HX_Controller
 
     public function index()
     {
-        $this->load->view('goods/index');
+        $this->load->model('goods/category_model', 'm_category');
+        $data['category_list'] = $this->m_category->get_all_list()['result_rows'];
+
+        $this->load->view('goods/index',$data);
     }
 
     public function get_category($page = 1)

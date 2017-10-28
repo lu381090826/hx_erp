@@ -1,6 +1,6 @@
 
 <footer class="footer">
-    <p>韩迅系统</p>
+    韩迅系统
 </footer>
 
 <!--[if lt IE 9]>

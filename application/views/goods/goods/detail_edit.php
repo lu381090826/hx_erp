@@ -27,6 +27,11 @@ $this->load->view('head');
     </tr>
 
     <tr>
+        <td>成本（元）</td>
+        <td><?= $cost ?></td>
+    </tr>
+
+    <tr>
         <td>价格（元）</td>
         <td><?= $price ?></td>
     </tr>

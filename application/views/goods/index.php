@@ -12,30 +12,115 @@ $this->load->view('head');
         width: 80px;
         height: 100px;
     }
+    .am-btn-group{
+        vertical-align: baseline;
+    }
 </style>
 <!--功能选项-->
-<select data-am-selected id="method_select" title="选择功能">
+<select data-am-selected id="method_select" class="am-u-sm-3" title="选择功能">
     <option value="get_goods">商品管理</option>
     <option value="get_category">分类管理</option>
     <option value="get_color">颜色管理</option>
     <option value="get_size">尺码管理</option>
 </select>
 <div class="am-btn-group am-btn-group-xs">
-    <button type="button" class="am-btn am-btn-default other-select div-get_goods"
-            onclick="window.location.href='/sku/action_add_sku'"><span class="am-icon-plus"></span>新建商品
-    </button>
-    <button type="button" class="am-btn am-btn-default other-select div-get_category"
-            onclick="window.location.href='/category/action_add_category'"><span class="am-icon-plus"></span>添加分类
-    </button>
-    <button type="button" class="am-btn am-btn-default other-select div-get_color"
-            onclick="window.location.href='/color/action_add_color'"><span class="am-icon-plus"></span>添加颜色
-    </button>
-    <button type="button" class="am-btn am-btn-default other-select div-get_size"
-            onclick="window.location.href='/size/action_add_size'"><span class="am-icon-plus"></span>添加尺码
-    </button>
+    <div class="other-select div-get_goods">
+        <button type="button" class="am-btn am-btn-default"
+                onclick="window.location.href='/sku/action_add_sku'"><span class="am-icon-plus"></span>新建商品
+        </button>
+        <button type="button" class="am-btn am-btn-default" data-am-collapse="{parent: '#accordion', target: '#search_form'}"><span class="am-icon-search"></span></button>
+        <div class="am-panel-group" id="accordion">
+            <div class="am-collapse" id="search_form">
+                <hr>
+                <form class="am-form" id="">
+
+                    <div class="am-form-group">
+                        <label class="am-u-sm-3 am-form-label">款号</label>
+                        <input type="text" id="search_goods_id" name="goods_id"/ >
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-u-sm-3 am-form-label">品牌</label>
+                        <input type="text" id="search_brand" name="brand" / >
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-u-sm-3 am-form-label">分类</label>
+                        <select id="search_category_id" name="category_id">
+                            <?php foreach ($category_list as $category): ?>
+                                <option value="<?= $category['id'] ?>"><?= $category['category_name'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label class="am-form-label"> 成本范围</label>
+                        <div class="am-u-sm-12">
+                            <div class="am-u-sm-5 am-padding-left-0">
+                                <input type="text" name="cost_min">
+                            </div>
+                            -
+                            <div class="am-u-sm-5 am-padding-left-0 am-padding-right-0">
+                                <input type="text" name="cost_max">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label class="am-form-label"> 价格范围</label>
+                        <div class="am-u-sm-12">
+                            <div class="am-u-sm-5 am-padding-left-0">
+                                <input type="text" name="price_min">
+                            </div>
+                            -
+                            <div class="am-u-sm-5 am-padding-left-0 am-padding-right-0">
+                                <input type="text" name="price_max">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label class="am-form-label"> 库存范围</label>
+                        <div class="am-u-sm-12">
+                            <div class="am-u-sm-5 am-padding-left-0">
+                                <input type="text" name="stock_min">
+                            </div>
+                            -
+                            <div class="am-u-sm-5 am-padding-left-0 am-padding-right-0">
+                                <input type="text" name="stock_max">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <div class="am-u-sm-12">
+                            <button type="button" class="am-btn am-btn-default"
+                                    onclick="get_goods()"><span class="am-icon-search"></span>搜索
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <div class=" other-select div-get_category">
+        <button type="button" class="am-btn am-btn-default"
+                onclick="window.location.href='/category/action_add_category'"><span class="am-icon-plus"></span>添加分类
+        </button>
+    </div>
+    <div class="other-select div-get_color">
+        <button type="button" class="am-btn am-btn-default"
+                onclick="window.location.href='/color/action_add_color'"><span class="am-icon-plus"></span>添加颜色
+        </button>
+    </div>
+    <div class="other-select div-get_size">
+        <button type="button" class="am-btn am-btn-default"
+                onclick="window.location.href='/size/action_add_size'"><span class="am-icon-plus"></span>添加尺码
+        </button>
+    </div>
 </div>
 <!--表格子-->
-<table class="am-table">
+<table class="am-table" id="from_table">
     <thead id="from_thead">
     </thead>
     <tbody id="from_contant">
@@ -55,12 +140,16 @@ $this->load->view('head');
     });
 
     function get_goods(curr) {
-        var content = "<tr style='text-align: center'> <th style='width: 80px'>小图</th> <th>款号</th><th>价格</th><th>库存</th><th>发布时间</th> <th style='text-align: center'>操作</th> </tr>";
-        from_thead.append(content);
+        tableClean();
+        var goods_content = "<tr style='text-align: center'> <th style='width: 80px'>小图</th> <th>款号</th><th>价格</th><th>库存</th><th>发布时间</th> <th style='text-align: center'>操作</th> </tr>";
+        from_thead.append(goods_content);
+        if($('#search_goods_id').val()){
+            console.log($('#search_goods_id').val())
+        }
 
         $.get(getContentUrl() + curr, function (result) {
             $.each(result.result_rows, function (i, o) {
-                content = "<tr>" +
+                goods_content = "<tr>" +
                     "<td><img class='pic' src='" + o.pic + "'></td>" +
                     "<td>" + o.goods_id + "</td>" +
                     "<td>¥" + o.price + "</td>" +
@@ -71,7 +160,7 @@ $this->load->view('head');
                     "<div><a href='/sku/delete_sku/" + o.goods_id + "'>删除</a></div>" +
                     "</td>" +
                     "</tr>";
-                from_contant.append(content)
+                from_contant.append(goods_content)
             });
         }, 'JSON');
     }

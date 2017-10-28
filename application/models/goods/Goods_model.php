@@ -48,6 +48,12 @@ class Goods_model extends HX_Model
             $insert_params['Fprice'] = $request['price'];
         }
 
+        if (empty($request['cost'])) {
+            show_error('成本有误');
+        } else {
+            $insert_params['Fcost'] = $request['cost'];
+        }
+
         if (!empty($request['record_number'])) {
             $insert_params['Frecord_number'] = $request['record_number'];
         }
