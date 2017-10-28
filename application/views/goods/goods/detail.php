@@ -27,7 +27,7 @@ $this->load->view('head');
 
         <div class="am-form-group">
             <label>小图</label>
-            <?= $pic ?>
+            <img width="80px" src="<?= $pic ?>" />
         </div>
 
         <div class="am-form-group">
