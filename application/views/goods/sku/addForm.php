@@ -9,15 +9,27 @@ $this->load->view('head');
     <fieldset>
         <legend>添加商品</legend>
         <div class="am-form-group">
-            <label for="doc-vld-name">商品名<span style="color: red">*</span>：</label>
-            <input type="text" id="doc-vld-name" minlength="1" placeholder="输入" name="name" class="am-form-field"
+            <label for="doc-vld-goods_id">款号<span style="color: red">*</span>：</label>
+            <input type="text" id="doc-vld-goods_id" minlength="1" placeholder="输入" name="goods_id" class="am-form-field"
                    required/>
         </div>
+        
         <div class="am-form-group">
-            <label for="doc-vld-goods_id">商品编号<span style="color: red">*</span>：</label>
-            <input type="text" id="doc-vld-goods_id" minlength="1" placeholder="输入" name="goods_id"
-                   class="am-form-field" required/>
+            <label for="doc-vld-brand_id">品牌：</label>
+            <input type="text" id="doc-vld-brand_id" placeholder="输入" name="brand"
+                   class="am-form-field"/>
         </div>
+
+        <div class="am-form-group">
+            <label for="doc-select-1">分类:</label>
+            <select id="doc-select-1" name="category_id">
+                <?php foreach ($category_list as $category): ?>
+                    <option value="<?= $category['id'] ?>"><?= $category['category_name'] ?></option>
+                <?php endforeach; ?>
+            </select>
+            <span class="am-form-caret"></span>
+        </div>
+
         <div class="am-form-group">
             <label for="doc-vld-price">价格（单位元）<span style="color: red">*</span>：</label>
             <input type="text" id="doc-vld-price" minlength="1" placeholder="输入" name="price" class="am-form-field"
@@ -54,26 +66,6 @@ $this->load->view('head');
             <input type="file" id="doc-vld-pic" name="pic" class="am-btn am-btn-default am-btn-sm"/>
         </div>
 
-        <div class="am-form-group">
-            <label for="doc-vld-record_number">备案号：</label>
-            <input type="text" id="doc-vld-record_number" placeholder="输入" name="record_number"
-                   class="am-form-field"/>
-        </div>
-        <div class="am-form-group">
-            <label for="doc-vld-brand_id">品牌：</label>
-            <input type="text" id="doc-vld-brand_id" placeholder="输入" name="brand"
-                   class="am-form-field"/>
-        </div>
-
-        <div class="am-form-group">
-            <label for="doc-select-1">分类:</label>
-            <select id="doc-select-1" name="category_id">
-                <?php foreach ($category_list as $category): ?>
-                    <option value="<?= $category['id'] ?>"><?= $category['category_name'] ?></option>
-                <?php endforeach; ?>
-            </select>
-            <span class="am-form-caret"></span>
-        </div>
         <div class="am-form-group">
             <label for="doc-vld-memo">备注：</label>
             <input type="text" id="doc-vld-memo" placeholder="输入" name="memo" class="am-form-field"/>

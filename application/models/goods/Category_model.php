@@ -56,6 +56,34 @@ class Category_model extends HX_Model
         return $this->suc_out_put($ret->result('array'));
     }
 
+    public function category_cache()
+    {
+        error_reporting(0);
+        $category_cache = 'CATEGORY_CACHE';
+        try {
+            $this->load->driver('cache');
+            if ($this->cache->redis->get($category_cache) === null) { //如果未设置
+
+                $arr = $this->getCategoryList();
+                log_message('INFO', json_encode($arr, JSON_UNESCAPED_UNICODE));
+
+                $this->cache->redis->set($category_cache, $arr); //设置
+                $this->cache->redis->EXPIRE($category_cache, 86400); //设置过期时间 （1天）
+            } else {
+                $arr = $this->cache->redis->get($category_cache);  //从缓存中直接读取对应的值
+            }
+
+        } catch (Exception $e) {
+            log_message('ERROR', $e->getMessage());
+        }
+
+        if (!isset($arr)) {
+            $arr = $this->getCategoryList();
+        }
+
+        return $arr;
+    }
+
     public function get_list($page = 0)
     {
         $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1";
@@ -76,5 +104,21 @@ class Category_model extends HX_Model
     public function category_delete_by_id($id)
     {
         return $this->db->update($this->table, ['Fstatus' => 0, 'Fop_uid' => $this->session->uid], ['Fid' => $id]);
+    }
+
+    /**
+     * @param $arr
+     * @return mixed
+     */
+    private function getCategoryList()
+    {
+        $arr = [];
+        $s = "SELECT Fid,Fcategory_name FROM {$this->table} WHERE Fstatus = 1";
+        $ret = $this->db->query($s);
+
+        foreach ($ret->result('array') as $row) {
+            $arr[$row['id']] = $row['category_name'];
+        }
+        return $arr;
     }
 }

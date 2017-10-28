@@ -29,21 +29,19 @@ class Goods_model extends HX_Model
     private function modify_goods_check($request)
     {
         $insert_params = [];
+        $insert_params['Fname'] = isset($request['name'])?$request['name']:'';
 
-        if (empty($request['name'])) {
-            show_error('商品名有误');
-        } else {
-            $insert_params['Fname'] = $request['name'];
-        }
         if (empty($request['goods_id'])) {
             show_error('商品编号有误');
         } else {
             $check_reentry = $this->get_row_by_id($request['goods_id']);
             if (!empty($check_reentry['result_rows'])) {
+                //重入id
                 $this->reentry = $request['goods_id'];
             }
             $insert_params['Fgoods_id'] = $request['goods_id'];
         }
+
         if (empty($request['price'])) {
             show_error('价格有误');
         } else {
@@ -70,6 +68,8 @@ class Goods_model extends HX_Model
         }
         if (!empty($request['status'])) {
             $insert_params['Fstatus'] = $request['status'];
+        } else {
+            $insert_params['Fstatus'] = 1;
         }
         if (!empty($request['op_uid'])) {
             $insert_params['Fop_uid'] = $this->session->uid;

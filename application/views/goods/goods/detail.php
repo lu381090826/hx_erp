@@ -8,37 +8,11 @@ $this->load->view('head');
 <!--<input type="button" name="Submit" class="am-btn am-btn-default" onclick="" value="删除">-->
 <form class="am-form">
     <fieldset>
-        <legend>商品名：<?= $name ?></legend>
-
-        <div class="am-form-group">
-            <label>商品名</label>
-            <?= $name ?>
-        </div>
-
-        <div class="am-form-group">
-            <label>商品编号</label>
-            <?= $goods_id ?>
-        </div>
+        <legend>款号 <strong><?= $goods_id ?></strong></legend>
 
         <div class="am-form-group">
             <label>价格</label>
             <?= $price ?>
-        </div>
-
-        <div class="am-form-group">
-            <label>小图</label>
-            <?= $pic ?>
-        </div>
-
-        <div class="am-form-group">
-            <label>条形码</label>
-            <?php foreach ($sku_list as $row):?>
-            <?php endforeach;?>
-        </div>
-
-        <div class="am-form-group">
-            <label>备案号</label>
-            <?= $record_number ?>
         </div>
 
         <div class="am-form-group">
@@ -48,7 +22,12 @@ $this->load->view('head');
 
         <div class="am-form-group">
             <label>分类</label>
-            <?= $category ?>
+            <?= $category_list[$category_id] ?>
+        </div>
+
+        <div class="am-form-group">
+            <label>小图</label>
+            <?= $pic ?>
         </div>
 
         <div class="am-form-group">
@@ -64,11 +43,6 @@ $this->load->view('head');
         <div class="am-form-group">
             <label>添加时间</label>
             <?= $create_time ?>
-        </div>
-
-        <div class="am-form-group">
-            <label>修改时间</label>
-            <?= $modify_time ?>
         </div>
     </fieldset>
 </form>
