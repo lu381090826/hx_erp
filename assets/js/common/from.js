@@ -43,7 +43,6 @@ function debugConsole(o) {
 }
 //展示分页
 var api_result;
-var current_page = 1 ;
 function fromLoad(controller) {
     fromClean();
     __CONTROLLER__ = controller;
@@ -65,7 +64,6 @@ function fromLoad(controller) {
             eval(method + '(' + 1 + ')');
         }
     }, 'JSON');
-
 }
 
 //下拉框选择方法
