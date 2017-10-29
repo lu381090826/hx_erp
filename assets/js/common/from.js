@@ -18,8 +18,8 @@ function fromClean() {
     other_select.hide();
 }
 function tableClean() {
-    from_thead.empty()
-    from_contant.empty()
+    from_thead.empty();
+    from_contant.empty();
 }
 
 function getFormJson(frm) {
@@ -45,6 +45,8 @@ function debugConsole(o) {
 var api_result;
 function fromLoad(controller) {
     fromClean();
+    other_select_div = $('#div-' + method);
+    other_select_div.show();
     __CONTROLLER__ = controller;
     $.get(getContentUrl() + 1, function (result) {
         api_result = result;
@@ -73,8 +75,6 @@ $(function () {
         fromClean();
         method = $(this).val();
         other_select_div = $('#div-' + method);
-        //用字符串执行方法
-        // eval(method + '(1)');
         other_select_div.show();
         fromLoad(__CONTROLLER__)
     });
