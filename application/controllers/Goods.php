@@ -70,6 +70,20 @@ class Goods extends HX_Controller
         $this->load->view('/goods/goods/detail', $data['result_rows']);
     }
 
+    public function goods_detail_edit($goods_id)
+    {
+        $this->load->model('goods/goods_model', 'goods_m');
+        $data = $this->goods_m->get_row_by_id($goods_id);
+
+        $this->load->model('goods/sku_model', 'sku_m');
+        $data['result_rows']['sku_list'] = $this->sku_m->get_sku_list_by_goods_id($goods_id);
+
+        $this->load->model('goods/category_model', 'category_m');
+        $data['result_rows']['category_list'] = $this->category_m->category_cache();
+
+        $this->load->view('/goods/goods/detail_edit', $data['result_rows']);
+    }
+
     public function get_goods($page = 0)
     {
         $this->load->model('goods/goods_model', 'goods_m');

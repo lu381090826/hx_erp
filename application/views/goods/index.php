@@ -132,6 +132,20 @@ $this->load->view('head');
 <!--分页-->
 <div id="page">
 </div>
+
+
+<div class="am-modal am-modal-confirm" tabindex="-1" id="my-confirm">
+    <div class="am-modal-dialog">
+        <div class="am-modal-hd">提示</div>
+        <div class="am-modal-bd">
+            你，确定要删除这条记录吗？
+        </div>
+        <div class="am-modal-footer">
+            <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+            <span class="am-modal-btn" data-am-modal-confirm>确定</span>
+        </div>
+    </div>
+</div>
 <?php $this->load->view('footer'); ?>
 <script type="text/javascript" src="/assets/js/amazeui.page.js"></script>
 <script type="text/javascript" src="/assets/js/common/from.js"></script>
@@ -179,7 +193,7 @@ $this->load->view('head');
                 "<td>" + o.create_time + "</td>" +
                 "<td align='center' valign='middle' style='word-break:break-all'>" +
                 "<div><a href='/goods/goods_detail/" + o.goods_id + "'>详情</a><div>" +
-                "<div><a href='/sku/delete_sku/" + o.goods_id + "'>删除</a></div>" +
+                "<div><i class='am-icon-close'></i><a onclick=\"sku_delete('"+o.goods_id+"')\">删除</a></button></div>" +
                 "</td>" +
                 "</tr>";
         });
@@ -231,5 +245,14 @@ $this->load->view('head');
                 from_contant.append(content)
             });
         }, 'JSON');
+    }
+
+    function sku_delete(goods_id) {
+        $('#my-confirm').modal({
+            relatedTarget: this,
+            onConfirm: function (options) {
+                $.get('/goods/delete_sku/' + goods_id);
+            }
+        });
     }
 </script>

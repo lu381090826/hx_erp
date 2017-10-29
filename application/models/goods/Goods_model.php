@@ -163,4 +163,9 @@ class Goods_model extends HX_Model
         return $this->suc_out_put($ret->result('array'));
     }
 
+    public function goods_delete($goods_id){
+
+        return $this->suc_out_put();
+    }
+
 }
