@@ -23,11 +23,20 @@ $this->load->view('head');
         <div class="am-form-group">
             <label for="doc-select-1">分类:</label>
             <select id="doc-select-1" name="category_id">
-                <?php foreach ($category_list as $category): ?>
-                    <option value="<?= $category['id'] ?>"><?= $category['category_name'] ?></option>
+                <?php foreach ($category_list as $k=>$category): ?>
+                    <option value="<?= $k ?>"><?= $category ?></option>
                 <?php endforeach; ?>
             </select>
             <span class="am-form-caret"></span>
+        </div>
+
+        <div class="am-form-group">
+            <label for="doc-select-1">添加到店铺（暂未启用）:</label>
+            <select data-am-selected="{searchBox: 1}">
+                <?php foreach ($shop_list as $shop): ?>
+                    <option value="<?=$shop['id']?>"><?=$shop['name']?></option>
+                <?php endforeach;?>
+            </select>
         </div>
 
         <div class="am-form-group">
@@ -83,3 +92,9 @@ $this->load->view('head');
 </form>
 
 <?php $this->load->view('footer'); ?>
+<script>
+    $(".am-input-sm").on('change','input',function(){
+        alert(1);
+        console.log($(this).val())
+    })
+</script>

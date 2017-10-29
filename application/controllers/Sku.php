@@ -11,8 +11,11 @@ class Sku extends HX_Controller
 
     public function action_add_sku()
     {
+        $this->load->model('goods/shop_model', 'shop_m');
+        $data['shop_list'] = $this->shop_m->get_shop_list()['result_rows'];
+
         $this->load->model('goods/category_model', 'm_category');
-        $data['category_list'] = $this->m_category->get_all_list()['result_rows'];
+        $data['category_list'] = $this->m_category->category_cache();
 
         $this->load->model('goods/color_model', 'color_m');
         $data['color_list'] = $this->color_m->get_color_list_all()['result_rows'];

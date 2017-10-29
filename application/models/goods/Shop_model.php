@@ -25,7 +25,7 @@ class Shop_model extends HX_Model
 
     public function get_shop_list_all()
     {
-        $s = "SELECT Fid,Fshop_info,Fshop_num FROM {$this->table} WHERE Fstatus = 1";
+        $s = "SELECT Fid,Fname FROM {$this->table} WHERE Fstatus = 1";
 
         $ret = $this->db->query($s);
 
