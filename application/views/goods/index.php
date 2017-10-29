@@ -146,6 +146,7 @@ $this->load->view('head');
     function get_goods(curr) {
         tableClean();
         var content = "<tr style='text-align: center'> <th style='width: 80px'>小图</th> <th>款号</th><th>价格</th><th>库存</th><th>发布时间</th> <th style='text-align: center;width: 80px' class='am-text-nowrap'>操作</th> </tr>";
+        from_thead.append(content);
 
         if(api_result==null){
             var search_data = getFormJson($('#goods_search_form'));
@@ -155,19 +156,21 @@ $this->load->view('head');
                     type: 'post',
                     data: search_data,
                     success: function (result) {
-                        content += goods_show(result, content);
+                        content = goods_show(result);
                     }
                 })
         }else{
-            content += goods_show(api_result, content)
+            content = goods_show(api_result)
         }
-        from_thead.append(content);
+
+        from_contant.append(content)
     }
 
 
-    function goods_show(result, goods_content) {
+    function goods_show(result) {
+        var goods_content;
         $.each(result.result_rows, function (i, o) {
-            goods_content = "<tr>" +
+            goods_content += "<tr>" +
                 "<td><img class='pic' src='" + o.pic + "'></td>" +
                 "<td>" + o.goods_id + "</td>" +
                 "<td>¥" + o.price + "</td>" +
@@ -178,7 +181,6 @@ $this->load->view('head');
                 "<div><a href='/sku/delete_sku/" + o.goods_id + "'>删除</a></div>" +
                 "</td>" +
                 "</tr>";
-            from_contant.append(goods_content)
         });
         return goods_content;
     }
