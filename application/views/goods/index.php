@@ -12,7 +12,8 @@ $this->load->view('head');
         width: 80px;
         height: 100px;
     }
-    .am-btn-group{
+
+    .am-btn-group {
         vertical-align: baseline;
     }
 </style>
@@ -22,13 +23,16 @@ $this->load->view('head');
     <option value="get_category">分类管理</option>
     <option value="get_color">颜色管理</option>
     <option value="get_size">尺码管理</option>
+    <option value="get_shop">店铺管理</option>
 </select>
 <div class="am-btn-group am-btn-group-xs">
     <div class="other-select" id="div-get_goods">
         <button type="button" class="am-btn am-btn-default"
                 onclick="window.location.href='/sku/action_add_sku'"><span class="am-icon-plus"></span>新建商品
         </button>
-        <button type="button" class="am-btn am-btn-default" data-am-collapse="{parent: '#accordion', target: '#goods_search'}"><span class="am-icon-search"></span></button>
+        <button type="button" class="am-btn am-btn-default"
+                data-am-collapse="{parent: '#accordion', target: '#goods_search'}"><span class="am-icon-search"></span>
+        </button>
         <div class="am-panel-group" id="accordion">
             <div class="am-collapse" id="goods_search">
                 <hr>
@@ -119,6 +123,11 @@ $this->load->view('head');
                 onclick="window.location.href='/size/action_add_size'"><span class="am-icon-plus"></span>添加尺码
         </button>
     </div>
+    <div class="other-select" id="div-get_shop">
+        <button type="button" class="am-btn am-btn-default"
+                onclick="window.location.href='/shop/action_add_shop'"><span class="am-icon-plus"></span>添加店铺
+        </button>
+    </div>
 </div>
 <!--表格子-->
 <table class="am-table" id="from_table">
@@ -138,7 +147,7 @@ $this->load->view('head');
     <div class="am-modal-dialog">
         <div class="am-modal-hd">提示</div>
         <div class="am-modal-bd">
-            你，确定要删除这条记录吗？
+            确定要删除这条记录吗？
         </div>
         <div class="am-modal-footer">
             <span class="am-modal-btn" data-am-modal-cancel>取消</span>
@@ -150,37 +159,35 @@ $this->load->view('head');
 <script type="text/javascript" src="/assets/js/amazeui.page.js"></script>
 <script type="text/javascript" src="/assets/js/common/from.js"></script>
 <script>
+
     $(document).ready(function () {
         fromLoad('goods');
     });
+
     function search_goods() {
         api_result = null;
         get_goods(1);
     }
 
-    var current_page = 1 ;
+
     function get_goods(curr) {
         tableClean();
         var fromThead = "<tr style='text-align: center'> <th style='width: 80px'>小图</th> <th>款号</th><th>价格</th><th>库存</th><th>发布时间</th> <th style='text-align: center;width: 80px' class='am-text-nowrap'>操作</th> </tr>";
         from_thead.append(fromThead);
 
-        if (api_result == null || curr != current_page) {
-            current_page = curr;
-            $.ajax(
-                {
-                    url: getContentUrl() + curr,
-                    type: 'post',
-                    data: getFormJson($('#goods_search_form')),
-                    success: function (result) {
-                        from_contant.append(goods_show(result))
-                    }
-                })
-        } else {
-            from_contant.append(goods_show(api_result))
-        }
-
+        $.ajax(
+            {
+                async: false,
+                url: getContentUrl() + curr,
+                type: 'post',
+                data: getFormJson($('#goods_search_form')),
+                success: function (result) {
+                    curr_page = curr;
+                    all_pages = result.pages;
+                    from_contant.append(goods_show(result));
+                }
+            })
     }
-
 
     function goods_show(result) {
         var goods_content = "";
@@ -193,7 +200,7 @@ $this->load->view('head');
                 "<td>" + o.create_time + "</td>" +
                 "<td align='center' valign='middle' style='word-break:break-all'>" +
                 "<div><a href='/goods/goods_detail/" + o.goods_id + "'>详情</a><div>" +
-                "<div><a onclick=\"sku_delete('"+o.goods_id+"')\">删除</a></button></div>" +
+                "<div><a onclick=\"sku_delete('" + o.goods_id + "')\">删除</a></button></div>" +
                 "</td>" +
                 "</tr>";
         });
@@ -201,57 +208,128 @@ $this->load->view('head');
     }
 
     function get_category(curr) {
+        tableClean();
+
         var content = "<tr> <th>id</th> <th>类别</th> <th>操作</th> </tr>";
         from_thead.append(content);
 
-        $.get(getContentUrl() + curr, function (result) {
-            $.each(result.result_rows, function (i, o) {
-                content = "<tr>" +
-                    "<td>" + o.id + "</td>" +
-                    "<td>" + o.category_name + "</td>" +
-                    "<td><a href='/category/delete_category/" + o.id + "'>删除</a></td>" +
-                    "</tr>";
-                from_contant.append(content)
-            });
-        }, 'JSON');
+        $.ajax({
+            type: 'get',
+            async: false,
+            url: getContentUrl() + curr,
+            dateType: 'json',
+            success: function (result) {
+                var row = '';
+                curr_page = curr;
+                all_pages = result.pages;
+                $.each(result.result_rows, function (i, o) {
+                    row += "<tr>" +
+                        "<td>" + o.id + "</td>" +
+                        "<td>" + o.category_name + "</td>" +
+                        "<td><a href='/category/delete_category/" + o.id + "'>删除</a></td>" +
+                        "</tr>";
+                });
+                from_contant.append(row);
+            }
+        })
     }
     function get_color(curr) {
+        tableClean();
         var content = "<tr> <th>颜色</th> <th>颜色代码</th> <th>颜色展示</th>  <th>操作</th> </tr>";
         from_thead.append(content);
 
-        $.get(getContentUrl() + curr, function (result) {
-            $.each(result.result_rows, function (i, o) {
-                content = "<tr>" +
-                    "<td>" + o.name + "</td>" +
-                    "<td>" + o.color_num + "</td>" +
-                    "<td><span class='am-badge'" + "style='background: #" + o.color_code + ";color: #" + o.color_code + "'>c</span></td>" +
-                    "<td><a href='/color/delete_color/" + o.id + "'>删除</a></td>" +
-                    "</tr>";
-                from_contant.append(content)
-            });
-        }, 'JSON');
+        $.ajax({
+            async: false,
+            url: getContentUrl() + curr,
+            type: 'get',
+            dateType: 'json',
+            success: function (result) {
+                var row = '';
+                $.each(result.result_rows, function (i, o) {
+                    row += "<tr>" +
+                        "<td>" + o.name + "</td>" +
+                        "<td>" + o.color_num + "</td>" +
+                        "<td><span class='am-badge'" + "style='background: #" + o.color_code + ";color: #" + o.color_code + "'>c</span></td>" +
+                        "<td><a href='/color/delete_color/" + o.id + "'>删除</a></td>" +
+                        "</tr>";
+                });
+                from_contant.append(row);
+                curr_page = curr;
+                all_pages = result.pages;
+            }
+        })
+
     }
+
     function get_size(curr) {
+        tableClean();
+
         var content = "<tr> <th>尺码</th> <th>尺码代码</th>  <th>操作</th> </tr>";
         from_thead.append(content);
 
-        $.get(getContentUrl() + curr + '?v=' + Math.random(), function (result) {
-            $.each(result.result_rows, function (i, o) {
-                content = "<tr>" +
-                    "<td>" + o.size_info + "</td>" +
-                    "<td>" + o.size_num + "</td>" +
-                    "<td><a href='/size/delete_size/" + o.id + "'>删除</a></td>" +
-                    "</tr>";
-                from_contant.append(content)
-            });
-        }, 'JSON');
+        $.ajax({
+            async: false,
+            url: getContentUrl() + curr,
+            dateType: false,
+            type: 'get',
+            success: function (result) {
+                var row = '';
+                $.each(result.result_rows, function (i, o) {
+                    row += "<tr>" +
+                        "<td>" + o.size_info + "</td>" +
+                        "<td>" + o.size_num + "</td>" +
+                        "<td><a href='/size/delete_size/" + o.id + "'>删除</a></td>" +
+                        "</tr>";
+                });
+                from_contant.append(row);
+                curr_page = curr;
+                all_pages = result.pages;
+            }
+        })
     }
 
-    function sku_delete(goods_id) {
+    function get_shop(curr) {
+        tableClean();
+
+        var content = "<tr> <th>店铺Id</th> <th>店名</th><th>创建时间</th> <th>操作</th> </tr>";
+        from_thead.append(content);
+
+        $.ajax({
+            type: 'get',
+            async: false,
+            dateType: 'json',
+            url: getContentUrl() + curr,
+            success: function (result) {
+                var row = '';
+                $.each(result.result_rows, function (i, o) {
+                    row += "<tr>" +
+                        "<td>" + o.id + "</td>" +
+                        "<td>" + o.name + "</td>" +
+                        "<td>" + o.create_time + "</td>" +
+                        "<td><a onclick=\"shop_delete('" + o.id + "')\">删除</a></td>" +
+                        "</tr>";
+                });
+                from_contant.append(row)
+                curr_page = curr;
+                all_pages = result.pages;
+            }
+        })
+    }
+
+    function sku_delete(id) {
         $('#my-confirm').modal({
             relatedTarget: this,
             onConfirm: function (options) {
-                $.get('/goods/delete_sku/' + goods_id);
+                $.get('/goods/delete_sku/' + id);
+            }
+        });
+    }
+    function shop_delete(id) {
+        $('#my-confirm').modal({
+            relatedTarget: this,
+            onConfirm: function (options) {
+                $.get('/shop/shop_delete/' + id);
+                get_shop(1)
             }
         });
     }

@@ -40,6 +40,14 @@ class Goods extends HX_Controller
         json_out_put($result);
     }
 
+    public function get_shop($page = 0)
+    {
+        $this->load->model('goods/shop_model', 'shop_m');
+        $result = $this->shop_m->get_shop_list($page);
+
+        json_out_put($result);
+    }
+
     public function get_sku($page = 0)
     {
         $this->load->model('goods/sku_model', 'sku_m');

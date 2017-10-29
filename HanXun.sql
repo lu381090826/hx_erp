@@ -510,3 +510,25 @@ ALTER TABLE `t_goods`
 ALTER TABLE `t_goods` ADD `Fcost` VARCHAR(32) NOT NULL AFTER `Fgoods_id`;
 ALTER TABLE `t_goods` CHANGE `Fcost` `Fcost` DECIMAL(32) NOT NULL, CHANGE `Fprice` `Fprice` DECIMAL(32) NOT NULL;
 ALTER TABLE `t_sku` ADD `Fcost` DECIMAL NOT NULL AFTER `Fproperty_id`;
+
+
+# 店铺
+CREATE TABLE `HanXun`.`t_shop` (
+  `Fid`           INT UNSIGNED                         NOT NULL AUTO_INCREMENT,
+  `Fname`         VARCHAR(64)                          NOT NULL DEFAULT '',
+  `Fowner`        VARCHAR(32)                          NULL     DEFAULT '',
+  `Fowner_mobile` VARCHAR(32)                          NULL     DEFAULT '',
+  `Fphone`        VARCHAR(32)                          NULL     DEFAULT '',
+  `Faddress`      VARCHAR(128)                         NULL     DEFAULT '',
+  `Femail`        VARCHAR(64)                          NULL     DEFAULT '',
+  `Fweb_home`     VARCHAR(64)                          NULL     DEFAULT '',
+  `Foperator`     VARCHAR(32)                          NULL     DEFAULT '',
+  `Fversion`      INT(10)                              NOT NULL DEFAULT '0',
+  `Fcreate_time`  DATETIME                             NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `Fmodify_time`  DATETIME ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`Fid`),
+  UNIQUE `key_shop_name` (`Fname`)
+)
+  ENGINE = InnoDB;
+ALTER TABLE `t_shop` ADD `Fmemo` VARCHAR(256) NULL DEFAULT '' AFTER `Fversion`;
+ALTER TABLE `t_shop` ADD `Fstatus` BOOLEAN NOT NULL DEFAULT TRUE AFTER `Fmemo`;

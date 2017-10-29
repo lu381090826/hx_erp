@@ -38,34 +38,29 @@ function getFormJson(frm) {
     return o;
 }
 
-function debugConsole(o) {
-    console.log(o);
-}
 //展示分页
-var api_result;
+var curr_page = 1;
+var all_pages = 1;
+
 function fromLoad(controller) {
     fromClean();
     other_select_div = $('#div-' + method);
     other_select_div.show();
     __CONTROLLER__ = controller;
-    $.get(getContentUrl() + 1, function (result) {
-        api_result = result;
-        if (result.pages > 1) {
-            $("#page").page({
-                pages: result.pages,
-                first: "首页", //设置false则不显示，默认为false
-                last: "尾页", //设置false则不显示，默认为false
-                prev: '<', //若不显示，设置false即可，默认为上一页
-                next: '>', //若不显示，设置false即可，默认为下一页
-                groups: 3, //连续显示分页数
-                jump: function (context, first) {
-                    eval(method + '(' + context.option.curr + ')');
-                }
-            })
-        } else {
-            eval(method + '(' + 1 + ')');
+
+    eval(method+"(1)");
+
+    $('#page').page({
+        pages: all_pages,
+        curr: curr_page,
+        groups: 5,
+        prev: "上一页",
+        next: "下一页",
+        jump: function (context, first) {
+            if(!first)
+            eval(method+"(" + context.option.curr + ")");
         }
-    }, 'JSON');
+    });
 }
 
 //下拉框选择方法
