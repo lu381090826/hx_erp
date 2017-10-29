@@ -43,12 +43,12 @@ function debugConsole(o) {
 }
 //展示分页
 var api_result;
+var current_page = 1 ;
 function fromLoad(controller) {
     fromClean();
     __CONTROLLER__ = controller;
-
-    $.get(getContentUrl() + "1", function (result) {
-        api_result = result
+    $.get(getContentUrl() + 1, function (result) {
+        api_result = result;
         if (result.pages > 1) {
             $("#page").page({
                 pages: result.pages,
@@ -58,15 +58,14 @@ function fromLoad(controller) {
                 next: '>', //若不显示，设置false即可，默认为下一页
                 groups: 3, //连续显示分页数
                 jump: function (context, first) {
-                    fromClean();
                     eval(method + '(' + context.option.curr + ')');
                 }
             })
         } else {
-            eval(method + '(1)');
+            eval(method + '(' + 1 + ')');
         }
     }, 'JSON');
-    other_select_div.show()
+
 }
 
 //下拉框选择方法
@@ -75,7 +74,7 @@ $(function () {
     $selected.on('change', function () {
         fromClean();
         method = $(this).val();
-        other_select_div = $('.div-' + method);
+        other_select_div = $('#div-' + method);
         //用字符串执行方法
         // eval(method + '(1)');
         other_select_div.show();

@@ -24,7 +24,7 @@ $this->load->view('head');
     <option value="get_size">尺码管理</option>
 </select>
 <div class="am-btn-group am-btn-group-xs">
-    <div class="other-select div-get_goods">
+    <div class="other-select" id="div-get_goods">
         <button type="button" class="am-btn am-btn-default"
                 onclick="window.location.href='/sku/action_add_sku'"><span class="am-icon-plus"></span>新建商品
         </button>
@@ -104,17 +104,17 @@ $this->load->view('head');
         </div>
 
     </div>
-    <div class=" other-select div-get_category">
+    <div class=" other-select" id="div-get_category">
         <button type="button" class="am-btn am-btn-default"
                 onclick="window.location.href='/category/action_add_category'"><span class="am-icon-plus"></span>添加分类
         </button>
     </div>
-    <div class="other-select div-get_color">
+    <div class="other-select" id="div-get_color">
         <button type="button" class="am-btn am-btn-default"
                 onclick="window.location.href='/color/action_add_color'"><span class="am-icon-plus"></span>添加颜色
         </button>
     </div>
-    <div class="other-select div-get_size">
+    <div class="other-select" id="div-get_size">
         <button type="button" class="am-btn am-btn-default"
                 onclick="window.location.href='/size/action_add_size'"><span class="am-icon-plus"></span>添加尺码
         </button>
@@ -145,30 +145,29 @@ $this->load->view('head');
     }
     function get_goods(curr) {
         tableClean();
-        var content = "<tr style='text-align: center'> <th style='width: 80px'>小图</th> <th>款号</th><th>价格</th><th>库存</th><th>发布时间</th> <th style='text-align: center;width: 80px' class='am-text-nowrap'>操作</th> </tr>";
-        from_thead.append(content);
+        var fromThead = "<tr style='text-align: center'> <th style='width: 80px'>小图</th> <th>款号</th><th>价格</th><th>库存</th><th>发布时间</th> <th style='text-align: center;width: 80px' class='am-text-nowrap'>操作</th> </tr>";
+        from_thead.append(fromThead);
 
-        if(api_result==null){
-            var search_data = getFormJson($('#goods_search_form'));
+        if (api_result == null || curr != current_page) {
+            current_page = curr;
             $.ajax(
                 {
                     url: getContentUrl() + curr,
                     type: 'post',
-                    data: search_data,
+                    data: getFormJson($('#goods_search_form')),
                     success: function (result) {
-                        content = goods_show(result);
+                        from_contant.append(goods_show(result))
                     }
                 })
-        }else{
-            content = goods_show(api_result)
+        } else {
+            from_contant.append(goods_show(api_result))
         }
 
-        from_contant.append(content)
     }
 
 
     function goods_show(result) {
-        var goods_content;
+        var goods_content = "";
         $.each(result.result_rows, function (i, o) {
             goods_content += "<tr>" +
                 "<td><img class='pic' src='" + o.pic + "'></td>" +
