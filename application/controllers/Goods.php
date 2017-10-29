@@ -75,8 +75,7 @@ class Goods extends HX_Controller
         $this->load->model('goods/goods_model', 'goods_m');
         $request['page'] = $page;
         $res = $this->goods_m->get_goods_list($request);
-
-        parent::pagination('goods/get_goods',$res['total_num'],10);
+        json_out_put($res);
     }
 
     public function search_goods(){

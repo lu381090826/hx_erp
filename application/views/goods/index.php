@@ -142,33 +142,42 @@ $this->load->view('head');
 
     function get_goods(curr) {
         tableClean();
-        var goods_content = "<tr style='text-align: center'> <th style='width: 80px'>小图</th> <th>款号</th><th>价格</th><th>库存</th><th>发布时间</th> <th style='text-align: center;width: 80px' class='am-text-nowrap'>操作</th> </tr>";
-        from_thead.append(goods_content);
-        var data = getFormJson($('#goods_search_form'))
-        console.log(data);
-        $.ajax(
-            {
-                url:getContentUrl() + curr,
-                type:'post',
-                data:data,
-                success:function (result) {
-                    $.each(result.result_rows, function (i, o) {
-                        goods_content = "<tr>" +
-                            "<td><img class='pic' src='" + o.pic + "'></td>" +
-                            "<td>" + o.goods_id + "</td>" +
-                            "<td>¥" + o.price + "</td>" +
-                            "<td>" + 0 + "</td>" +
-                            "<td>" + o.create_time + "</td>" +
-                            "<td align='center' valign='middle' style='word-break:break-all'>" +
-                            "<div><a href='/goods/goods_detail/" + o.goods_id + "'>详情</a><div>" +
-                            "<div><a href='/sku/delete_sku/" + o.goods_id + "'>删除</a></div>" +
-                            "</td>" +
-                            "</tr>";
-                        from_contant.append(goods_content)
-                    });
-                }
-            })
+        var content = "<tr style='text-align: center'> <th style='width: 80px'>小图</th> <th>款号</th><th>价格</th><th>库存</th><th>发布时间</th> <th style='text-align: center;width: 80px' class='am-text-nowrap'>操作</th> </tr>";
 
+        if(api_result==null){
+            var search_data = getFormJson($('#goods_search_form'));
+            $.ajax(
+                {
+                    url: getContentUrl() + curr,
+                    type: 'post',
+                    data: search_data,
+                    success: function (result) {
+                        content += goods_show(result, content);
+                    }
+                })
+        }else{
+            content += goods_show(api_result, content)
+        }
+        from_thead.append(content);
+    }
+
+
+    function goods_show(result, goods_content) {
+        $.each(result.result_rows, function (i, o) {
+            goods_content = "<tr>" +
+                "<td><img class='pic' src='" + o.pic + "'></td>" +
+                "<td>" + o.goods_id + "</td>" +
+                "<td>¥" + o.price + "</td>" +
+                "<td>" + 0 + "</td>" +
+                "<td>" + o.create_time + "</td>" +
+                "<td align='center' valign='middle' style='word-break:break-all'>" +
+                "<div><a href='/goods/goods_detail/" + o.goods_id + "'>详情</a><div>" +
+                "<div><a href='/sku/delete_sku/" + o.goods_id + "'>删除</a></div>" +
+                "</td>" +
+                "</tr>";
+            from_contant.append(goods_content)
+        });
+        return goods_content;
     }
 
     function get_category(curr) {

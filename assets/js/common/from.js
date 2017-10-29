@@ -38,14 +38,18 @@ function getFormJson(frm) {
     return o;
 }
 
+function debugConsole(o) {
+    console.log(o);
+}
 //展示分页
+var api_result;
 function fromLoad(controller) {
     fromClean();
     __CONTROLLER__ = controller;
 
     $.get(getContentUrl() + "1", function (result) {
-        console.log(result.total_num)
-        if (result.total_num > 1) {
+        api_result = result
+        if (result.pages > 1) {
             $("#page").page({
                 pages: result.pages,
                 first: "首页", //设置false则不显示，默认为false
@@ -54,8 +58,7 @@ function fromLoad(controller) {
                 next: '>', //若不显示，设置false即可，默认为下一页
                 groups: 3, //连续显示分页数
                 jump: function (context, first) {
-                    from_thead.empty();
-                    from_contant.empty();
+                    fromClean();
                     eval(method + '(' + context.option.curr + ')');
                 }
             })
