@@ -193,7 +193,7 @@ $this->load->view('head');
                 "<td>" + o.create_time + "</td>" +
                 "<td align='center' valign='middle' style='word-break:break-all'>" +
                 "<div><a href='/goods/goods_detail/" + o.goods_id + "'>详情</a><div>" +
-                "<div><i class='am-icon-close'></i><a onclick=\"sku_delete('"+o.goods_id+"')\">删除</a></button></div>" +
+                "<div><a onclick=\"sku_delete('"+o.goods_id+"')\">删除</a></button></div>" +
                 "</td>" +
                 "</tr>";
         });
