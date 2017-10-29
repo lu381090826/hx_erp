@@ -94,7 +94,7 @@ $this->load->view('head');
                     <div class="am-form-group">
                         <div class="am-u-sm-12">
                             <button type="button" class="am-btn am-btn-default"
-                                    onclick="get_goods()"><span class="am-icon-search"></span>搜索
+                                    onclick="search_goods()"><span class="am-icon-search"></span>搜索
                             </button>
                         </div>
                     </div>
@@ -139,7 +139,10 @@ $this->load->view('head');
     $(document).ready(function () {
         fromLoad('goods');
     });
-
+    function search_goods() {
+        api_result = null;
+        get_goods(1);
+    }
     function get_goods(curr) {
         tableClean();
         var content = "<tr style='text-align: center'> <th style='width: 80px'>小图</th> <th>款号</th><th>价格</th><th>库存</th><th>发布时间</th> <th style='text-align: center;width: 80px' class='am-text-nowrap'>操作</th> </tr>";

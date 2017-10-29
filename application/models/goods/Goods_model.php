@@ -114,31 +114,31 @@ class Goods_model extends HX_Model
 
     private function searchParams($request){
         $sql = "";
-        if (isset($request['goods_id'])) {
+        if (!empty($request['goods_id'])) {
             $sql .= " AND Fgoods_id LIKE '%{$request['goods_id']}%' ";
         }
-        if(isset($request['price_max'])){
+        if(!empty($request['price_max'])){
             $sql .= " AND Fprice <= {$request['price_max']} ";
         }
-        if(isset($request['price_min'])){
+        if(!empty($request['price_min'])){
             $sql .= " AND Fprice >= {$request['price_min']} ";
         }
-        if(isset($request['record_number'])){
+        if(!empty($request['record_number'])){
             $sql .= " AND Frecord_number LIKE '%{$request['record_number']}%' ";
         }
-        if(isset($request['brand'])){
+        if(!empty($request['brand'])){
             $sql .= " AND Fbrand LIKE '%{$request['brand']}%' ";
         }
-        if(isset($request['category_id'])){
-            $sql .= " AND Fcategory_id = {$request['Fcategory_id']} ";
+        if(!empty($request['category_id'])){
+            $sql .= " AND Fcategory_id = {$request['category_id']} ";
         }
-        if(isset($request['category'])){
+        if(!empty($request['category'])){
             $sql .= " AND Fcategory LIKE '%{$request['category']}%' ";
         }
-        if(isset($request['begin_time'])){
+        if(!empty($request['begin_time'])){
             $sql .= " AND Fcreate_time >= '{$request['begin_time']}' ";
         }
-        if(isset($request['end_time'])){
+        if(!empty($request['end_time'])){
             $sql .= " AND Fcreate_time <= '{$request['end_time']}' ";
         }
 
