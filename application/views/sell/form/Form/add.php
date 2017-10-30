@@ -358,10 +358,7 @@
                 var _this = this;
 
                 //input
-                var input = e;
-
-
-                console.log(e);
+                var input_value = e.target.value;
 
                 //Ajax查询
                 $.ajax({
@@ -369,12 +366,11 @@
                     type: "get",
                     dataType: "json",
                     data: {
-                        "key": this.client_search,
+                        "key": input_value,
                     },
                     success:function(result){
                         if(result.state.return_code==0){
                             _this.clientList = result.data;
-                            console.log(result.data);
                         }
                     }
                 });
