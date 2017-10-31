@@ -50,19 +50,23 @@
 
 /*订单项*/
 .order-list .item{
-    display: flex;
-    justify-content: space-between;
     background-image: linear-gradient(#5f9cc5,#396b9e);
     border-radius: 6px;
-    border: 1px solid #044062;
+    /*border: 1px solid #044062;*/
     cursor: pointer;
     color: white;
 }
-.order-list .item .body{
+.order-list .item .main{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    /*border-bottom: 0.2px solid #044062;*/
+}
+.order-list .item .main .data{
     padding: 12px 15px;
     width: 100%;
 }
-.order-list .item .body .title{
+.order-list .item .main .data .title{
     display: flex;
     justify-content: space-between;
 
@@ -72,11 +76,20 @@
     margin-top: 3px;
     margin-bottom: 3px;
 }
-.order-list .item .icon{
+.order-list .item .main .icon{
     display: flex;
     align-items: center;
     font-size: 24px;
-    border-left: 1px solid #044062;
+    /*border-left: 1px solid #044062;*/
+    border-left: 1px solid white;
     padding-left: 6px;
     padding-right: 6px;
+}
+.order-list .item .options .list-group{
+    margin-bottom: 0px;
+}
+.order-list .item .options .list-group .list-group-item{
+    font-size: 16px;
+    font-weight: 500;
+    background-color: transparent;
 }

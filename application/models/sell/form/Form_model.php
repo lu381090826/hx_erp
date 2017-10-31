@@ -52,18 +52,6 @@ class Form_model extends BaseModel{
 	}
 
 	/**
-	 * @return string
-	 */
-	public function getStatusName(){
-		switch($this->status){
-			case 0:
-				return "新单";
-			default:
-				return "其他";
-		}
-	}
-
-	/**
 	 * 保存前执行
 	 */
 	protected function beforeSave()
@@ -87,6 +75,24 @@ class Form_model extends BaseModel{
 	}
 
 	/**
+	 * @return string
+	 */
+	public function getStatusName(){
+		switch($this->status){
+			case 0:
+				return "待配货";
+			case 1:
+				return "已配货";
+			case 2:
+				return "已完成";
+			case 3:
+				return "已废除";
+			default:
+				return "其他";
+		}
+	}
+
+	/**
 	 * 支付方式映射
 	 */
 	public function getPaymentMap(){
@@ -105,9 +111,9 @@ class Form_model extends BaseModel{
 	}
 
 	/**
-	 * 添加订单
+	 * 添加/修改 订单(事务)
 	 */
-	public function add($data){
+	public function updateForm($data){
 		//开始事务
 		$this->db->trans_strict(FALSE);
 		$this->db->trans_begin();
@@ -116,18 +122,23 @@ class Form_model extends BaseModel{
 		$this->load($data);
 		$this->save();
 
+		//删除所有旧项
+		$this->MSpu->deleteAll(["form_id" => $this->id]);
+		$this->MSku->deleteAll(["form_id" => $this->id]);
+
 		//遍历spu
 		foreach($data["selectList"] as $spu_data){
 			$spu = $this->MSpu->_new();
 			$spu->form_id = $this->id;
 			$spu->spu_id = $spu_data["spu_id"];
-			$spu->snap_price = $spu_data["price"];
-			$spu->snap_pic = $spu_data["pic"];
-			$spu->snap_pic_normal = $spu_data["pic_normal"];
+			$spu->snap_price = $spu_data["snap_price"];
+			$spu->snap_pic = $spu_data["snap_pic"];
+			$spu->snap_pic_normal = $spu_data["snap_pic_normal"];
 			$spu->save();
 			//遍历sku
 			foreach($spu_data["skus"] as $sku_data){
 				$sku = $this->MSku->_new();
+				$sku->form_id = $this->id;
 				$sku->fspu_id = $spu->id;
 				$sku->sku_id = $sku_data["sku_id"];
 				$sku->color = $sku_data["color"];

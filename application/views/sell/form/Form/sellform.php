@@ -56,8 +56,9 @@
                 <a type="button" data-am-modal="{target: '#modal-client-add', closeViaDimmer: 0}"><span class="glyphicon glyphicon-plus"></span>添加</a>
             </label>
             <div class="input-compose">
-                <div><input type="text" class="form-control" placeholder="搜索客户" :value="client_search" v-on:change="clientChange"></div>
-                <div><input type="text" class="form-control" placeholder="客户名称/电话" disabled :value="client | client_show"></div>
+                <div><input type="text" class="form-control" placeholder="搜索客户" :value="clientKey" v-on:change="clientChange"></div>
+                <div v-if="client != null"><input type="text" class="form-control" placeholder="客户名称/电话" disabled :value="client | client_show"></div>
+                <div v-else><input type="text" class="form-control" placeholder="客户名称/电话" disabled></div>
             </div>
             <div class="form-group"></div>
             <div class="form-group">
@@ -97,9 +98,9 @@
                     <div :id="'collapse_6_'+index" class="panel-collapse collapse" role="tabpanel" :aria-labelledby="'heading_6_'+index">
                         <div class="panel-body">
                             <div class="sku-content row">
-                                <div class="col-xs-3"><img :src="item.pic" alt="" class="img-rounded"></div>
+                                <div class="col-xs-3"><img :src="item.snap_pic" alt="" class="img-rounded"></div>
                                 <div class="col-xs-3"><label>单价</label></div>
-                                <div class="col-xs-6"><input type="number" class="form-control" placeholder="单价" v-model="item.price"></div>
+                                <div class="col-xs-6"><input type="text" class="form-control" placeholder="单价" v-bind:value="item.snap_price"></div>
                             </div>
                             <div class="sku-table row">
                                 <table class="table table-striped">
@@ -107,7 +108,7 @@
                                     <td>颜色</td><td>尺码</td><td>数量</td><td>操作</td>
                                     </thead>
                                     <tr v-for="sku in item.skus">
-                                        <td>{{sku.color}}</td><td>{{sku.size}}</td><td><input type="number" class="form-control" placeholder="单价" v-model="sku.num"></td><td><a v-on:click="skuDel(item,sku)">删除</a></td>
+                                        <td>{{sku.color}}</td><td>{{sku.size}}</td><td><input type="number" class="form-control" placeholder="数量" v-model="sku.num"></td><td><a v-on:click="skuDel(item,sku)">删除</a></td>
                                     </tr>
                                 </table>
                             </div>
@@ -133,16 +134,16 @@
                                 {{item.spu_id}}
                             </h1>
                             <h1 class="panel-title">
-                                {{item | sku_total_num}}件*{{item.price}}={{item | sku_total_price}}元
+                                {{item | sku_total_num}}件*{{item.snap_price}}={{item | sku_total_price}}元
                             </h1>
                         </a>
                     </div>
                     <div :id="'collapse_7_'+index" class="panel-collapse collapse" role="tabpanel" :aria-labelledby="'heading_7_'+index">
                         <div class="panel-body">
                             <div class="sku-content row">
-                                <div class="col-xs-3"><img :src="item.pic" alt="" class="img-rounded"></div>
+                                <div class="col-xs-3"><img :src="item.snap_pic" alt="" class="img-rounded"></div>
                                 <div class="col-xs-3"><label>单价</label></div>
-                                <div class="col-xs-6"><input type="number" class="form-control" placeholder="单价" v-model="item.price"></div>
+                                <div class="col-xs-6"><input type="text" class="form-control" placeholder="单价" v-model="item.snap_price"></div>
                             </div>
                             <div class="sku-table row">
                                 <table class="table table-striped">
@@ -150,7 +151,7 @@
                                     <td>颜色</td><td>尺码</td><td>数量</td><td>操作</td>
                                     </thead>
                                     <tr v-for="sku in item.skus">
-                                        <td>{{sku.color}}</td><td>{{sku.size}}</td><td><input type="number" class="form-control" placeholder="单价" v-model="sku.num"></td><td><a v-on:click="skuDel(item,sku)">删除</a></td>
+                                        <td>{{sku.color}}</td><td>{{sku.size}}</td><td><input type="number" class="form-control" placeholder="数量" v-model="sku.num"></td><td><a v-on:click="skuDel(item,sku)">删除</a></td>
                                     </tr>
                                 </table>
                             </div>
@@ -172,7 +173,6 @@
         <!-- 提交按钮 -->
         <button class="btn btn-primary from-submit" type="submit" v-on:click="submit()">提交</button>
     </div>
-
     <!-- 模拟框 (添加用户) -->
     <div class="am-modal am-modal-no-btn" tabindex="-1" id="modal-client-add">
         <div class="am-modal-dialog">
@@ -223,7 +223,7 @@
                 var item = list[key];
                 for(key2 in item.skus){
                     var sku = item.skus[key2];
-                    total += parseInt(sku.num) * item.price;
+                    total += parseInt(sku.num) * item.snap_price;
                 }
             }
         }
@@ -245,14 +245,14 @@
         var total = 0;
         for(key in item.skus){
             var sku = item.skus[key];
-            total += parseInt(sku.num) * item.price;
+            total += parseInt(sku.num) * item.snap_price;
         }
         return total;
     })
 
     //过滤器--拼凑客户信息
     Vue.filter('client_show',function(client){
-        if(client.id == "" || client.id == undefined || client.id == null)
+        if(client.id == null)
             return "";
         else
             return client.name+"("+client.phone+")";
@@ -263,6 +263,7 @@
         el:"#vue-app",
         data: {
             //数据
+            "id":'<?=$model->id?>',
             "seller":{
                 "id":"1000",
                 "name":"测试",
@@ -271,46 +272,45 @@
                     "name":"仓库01",
                 }
             },
-            "payment":0,
+            "client":null,
+            "payment":"0",
             "remark":"",
-            //列表
-            "paymentMap": <?=json_encode($paymentMap)?>,
-            //客户相关
-            "client_search":"",
-            "client":{
-                "id":"",
-                "name":"",
-                "phone":"",
-                "source":null,
-            },
+            'selectList':[],
+            //搜索、输入、映射
+            "clientKey":"",
+            "clientList":[],
+            'searchKey':"",
+            'searchList':[],
             "client_input":{
                 "name":"",
                 "phone":"",
             },
-            "clientList":[],
-            //SKU查询相关
-            'searchKey':"",
-            'searchList':[],
-            'selectList':[],
+            "paymentMap": <?=json_encode($paymentMap)?>,
         },
-        created:function()
-        {
-            //console.log(this.seller);
-            //console.log(this.paymentMap);
+        created:function() {
+            //载入数据
+            this.client = <?=json_encode($model->client)?>;
+            this.remark = '<?=$model->remark?>';
+            this.payment = '<?=$model->payment?>';
+            this.selectList = <?=json_encode($model->goods)?>;
+
+            //搜索值修正
+            if(this.client)
+                this.clientKey = this.client.id;
         },
         methods: {
             //搜索
             searchChange:function(e){
                 this.searchList = [
                     {
-                        "spu_id":"TS100001","pic":"images/597ffd72d627f.JPG","pic_normal":"images/597ffd72d627f.JPG","price":12,
+                        "spu_id":"TS100001","snap_pic":"images/597ffd72d627f.JPG","snap_pic_normal":"images/597ffd72d627f.JPG","snap_price":12,remark:"",
                         "skus":[
                             {"sku_id":"1231","color":"红","size":"F","num":0},
                             {"sku_id":"1232","color":"蓝","size":"F","num":0}
                         ]
                     },
                     {
-                        "spu_id":"TS100002","pic":"images/597ffd72d627f.JPG","pic_normal":"images/597ffd72d627f.JPG","price":12,
+                        "spu_id":"TS100002","snap_pic":"images/597ffd72d627f.JPG","snap_pic_normal":"images/597ffd72d627f.JPG","snap_price":12,remark:"",
                         "skus":[
                             {"sku_id":"1233","color":"红","size":"F","num":0},
                             {"sku_id":"1234","color":"蓝","size":"F","num":0}
@@ -320,8 +320,11 @@
             },
             //加入列表
             selectAdd:function(item){
+                //克隆然后添加
                 var clone = JSON.parse(JSON.stringify(item));
                 this.selectList.push(clone);
+                //在搜索表中移除
+                this.searchDel(item);
             },
             //清理未填
             searchClean:function(item){
@@ -333,20 +336,27 @@
                 }
                 item.skus = list;
             },
+            //删除搜索项
+            searchDel:function(item){
+                //获取索引
+                var index = this.getIndex(item,this.searchList);
+                //删除索引位置项
+                this.searchList.splice(index,1);
+            },
             //删除SKU项
             skuDel:function(item,sku){
                 //获取索引
-                var index = this.getIndex(sku,item.skus,"id");
+                var index = this.getIndex(sku,item.skus);
                 //删除索引位置项
                 item.skus.splice(index,1);
             },
             //获取索引
-            getIndex:function(item,list,key){
+            getIndex:function(item,list){
                 //定义索引
                 var index = null;
                 //获取索引
                 for(var i=0;i<list.length;i++){
-                    if(list[i][key] == item[key])
+                    if(list[i] == item)
                         index = i;
                 }
                 //返回索引
@@ -354,10 +364,8 @@
             },
             //客户输入改变
             clientChange:function(e){
-                //this
+                //取值和This
                 var _this = this;
-
-                //input
                 var input_value = e.target.value;
 
                 //Ajax查询
@@ -376,21 +384,16 @@
                 });
 
                 //清空搜索内容
-                this.client_search = "";
+                this.clientKey = "";
                 //情况当前client
-                this.client.id = "";
-                this.client.name = "";
-                this.client.phone = "";
+                this.client = null;
             },
             //选择客户
             clientSelect:function(client){
                 //更改查询框内容
-                this.client_search = client.id;
-                //更改客户信息
-                this.client.id = client.id;
-                this.client.name = client.name;
-                this.client.phone = client.phone;
-                this.client.source = client;
+                this.clientKey = client.id;
+                //更改客户
+                this.client = client;
                 this.clientList = [];
             },
             //添加客户
@@ -409,7 +412,7 @@
                     success:function(result) {
                         if(result.state.return_code == 0) {
                             //更改查询框内容
-                            _this.client_search = result.data.id;
+                            _this.clientKey = result.data.id;
                             //更改客户信息
                             _this.client.id = result.data.id;
                             _this.client.name = result.data.name;
@@ -426,27 +429,28 @@
                         else {
                             alert(result.state.return_msg)
                         }
-                        console.log(vue.list);
                     }
                 });
             },
             //提交
             submit:function(){
-                console.log(this.seller.id);
-                console.log(this.client.id);
-                console.log(this.payment);
-                console.log(this.remark);
-                console.log(this.selectList);
+                //console.log(this.id);
+                //console.log(this.seller.id);
+                //console.log(this.client.id);
+                //console.log(this.payment);
+                //console.log(this.remark);
+                //console.log(this.selectList);
                 //获取总额
                 var total_num = $("#total_num").val();
                 var total_price = $("#total_price").val();
 
                 //Ajax
                 $.ajax({
-                    url:'<?=site_url("sell/form/Form/add_api")?>',
-                    type:"get",
+                    url:'<?=site_url("sell/form/Form/update_api")?>',
+                    type:"post",
                     dataType:"json",
                     data:{
+                        "id":this.id,
                         "user_id":this.seller.id,
                         "client_id":this.client.id,
                         "payment":this.payment,
@@ -462,7 +466,6 @@
                         else {
                             alert(result.state.return_msg)
                         }
-                        console.log(vue.list);
                     }
                 });
             }

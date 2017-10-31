@@ -257,6 +257,22 @@ class BaseModel extends CI_Model {
         return $bool;
     }
 
+    /**
+     * @param array $condition
+     * @return bool
+     * 按照条件删除
+     */
+    public function deleteAll($condition=[]){
+        //按照加官，使用sql前所有字段加F
+        $condition = $this->addPrefixKeyValue($condition);
+
+        //删除
+        $this->db->where($condition)->delete($this->table);
+
+        //返回
+        return true;
+    }
+
     //endregion
 
     //region 生命周期

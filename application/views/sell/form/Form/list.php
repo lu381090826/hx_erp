@@ -39,17 +39,27 @@
     <!-- 订单 -->
     <div class="order-list">
         <div class="item" v-for="item in list" v-if="item.create_user_id.indexOf(filter) != -1 || item.total_price.indexOf(filter) != -1">
-            <div class="body" v-on:click="update(item)">
-                <div class="title">
-                    <div class="client">{{item.client.id}}</div>
-                    <div class="tag">{{item.status_name}}</div>
+            <div class="main">
+                <div class="data" v-on:click="select(item)">
+                    <div class="title">
+                        <div class="client">{{item.client.name}}</div>
+                        <div class="tag">{{item.status_name}}</div>
+                    </div>
+                    <div>{{item.date}}</div>
+                    <div>开单人：{{item.create_user_id}}</div>
+                    <div>销售数量：{{item.total_num}}  销售金额：{{item.total_price}}</div>
                 </div>
-                <div>{{item.date}}</div>
-                <div>开单人：{{item.create_user_id}}</div>
-                <div>销售数量：{{item.total_num}}  销售金额：{{item.total_price}}</div>
+                <div class="icon">
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
+                </div>
             </div>
-            <div class="icon">
-                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            <div class="options" v-if="item === selected">
+                <ul class="list-group">
+                    <li class="list-group-item">打印</li>
+                    <li class="list-group-item" v-if="item.status == 0 || item.status == 1">配货</li>
+                    <li class="list-group-item" v-if="item.status == 0" v-on:click="modify(item)">修改</li>
+                    <li class="list-group-item" v-if="item.status == 0" v-on:click="scrap(item)">作废</li>
+                </ul>
             </div>
         </div>
     </div>
@@ -60,8 +70,8 @@
     var vue = new Vue({
         el:"#vue-app",
         data: {
-            //列表
             "list":[],
+            "selected":null,
             "start_date":"<?=date("Y-m-d",time())?>",
             "end_date":"<?=date("Y-m-d",time())?>",
             "filter":"",
@@ -70,6 +80,13 @@
             this.search();
         },
         methods: {
+            //选择项
+            select:function(item){
+                if(this.selected === item)
+                    this.selected = null;
+                else
+                    this.selected = item;
+            },
             //修改订单
             update:function(order){
                 if(order.canUpdate){
@@ -84,7 +101,7 @@
 
                 //Ajax
                 $.ajax({
-                    url:'<?=site_url("sell/form/Form/search_api")?>',
+                    url:'<?=site_url($_controller->views."/search_api")?>',
                     type:"post",
                     dataType:"json",
                     data:{
@@ -97,6 +114,37 @@
                         //console.log(vue.list);
                     }
                 });
+            },
+            //修改
+            modify:function(item){
+                //过滤掉非新单
+                if(item.status != 0)
+                    return;
+
+                //跳转
+                window.location.href='<?=site_url($_controller->views."/modify")?>/'+item.id;
+            },
+            //作废
+            scrap:function(item){
+                var _this = this;
+                var w=confirm("是否确定报废该销售单?")
+                if (w==true) {
+                    $.ajax({
+                        url: '<?=site_url($_controller->views . "/scrap_api")?>',
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            "id": item.id,
+                        },
+                        success: function (result) {
+                            if (result.state.return_code == 0) {
+                                _this.search();
+                            }
+                            else
+                                alert(item.state.return_msg);
+                        }
+                    });
+                }
             }
         }
     })
