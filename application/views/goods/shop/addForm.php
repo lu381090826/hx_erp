@@ -9,15 +9,48 @@ $this->load->view('head');
         <legend>添加店铺</legend>
         <div class="am-form-group">
             <label for="doc-vld-name">店铺名：</label>
-            <input type="text" id="doc-vld-name" minlength="1" placeholder="输入店铺名称" name="name"
+            <input type="text" id="doc-vld-name" minlength="1" placeholder="店铺名称" name="name"
                    class="am-form-field"
                    required/>
         </div>
         <div class="am-form-group">
-            <label for="doc-vld-memo">备注：</label>
-            <input type="text" id="doc-vld-memo" minlength="1" value="无" placeholder="输入备注" name="memo"
+            <label for="doc-vld-owner">负责人姓名：</label>
+            <input type="text" id="doc-vld-owner" placeholder="姓名" name="owner"
                    class="am-form-field"
                    required/>
+        </div>
+        <div class="am-form-group">
+            <label for="doc-vld-owner_mobile">负责人电话：</label>
+            <input type="text" id="doc-vld-owner_mobile" placeholder="电话" name="owner_mobile"
+                   class="am-form-field"
+            required/>
+        </div>
+        <div class="am-form-group">
+            <label for="doc-vld-phone">座机：</label>
+            <input type="text" id="doc-vld-phone" placeholder="座机" name="phone"
+                   class="am-form-field"/>
+        </div>
+
+        <div class="am-form-group">
+            <label for="doc-vld-address">地址：</label>
+            <input type="text" id="doc-vld-address" placeholder="地址" name="address"
+                   class="am-form-field"/>
+        </div>
+        <div class="am-form-group">
+            <label for="doc-vld-email">邮箱：</label>
+            <input type="text" id="doc-vld-email" placeholder="邮箱" name="email"
+                   class="am-form-field"/>
+        </div>
+        <div class="am-form-group">
+            <label for="doc-vld-web_home">官网：</label>
+            <input type="text" id="doc-vld-web_home" placeholder="官网" name="web_home"
+                   class="am-form-field"/>
+        </div>
+
+        <div class="am-form-group">
+            <label for="doc-vld-memo">备注：</label>
+            <input type="text" id="doc-vld-memo" value="" placeholder="备注" name="memo"
+                   class="am-form-field"/>
         </div>
 
         <button class="am-btn am-btn-secondary" type="submit" id="submit">提交</button>

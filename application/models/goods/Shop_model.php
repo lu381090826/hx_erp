@@ -62,7 +62,7 @@ class Shop_model extends HX_Model
         if (!$ret->row(0)) {
             return $this->suc_out_put();
         }
-        return $this->fail_out_put(1000, "店铺已存在");
+        return $this->fail_out_put(1000, "该店铺名已存在");
     }
 
     private function check_input($request)
@@ -71,16 +71,41 @@ class Shop_model extends HX_Model
         if (!empty($request['name'])) {
             $insert_params['Fname'] = $request['name'];
         } else {
-            show_error("店铺名称不能为空");
+            show_error("请填写店铺姓名");
         }
-
         $ret = $this->check_shop_name_available($request);
         if ($ret['result'] != 0) {
             show_error($ret['res_info']);
         }
+        if (!empty($request['owner'])) {
+            $insert_params['Fowner'] = $request['owner'];
+        } else {
+            show_error("请填写负责人");
+        }
+        if (!empty($request['owner_mobile'])) {
+            $insert_params['Fowner_mobile'] = $request['owner_mobile'];
+        } else {
+            show_error("请填写负责人电话");
+        }
+
+        if (!empty($request['phone'])) {
+            $insert_params['Fphone'] = $request['phone'];
+        }
+        if (!empty($request['address'])) {
+            $insert_params['Faddress'] = $request['address'];
+        }
+        if (!empty($request['email'])) {
+            $insert_params['Femail'] = $request['email'];
+        }
+        if (!empty($request['web_home'])) {
+            $insert_params['Fweb_home'] = $request['web_home'];
+        }
+        $insert_params['Foperator'] = $this->session->uid;
 
         if (!empty($request['memo'])) {
             $insert_params['Fmemo'] = $request['memo'];
+        }else{
+            $insert_params['Fmemo'] = '';
         }
         return $insert_params;
     }
