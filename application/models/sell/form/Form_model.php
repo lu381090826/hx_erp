@@ -45,7 +45,7 @@ class Form_model extends BaseModel{
 	static function describe()
 	{
 		$data = (object)array();
-		$data->desc = "销售表";
+		$data->desc = "销售订单";
 		$data->name = "From";
 
 		return $data;

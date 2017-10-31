@@ -45,14 +45,18 @@ class ViewComponent
             }
 
             //按钮
-            $html .= '<td>'.
+            /*$html .= '<td>'.
                 '<div class="am-btn-toolbar">'.
                 '<div class="am-btn-group am-btn-group-xs">'.
                 '<a class="am-btn am-btn-default am-btn-xs am-text-secondary" href="'.UrlComponent::update($_controller,$item).'"><span class="am-icon-pencil-square-o"></span> 编辑 </a>'.
-                /*'<a class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" href="'.UrlComponent::delete($_controller,$item).'"><span class="am-icon-trash-o"></span> 删除 </a>'.*/
+                //'<a class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" href="'.UrlComponent::delete($_controller,$item).'"><span class="am-icon-trash-o"></span> 删除 </a>'.
                 '<a class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" href="javascript:if(window.confirm(\'确定删除数据?\')) window.location.href=\''.UrlComponent::delete($_controller,$item).'\'"><span class="am-icon-trash-o"></span> 删除 </a>'.
                 '</div>'.
-                '</div>';
+                '</div>';*/
+            $html .= '<td>'.
+                '<a href="'.UrlComponent::update($_controller,$item).'"> 编辑 </a>'.
+                '<a href="javascript:if(window.confirm(\'确定删除数据?\')) window.location.href=\''.UrlComponent::delete($_controller,$item).'\'"> 删除 </a>'.
+                '</td>';
 
 
             $html .= "</tr>";

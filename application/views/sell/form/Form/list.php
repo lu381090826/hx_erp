@@ -2,12 +2,17 @@
 <!--<link rel="stylesheet" href="<?/*=$base_url*/?>/assets/page/css/header.css">-->
 <link rel="stylesheet" href="/assets/page/css/list.css">
 
+<!-- 二级导航 -->
+<div class="am-cf am-padding am-padding-bottom-0">
+    <select data-am-selected id="subnav">
+        <option value="#" selected>销售订单</option>
+        <option value="<?=site_url("sell/client/Client")?>">客户管理</option>
+    </select>
+</div>
+<hr>
+
 <!-- 主体 -->
 <div id="vue-app" class="form-content">
-    <!-- 标题 -->
-    <div class="page-header">
-        <h3>销售单<small>今日开单</small></h3>
-    </div>
     <!-- 新开单 -->
     <a class="btn-add" href="<?=site_url($_controller->views."/add")?>"><span class="glyphicon glyphicon-plus"></span>新开单</a></label>
     <!-- 搜索框 -->
@@ -149,3 +154,4 @@
         }
     })
 </script>
+

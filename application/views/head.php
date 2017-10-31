@@ -13,8 +13,10 @@
     <meta HTTP-EQUIV="expires" CONTENT="0">
     <link rel="alternate icon" type="image/png" href="/assets/i/favicon.png">
     <link rel="stylesheet" href="/assets/css/amazeui.min.css"/>
-<!--    韩迅css   -->
+    <!--    韩迅css   -->
     <link rel="stylesheet" href="/assets/css/app.css"/>
+    <!--    jquery   -->
+    <script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
 </head>
 <body>
 <header class="am-topbar am-topbar-fixed-top">

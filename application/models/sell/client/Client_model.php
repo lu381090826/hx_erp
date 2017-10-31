@@ -20,9 +20,9 @@ class Client_model extends BaseModel{
     {
         return [
             'id' => 'ID',
-            'name' => '客户名称',
-            'phone' => '客户电话',
-            'addr' => '客户地址',
+            'name' => '名称',
+            'phone' => '电话',
+            'addr' => '地址',
         ];
     }
 
@@ -32,7 +32,7 @@ class Client_model extends BaseModel{
     static function describe()
     {
         $data = (object)array();
-        $data->desc = "客户信息";
+        $data->desc = "客户管理";
         $data->name = "Client";
 
         return $data;

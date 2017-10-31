@@ -2,12 +2,18 @@
 <!--<link rel="stylesheet" href="<?/*=$base_url*/?>/assets/page/css/header.css">-->
 <link rel="stylesheet" href="/assets/page/css/add.css">
 
+<!-- 面包屑 -->
+<div class="am-cf am-padding am-padding-bottom-0">
+    <div class="am-fl am-cf">
+        <a class="am-text-primary am-text-lg" href="<?=base_url()?>">HOME</a> /
+        <a href="<?=site_url("$_controller->views/index")?>"><?=$_controller->describe->desc?></a> /
+        <small>订单编辑</small>
+    </div>
+</div>
+<hr />
+
 <!-- 主体 -->
 <div id="vue-app" class="form-content">
-    <!-- 标题 -->
-    <div class="page-header">
-        <h3>销售单<small>新订单</small></h3>
-    </div>
     <!-- 表单主体 -->
     <div>
         <!-- 员工仓库 -->
