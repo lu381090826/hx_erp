@@ -81,6 +81,7 @@ class Category_model extends HX_Model
         if (!isset($arr)) {
             $arr = $this->getCategoryList();
         }
+        log_message('INFO', json_encode($arr, JSON_UNESCAPED_UNICODE));
 
         return $arr;
     }
