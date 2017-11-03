@@ -223,7 +223,7 @@ $config['allow_get_array'] = TRUE;
 | your log files will fill up very fast.
 |
 */
-$config['log_threshold'] = 1;
+$config['log_threshold'] = 4;
 
 /*
 |--------------------------------------------------------------------------
@@ -260,7 +260,7 @@ $config['log_file_extension'] = 'log';
 | IMPORTANT: This MUST be an integer (no quotes) and you MUST use octal
 |            integer notation (i.e. 0700, 0644, etc.)
 */
-$config['log_file_permissions'] = 0777;
+$config['log_file_permissions'] = 0644;
 
 /*
 |--------------------------------------------------------------------------
