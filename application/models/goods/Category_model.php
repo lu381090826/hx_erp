@@ -45,6 +45,7 @@ class Category_model extends HX_Model
     {
         $inserty_arr = $this->check_insert($request);
         $this->db->insert($this->table, $inserty_arr);
+        $this->cache_delete();
     }
 
     public function get_all_list()
@@ -84,6 +85,15 @@ class Category_model extends HX_Model
         return $arr;
     }
 
+    public function cache_delete()
+    {
+        $cache = 'CATEGORY_CACHE';
+        $this->load->driver('cache');
+        if ($this->cache->redis->get($cache) != null) { //如果未设置
+            $this->cache->redis->delete($cache);
+        }
+    }
+
     public function get_list($page = 0)
     {
         $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1";
@@ -103,6 +113,7 @@ class Category_model extends HX_Model
 
     public function category_delete_by_id($id)
     {
+        $this->cache_delete();
         return $this->db->update($this->table, ['Fstatus' => 0, 'Fop_uid' => $this->session->uid], ['Fid' => $id]);
     }
 

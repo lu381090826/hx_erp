@@ -20,6 +20,7 @@ class Color_model extends HX_Model
 
     public function color_delete_by_id($id)
     {
+        $this->color_cache_delete();
         return $this->db->update($this->table, ['Fstatus' => 0], ['Fid' => $id]);
     }
 
@@ -96,6 +97,55 @@ class Color_model extends HX_Model
             'Fmemo' => $request['memo'],
         ];
         $this->db->insert($this->table, $insert_arr);
+        $this->color_cache_delete();
+    }
+
+    public function color_cache_delete()
+    {
+        $color_cache = 'COLOR_CACHE';
+        $this->load->driver('cache');
+        if ($this->cache->redis->get($color_cache) != null) { //如果未设置
+            $this->cache->redis->delete($color_cache);
+        }
+    }
+
+    public function color_cache()
+    {
+        error_reporting(0);
+        $color_cache = 'COLOR_CACHE';
+        try {
+            $this->load->driver('cache');
+            if ($this->cache->redis->get($color_cache) === null) { //如果未设置
+
+                $arr = $this->colorList();
+
+                log_message('INFO', json_encode($arr, JSON_UNESCAPED_UNICODE));
+
+                $this->cache->redis->set($color_cache, $arr); //设置
+                $this->cache->redis->EXPIRE($color_cache, 86400); //设置过期时间 （1天）
+            } else {
+                $arr = $this->cache->redis->get($color_cache);  //从缓存中直接读取对应的值
+            }
+
+        } catch (Exception $e) {
+            log_message('ERROR', $e->getMessage());
+        }
+
+        if (!isset($arr)) {
+            $arr = $this->colorList();
+        }
+
+        return $arr;
+    }
+
+    private function colorList()
+    {
+        $arr = $this->get_color_list_all();
+        $result = [];
+        foreach ($arr['result_rows'] as $r) {
+            $result[$r['id']] = $r;
+        }
+        return $result;
     }
 
 }

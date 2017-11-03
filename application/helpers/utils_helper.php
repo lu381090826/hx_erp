@@ -32,3 +32,24 @@ if (!function_exists('json_out_put')) {
         $CI->output->set_output(json_encode($arr,JSON_UNESCAPED_UNICODE));
     }
 }
+
+//根据二维数组的建值去重
+if (!function_exists('arr_sort')) {
+    function arr_sort($array, $key, $order = "asc")
+    {
+        $arr_nums = $arr = array();
+        foreach ($array as $k => $v) {
+            $arr_nums[$k] = $v[$key];
+        }
+        if ($order == 'asc') {
+            asort($arr_nums);
+        } else {
+            arsort($arr_nums);
+        }
+        foreach ($arr_nums as $k => $v) {
+            $arr[$k] = $array[$k];
+        }
+        return $arr;
+    }
+}
+

@@ -117,4 +117,10 @@ class Shop_model extends HX_Model
         $this->db->insert($this->table, $insert_arr);
     }
 
+    public function shop_detail_by_id($id)
+    {
+        $s = "SELECT * FROM {$this->table} u  WHERE u.Fstatus = 1 AND Fid = ? LIMIT 1;";
+        $ret = $this->db->query($s, [$id]);
+        return $this->suc_out_put($ret->row(0, 'array'));
+    }
 }

@@ -95,4 +95,49 @@ class Size_model extends HX_Model
         $this->db->insert($this->table, $insert_arr);
     }
 
+    public function size_cache()
+    {
+        error_reporting(0);
+        $cache = 'SIZE_CACHE';
+        try {
+            $this->load->driver('cache');
+            if ($this->cache->redis->get($cache) === null) { //如果未设置
+
+                $arr = $this->getSizeList();
+                log_message('INFO', json_encode($arr, JSON_UNESCAPED_UNICODE));
+
+                $this->cache->redis->set($cache, $arr); //设置
+                $this->cache->redis->EXPIRE($cache, 86400); //设置过期时间 （1天）
+            } else {
+                $arr = $this->cache->redis->get($cache);  //从缓存中直接读取对应的值
+            }
+
+        } catch (Exception $e) {
+            log_message('ERROR', $e->getMessage());
+        }
+
+        if (!isset($arr)) {
+            $arr = $this->getSizeList();
+        }
+
+        return $arr;
+    }
+
+    public function cache_delete()
+    {
+        $cache = 'SIZE_CACHE';
+        $this->load->driver('cache');
+        if ($this->cache->redis->get($cache) != null) { //如果未设置
+            $this->cache->redis->delete($cache);
+        }
+    }
+
+    private function getSizeList(){
+        $arr = $this->get_size_list_all();
+        $result = [];
+        foreach ($arr['result_rows'] as $r) {
+            $result[$r['id']] = $r;
+        }
+        return $result;
+    }
 }

@@ -36,6 +36,23 @@ $this->load->view('head');
         </div>
 
         <div class="am-form-group">
+            <label>颜色和尺码：</label>
+            <?php foreach ($sku_list as $row):?>
+
+                <div class="am-checkbox">
+                    <label>
+                         <span
+                            style="color: #<?= $color_cache[$row['color_id']]['color_code'] ?>;background: #<?= $color_cache[$row['color_id']]['color_code'] ?>;">
+                    c</span><?= $color_cache[$row['color_id']]['name'] ?>-<?= $color_cache[$row['color_id']]['color_num'] ?>
+                        <strong>|</strong>
+                        <?= $size_cache[$row['size_id']]['size_info'] ?> <?= $size_cache[$row['size_id']]['size_num'] ?>
+                    </label>
+                </div>
+            <?php endforeach; ?>
+        </div>
+
+
+        <div class="am-form-group">
             <label>备注</label>
             <?= $memo ?>
         </div>

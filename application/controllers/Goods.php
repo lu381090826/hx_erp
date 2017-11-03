@@ -70,7 +70,14 @@ class Goods extends HX_Controller
         $data = $this->goods_m->get_row_by_id($goods_id);
 
         $this->load->model('goods/sku_model', 'sku_m');
-        $data['result_rows']['sku_list'] = $this->sku_m->get_sku_list_by_goods_id($goods_id);
+        $data['result_rows']['sku_list'] = $this->sku_m->get_sku_list_info_by_goods_id($goods_id)['result_rows'];
+        $data['result_rows']['color_list'] = arr_sort($data['result_rows']['sku_list'],'color_id');
+
+        $this->load->model('goods/color_model', 'color_m');
+        $data['result_rows']['color_cache'] = $this->color_m->color_cache();
+
+        $this->load->model('goods/size_model', 'size_m');
+        $data['result_rows']['size_cache'] = $this->size_m->size_cache();
 
         $this->load->model('goods/category_model', 'category_m');
         $data['result_rows']['category_list'] = $this->category_m->category_cache();

@@ -291,7 +291,7 @@ $this->load->view('head');
     function get_shop(curr) {
         tableClean();
 
-        var content = "<tr> <th>店铺Id</th> <th>店名</th><th>创建时间</th> <th>操作</th> </tr>";
+        var content = "<tr> <th>Id</th> <th>店名</th><th>负责人</th><th>负责电话</th><th>创建时间</th> <th style='text-align: center;width: 80px' class='am-text-nowrap'>操作</th> </tr>";
         from_thead.append(content);
 
         $.ajax({
@@ -305,8 +305,10 @@ $this->load->view('head');
                     row += "<tr>" +
                         "<td>" + o.id + "</td>" +
                         "<td>" + o.name + "</td>" +
+                        "<td>" + o.owner + "</td>" +
+                        "<td>" + o.owner_mobile + "</td>" +
                         "<td>" + o.create_time + "</td>" +
-                        "<td><a onclick=\"shop_delete('" + o.id + "')\">删除</a></td>" +
+                        "<td><a href='/shop/shop_detail/" + o.id + "'>详情</a><a onclick=\"shop_delete('" + o.id + "')\">删除</a></td>" +
                         "</tr>";
                 });
                 from_contant.append(row)
