@@ -101,7 +101,7 @@ class Size_model extends HX_Model
         $cache = 'SIZE_CACHE';
         try {
             $this->load->driver('cache');
-            if ($this->cache->redis->get($cache) === null) { //如果未设置
+            if (empty($this->cache->redis->get($cache))) { //如果未设置
 
                 $arr = $this->getSizeList();
 
