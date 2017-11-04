@@ -250,7 +250,7 @@ $this->load->view('head');
                         "<td>" + o.name + "</td>" +
                         "<td>" + o.color_num + "</td>" +
                         "<td><span class='am-badge'" + "style='background: #" + o.color_code + ";color: #" + o.color_code + "'>c</span></td>" +
-                        "<td><a onclick=\"color_delete('" + o.id + "')\">删除</a></td>" +
+                        "<td><a data-id="+o.id+" onclick=\"color_delete("+o.id+")\">删除</a></td>" +
                         "</tr>";
                 });
                 from_contant.append(row);
@@ -321,40 +321,48 @@ $this->load->view('head');
         })
     }
 
+    //避免模态框缓存，用全局变量
+    var delete_id = 0;
     function color_delete(id) {
+        delete_id = id;
         $('#my-confirm').modal({
             relatedTarget: this,
             onConfirm: function (options) {
-                $.get('/color/delete_color/' + id);
-                get_color(1)
+                $.post('/color/delete_color/' + delete_id);
+                setTimeout(function(){
+                    fromLoad('goods','get_color');
+                },500);
             }
         });
     }
 
     function size_delete(id) {
+        delete_id = id;
         $('#my-confirm').modal({
             relatedTarget: this,
             onConfirm: function (options) {
-                $.get('/size/delete_size/' + id);
-                get_size(1)
+                $.post('/size/delete_size/' + delete_id);
+                fromLoad('goods','get_size');
             }
         });
     }
     function sku_delete(id) {
+        delete_id = id;
         $('#my-confirm').modal({
             relatedTarget: this,
             onConfirm: function (options) {
-                $.get('/goods/delete_sku/' + id);
-                get_goods(1);
+                $.post('/goods/delete_sku/' + delete_id);
+                fromLoad('goods','get_sku');
             }
         });
     }
     function shop_delete(id) {
+        delete_id = id;
         $('#my-confirm').modal({
             relatedTarget: this,
             onConfirm: function (options) {
-                $.get('/shop/shop_delete/' + id);
-                get_shop(1)
+                $.post('/shop/shop_delete/' + delete_id);
+                fromLoad('goods','get_shop');
             }
         });
     }

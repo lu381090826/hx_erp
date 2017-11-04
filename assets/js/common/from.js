@@ -42,13 +42,18 @@ function getFormJson(frm) {
 var curr_page = 1;
 var all_pages = 1;
 
-function fromLoad(controller) {
+function fromLoad(controller,function_name) {
     fromClean();
+
     other_select_div = $('#div-' + method);
     other_select_div.show();
     __CONTROLLER__ = controller;
 
-    eval(method+"(1)");
+    if (function_name) {
+        method = function_name;
+    }
+
+    eval(method + "(1)");
 
     $('#page').page({
         pages: all_pages,

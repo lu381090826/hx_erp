@@ -20,7 +20,9 @@ class Color_model extends HX_Model
 
     public function color_delete_by_id($id)
     {
-        $ret = $this->db->update($this->table, ['Fstatus' => 0], ['Fid' => $id]);
+        log_in('color_delete_by_id'.$id);
+        $ret = $this->db->update($this->table, ['Fstatus' => "0"], ['Fid' => $id]);
+        log_out($this->db->last_query());
         $this->color_cache_delete();
         return $ret;
     }
@@ -29,7 +31,7 @@ class Color_model extends HX_Model
     {
         $s = "SELECT Fid,Fname,Fcolor_num,Fcolor_code FROM {$this->table} WHERE Fstatus = 1";
         $ret = $this->db->query($s);
-
+        log_out($this->db->last_query());
         return $this->suc_out_put($ret->result('array'));
     }
 
@@ -103,6 +105,7 @@ class Color_model extends HX_Model
 
     public function color_cache_delete()
     {
+        error_reporting(0);
         try {
             $color_cache = 'COLOR_CACHE';
             $this->load->driver('cache');
