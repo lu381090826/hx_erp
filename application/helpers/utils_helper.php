@@ -53,3 +53,38 @@ if (!function_exists('arr_sort')) {
     }
 }
 
+//log_in
+if (!function_exists('log_in')) {
+    function log_in($request = '')
+    {
+        $CI = &get_instance();
+        $in['uri'] = $CI->uri->rsegments;
+        $in['benchmark'] = $CI->benchmark;
+        $in['in_info'] = $request;
+        log_message('INFO',json_encode($in,JSON_UNESCAPED_UNICODE));
+    }
+}
+//log_out
+if (!function_exists('log_out')) {
+    function log_out($request = '')
+    {
+        $CI = &get_instance();
+        $in['uri'] = $CI->uri->rsegments;
+        $in['benchmark'] = $CI->benchmark;
+        $in['out_info'] = $request;
+        log_message('INFO',json_encode($in,JSON_UNESCAPED_UNICODE));
+    }
+}
+//log_out
+if (!function_exists('log_error')) {
+    function log_error($request = '')
+    {
+        $CI = &get_instance();
+        $in['uri'] = $CI->uri->rsegments;
+        $in['benchmark'] = $CI->benchmark;
+        $in['error_info'] = $request;
+        log_message('ERROR',json_encode($in,JSON_UNESCAPED_UNICODE));
+    }
+}
+
+

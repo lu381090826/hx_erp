@@ -64,9 +64,9 @@ class Category_model extends HX_Model
         try {
             $this->load->driver('cache');
             if ($this->cache->redis->get($category_cache) === null) { //如果未设置
-
+                log_in($this->cache->redis);
                 $arr = $this->getCategoryList();
-                log_message('INFO', json_encode($arr, JSON_UNESCAPED_UNICODE));
+                log_in($arr);
 
                 $this->cache->redis->set($category_cache, $arr); //设置
                 $this->cache->redis->EXPIRE($category_cache, 86400); //设置过期时间 （1天）
@@ -75,14 +75,13 @@ class Category_model extends HX_Model
             }
 
         } catch (Exception $e) {
-            log_message('ERROR', $e->getMessage());
+            log_error($e->getMessage());
         }
 
         if (!isset($arr)) {
             $arr = $this->getCategoryList();
         }
-        log_message('INFO', json_encode($arr, JSON_UNESCAPED_UNICODE));
-
+        log_out($arr);
         return $arr;
     }
 
