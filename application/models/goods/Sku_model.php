@@ -100,7 +100,7 @@ class Sku_model extends HX_Model
         return $params;
     }
 
-    private function unset_sku($goods_id)
+    public function unset_sku($goods_id)
     {
         $this->db->update($this->table, ["Fstatus" => 0], ["Fgoods_id" => $goods_id]);
     }

@@ -30,8 +30,5 @@ class Color extends HX_Controller
     public function delete_color($id)
     {
         $this->m_color->color_delete_by_id($id);
-
-        $this->load->helper('url');
-        redirect("success");
     }
 }

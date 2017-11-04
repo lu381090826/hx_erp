@@ -20,8 +20,9 @@ class Color_model extends HX_Model
 
     public function color_delete_by_id($id)
     {
+        $ret = $this->db->update($this->table, ['Fstatus' => 0], ['Fid' => $id]);
         $this->color_cache_delete();
-        return $this->db->update($this->table, ['Fstatus' => 0], ['Fid' => $id]);
+        return $ret;
     }
 
     public function get_color_list_all()
@@ -102,10 +103,14 @@ class Color_model extends HX_Model
 
     public function color_cache_delete()
     {
-        $color_cache = 'COLOR_CACHE';
-        $this->load->driver('cache');
-        if ($this->cache->redis->get($color_cache) != null) { //如果未设置
-            $this->cache->redis->delete($color_cache);
+        try {
+            $color_cache = 'COLOR_CACHE';
+            $this->load->driver('cache');
+            if ($this->cache->redis->get($color_cache) != null) { //如果未设置
+                $this->cache->redis->delete($color_cache);
+            }
+        } catch (Exception $e) {
+            log_error($e->getMessage());
         }
     }
 

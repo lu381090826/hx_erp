@@ -250,7 +250,7 @@ $this->load->view('head');
                         "<td>" + o.name + "</td>" +
                         "<td>" + o.color_num + "</td>" +
                         "<td><span class='am-badge'" + "style='background: #" + o.color_code + ";color: #" + o.color_code + "'>c</span></td>" +
-                        "<td><a href='/color/delete_color/" + o.id + "'>删除</a></td>" +
+                        "<td><a onclick=\"color_delete('" + o.id + "')\">删除</a></td>" +
                         "</tr>";
                 });
                 from_contant.append(row);
@@ -278,7 +278,7 @@ $this->load->view('head');
                     row += "<tr>" +
                         "<td>" + o.size_info + "</td>" +
                         "<td>" + o.size_num + "</td>" +
-                        "<td><a href='/size/delete_size/" + o.id + "'>删除</a></td>" +
+                        "<td><a onclick=\"size_delete('" + o.id + "')\">删除</a></td>" +
                         "</tr>";
                 });
                 from_contant.append(row);
@@ -314,18 +314,38 @@ $this->load->view('head');
                         "</td>" +
                         "</tr>";
                 });
-                from_contant.append(row)
+                from_contant.append(row);
                 curr_page = curr;
                 all_pages = result.pages;
             }
         })
     }
 
+    function color_delete(id) {
+        $('#my-confirm').modal({
+            relatedTarget: this,
+            onConfirm: function (options) {
+                $.get('/color/delete_color/' + id);
+                get_color(1)
+            }
+        });
+    }
+
+    function size_delete(id) {
+        $('#my-confirm').modal({
+            relatedTarget: this,
+            onConfirm: function (options) {
+                $.get('/size/delete_size/' + id);
+                get_size(1)
+            }
+        });
+    }
     function sku_delete(id) {
         $('#my-confirm').modal({
             relatedTarget: this,
             onConfirm: function (options) {
                 $.get('/goods/delete_sku/' + id);
+                get_goods(1);
             }
         });
     }

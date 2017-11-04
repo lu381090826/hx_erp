@@ -72,23 +72,6 @@ class Sku extends HX_Controller
         redirect("success");
     }
 
-    public function edd_sku()
-    {
-        $this->load->model('goods/goods_model', 'goods_m');
-
-        $post = $this->input->post();
-        if (!empty($_FILES['pic']['size'])) {
-            $post['pic'] = $this->upload_file()['small_path'];
-            $post['pic_normal'] = $this->upload_file()['normal_path'];
-        }
-        $this->goods_m->modify_goods($post);
-        $this->sku_m->modify_sku($post);
-
-
-        $this->load->helper('url');
-        redirect("success");
-    }
-
     public function delete_sku($id)
     {
         $this->sku_m->sku_delete_by_id($id);
