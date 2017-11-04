@@ -125,13 +125,42 @@ class Sku extends HX_Controller
         }
     }
 
+    private function imageCreateFromAny($filepath) {
+        $type = exif_imagetype($filepath); // [] if you don't have exif you could use getImageSize()
+        $allowedTypes = array(
+            1,  // [] gif
+            2,  // [] jpg
+            3,  // [] png
+            6   // [] bmp
+        );
+        if (!in_array($type, $allowedTypes)) {
+            return false;
+        }
+        $im = null;
+        switch ($type) {
+            case 1 :
+                $im = imageCreateFromGif($filepath);
+                break;
+            case 2 :
+                $im = imageCreateFromJpeg($filepath);
+                break;
+            case 3 :
+                $im = imageCreateFromPng($filepath);
+                break;
+//            case 6 :
+//                $im = imageCreateFromBmp($filepath);
+//                break;
+        }
+        return $im;
+    }
+
     /*
      * 切割图片
      * */
     private function resize_image($uploadfile, $maxwidth, $maxheight, $name, $path)
     {
         $uploadedfile = $uploadfile;
-        $src = imagecreatefromjpeg($uploadedfile);
+        $src = $this->imageCreateFromAny($uploadedfile);
 
         list($width, $height) = getimagesize($uploadedfile);
 
