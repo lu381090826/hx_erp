@@ -308,7 +308,10 @@ $this->load->view('head');
                         "<td>" + o.owner + "</td>" +
                         "<td>" + o.owner_mobile + "</td>" +
                         "<td>" + o.create_time + "</td>" +
-                        "<td><a href='/shop/shop_detail/" + o.id + "'>详情</a><a onclick=\"shop_delete('" + o.id + "')\">删除</a></td>" +
+                        "<td align='center' valign='middle' style='word-break:break-all'>" +
+                        "<div><a href='/shop/shop_detail/" + o.id + "'>详情</a><div>" +
+                        "<div><a onclick=\"shop_delete('" + o.id + "')\">删除</a></button></div>" +
+                        "</td>" +
                         "</tr>";
                 });
                 from_contant.append(row)

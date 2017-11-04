@@ -75,13 +75,14 @@ class Goods extends HX_Controller
 
         $this->load->model('goods/color_model', 'color_m');
         $data['result_rows']['color_cache'] = $this->color_m->color_cache();
-
+        log_out($data);
         $this->load->model('goods/size_model', 'size_m');
         $data['result_rows']['size_cache'] = $this->size_m->size_cache();
 
         $this->load->model('goods/category_model', 'category_m');
         $data['result_rows']['category_list'] = $this->category_m->category_cache();
 
+        log_out($data['result_rows']);
         $this->load->view('/goods/goods/detail', $data['result_rows']);
     }
 

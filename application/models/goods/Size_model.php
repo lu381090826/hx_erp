@@ -104,7 +104,6 @@ class Size_model extends HX_Model
             if ($this->cache->redis->get($cache) === null) { //如果未设置
 
                 $arr = $this->getSizeList();
-                log_message('INFO', json_encode($arr, JSON_UNESCAPED_UNICODE));
 
                 $this->cache->redis->save($cache, $arr , 86400); //设置
             } else {
@@ -112,7 +111,7 @@ class Size_model extends HX_Model
             }
 
         } catch (Exception $e) {
-            log_message('ERROR', $e->getMessage());
+            log_error($e->getMessage());
         }
 
         if (!isset($arr)) {
