@@ -121,7 +121,7 @@ class Color_model extends HX_Model
 
                 log_message('INFO', json_encode($arr, JSON_UNESCAPED_UNICODE));
 
-                $this->cache->redis->set($color_cache, $arr); //设置
+                $this->cache->redis->save($color_cache, $arr); //设置
                 $this->cache->redis->EXPIRE($color_cache, 86400); //设置过期时间 （1天）
             } else {
                 $arr = $this->cache->redis->get($color_cache);  //从缓存中直接读取对应的值
