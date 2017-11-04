@@ -106,8 +106,7 @@ class Size_model extends HX_Model
                 $arr = $this->getSizeList();
                 log_message('INFO', json_encode($arr, JSON_UNESCAPED_UNICODE));
 
-                $this->cache->redis->save($cache, $arr); //设置
-                $this->cache->redis->EXPIRE($cache, 86400); //设置过期时间 （1天）
+                $this->cache->redis->save($cache, $arr , 86400); //设置
             } else {
                 $arr = $this->cache->redis->get($cache);  //从缓存中直接读取对应的值
             }

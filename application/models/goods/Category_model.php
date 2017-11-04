@@ -66,8 +66,7 @@ class Category_model extends HX_Model
             if (empty($this->cache->redis->get($category_cache))) { //如果未设置
                 $arr = $this->getCategoryList();
 
-                $this->cache->redis->save($category_cache, $arr); //设置
-                $this->cache->redis->EXPIRE($category_cache, 86400); //设置过期时间 （1天）
+                $this->cache->redis->save($category_cache, $arr,86400); //设置
             } else {
                 $arr = $this->cache->redis->get($category_cache);  //从缓存中直接读取对应的值
             }
