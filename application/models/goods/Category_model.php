@@ -63,10 +63,8 @@ class Category_model extends HX_Model
         $category_cache = 'CATEGORY_CACHE';
         try {
             $this->load->driver('cache');
-            if ($this->cache->redis->get($category_cache) === null) { //如果未设置
-                log_in($this->cache->redis);
+            if (empty($this->cache->redis->get($category_cache))) { //如果未设置
                 $arr = $this->getCategoryList();
-                log_in($arr);
 
                 $this->cache->redis->set($category_cache, $arr); //设置
                 $this->cache->redis->EXPIRE($category_cache, 86400); //设置过期时间 （1天）
