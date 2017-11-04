@@ -87,18 +87,20 @@ class Sku_model extends HX_Model
         return $params;
     }
 
+    private function unset_sku($goods_id)
+    {
+        $this->db->update($this->table, ["Fstatus" => 0], ["Fgoods_id" => $goods_id]);
+    }
+
     private function get_sku_id($request, $color_id_array, $size_id_array)
     {
         $sku_info = [];
-        $sku_id_list = $this->get_sku_list_by_goods_id($request['goods_id'])['result_rows'];
         $i = 0;
         foreach ($color_id_array as $k => $color_row) {
             foreach ($size_id_array as $z => $size_row) {
 
                 $curr_sku_id = $request['goods_id'] . str_pad($color_row,2,"0",STR_PAD_LEFT) . str_pad($size_row,2,"0",STR_PAD_LEFT) ;
-                if (in_array($curr_sku_id, $sku_id_list)) {
-                    continue;
-                }
+
                 $sku_info[$i]['Fsku_id'] = $curr_sku_id;
                 $sku_info[$i]['Fgoods_id'] = $request['goods_id'];
                 $sku_info[$i]['Fcolor_id'] = $color_row;
@@ -145,13 +147,12 @@ class Sku_model extends HX_Model
 
     public function modify_sku($request)
     {
+        //所有sku status状态置为0，再增加
+        $this->unset_sku($request['goods_id']);
         $params = $this->insert_sku_pararm($request);
-        if ($this->reentry) {
-            $this->db->update($this->table, $params, ['Fid' => $this->reentry]);
-        } else {
-            $this->db->insert_batch($this->table, $params);
+        foreach ($params as $p) {
+            $this->db->replace($this->table, $p);
         }
-
     }
 
     public function get_row_by_id($uid)

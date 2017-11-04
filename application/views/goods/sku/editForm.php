@@ -7,24 +7,33 @@ $this->load->view('head');
        value="返回上一页">
 <form action="/sku/add_sku" class="am-form" id="doc-vld-msg" method="post" enctype="multipart/form-data">
     <fieldset>
-        <legend>添加商品</legend>
+        <legend>修改商品</legend>
         <div class="am-form-group">
             <label for="doc-vld-goods_id">款号<span style="color: red">*</span>：</label>
-            <input type="text" id="doc-vld-goods_id" minlength="1" placeholder="输入" name="goods_id" class="am-form-field"
-                   required/>
+            <input type="text" id="doc-vld-goods_id" minlength="1" placeholder="输入"
+                   name="goods_id" readonly="readonly" class="am-form-field"
+                   value="<?=$goods_info['goods_id']?>"
+            />
         </div>
         
         <div class="am-form-group">
             <label for="doc-vld-brand_id">品牌：</label>
-            <input type="text" id="doc-vld-brand_id" placeholder="输入" name="brand"
+            <input type="text" id="doc-vld-brand_id" placeholder="输入"
+                   name="brand"
+                   value="<?=$goods_info['brand']?>"
                    class="am-form-field"/>
         </div>
 
         <div class="am-form-group">
             <label for="doc-select-1">分类:</label>
             <select id="doc-select-1" name="category_id">
-                <?php foreach ($category_list as $k=>$category): ?>
-                    <option value="<?= $k ?>"><?= $category ?></option>
+                <?php foreach ($category_list as $k => $category): ?>
+                    <option value="<?= $k ?>"
+                            <?php if ($goods_info['category_id'] == $k): ?>
+                                selected="selected"
+                            <?php endif; ?>>
+                        <?= $category ?>
+                    </option>
                 <?php endforeach; ?>
             </select>
             <span class="am-form-caret"></span>
@@ -41,13 +50,17 @@ $this->load->view('head');
 
         <div class="am-form-group">
             <label for="doc-vld-price">价格（单位元）<span style="color: red">*</span>：</label>
-            <input type="text" id="doc-vld-price" minlength="1" placeholder="输入" name="price" class="am-form-field"
+            <input type="text" id="doc-vld-price" minlength="1" placeholder="输入"
+                   name="price" class="am-form-field"
+                   value="<?=$goods_info['price']?>"
                    required/>
         </div>
 
         <div class="am-form-group">
             <label for="doc-vld-cost">成本（单位元）<span style="color: red">*</span>：</label>
-            <input type="text" id="doc-vld-cost" minlength="1" placeholder="输入" name="cost" class="am-form-field"
+            <input type="text" id="doc-vld-cost" minlength="1" placeholder="输入"
+                   name="cost" class="am-form-field"
+                   value="<?=$goods_info['cost']?>"
                    required/>
         </div>
 
@@ -56,9 +69,13 @@ $this->load->view('head');
             <?php foreach ($color_list as $row): ?>
                 <div class="am-checkbox">
                     <label>
-                        <input type="checkbox" name="color[]" value="<?= $row['id'] ?>"> <span
+                        <input type="checkbox" name="color[]" value="<?= $row['id'] ?>"
+                            <?php if (!empty($row['is_select'])): ?>
+                                checked
+                            <?php endif; ?>
+                        > <span
                             style="color: #<?= $row['color_code'] ?>;background: #<?= $row['color_code'] ?>;">
-                    ccc</span><?= $row['name'] ?>-<?= $row['color_num'] ?>
+                    ccc</span><?= $row['name'] ?> <?= $row['color_num'] ?>
                     </label>
                 </div>
             <?php endforeach; ?>
@@ -69,8 +86,14 @@ $this->load->view('head');
             <?php foreach ($size_list as $row): ?>
                 <div class="am-checkbox">
                     <label>
-                        <input type="checkbox" name="size[]" value="<?= $row['id'] ?>"> <?= $row['size_info'] ?>
-                        -<?= $row['size_num'] ?>
+                        <input type="checkbox" name="size[]"
+                               value="<?= $row['id'] ?>"
+                            <?php if (!empty($row['is_select'])): ?>
+                                checked
+                            <?php endif; ?>
+                        >
+                        <?= $row['size_info'] ?>
+                         <?= $row['size_num'] ?>
                     </label>
                 </div>
             <?php endforeach; ?>
@@ -83,7 +106,7 @@ $this->load->view('head');
 
         <div class="am-form-group">
             <label for="doc-vld-memo">备注：</label>
-            <input type="text" id="doc-vld-memo" placeholder="输入" name="memo" class="am-form-field"/>
+            <input type="text" id="doc-vld-memo" value="<?=$goods_info['memo']?>" placeholder="输入" name="memo" class="am-form-field"/>
         </div>
         <button class="am-btn am-btn-secondary" id="submit" type="submit">提交</button>
         <input type="button" name="Submit" class="am-btn am-btn-default" onclick="javascript:history.back(-1);"

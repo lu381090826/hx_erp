@@ -6,7 +6,7 @@ class HX_Model extends CI_Model
     protected $total_num = 0;
     protected $offset = 0;
     protected $limit = 10;
-    protected $reentry = 0; //是否重入
+    protected $reentry = null; //是否重入
     protected $reentry_key = 0; //重入主键
 
     protected $m_input = [];

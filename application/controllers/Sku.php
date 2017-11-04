@@ -18,15 +18,61 @@ class Sku extends HX_Controller
         $data['category_list'] = $this->m_category->category_cache();
 
         $this->load->model('goods/color_model', 'color_m');
-        $data['color_list'] = $this->color_m->get_color_list_all()['result_rows'];
+        $data['color_list'] = $this->color_m->color_cache();
 
         $this->load->model('goods/size_model', 'size_m');
-        $data['size_list'] = $this->size_m->get_size_list_all()['result_rows'];
+        $data['size_list'] = $this->size_m->size_cache();
 
         $this->load->view('goods/sku/addForm', $data);
     }
 
+    public function action_edit_sku($goods_id)
+    {
+        $this->load->model('goods/shop_model', 'shop_m');
+        $data['shop_list'] = $this->shop_m->get_shop_list()['result_rows'];
+
+        $this->load->model('goods/category_model', 'm_category');
+        $data['category_list'] = $this->m_category->category_cache();
+
+        $this->load->model('goods/color_model', 'color_m');
+        $data['color_list'] = $this->color_m->color_cache();
+
+        $this->load->model('goods/size_model', 'size_m');
+        $data['size_list'] = $this->size_m->size_cache();
+
+        $this->load->model('goods/goods_model', 'goods_m');
+        $data['goods_info'] = $this->goods_m->get_row_by_id($goods_id)['result_rows'];
+
+        $this->load->model('goods/sku_model', 'sku_m');
+        $data['sku_list'] = $this->sku_m->get_sku_list_info_by_goods_id($goods_id)['result_rows'];
+
+        foreach ($data['sku_list'] as $row) {
+            $data['color_list'][$row['color_id']]['is_select'] = 1;
+            $data['size_list'][$row['size_id']]['is_select'] = 1;
+        }
+
+        log_out($data);
+        $this->load->view('goods/sku/editForm', $data);
+    }
+
     public function add_sku()
+    {
+        $this->load->model('goods/goods_model', 'goods_m');
+        $post = $this->input->post();
+
+        if (!empty($_FILES['pic']['size'])) {
+            $post['pic'] = $this->upload_file()['small_path'];
+            $post['pic_normal'] = $this->upload_file()['normal_path'];
+        }
+
+        $this->goods_m->modify_goods($post);
+        $this->sku_m->modify_sku($post);
+
+        $this->load->helper('url');
+        redirect("success");
+    }
+
+    public function edd_sku()
     {
         $this->load->model('goods/goods_model', 'goods_m');
 

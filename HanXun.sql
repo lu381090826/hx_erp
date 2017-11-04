@@ -532,3 +532,6 @@ CREATE TABLE `HanXun`.`t_shop` (
   ENGINE = InnoDB;
 ALTER TABLE `t_shop` ADD `Fmemo` VARCHAR(256) NULL DEFAULT '' AFTER `Fversion`;
 ALTER TABLE `t_shop` ADD `Fstatus` BOOLEAN NOT NULL DEFAULT TRUE AFTER `Fmemo`;
+
+ALTER TABLE `t_sku` DROP `Fid`;
+ALTER TABLE `t_sku` ADD PRIMARY KEY( `Fsku_id`);

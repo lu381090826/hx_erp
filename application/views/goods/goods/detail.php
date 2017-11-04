@@ -4,7 +4,7 @@ $this->load->view('head');
 ?>
 <input type="button" name="Submit" class="am-btn am-btn-default" onclick="javascript:history.back(-1);" value="返回上一页">
 <input type="button" name="Submit" class="am-btn am-btn-default"
-       onclick="location.href='/goods/goods_detail_edit/<?= $goods_id ?>'" value="编辑">
+       onclick="location.href='/sku/action_edit_sku/<?= $goods_id ?>'" value="编辑">
 <!--<input type="button" name="Submit" class="am-btn am-btn-default" onclick="" value="删除">-->
 <form class="am-form">
     <fieldset>
@@ -43,7 +43,7 @@ $this->load->view('head');
                         <label>
                          <span
                              style="color: #<?= $color_cache[$row['color_id']]['color_code'] ?>;background: #<?= $color_cache[$row['color_id']]['color_code'] ?>;">
-                    c</span><?= $color_cache[$row['color_id']]['name'] ?>
+                    ccc</span><?= $color_cache[$row['color_id']]['name'] ?>
                             -<?= $color_cache[$row['color_id']]['color_num'] ?>
                             <strong>|</strong>
                             <?= $size_cache[$row['size_id']]['size_info'] ?> <?= $size_cache[$row['size_id']]['size_num'] ?>
