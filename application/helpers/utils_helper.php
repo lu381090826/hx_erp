@@ -61,6 +61,7 @@ if (!function_exists('log_in')) {
         $in['uri'] = $CI->uri->rsegments;
         $in['benchmark'] = $CI->benchmark;
         $in['in_info'] = $request;
+        $in['user_session'] = $CI->session;
         log_message('INFO',json_encode($in,JSON_UNESCAPED_UNICODE));
     }
 }
@@ -70,8 +71,8 @@ if (!function_exists('log_out')) {
     {
         $CI = &get_instance();
         $in['uri'] = $CI->uri->rsegments;
-        $in['benchmark'] = $CI->benchmark;
         $in['out_info'] = $request;
+        $in['user_session'] = $CI->session;
         log_message('INFO',json_encode($in,JSON_UNESCAPED_UNICODE));
     }
 }
@@ -83,6 +84,7 @@ if (!function_exists('log_error')) {
         $in['uri'] = $CI->uri->rsegments;
         $in['benchmark'] = $CI->benchmark;
         $in['error_info'] = $request;
+        $in['user_session'] = $CI->session;
         log_message('ERROR',json_encode($in,JSON_UNESCAPED_UNICODE));
     }
 }
