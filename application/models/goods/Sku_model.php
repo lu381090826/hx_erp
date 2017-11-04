@@ -40,7 +40,20 @@ class Sku_model extends HX_Model
         $s = "SELECT * FROM {$this->table} WHERE Fgoods_id = ? AND Fstatus = 1  ORDER BY Fcreate_time DESC";
         $ret = $this->db->query($s, [$goods_id]);
         $sku_list = [];
+
+        $this->load->model('goods/color_model', 'color_m');
+        $color_cache = $this->color_m->color_cache();
+
+        $this->load->model('goods/size_model', 'size_m');
+        $size_cache = $this->size_m->size_cache();
+
+        $this->load->model('goods/category_model', 'category_m');
+        $category_cache = $this->category_m->category_cache();
+
         foreach ($ret->result('array') as $row) {
+            $row['color_info'] = $color_cache[$row['color_id']];
+            $row['size_info'] = $size_cache[$row['size_id']];
+            $row['category_info'] = $category_cache[$row['category_id']];
             array_push($sku_list, $row);
         }
         return $this->suc_out_put($sku_list);

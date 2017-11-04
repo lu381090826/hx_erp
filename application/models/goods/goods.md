@@ -44,7 +44,7 @@ Array
 ###根据spu查询sku列表
 ```php
 model:goods/sku_model
-method:get_sku_list_by_goods_id
+method:get_sku_list_info_by_goods_id
 request:
 goods_id  #商品编号 spu_id
 response:
@@ -54,38 +54,33 @@ Array
     [res_info] => ok
     [total_num] => 0
     [pages] => 0
-    [result_rows] => Array
-        (
-            [0] => Array
-                (
-                    [id] => 35   
-                    [goods_id] => TEST20170102
-                    [sku_id] => TEST2017010298   
-                    [name] =>          
-                    [bar_code] =>       #条码（废弃，等同skuid）
-                    [record_number] => 测试  （备案号）
-                    [brand_id] => 0     
-                    [brand] => 测试           （品牌）
-                    [category_id] => 3     （分类id）
-                    [property_id] => 0
-                    [price] => 1111
-                    [source_area] => 
-                    [import] => 0
-                    [unit] => 
-                    [weight] => 
-                    [pic] => 
-                    [pic_normal] => 
-                    [color_id] => 0   #颜色id
-                    [size_id] => 0    #尺寸id
-                    [memo] => 测试
-                    [version] => 0
-                    [status] => 1
-                    [op_uid] => 0
-                    [create_time] => 2017-10-14 11:00:44
-                    [modify_time] => 2017-10-14 11:00:44
-                )
-        )
-)
+    [result_rows] => 
+    [
+          {
+            "goods_id": "201710290735",
+            "sku_id": "2017102907351106",
+            "name": "",   
+            "brand": "1111",   品牌
+            "category_id": "1",  分类id
+            "cost": "8",   成本
+            "price": "100",  售价
+            "memo": "test",   备注
+            "op_uid": "0",
+            "create_time": "2017-11-04 13:46:57",
+            "color_info": {
+              "id": "11",    颜色id
+              "name": "111",   
+              "color_num": "19",
+              "color_code": "1f1fde"
+            },
+            "size_info": {
+              "id": "6",    尺寸id
+              "size_info": "大1码1",
+              "size_num": "1111"
+            },
+            "category_info": "服装"   分类名
+          }
+        ]
 ```
 ###商品搜索
 ```php
