@@ -68,6 +68,7 @@ class Sku extends HX_Controller
         $this->goods_m->modify_goods($post);
         $this->sku_m->modify_sku($post);
 
+
         $this->load->helper('url');
         redirect("success");
     }

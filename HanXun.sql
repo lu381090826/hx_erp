@@ -535,3 +535,18 @@ ALTER TABLE `t_shop` ADD `Fstatus` BOOLEAN NOT NULL DEFAULT TRUE AFTER `Fmemo`;
 
 ALTER TABLE `t_sku` DROP `Fid`;
 ALTER TABLE `t_sku` ADD PRIMARY KEY( `Fsku_id`);
+
+CREATE TABLE `HanXun`.`t_shop_goods` (
+  `Fid`          INT                                  NOT NULL AUTO_INCREMENT,
+  `Fgoods_id`    VARCHAR(32)                          NOT NULL DEFAULT '',
+  `Fshop_id`     VARCHAR(32)                          NOT NULL DEFAULT '',
+  `Fstatus`      BOOLEAN                              NOT NULL DEFAULT TRUE,
+  `Fversion`     INT                                  NOT NULL DEFAULT '0',
+  `Fcreate_time` DATETIME                             NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `Fmodify_time` DATETIME ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`Fid`)
+)
+  ENGINE = InnoDB;
+ALTER TABLE `HanXun`.`t_shop_goods` ADD UNIQUE `Frelation` (`Fgoods_id`, `Fshop_id`);
+ALTER TABLE `t_shop_goods` ADD `Foperatror` INT NOT NULL DEFAULT '0' AFTER `Fversion`;
+ALTER TABLE `t_shop_goods` CHANGE `Foperatror` `Foperator` INT(11) NOT NULL DEFAULT '0';

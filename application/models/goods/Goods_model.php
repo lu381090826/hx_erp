@@ -92,6 +92,22 @@ class Goods_model extends HX_Model
             $this->db->insert($this->table, $insert_params);
         }
 
+        if(!empty($request['shop_id'])){
+            $this->goods_addto_shop($request['shop_id'],$request['goods_id']);
+        }
+
+    }
+
+    public function goods_addto_shop($shop_id_arr, $goods_id)
+    {
+        $arr = [];
+        foreach ($shop_id_arr as $k => $r) {
+            $arr['Fshop_id'] = $r;
+            $arr['Fstatus'] = 1;
+            $arr['Fgoods_id'] = $goods_id;
+            $arr['Foperator'] = $this->session->uid;
+            $this->db->replace("t_shop_goods", $arr);
+        }
     }
 
     public function get_goods_list($request)
