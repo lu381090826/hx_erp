@@ -536,9 +536,9 @@ ALTER TABLE `t_shop` ADD `Fstatus` BOOLEAN NOT NULL DEFAULT TRUE AFTER `Fmemo`;
 ALTER TABLE `t_sku` DROP `Fid`;
 ALTER TABLE `t_sku` ADD PRIMARY KEY( `Fsku_id`);
 
-CREATE TABLE `HanXun`.`t_shop_goods` (
+CREATE TABLE `HanXun`.`t_shop_seller` (
   `Fid`          INT                                  NOT NULL AUTO_INCREMENT,
-  `Fgoods_id`    VARCHAR(32)                          NOT NULL DEFAULT '',
+  `Fseller_id`    VARCHAR(32)                          NOT NULL DEFAULT '',
   `Fshop_id`     VARCHAR(32)                          NOT NULL DEFAULT '',
   `Fstatus`      BOOLEAN                              NOT NULL DEFAULT TRUE,
   `Fversion`     INT                                  NOT NULL DEFAULT '0',
@@ -547,6 +547,6 @@ CREATE TABLE `HanXun`.`t_shop_goods` (
   PRIMARY KEY (`Fid`)
 )
   ENGINE = InnoDB;
-ALTER TABLE `HanXun`.`t_shop_goods` ADD UNIQUE `Frelation` (`Fgoods_id`, `Fshop_id`);
-ALTER TABLE `t_shop_goods` ADD `Foperatror` INT NOT NULL DEFAULT '0' AFTER `Fversion`;
-ALTER TABLE `t_shop_goods` CHANGE `Foperatror` `Foperator` INT(11) NOT NULL DEFAULT '0';
+ALTER TABLE `HanXun`.`t_shop_seller` ADD UNIQUE `Frelation` (`Fseller_id`, `Fshop_id`);
+ALTER TABLE `t_shop_seller` ADD `Foperatror` INT NOT NULL DEFAULT '0' AFTER `Fversion`;
+ALTER TABLE `t_shop_seller` CHANGE `Foperatror` `Foperator` INT(11) NOT NULL DEFAULT '0';

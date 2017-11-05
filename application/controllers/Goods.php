@@ -104,7 +104,6 @@ class Goods extends HX_Controller
         $this->load->model('goods/goods_model', 'goods_m');
         $request=$this->input->post();
         $request['page'] = $page;
-
         $res = $this->goods_m->search_goods($request);
         json_out_put($res);
     }

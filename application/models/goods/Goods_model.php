@@ -166,19 +166,58 @@ class Goods_model extends HX_Model
         if(!empty($request['begin_time'])){
             $sql .= " AND Fcreate_time >= '{$request['begin_time']}' ";
         }
-        if(!empty($request['end_time'])){
+        if (!empty($request['end_time'])) {
             $sql .= " AND Fcreate_time <= '{$request['end_time']}' ";
+        }
+
+        $this->config->load('user_type', 'user_type');
+        if ($this->session->role_id == $this->config->item('user_type')['admin']) {
+            $goods_ids = $this->get_seller_goods();
+            if (!empty($goods_ids)) {
+                $goods_ids_str = implode('","', $this->get_seller_goods());
+                $sql .= " AND Fgoods_id in (\"{$goods_ids_str}\") ";
+            } else {
+                $sql .= " AND Fgoods_id = '0' ";
+            }
         }
 
         return $sql;
     }
 
-    public function search_goods($request){
-        $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1";
+    private function get_seller_goods()
+    {
+        $s = "SELECT Fshop_id FROM t_shop_seller WHERE Fstatus = 1 AND Fseller_id = ? ORDER BY Fcreate_time DESC";
+        $ret = $this->db->query($s, [$this->session->uid]);
+        $shop_query = $ret->result('array');
+        $shop_ids = [];
+        foreach ($shop_query as $row) {
+            $shop_ids[] = $row['shop_id'];
+        }
+
+        if (count($shop_ids)) {
+            $shop_ids_str = implode("','", $shop_ids);
+            $s = "SELECT Fgoods_id FROM t_shop_goods WHERE Fstatus = 1 AND Fshop_id in ('{$shop_ids_str}')";
+            $ret = $this->db->query($s);
+            $goods_query = $ret->result('array');
+
+            $goods_ids = [];
+            foreach ($goods_query as $row) {
+                $goods_ids[] = $row['goods_id'];
+            }
+            return $goods_ids;
+        } else {
+            return null;
+        }
+    }
+
+    public function search_goods($request)
+    {
+        $params = $this->searchParams($request);
+
+        $s = "SELECT count(1) FROM {$this->table} WHERE Fstatus = 1 {$params} ";
         $ret = $this->db->query($s);
         $this->total_num = $ret->num_rows();
 
-        $params = $this->searchParams($request);
 
         $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1 {$params} ORDER BY Fcreate_time DESC LIMIT ? , ?";
 
@@ -188,7 +227,10 @@ class Goods_model extends HX_Model
             $offset,
             $limit
         ]);
-        return $this->suc_out_put($ret->result('array'));
+
+        $result_arr = $ret->result('array');
+
+        return $this->suc_out_put($result_arr);
     }
 
     public function delete_goods($goods_id)
