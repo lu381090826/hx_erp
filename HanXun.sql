@@ -550,3 +550,40 @@ CREATE TABLE `HanXun`.`t_shop_seller` (
 ALTER TABLE `HanXun`.`t_shop_seller` ADD UNIQUE `Frelation` (`Fseller_id`, `Fshop_id`);
 ALTER TABLE `t_shop_seller` ADD `Foperatror` INT NOT NULL DEFAULT '0' AFTER `Fversion`;
 ALTER TABLE `t_shop_seller` CHANGE `Foperatror` `Foperator` INT(11) NOT NULL DEFAULT '0';
+
+
+--
+-- 表的结构 `t_shop_goods`
+--
+
+CREATE TABLE `t_shop_goods` (
+  `Fid` int(11) NOT NULL,
+  `Fgoods_id` varchar(32) NOT NULL DEFAULT '',
+  `Fshop_id` varchar(32) NOT NULL DEFAULT '',
+  `Fstatus` tinyint(1) NOT NULL DEFAULT '1',
+  `Fversion` int(11) NOT NULL DEFAULT '0',
+  `Foperator` int(11) NOT NULL DEFAULT '0',
+  `Fcreate_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `Fmodify_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `t_shop_goods`
+--
+ALTER TABLE `t_shop_goods`
+  ADD PRIMARY KEY (`Fid`),
+  ADD UNIQUE KEY `Frelation` (`Fgoods_id`,`Fshop_id`);
+
+--
+-- 在导出的表使用AUTO_INCREMENT
+--
+
+--
+-- 使用表AUTO_INCREMENT `t_shop_goods`
+--
+ALTER TABLE `t_shop_goods`
+  MODIFY `Fid` int(11) NOT NULL AUTO_INCREMENT;COMMIT;

@@ -167,7 +167,7 @@ $this->load->view('head');
         </div>
     </div>
 </div>
-<div class="am-modal am-modal-confirm" tabindex="-1" id="sku-remove-confirm">
+<div class="am-modal am-modal-confirm" tabindex="-1" id="goods-remove-confirm">
     <div class="am-modal-dialog">
         <div class="am-modal-hd">提示</div>
         <div class="am-modal-bd">
@@ -387,12 +387,12 @@ $this->load->view('head');
     }
     function sku_delete(id) {
         delete_id = id;
-        $('#sku-remove-confirm').modal({
+        $('#goods-remove-confirm').modal({
             relatedTarget: this,
             onConfirm: function (options) {
                 $.post('/goods/delete_sku/' + delete_id);
                 setTimeout(function(){
-                    fromLoad('goods','get_sku');
+                    fromLoad('goods','get_goods');
                 },300);
             }
         });
