@@ -15,7 +15,10 @@ class shop extends HX_Controller
 
     public function action_add_shop()
     {
-        $this->load->view('goods/shop/addForm');
+        $this->load->model('admin/user_model', 'user_m');
+        $r['seller_list'] = $this->user_m->get_seller()['result_rows'];
+
+        $this->load->view('goods/shop/addForm',$r);
     }
 
     public function shop_add()
@@ -39,6 +42,9 @@ class shop extends HX_Controller
     {
         $r = $this->shop_m->shop_detail_by_id($id);
 
+        $this->load->model('admin/user_model', 'user_m');
+        $r['seller_list'] = $this->user_m->get_seller();
+
         $this->load->view('goods/shop/detail',$r['result_rows']);
     }
 
@@ -46,6 +52,18 @@ class shop extends HX_Controller
     {
         $r = $this->shop_m->shop_detail_by_id($id);
 
+        $this->load->model('admin/user_model', 'user_m');
+        $r['result_rows']['seller_list'] = $this->user_m->get_seller()['result_rows'];
+
+        $sellers = $this->user_m->get_seller_shop($id);
+
+        foreach ($r['result_rows']['seller_list'] as &$row) {
+            if (array_keys($sellers, ['seller_id' => $row['uid']])) {
+                $row['is_check'] = true;
+            }else{
+                $row['is_check'] = false;
+            }
+        }
         $this->load->view('goods/shop/editForm',$r['result_rows']);
     }
 

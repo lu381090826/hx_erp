@@ -115,14 +115,21 @@ class Shop_model extends HX_Model
         $insert_arr = $this->check_input($request);
 
         $this->db->insert($this->table, $insert_arr);
+
+        if (isset($request['seller_id'])) {
+            $this->seller_addto_shop($request['seller_id'],
+                $this->db->insert_id());
+        }
     }
 
     private function check_update_input($request)
     {
+        unset($request['seller_id']);
         $params = [];
         foreach ($request as $k => $row) {
             $params['F' . $k] = $row;
         }
+
         return $params;
     }
 
@@ -131,6 +138,10 @@ class Shop_model extends HX_Model
         $arr = $this->check_update_input($request);
 
         $this->db->update($this->table, $arr, ['Fid' => $request['id']]);
+
+        if (isset($request['seller_id'])) {
+            $this->seller_addto_shop($request['seller_id'],$request['id']);
+        }
     }
 
     public function shop_detail_by_id($id)
@@ -138,5 +149,19 @@ class Shop_model extends HX_Model
         $s = "SELECT * FROM {$this->table} u  WHERE u.Fstatus = 1 AND Fid = ? LIMIT 1;";
         $ret = $this->db->query($s, [$id]);
         return $this->suc_out_put($ret->row(0, 'array'));
+    }
+
+    private function seller_addto_shop($seller_id_arr, $shop_id)
+    {
+        //先清空再新增
+        $this->db->update("t_shop_seller", ['Fstatus' => 0], ['Fshop_id' => $shop_id]);
+        $arr = [];
+        foreach ($seller_id_arr as $k => $r) {
+            $arr['Fseller_id'] = $r;
+            $arr['Fstatus'] = 1;
+            $arr['Fshop_id'] = $shop_id;
+            $arr['Foperator'] = $this->session->uid;
+            $this->db->replace("t_shop_seller", $arr);
+        }
     }
 }

@@ -58,6 +58,15 @@ $this->load->view('head');
         </div>
 
         <div class="am-form-group">
+            <label for="doc-select-1">销售:</label>
+            <select multiple name="seller_id[]" data-am-selected="{searchBox: 1,maxHeight:200}">
+                <?php foreach ($seller_list as $s): ?>
+                    <option value="<?=$s['uid']?>" <?php if($s['is_check']):?>selected<?php endif;?>><?=$s['name']?></option>
+                <?php endforeach;?>
+            </select>
+        </div>
+
+        <div class="am-form-group">
             <label for="doc-vld-memo">备注：</label>
             <input type="text" id="doc-vld-memo" value="" placeholder="备注" name="memo"
                    value="<?=$memo?>"

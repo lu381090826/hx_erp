@@ -170,6 +170,7 @@ class Goods_model extends HX_Model
             $sql .= " AND Fcreate_time <= '{$request['end_time']}' ";
         }
 
+        //销售只能看自己店铺的内容
         $this->config->load('user_type', 'user_type');
         if ($this->session->role_id == $this->config->item('user_type')['seller']) {
             $goods_ids = $this->get_seller_goods();

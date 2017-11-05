@@ -107,4 +107,23 @@ class User_model extends HX_Model
         ];
         $this->db->insert($this->table, $insert_arr);
     }
+
+    public function get_seller()
+    {
+        $this->config->load('user_type');
+        $seller_role = $this->config->item('user_type')['seller'];
+        $s = "SELECT * FROM t_user u WHERE Frole_id = ? ORDER BY Fcreate_time DESC ;";
+        $ret = $this->db->query($s, [$seller_role]);
+        return $this->suc_out_put($ret->result('array'));
+    }
+
+    //获取商品所在店铺
+    public function get_seller_shop($shop_id)
+    {
+        $s = "SELECT Fseller_id FROM t_shop_seller WHERE Fstatus = 1 AND Fshop_id= ?  ORDER BY Fcreate_time DESC";
+
+        $ret = $this->db->query($s, [$shop_id]);
+
+        return $ret->result('array');
+    }
 }
