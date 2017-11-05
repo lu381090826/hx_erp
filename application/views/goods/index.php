@@ -143,7 +143,43 @@ $this->load->view('head');
 </div>
 
 
-<div class="am-modal am-modal-confirm" tabindex="-1" id="my-confirm">
+<div class="am-modal am-modal-confirm" tabindex="-1" id="color-remove-confirm">
+    <div class="am-modal-dialog">
+        <div class="am-modal-hd">提示</div>
+        <div class="am-modal-bd">
+            确定要删除这条记录吗？
+        </div>
+        <div class="am-modal-footer">
+            <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+            <span class="am-modal-btn" data-am-modal-confirm>确定</span>
+        </div>
+    </div>
+</div>
+<div class="am-modal am-modal-confirm" tabindex="-1" id="size-remove-confirm">
+    <div class="am-modal-dialog">
+        <div class="am-modal-hd">提示</div>
+        <div class="am-modal-bd">
+            确定要删除这条记录吗？
+        </div>
+        <div class="am-modal-footer">
+            <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+            <span class="am-modal-btn" data-am-modal-confirm>确定</span>
+        </div>
+    </div>
+</div>
+<div class="am-modal am-modal-confirm" tabindex="-1" id="sku-remove-confirm">
+    <div class="am-modal-dialog">
+        <div class="am-modal-hd">提示</div>
+        <div class="am-modal-bd">
+            确定要删除这条记录吗？
+        </div>
+        <div class="am-modal-footer">
+            <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+            <span class="am-modal-btn" data-am-modal-confirm>确定</span>
+        </div>
+    </div>
+</div>
+<div class="am-modal am-modal-confirm" tabindex="-1" id="shop-remove-confirm">
     <div class="am-modal-dialog">
         <div class="am-modal-hd">提示</div>
         <div class="am-modal-bd">
@@ -325,44 +361,51 @@ $this->load->view('head');
     var delete_id = 0;
     function color_delete(id) {
         delete_id = id;
-        $('#my-confirm').modal({
+        $('#color-remove-confirm').modal({
             relatedTarget: this,
             onConfirm: function (options) {
+                console.log($(this.relatedTarget));
                 $.post('/color/delete_color/' + delete_id);
                 setTimeout(function(){
                     fromLoad('goods','get_color');
-                },500);
+                },300);
             }
         });
     }
 
     function size_delete(id) {
         delete_id = id;
-        $('#my-confirm').modal({
+        $('#size-remove-confirm').modal({
             relatedTarget: this,
             onConfirm: function (options) {
                 $.post('/size/delete_size/' + delete_id);
-                fromLoad('goods','get_size');
+                setTimeout(function(){
+                    fromLoad('goods','get_size');
+                },300);
             }
         });
     }
     function sku_delete(id) {
         delete_id = id;
-        $('#my-confirm').modal({
+        $('#sku-remove-confirm').modal({
             relatedTarget: this,
             onConfirm: function (options) {
                 $.post('/goods/delete_sku/' + delete_id);
-                fromLoad('goods','get_sku');
+                setTimeout(function(){
+                    fromLoad('goods','get_sku');
+                },300);
             }
         });
     }
     function shop_delete(id) {
         delete_id = id;
-        $('#my-confirm').modal({
+        $('#shop-remove-confirm').modal({
             relatedTarget: this,
             onConfirm: function (options) {
                 $.post('/shop/shop_delete/' + delete_id);
-                fromLoad('goods','get_shop');
+                setTimeout(function(){
+                    fromLoad('goods','get_shop');
+                },300);
             }
         });
     }

@@ -76,6 +76,6 @@ $(function () {
         method = $(this).val();
         other_select_div = $('#div-' + method);
         other_select_div.show();
-        fromLoad(__CONTROLLER__)
+        fromLoad(__CONTROLLER__);
     });
 });
