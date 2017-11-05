@@ -171,7 +171,7 @@ class Goods_model extends HX_Model
         }
 
         $this->config->load('user_type', 'user_type');
-        if ($this->session->role_id == $this->config->item('user_type')['admin']) {
+        if ($this->session->role_id == $this->config->item('user_type')['seller']) {
             $goods_ids = $this->get_seller_goods();
             if (!empty($goods_ids)) {
                 $goods_ids_str = implode('","', $this->get_seller_goods());
