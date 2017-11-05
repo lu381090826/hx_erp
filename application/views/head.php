@@ -51,7 +51,7 @@
                     </div>
                 <?php } ?>
                 <?php if (check_auth(2)) { ?>
-                    <a href="goods">
+                    <a href="/goods">
                         <div class="am-topbar-right">
                             <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span
                                     class="am-icon-shopping-bag"></span> 商品管理
