@@ -12,7 +12,7 @@ class Sku extends HX_Controller
     public function action_add_sku()
     {
         $this->load->model('goods/shop_model', 'shop_m');
-        $data['shop_list'] = $this->shop_m->get_shop_list()['result_rows'];
+        $data['shop_list'] = $this->shop_m->get_shop_list_all()['result_rows'];
 
         $this->load->model('goods/category_model', 'm_category');
         $data['category_list'] = $this->m_category->category_cache();
@@ -29,7 +29,7 @@ class Sku extends HX_Controller
     public function action_edit_sku($goods_id)
     {
         $this->load->model('goods/shop_model', 'shop_m');
-        $data['shop_list'] = $this->shop_m->get_shop_list()['result_rows'];
+        $data['shop_list'] = $this->shop_m->get_shop_list_all()['result_rows'];
 
         $this->load->model('goods/category_model', 'm_category');
         $data['category_list'] = $this->m_category->category_cache();
@@ -42,16 +42,24 @@ class Sku extends HX_Controller
 
         $this->load->model('goods/goods_model', 'goods_m');
         $data['goods_info'] = $this->goods_m->get_row_by_id($goods_id)['result_rows'];
+        $shops = $this->goods_m->get_goods_shop($goods_id);
 
         $this->load->model('goods/sku_model', 'sku_m');
         $data['sku_list'] = $this->sku_m->get_sku_list_info_by_goods_id($goods_id)['result_rows'];
+
 
         foreach ($data['sku_list'] as $row) {
             $data['color_list'][$row['color_id']]['is_select'] = 1;
             $data['size_list'][$row['size_id']]['is_select'] = 1;
         }
 
-        log_out($data);
+        foreach ($data['shop_list'] as &$row) {
+            if (array_keys($shops, ['shop_id' => $row['id']])) {
+                $row['is_check'] = true;
+            }else{
+                $row['is_check'] = false;
+            }
+        }
         $this->load->view('goods/sku/editForm', $data);
     }
 

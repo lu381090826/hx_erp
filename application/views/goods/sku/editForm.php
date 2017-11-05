@@ -40,10 +40,10 @@ $this->load->view('head');
         </div>
 
         <div class="am-form-group">
-            <label for="doc-select-1">添加到店铺（暂未启用）:</label>
-            <select data-am-selected="{searchBox: 1}">
+            <label for="doc-select-1">添加到店铺:</label>
+            <select multiple data-am-selected="{searchBox: 1,maxHeight:200}">
                 <?php foreach ($shop_list as $shop): ?>
-                    <option value="<?=$shop['id']?>"><?=$shop['name']?></option>
+                    <option value="<?=$shop['id']?>" <?php if($shop['is_check']):?>selected<?php endif;?>><?=$shop['name']?></option>
                 <?php endforeach;?>
             </select>
         </div>

@@ -32,7 +32,7 @@ $this->load->view('head');
 
         <div class="am-form-group">
             <label for="doc-select-1">添加到店铺:</label>
-            <select multiple data-am-selected="{searchBox: 1}" name="shop_id[]">
+            <select multiple data-am-selected="{searchBox: 1,maxHeight: 200}" name="shop_id[]">
                 <?php foreach ($shop_list as $shop): ?>
                     <option value="<?=$shop['id']?>"><?=$shop['name']?></option>
                 <?php endforeach;?>

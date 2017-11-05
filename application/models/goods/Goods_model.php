@@ -100,6 +100,8 @@ class Goods_model extends HX_Model
 
     public function goods_addto_shop($shop_id_arr, $goods_id)
     {
+        //先清空再新增
+        $this->db->update("t_shop_goods", ['Fstatus' => 0], ['Fgoods_id' => $goods_id]);
         $arr = [];
         foreach ($shop_id_arr as $k => $r) {
             $arr['Fshop_id'] = $r;
@@ -126,6 +128,16 @@ class Goods_model extends HX_Model
         ]);
 
         return $this->suc_out_put($ret->result('array'));
+    }
+
+    //获取商品所在店铺
+    public function get_goods_shop($goods_id)
+    {
+        $s = "SELECT Fshop_id FROM t_shop_goods WHERE Fstatus = 1 AND Fgoods_id= ?  ORDER BY Fcreate_time DESC";
+
+        $ret = $this->db->query($s, [$goods_id]);
+
+        return $ret->result('array');
     }
 
     private function searchParams($request){
