@@ -41,4 +41,20 @@ class shop extends HX_Controller
 
         $this->load->view('goods/shop/detail',$r['result_rows']);
     }
+
+    public function shop_detail_edit($id)
+    {
+        $r = $this->shop_m->shop_detail_by_id($id);
+
+        $this->load->view('goods/shop/editForm',$r['result_rows']);
+    }
+
+    public function shop_modify()
+    {
+        $post = $this->input->post();
+        $this->shop_m->update_shop($post);
+
+        $this->load->helper('url');
+        redirect("success");
+    }
 }

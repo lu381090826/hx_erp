@@ -117,6 +117,22 @@ class Shop_model extends HX_Model
         $this->db->insert($this->table, $insert_arr);
     }
 
+    private function check_update_input($request)
+    {
+        $params = [];
+        foreach ($request as $k => $row) {
+            $params['F' . $k] = $row;
+        }
+        return $params;
+    }
+
+    public function update_shop($request)
+    {
+        $arr = $this->check_update_input($request);
+
+        $this->db->update($this->table, $arr, ['Fid' => $request['id']]);
+    }
+
     public function shop_detail_by_id($id)
     {
         $s = "SELECT * FROM {$this->table} u  WHERE u.Fstatus = 1 AND Fid = ? LIMIT 1;";
