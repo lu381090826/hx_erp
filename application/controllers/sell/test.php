@@ -23,7 +23,7 @@ class Test extends CI_Controller {
      */
     public function index()
     {
-        $key = "123";
+        $key = "1234";
 
         //搜索出列表
         $list = array();
