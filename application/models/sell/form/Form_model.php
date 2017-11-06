@@ -139,7 +139,7 @@ class Form_model extends BaseModel{
 			foreach($spu_data["skus"] as $sku_data){
 				$sku = $this->MSku->_new();
 				$sku->form_id = $this->id;
-				$sku->fspu_id = $spu->id;
+				$sku->form_spu_id = $spu->id;
 				$sku->sku_id = $sku_data["sku_id"];
 				$sku->color = $sku_data["color"];
 				$sku->size = $sku_data["size"];
