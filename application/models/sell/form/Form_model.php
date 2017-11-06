@@ -10,7 +10,7 @@ class Form_model extends BaseModel{
 	/**
 	 * @fields
 	 */
-	public $id,$user_id,$client_id,$total_num,$total_price,$payment,$status,$remark,$create_at,$update_at,$create_user_id,$update_user_id;
+	public $id,$order_num,$user_id,$client_id,$total_num,$total_price,$payment,$status,$remark,$create_at,$update_at,$create_user_id,$update_user_id;
 
 	function __construct(){
 		$this->load->model('sell/form/FormSpu_model',"MSpu",true);
@@ -24,10 +24,10 @@ class Form_model extends BaseModel{
 	{
 		return [
 			'id' => 'ID',
+			'order_num' => '销售单号',
 			'user_id' => '销售员ID',
 			'client_id' => '客户ID',
 			'tatol_num' => '合计数量',
-			'total_price' => '合计金额',
 			'total_price' => '合计金额',
 			'payment' => '支付方法',
 			'remark' => '备注',
@@ -159,6 +159,11 @@ class Form_model extends BaseModel{
 			$this->db->trans_commit();
 			return true;
 		}
+	}
+
+	/** 生成销售单号 */
+	public function createOrderNum(){
+		return md5(time() . mt_rand(1,100));
 	}
 }
 ?>    

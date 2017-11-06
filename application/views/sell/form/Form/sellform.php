@@ -16,6 +16,11 @@
 <div id="vue-app" class="form-content">
     <!-- 表单主体 -->
     <div>
+        <!-- 销售单号 -->
+        <div class="form-group">
+            <label>销售单号</label>
+            <input type="text" class="form-control" placeholder="销售单号" v-model="order_num" disabled>
+        </div>
         <!-- 员工仓库 -->
         <div class="form-group">
             <label>销售员</label>
@@ -270,6 +275,7 @@
         data: {
             //数据
             "id":'<?=$model->id?>',
+            'order_num':'',
             "seller":{
                 "id":"1000",
                 "name":"测试",
@@ -295,6 +301,7 @@
         },
         created:function() {
             //载入数据
+            this.order_num = '<?=$model->order_num?>';
             this.client = <?=json_encode($model->client)?>;
             this.remark = '<?=$model->remark?>';
             this.payment = '<?=$model->payment?>';
@@ -457,6 +464,7 @@
                     dataType:"json",
                     data:{
                         "id":this.id,
+                        "order_num":this.order_num,
                         "user_id":this.seller.id,
                         "client_id":this.client.id,
                         "payment":this.payment,
