@@ -97,24 +97,25 @@ class Size_model extends HX_Model
 
     public function size_cache()
     {
-        error_reporting(0);
-        $cache = 'SIZE_CACHE';
-        try {
-            $this->load->driver('cache');
-            if (empty($this->cache->redis->get($cache))) { //如果未设置
+        $arr = [];
+        if ($this->config->item('redis_default')['cache_on']) {
+            $cache = 'SIZE_CACHE';
+            try {
+                $this->load->driver('cache');
+                if (empty($this->cache->redis->get($cache))) { //如果未设置
 
-                $arr = $this->getSizeList();
+                    $arr = $this->getSizeList();
 
-                $this->cache->redis->save($cache, $arr , 86400); //设置
-            } else {
-                $arr = $this->cache->redis->get($cache);  //从缓存中直接读取对应的值
+                    $this->cache->redis->save($cache, $arr, 86400); //设置
+                } else {
+                    $arr = $this->cache->redis->get($cache);  //从缓存中直接读取对应的值
+                }
+
+            } catch (Exception $e) {
+                log_error($e->getMessage());
             }
-
-        } catch (Exception $e) {
-            log_error($e->getMessage());
         }
-
-        if (!isset($arr)) {
+        if (empty($arr)) {
             $arr = $this->getSizeList();
         }
 

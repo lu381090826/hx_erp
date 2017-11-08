@@ -119,24 +119,25 @@ class Color_model extends HX_Model
 
     public function color_cache()
     {
-        error_reporting(0);
-        $color_cache = 'COLOR_CACHE';
-        try {
-            $this->load->driver('cache');
-            if (empty($this->cache->redis->get($color_cache))) { //如果未设置
+        $arr = [];
+        if ($this->config->item('redis_default')['cache_on']) {
+            $color_cache = 'COLOR_CACHE';
+            try {
+                $this->load->driver('cache');
+                if (empty($this->cache->redis->get($color_cache))) { //如果未设置
 
-                $arr = $this->colorList();
+                    $arr = $this->colorList();
 
-                $this->cache->redis->save($color_cache, $arr, 86400); //设置
-            } else {
-                $arr = $this->cache->redis->get($color_cache);  //从缓存中直接读取对应的值
+                    $this->cache->redis->save($color_cache, $arr, 86400); //设置
+                } else {
+                    $arr = $this->cache->redis->get($color_cache);  //从缓存中直接读取对应的值
+                }
+
+            } catch (Exception $e) {
+                log_error($e->getMessage());
             }
-
-        } catch (Exception $e) {
-            log_error($e->getMessage());
         }
-
-        if (!isset($arr)) {
+        if (empty($arr)) {
             $arr = $this->colorList();
         }
 

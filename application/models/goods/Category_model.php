@@ -59,26 +59,27 @@ class Category_model extends HX_Model
 
     public function category_cache()
     {
-        error_reporting(0);
-        $category_cache = 'CATEGORY_CACHE';
-        try {
-            $this->load->driver('cache');
-            if (empty($this->cache->redis->get($category_cache))) { //如果未设置
-                $arr = $this->getCategoryList();
+        $arr = [];
+        if ($this->config->item('redis_default')['cache_on']) {
+            $category_cache = 'CATEGORY_CACHE';
+            try {
+                $this->load->driver('cache');
+                if (empty($this->cache->redis->get($category_cache))) { //如果未设置
+                    $arr = $this->getCategoryList();
 
-                $this->cache->redis->save($category_cache, $arr,86400); //设置
-            } else {
-                $arr = $this->cache->redis->get($category_cache);  //从缓存中直接读取对应的值
+                    $this->cache->redis->save($category_cache, $arr, 86400); //设置
+                } else {
+                    $arr = $this->cache->redis->get($category_cache);  //从缓存中直接读取对应的值
+                }
+
+            } catch (Exception $e) {
+                log_error($e->getMessage());
             }
-
-        } catch (Exception $e) {
-            log_error($e->getMessage());
         }
 
-        if (!isset($arr)) {
+        if (empty($arr)) {
             $arr = $this->getCategoryList();
         }
-        log_out($arr);
         return $arr;
     }
 
