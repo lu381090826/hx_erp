@@ -320,7 +320,7 @@
 
                 //Ajax查询
                 $.ajax({
-                    url: '<?=site_url("sell/form/Form/search_goods_api")?>',
+                    url: '<?=site_url($_controller->api."/search_goods")?>',
                     type: "get",
                     dataType: "json",
                     data: {
@@ -386,7 +386,7 @@
 
                 //Ajax查询
                 $.ajax({
-                    url: '<?=site_url("sell/client/Client/search_api")?>',
+                    url: '<?=site_url($_controller->api."/search_client")?>',
                     type: "get",
                     dataType: "json",
                     data: {
@@ -418,7 +418,7 @@
                 var _this = this;
                 //Ajax
                 $.ajax({
-                    url:'<?=site_url("sell/client/Client/add_api")?>',
+                    url:'<?=site_url($_controller->api."/add_client")?>',
                     type:"get",
                     dataType:"json",
                     data:{
@@ -460,7 +460,7 @@
 
                 //Ajax
                 $.ajax({
-                    url:'<?=site_url("sell/form/Form/update_api")?>',
+                    url:'<?=site_url($_controller->controller."/update_asyn")?>',
                     type:"post",
                     dataType:"json",
                     data:{

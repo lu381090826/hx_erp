@@ -86,7 +86,7 @@ class Form_model extends BaseModel{
 			case 2:
 				return "已完成";
 			case 3:
-				return "已废除";
+				return "已废弃";
 			default:
 				return "其他";
 		}

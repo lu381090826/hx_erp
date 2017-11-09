@@ -106,7 +106,7 @@
 
                 //Ajax
                 $.ajax({
-                    url:'<?=site_url($_controller->views."/search_api")?>',
+                    url:'<?=site_url($_controller->api."/search_sell")?>',
                     type:"post",
                     dataType:"json",
                     data:{
@@ -127,7 +127,7 @@
                     return;
 
                 //跳转
-                window.location.href='<?=site_url($_controller->views."/modify")?>/'+item.id;
+                window.location.href='<?=site_url($_controller->controller."/modify")?>/'+item.id;
             },
             //作废
             scrap:function(item){
@@ -135,7 +135,7 @@
                 var w=confirm("是否确定报废该销售单?")
                 if (w==true) {
                     $.ajax({
-                        url: '<?=site_url($_controller->views . "/scrap_api")?>',
+                        url: '<?=site_url($_controller->controller . "/scrap_asyn")?>',
                         type: "post",
                         dataType: "json",
                         data: {
