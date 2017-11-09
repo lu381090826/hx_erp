@@ -129,21 +129,23 @@ class Form_model extends BaseModel{
 		//遍历spu
 		foreach($data["selectList"] as $spu_data){
 			$spu = $this->MSpu->_new();
+			$spu->load($spu_data);
 			$spu->form_id = $this->id;
-			$spu->spu_id = $spu_data["spu_id"];
-			$spu->snap_price = $spu_data["snap_price"];
-			$spu->snap_pic = $spu_data["snap_pic"];
-			$spu->snap_pic_normal = $spu_data["snap_pic_normal"];
+			//$spu->spu_id = $spu_data["spu_id"];
+			//$spu->snap_price = $spu_data["snap_price"];
+			//$spu->snap_pic = $spu_data["snap_pic"];
+			//$spu->snap_pic_normal = $spu_data["snap_normal"];
 			$spu->save();
 			//遍历sku
 			foreach($spu_data["skus"] as $sku_data){
 				$sku = $this->MSku->_new();
+				$sku->load($sku_data);
 				$sku->form_id = $this->id;
 				$sku->form_spu_id = $spu->id;
-				$sku->sku_id = $sku_data["sku_id"];
+				/*$sku->sku_id = $sku_data["sku_id"];
 				$sku->color = $sku_data["color"];
 				$sku->size = $sku_data["size"];
-				$sku->num = $sku_data["num"];
+				$sku->num = $sku_data["num"];*/
 				$sku->save();
 			}
 		}

@@ -314,22 +314,25 @@
         methods: {
             //搜索
             searchChange:function(e){
-                this.searchList = [
-                    {
-                        "spu_id":"TS100001","snap_pic":"images/597ffd72d627f.JPG","snap_pic_normal":"images/597ffd72d627f.JPG","snap_price":12,remark:"",
-                        "skus":[
-                            {"sku_id":"1231","color":"红","size":"F","num":0},
-                            {"sku_id":"1232","color":"蓝","size":"F","num":0}
-                        ]
+                //取值和This
+                var _this = this;
+                var input_value = e.target.value;
+
+                //Ajax查询
+                $.ajax({
+                    url: '<?=site_url("sell/form/Form/search_goods_api")?>',
+                    type: "get",
+                    dataType: "json",
+                    data: {
+                        "key": input_value,
                     },
-                    {
-                        "spu_id":"TS100002","snap_pic":"images/597ffd72d627f.JPG","snap_pic_normal":"images/597ffd72d627f.JPG","snap_price":12,remark:"",
-                        "skus":[
-                            {"sku_id":"1233","color":"红","size":"F","num":0},
-                            {"sku_id":"1234","color":"蓝","size":"F","num":0}
-                        ]
+                    success:function(result){
+                        if(result.state.return_code == 0){
+                            _this.searchList = result.data;
+                            console.log(_this.searchList);
+                        }
                     }
-                ];
+                });
             },
             //加入列表
             selectAdd:function(item){
@@ -447,12 +450,10 @@
             },
             //提交
             submit:function(){
-                //console.log(this.id);
-                //console.log(this.seller.id);
-                //console.log(this.client.id);
-                //console.log(this.payment);
-                //console.log(this.remark);
-                //console.log(this.selectList);
+                //检测
+                if(!this.check())
+                    return;
+
                 //获取总额
                 var total_num = $("#total_num").val();
                 var total_price = $("#total_price").val();
@@ -482,6 +483,19 @@
                         }
                     }
                 });
+            },
+            //检测
+            check:function(){
+                if(this.client == null){
+                    alert("请选择客户");
+                    return false;
+                }
+                else if(this.selectList.length == 0){
+                    alert("销售单不能为空");
+                    return false;
+                }
+
+                return true;
             }
         }
     })

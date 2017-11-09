@@ -23,14 +23,17 @@ class Test extends CI_Controller {
      */
     public function index()
     {
-        $key = "1243";
+        $key = "123";
 
         //搜索出列表
         $list = array();
         $goods = $this->m_goods->search_goods(["goods_id"=>$key]);
         foreach($goods["result_rows"] as $good){
+            $item = (object)$good;
             $skus = $this->m_sku->get_sku_list_info_by_goods_id($good["goods_id"]);
-            var_dump($skus);
+            $item->skus = $skus["result_rows"];
+            $list[] = $item;
         }
+        var_dump($list);
     }
 }
