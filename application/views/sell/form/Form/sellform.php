@@ -1,6 +1,5 @@
 <!-- 样式 -->
-<!--<link rel="stylesheet" href="<?/*=$base_url*/?>/assets/page/css/header.css">-->
-<link rel="stylesheet" href="/assets/page/css/add.css">
+<link rel="stylesheet" href="/assets/page/form/add.css">
 
 <!-- 面包屑 -->
 <div class="am-cf am-padding am-padding-bottom-0">

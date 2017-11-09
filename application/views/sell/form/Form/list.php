@@ -1,6 +1,5 @@
 <!-- 样式 -->
-<!--<link rel="stylesheet" href="<?/*=$base_url*/?>/assets/page/css/header.css">-->
-<link rel="stylesheet" href="/assets/page/css/list.css">
+<link rel="stylesheet" href="/assets/page/form/list.css">
 
 <!-- 二级导航 -->
 <div class="am-cf am-padding am-padding-bottom-0">
@@ -61,7 +60,7 @@
             <div class="options" v-if="item === selected">
                 <ul class="list-group">
                     <li class="list-group-item">打印</li>
-                    <li class="list-group-item" v-if="item.status == 0 || item.status == 1">配货</li>
+                    <li class="list-group-item" v-if="item.status == 0 || item.status == 1" v-on:click="allocate(item)">配货</li>
                     <li class="list-group-item" v-if="item.status == 0" v-on:click="modify(item)">修改</li>
                     <li class="list-group-item" v-if="item.status == 0" v-on:click="scrap(item)">作废</li>
                 </ul>
@@ -150,6 +149,11 @@
                         }
                     });
                 }
+            },
+            //配货
+            allocate:function(item){
+                var url = '<?=site_url("sell/allocate/Allocate/index")?>/'+item.id;
+                location.href = url;
             }
         }
     })

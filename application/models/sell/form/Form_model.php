@@ -113,7 +113,7 @@ class Form_model extends BaseModel{
 	}
 
 	/**
-	 * 添加/修改 订单(事务)
+	 * 添加/修改
 	 */
 	public function updateForm($data){
 		//开始事务
@@ -169,7 +169,9 @@ class Form_model extends BaseModel{
 	 * 生成销售单号
 	 * */
 	public function createOrderNum(){
-		return md5(time() . mt_rand(1,100));
+		list($t1, $t2) = explode(' ', microtime());
+		$time = (float)sprintf('%.0f',(floatval($t1)+floatval($t2))*1000);
+		return "HXS".$time;
 	}
 }
 ?>    

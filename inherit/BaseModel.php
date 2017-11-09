@@ -331,7 +331,7 @@ class BaseModel extends CI_Model {
     //region 内核应对
 
     //获取数量
-    private function getCount($condition){
+    protected function getCount($condition){
         $query = $this->db->select('COUNT(*) AS `Fnums`')->where($condition)->get($this->table);;
         $result = $query->row();
         $count = $result->nums;
@@ -339,7 +339,7 @@ class BaseModel extends CI_Model {
     }
 
     //添加前置
-    private function addPrefix(){
+    protected function addPrefix(){
         //按照加官，使用sql前所有字段加F
         foreach($this as $key=>$value){
             //跳过表名
@@ -361,7 +361,7 @@ class BaseModel extends CI_Model {
     }
 
     //删除前缀
-    private function delPrefix(){
+    protected function delPrefix(){
         //按照加官，使用sql后全部字段削去F
         foreach($this as $key=>$value){
             //跳过表名
@@ -382,21 +382,35 @@ class BaseModel extends CI_Model {
         }
     }
 
-    //get
-    private function addPrefixGet(){
+    //添加前缀，GET时使用
+    protected function addPrefixGet(){
         $this->pk = "F".$this->pk;
     }
 
-    //get
-    private function delPrefixGet(){
+    //删除前缀，GET时使用
+    protected function delPrefixGet(){
         $this->pk = substr($this->pk,1);
     }
 
-    //sort 和 condition
-    private function addPrefixKeyValue($array){
+    //排序和条件使用
+    protected function addPrefixKeyValue($array){
         $result = array();
         foreach($array as $key=>$value){
             $result["F".$key] = $value;
+        }
+        return $result;
+    }
+
+    //字段使用
+    protected function addPrefixField($field){
+        return "F".$field;
+    }
+
+    //字段使用
+    protected function addPrefixFields($fields){
+        $result = array();
+        foreach($fields as $value){
+            $result[] = "F".$value;
         }
         return $result;
     }
