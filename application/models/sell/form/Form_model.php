@@ -12,6 +12,9 @@ class Form_model extends BaseModel{
 	 */
 	public $id,$order_num,$user_id,$client_id,$total_num,$total_price,$payment,$status,$remark,$create_at,$update_at,$create_user_id,$update_user_id;
 
+	/**
+	 * Form_model constructor.
+	 */
 	function __construct(){
 		$this->load->model('sell/form/FormSpu_model',"MSpu",true);
 		$this->load->model('sell/form/FormSku_model',"MSku",true);
@@ -60,14 +63,13 @@ class Form_model extends BaseModel{
 		date_default_timezone_set('Asia/Shanghai');
 
 		//保存当前时间戳
-		$this->user_id = 0;
 		$this->update_at = time();
-		$this->update_user_id = 0;
+		$this->update_user_id = $this->session->uid;
 
 		//如果是新增
 		if(empty($this->id)){
 			$this->create_at = time();
-			$this->create_user_id = 0;
+			$this->create_user_id = $this->session->uid;
 		}
 
 		//父类方法
@@ -163,7 +165,9 @@ class Form_model extends BaseModel{
 		}
 	}
 
-	/** 生成销售单号 */
+	/**
+	 * 生成销售单号
+	 * */
 	public function createOrderNum(){
 		return md5(time() . mt_rand(1,100));
 	}

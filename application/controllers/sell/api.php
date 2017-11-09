@@ -145,4 +145,18 @@ class Api extends CI_Controller {
         //返回结果
         $this->apiresult->sentApiSuccess($list);
     }
+
+    /**
+     * 获取当前用户
+     */
+    public function get_user(){
+        if(isset($this->session->uid) && isset($this->session->userdata)){
+            $user = $this->session->userdata;
+            $user["id"] = $this->session->uid;
+            $this->apiresult->sentApiSuccess($user);
+        }
+        else{
+            $this->apiresult->sentApiError(-1,"not logged in");
+        }
+    }
 }

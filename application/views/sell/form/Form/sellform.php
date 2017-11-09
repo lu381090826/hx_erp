@@ -41,15 +41,15 @@
                             <div class="form-group">
                                 <label>销售仓库</label>
                                 <div class="input-compose">
-                                    <div><input type="text" class="form-control" placeholder="Amount" disabled v-model="seller.name"></div>
-                                    <div><input type="text" class="form-control" placeholder="Amount" disabled v-model="seller.id"></div>
+                                    <div><input type="text" class="form-control" placeholder="Amount" disabled value="暂无"></div>
+                                    <div><input type="text" class="form-control" placeholder="Amount" disabled value="暂无"></div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>开单员工</label>
                                 <div class="input-compose">
-                                    <div><input type="text" class="form-control" placeholder="Amount" disabled v-model="seller.store.name"></div>
-                                    <div><input type="text" class="form-control" placeholder="Amount" disabled v-model="seller.store.id"></div>
+                                    <div><input type="text" class="form-control" placeholder="Amount" disabled v-model="user.name"></div>
+                                    <div><input type="text" class="form-control" placeholder="Amount" disabled v-model="user.id"></div>
                                 </div>
                             </div>
                         </div>
@@ -276,14 +276,7 @@
             //数据
             "id":'<?=$model->id?>',
             'order_num':'',
-            "seller":{
-                "id":"1000",
-                "name":"测试",
-                "store":{
-                    "id":"1000",
-                    "name":"仓库01",
-                }
-            },
+            "user":null,
             "client":null,
             "payment":"0",
             "remark":"",
@@ -300,6 +293,21 @@
             "paymentMap": <?=json_encode($paymentMap)?>,
         },
         created:function() {
+            //this
+            var _this = this;
+
+            //获取当前用户信息
+            $.ajax({
+                url:'<?=site_url($_controller->api."/get_user")?>',
+                async: false,
+                type:"post",
+                dataType:"json",
+                success:function(result) {
+                    if(result.state.return_code == 0)
+                        _this.user = result.data
+                }
+            });
+
             //载入数据
             this.order_num = '<?=$model->order_num?>';
             this.client = <?=json_encode($model->client)?>;
@@ -466,7 +474,7 @@
                     data:{
                         "id":this.id,
                         "order_num":this.order_num,
-                        "user_id":this.seller.id,
+                        "user_id":this.user.id,
                         "client_id":this.client.id,
                         "payment":this.payment,
                         "remark":this.remark,
