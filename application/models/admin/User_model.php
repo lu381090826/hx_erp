@@ -27,7 +27,7 @@ class User_model extends HX_Model
             md5($this->input->post('password'))
         ]);
 
-        return $ret->row(0,'array');
+        return $ret->row(0, 'array');
     }
 
     public function check_mobile_available($request)
@@ -125,5 +125,20 @@ class User_model extends HX_Model
         $ret = $this->db->query($s, [$shop_id]);
 
         return $ret->result('array');
+    }
+
+    public function get_user_info($uid)
+    {
+        $user_info = $this->get_row_by_uid($uid);
+        if (empty($user_info['result_rows'])) {
+            show_error("用户不存在");
+        }
+        $this->config->load('user_type', 'user_type');
+        if ($user_info['result_rows']['role_id'] == $this->config->item('user_type')['seller']) {
+            $this->load->model('goods/shop_model', 'shop_m');
+            $shop_info = $this->shop_m->get_user_shop($uid);
+            $user_info['result_rows']['shop_info'] = $shop_info;
+        }
+        return $user_info['result_rows'];
     }
 }

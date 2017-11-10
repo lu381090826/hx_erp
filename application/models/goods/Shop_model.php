@@ -32,7 +32,7 @@ class Shop_model extends HX_Model
         return $this->suc_out_put($ret->result('array'));
     }
 
-    public function get_shop_list($page = 1)
+    public function get_shop_list($page = 1 , $shop_id = [])
     {
         $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1";
         $ret = $this->db->query($s);
@@ -164,4 +164,27 @@ class Shop_model extends HX_Model
             $this->db->replace("t_shop_seller", $arr);
         }
     }
+
+
+    public function get_user_shop($uid){
+        $s = "SELECT * FROM t_shop_seller  WHERE Fstatus = 1 AND Fseller_id = ? LIMIT 1;";
+        $ret = $this->db->query($s, [$uid]);
+        $result = $ret->result('array');
+        $shop_id = [];
+        foreach ($result as $r){
+            $shop_id[] = $r['shop_id'];
+        }
+        $shop_info = $this->get_shop_info_by_shop_id($shop_id);
+
+        return $shop_info['result_rows'];
+    }
+
+    public function get_shop_info_by_shop_id($shop_id = [])
+    {
+        $shop_arr = implode(',', $shop_id);
+        $s = "SELECT * FROM t_shop  WHERE Fstatus = 1 AND Fid in (?) ORDER  BY Fcreate_time DESC;";
+        $ret = $this->db->query($s, [$shop_arr]);
+        return $this->suc_out_put($ret->result('array'));
+    }
+
 }
