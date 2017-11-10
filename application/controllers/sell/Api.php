@@ -20,6 +20,7 @@ class Api extends CI_Controller {
         $this->load->model('sell/form/FormSku_model',"m_sku",true);
         $this->load->model('goods/Goods_model',"m_goods",true);
         $this->load->model('goods/Sku_model',"m_good_sku",true);
+        $this->load->model('admin/User_model',"m_user",true);
     }
 
     /**
@@ -149,10 +150,10 @@ class Api extends CI_Controller {
     /**
      * 获取当前用户
      */
-    public function get_user(){
+    public function now_user(){
         if(isset($this->session->uid) && isset($this->session->userdata)){
-            $user = $this->session->userdata;
-            $user["id"] = $this->session->uid;
+            $uid = $this->session->uid;
+            $user = $this->m_user->get_user_info($uid);
             $this->apiresult->sentApiSuccess($user);
         }
         else{

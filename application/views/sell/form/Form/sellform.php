@@ -37,18 +37,18 @@
                     <div id="collapse_1_1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading_1_1">
                         <div class="panel-body">
                             <!-- 项目内容 -->
-                            <div class="form-group">
+                            <div class="form-group" v-if="user.shop_info">
                                 <label>销售仓库</label>
                                 <div class="input-compose">
-                                    <div><input type="text" class="form-control" placeholder="Amount" disabled value="暂无"></div>
-                                    <div><input type="text" class="form-control" placeholder="Amount" disabled value="暂无"></div>
+                                    <div><input type="text" class="form-control" placeholder="Amount" disabled v-model="user.shop_info[0].name"></div>
+                                    <div><input type="text" class="form-control" placeholder="Amount" disabled v-model="user.shop_info[0].id"></div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>开单员工</label>
                                 <div class="input-compose">
                                     <div><input type="text" class="form-control" placeholder="Amount" disabled v-model="user.name"></div>
-                                    <div><input type="text" class="form-control" placeholder="Amount" disabled v-model="user.id"></div>
+                                    <div><input type="text" class="form-control" placeholder="Amount" disabled v-model="user.uid"></div>
                                 </div>
                             </div>
                         </div>
@@ -297,7 +297,7 @@
 
             //获取当前用户信息
             $.ajax({
-                url:'<?=site_url($_controller->api."/get_user")?>',
+                url:'<?=site_url($_controller->api."/now_user")?>',
                 async: false,
                 type:"post",
                 dataType:"json",
