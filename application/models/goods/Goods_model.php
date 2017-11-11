@@ -215,7 +215,7 @@ class Goods_model extends HX_Model
     {
         $params = $this->searchParams($request);
 
-        $s = "SELECT count(1) FROM {$this->table} WHERE Fstatus = 1 {$params} ";
+        $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1 {$params} ";
         $ret = $this->db->query($s);
         $this->total_num = $ret->num_rows();
 
