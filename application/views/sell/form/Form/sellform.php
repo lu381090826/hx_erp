@@ -1,6 +1,5 @@
 <!-- 样式 -->
-<!--<link rel="stylesheet" href="<?/*=$base_url*/?>/assets/page/css/header.css">-->
-<link rel="stylesheet" href="/assets/page/css/add.css">
+<link rel="stylesheet" href="/assets/page/form/add.css">
 
 <!-- 面包屑 -->
 <div class="am-cf am-padding am-padding-bottom-0">
@@ -41,15 +40,15 @@
                             <div class="form-group">
                                 <label>销售仓库</label>
                                 <div class="input-compose">
-                                    <div><input type="text" class="form-control" placeholder="Amount" disabled v-model="seller.name"></div>
-                                    <div><input type="text" class="form-control" placeholder="Amount" disabled v-model="seller.id"></div>
+                                    <div><input type="text" class="form-control" placeholder="Amount" disabled value="暂无"></div>
+                                    <div><input type="text" class="form-control" placeholder="Amount" disabled value="暂无"></div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>开单员工</label>
                                 <div class="input-compose">
-                                    <div><input type="text" class="form-control" placeholder="Amount" disabled v-model="seller.store.name"></div>
-                                    <div><input type="text" class="form-control" placeholder="Amount" disabled v-model="seller.store.id"></div>
+                                    <div><input type="text" class="form-control" placeholder="Amount" disabled v-model="user.name"></div>
+                                    <div><input type="text" class="form-control" placeholder="Amount" disabled v-model="user.id"></div>
                                 </div>
                             </div>
                         </div>
@@ -276,14 +275,7 @@
             //数据
             "id":'<?=$model->id?>',
             'order_num':'',
-            "seller":{
-                "id":"1000",
-                "name":"测试",
-                "store":{
-                    "id":"1000",
-                    "name":"仓库01",
-                }
-            },
+            "user":null,
             "client":null,
             "payment":"0",
             "remark":"",
@@ -300,6 +292,21 @@
             "paymentMap": <?=json_encode($paymentMap)?>,
         },
         created:function() {
+            //this
+            var _this = this;
+
+            //获取当前用户信息
+            $.ajax({
+                url:'<?=site_url($_controller->api."/get_user")?>',
+                async: false,
+                type:"post",
+                dataType:"json",
+                success:function(result) {
+                    if(result.state.return_code == 0)
+                        _this.user = result.data
+                }
+            });
+
             //载入数据
             this.order_num = '<?=$model->order_num?>';
             this.client = <?=json_encode($model->client)?>;
@@ -314,22 +321,25 @@
         methods: {
             //搜索
             searchChange:function(e){
-                this.searchList = [
-                    {
-                        "spu_id":"TS100001","snap_pic":"images/597ffd72d627f.JPG","snap_pic_normal":"images/597ffd72d627f.JPG","snap_price":12,remark:"",
-                        "skus":[
-                            {"sku_id":"1231","color":"红","size":"F","num":0},
-                            {"sku_id":"1232","color":"蓝","size":"F","num":0}
-                        ]
+                //取值和This
+                var _this = this;
+                var input_value = e.target.value;
+
+                //Ajax查询
+                $.ajax({
+                    url: '<?=site_url($_controller->api."/search_goods")?>',
+                    type: "get",
+                    dataType: "json",
+                    data: {
+                        "key": input_value,
                     },
-                    {
-                        "spu_id":"TS100002","snap_pic":"images/597ffd72d627f.JPG","snap_pic_normal":"images/597ffd72d627f.JPG","snap_price":12,remark:"",
-                        "skus":[
-                            {"sku_id":"1233","color":"红","size":"F","num":0},
-                            {"sku_id":"1234","color":"蓝","size":"F","num":0}
-                        ]
+                    success:function(result){
+                        if(result.state.return_code == 0){
+                            _this.searchList = result.data;
+                            console.log(_this.searchList);
+                        }
                     }
-                ];
+                });
             },
             //加入列表
             selectAdd:function(item){
@@ -383,7 +393,7 @@
 
                 //Ajax查询
                 $.ajax({
-                    url: '<?=site_url("sell/client/Client/search_api")?>',
+                    url: '<?=site_url($_controller->api."/search_client")?>',
                     type: "get",
                     dataType: "json",
                     data: {
@@ -415,7 +425,7 @@
                 var _this = this;
                 //Ajax
                 $.ajax({
-                    url:'<?=site_url("sell/client/Client/add_api")?>',
+                    url:'<?=site_url($_controller->api."/add_client")?>',
                     type:"get",
                     dataType:"json",
                     data:{
@@ -447,25 +457,23 @@
             },
             //提交
             submit:function(){
-                //console.log(this.id);
-                //console.log(this.seller.id);
-                //console.log(this.client.id);
-                //console.log(this.payment);
-                //console.log(this.remark);
-                //console.log(this.selectList);
+                //检测
+                if(!this.check())
+                    return;
+
                 //获取总额
                 var total_num = $("#total_num").val();
                 var total_price = $("#total_price").val();
 
                 //Ajax
                 $.ajax({
-                    url:'<?=site_url("sell/form/Form/update_api")?>',
+                    url:'<?=site_url($_controller->controller."/update_asyn")?>',
                     type:"post",
                     dataType:"json",
                     data:{
                         "id":this.id,
                         "order_num":this.order_num,
-                        "user_id":this.seller.id,
+                        "user_id":this.user.id,
                         "client_id":this.client.id,
                         "payment":this.payment,
                         "remark":this.remark,
@@ -482,6 +490,19 @@
                         }
                     }
                 });
+            },
+            //检测
+            check:function(){
+                if(this.client == null){
+                    alert("请选择客户");
+                    return false;
+                }
+                else if(this.selectList.length == 0){
+                    alert("销售单不能为空");
+                    return false;
+                }
+
+                return true;
             }
         }
     })

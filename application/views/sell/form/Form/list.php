@@ -1,6 +1,5 @@
 <!-- 样式 -->
-<!--<link rel="stylesheet" href="<?/*=$base_url*/?>/assets/page/css/header.css">-->
-<link rel="stylesheet" href="/assets/page/css/list.css">
+<link rel="stylesheet" href="/assets/page/form/list.css">
 
 <!-- 二级导航 -->
 <div class="am-cf am-padding am-padding-bottom-0">
@@ -61,7 +60,7 @@
             <div class="options" v-if="item === selected">
                 <ul class="list-group">
                     <li class="list-group-item">打印</li>
-                    <li class="list-group-item" v-if="item.status == 0 || item.status == 1">配货</li>
+                    <li class="list-group-item" v-if="item.status == 0 || item.status == 1" v-on:click="allocate(item)">配货</li>
                     <li class="list-group-item" v-if="item.status == 0" v-on:click="modify(item)">修改</li>
                     <li class="list-group-item" v-if="item.status == 0" v-on:click="scrap(item)">作废</li>
                 </ul>
@@ -106,7 +105,7 @@
 
                 //Ajax
                 $.ajax({
-                    url:'<?=site_url($_controller->views."/search_api")?>',
+                    url:'<?=site_url($_controller->api."/search_sell")?>',
                     type:"post",
                     dataType:"json",
                     data:{
@@ -127,7 +126,7 @@
                     return;
 
                 //跳转
-                window.location.href='<?=site_url($_controller->views."/modify")?>/'+item.id;
+                window.location.href='<?=site_url($_controller->controller."/modify")?>/'+item.id;
             },
             //作废
             scrap:function(item){
@@ -135,7 +134,7 @@
                 var w=confirm("是否确定报废该销售单?")
                 if (w==true) {
                     $.ajax({
-                        url: '<?=site_url($_controller->views . "/scrap_api")?>',
+                        url: '<?=site_url($_controller->controller . "/scrap_asyn")?>',
                         type: "post",
                         dataType: "json",
                         data: {
@@ -150,6 +149,11 @@
                         }
                     });
                 }
+            },
+            //配货
+            allocate:function(item){
+                var url = '<?=site_url("sell/allocate/Allocate/index")?>/'+item.id;
+                location.href = url;
             }
         }
     })

@@ -12,6 +12,9 @@ class Form_model extends BaseModel{
 	 */
 	public $id,$order_num,$user_id,$client_id,$total_num,$total_price,$payment,$status,$remark,$create_at,$update_at,$create_user_id,$update_user_id;
 
+	/**
+	 * Form_model constructor.
+	 */
 	function __construct(){
 		$this->load->model('sell/form/FormSpu_model',"MSpu",true);
 		$this->load->model('sell/form/FormSku_model',"MSku",true);
@@ -60,14 +63,13 @@ class Form_model extends BaseModel{
 		date_default_timezone_set('Asia/Shanghai');
 
 		//保存当前时间戳
-		$this->user_id = 0;
 		$this->update_at = time();
-		$this->update_user_id = 0;
+		$this->update_user_id = $this->session->uid;
 
 		//如果是新增
 		if(empty($this->id)){
 			$this->create_at = time();
-			$this->create_user_id = 0;
+			$this->create_user_id = $this->session->uid;
 		}
 
 		//父类方法
@@ -86,7 +88,7 @@ class Form_model extends BaseModel{
 			case 2:
 				return "已完成";
 			case 3:
-				return "已废除";
+				return "已废弃";
 			default:
 				return "其他";
 		}
@@ -111,7 +113,7 @@ class Form_model extends BaseModel{
 	}
 
 	/**
-	 * 添加/修改 订单(事务)
+	 * 添加/修改
 	 */
 	public function updateForm($data){
 		//开始事务
@@ -129,21 +131,23 @@ class Form_model extends BaseModel{
 		//遍历spu
 		foreach($data["selectList"] as $spu_data){
 			$spu = $this->MSpu->_new();
+			$spu->load($spu_data);
 			$spu->form_id = $this->id;
-			$spu->spu_id = $spu_data["spu_id"];
-			$spu->snap_price = $spu_data["snap_price"];
-			$spu->snap_pic = $spu_data["snap_pic"];
-			$spu->snap_pic_normal = $spu_data["snap_pic_normal"];
+			//$spu->spu_id = $spu_data["spu_id"];
+			//$spu->snap_price = $spu_data["snap_price"];
+			//$spu->snap_pic = $spu_data["snap_pic"];
+			//$spu->snap_pic_normal = $spu_data["snap_normal"];
 			$spu->save();
 			//遍历sku
 			foreach($spu_data["skus"] as $sku_data){
 				$sku = $this->MSku->_new();
+				$sku->load($sku_data);
 				$sku->form_id = $this->id;
 				$sku->form_spu_id = $spu->id;
-				$sku->sku_id = $sku_data["sku_id"];
+				/*$sku->sku_id = $sku_data["sku_id"];
 				$sku->color = $sku_data["color"];
 				$sku->size = $sku_data["size"];
-				$sku->num = $sku_data["num"];
+				$sku->num = $sku_data["num"];*/
 				$sku->save();
 			}
 		}
@@ -161,9 +165,13 @@ class Form_model extends BaseModel{
 		}
 	}
 
-	/** 生成销售单号 */
+	/**
+	 * 生成销售单号
+	 * */
 	public function createOrderNum(){
-		return md5(time() . mt_rand(1,100));
+		list($t1, $t2) = explode(' ', microtime());
+		$time = (float)sprintf('%.0f',(floatval($t1)+floatval($t2))*1000);
+		return "HXS".$time;
 	}
 }
 ?>    
