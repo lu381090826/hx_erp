@@ -65,7 +65,33 @@ class Color_model extends HX_Model
         if (!$ret->row(0)) {
             return $this->suc_out_put();
         }
-        return $this->fail_out_put(1000, "颜色代码已存在");
+        return $this->fail_out_put(1000, "颜色代码:'{$request['color_num']}'已存在");
+    }
+
+    public function check_color_name_available($request)
+    {
+        $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1  AND Fname = ?;";
+
+        $ret = $this->db->query($s, [
+            $request['name']
+        ]);
+        if (!$ret->row(0)) {
+            return $this->suc_out_put();
+        }
+        return $this->fail_out_put(1000, "颜色名称:'{$request['name']}'已存在");
+    }
+
+    public function check_color_code_available($request)
+    {
+        $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1  AND Fcolor_code = ?;";
+
+        $ret = $this->db->query($s, [
+            $request['color_code']
+        ]);
+        if (!$ret->row(0)) {
+            return $this->suc_out_put();
+        }
+        return $this->fail_out_put(1000, "颜色:'#{$request['color_code']}'已存在");
     }
 
     private function insert_color_check($request)
@@ -82,6 +108,16 @@ class Color_model extends HX_Model
         }
 
         $ret = $this->check_color_num_available($request);
+        if ($ret['result'] != 0) {
+            $msg = $ret['res_info'];
+        }
+
+        $ret = $this->check_color_name_available($request);
+        if ($ret['result'] != 0) {
+            $msg = $ret['res_info'];
+        }
+
+        $ret = $this->check_color_code_available($request);
         if ($ret['result'] != 0) {
             $msg = $ret['res_info'];
         }
