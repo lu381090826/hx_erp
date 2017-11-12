@@ -93,46 +93,4 @@ $this->load->view('head');
 </form>
 
 <?php $this->load->view('footer'); ?>
-<script>
-    $(function () {
-        var $color_selected = $('#color-select');
-
-        $color_selected.on('change', function () {
-            var append_color_text = "";
-            $(this).find("option:selected").each(function (i, o) {
-                var color_code = $(this).attr("data");
-                var color_name = $(this).text();
-                append_color_text += "<div><span style='color:#" + color_code + ";background: #" + color_code + "'>ccc</span>"
-                    + color_name
-                    + "</div>"
-            });
-            if (append_color_text != "") {
-                $('#color-select-info').html("已选：<br>" + append_color_text);
-            }
-        });
-
-        var $size_selected = $('#size-select');
-
-        $size_selected.on('change', function () {
-            var append_size_text = "";
-            $(this).find("option:selected").each(function (i, o) {
-                append_size_text += "<div>" + $(this).text() + " </div>";
-            });
-            if (append_size_text != "") {
-                $('#size-select-info').html("已选：<br>" + append_size_text);
-            }
-        });
-
-        var $shop_selected = $('#shop-select');
-
-        $shop_selected.on('change', function () {
-            var append_shop_text = "";
-            $(this).find("option:selected").each(function (i, o) {
-                append_shop_text += "<div>" + $(this).text()+  "</div>";
-            });
-            if (append_shop_text != "") {
-                $('#shop-select-info').html("已选：<br>" + append_shop_text);
-            }
-        });
-    });
-</script>
+<script src="/assets/js/select.js"></script>
