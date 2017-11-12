@@ -27,30 +27,41 @@ $this->load->view('head');
 
         <div class="am-form-group">
             <label>分类</label>
-            <?= isset($category_list[$category_id])?$category_list[$category_id]:"" ?>
+            <?= isset($category_list[$category_id]) ? $category_list[$category_id] : "" ?>
         </div>
 
         <div class="am-form-group">
             <label>小图</label>
-            <img width="80px" src="<?= $pic ?>" />
+            <img width="80px" src="<?= $pic ?>"/>
         </div>
 
         <div class="am-form-group">
-            <label>颜色和尺码：</label>
-            <?php foreach ($sku_list as $row): ?>
-                <?php if (isset($color_cache[$row['color_id']]) && isset($size_cache[$row['size_id']])): ?>
-                    <div class="am-checkbox">
-                        <label>
-                         <span
-                             style="color: #<?= $color_cache[$row['color_id']]['color_code'] ?>;background: #<?= $color_cache[$row['color_id']]['color_code'] ?>;">
-                    ccc</span><?= $color_cache[$row['color_id']]['name'] ?>
-                            -<?= $color_cache[$row['color_id']]['color_num'] ?>
-                            <strong>|</strong>
-                            <?= $size_cache[$row['size_id']]['size_info'] ?> <?= $size_cache[$row['size_id']]['size_num'] ?>
-                        </label>
-                    </div>
-                <?php endif; ?>
-            <?php endforeach; ?>
+            <label>SKU：</label>
+            <table class="am-table">
+                <thead>
+                <tr>
+                    <th>sku_id</th>
+                    <th>颜色</th>
+                    <th>尺码</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($sku_list as $row): ?>
+                    <?php if (isset($color_cache[$row['color_id']]) && isset($size_cache[$row['size_id']])): ?>
+                        <tr>
+                            <td><?= $row['sku_id'] ?></td>
+                            <td><span
+                                    style="color: #<?= $color_cache[$row['color_id']]['color_code'] ?>;background: #<?= $color_cache[$row['color_id']]['color_code'] ?>;">
+                    ccc</span><?= $color_cache[$row['color_id']]['name'] ?></td>
+                            <td><?= $size_cache[$row['size_id']]['size_info'] ?></td>
+                            <td>删除</td>
+                        </tr>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+
+                </tbody>
+            </table>
         </div>
 
 
