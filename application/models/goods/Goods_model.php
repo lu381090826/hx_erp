@@ -21,7 +21,7 @@ class Goods_model extends HX_Model
 
     public function get_row_by_id($goods_id)
     {
-        $s = "SELECT * FROM {$this->table} u  WHERE u.Fstatus = 1 AND Fgoods_id = ? LIMIT 1;";
+        $s = "SELECT * FROM {$this->table}   WHERE Fgoods_id = ? LIMIT 1;";
         $ret = $this->db->query($s, [$goods_id]);
         return $this->suc_out_put($ret->row(0, 'array'));
     }
