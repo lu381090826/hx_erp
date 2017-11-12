@@ -587,3 +587,5 @@ ALTER TABLE `t_shop_goods`
 --
 ALTER TABLE `t_shop_goods`
   MODIFY `Fid` int(11) NOT NULL AUTO_INCREMENT;COMMIT;
+
+ALTER TABLE `HanXun`.`t_goods` ADD INDEX `idx_modify_time` (`Fmodify_time`);

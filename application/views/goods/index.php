@@ -210,8 +210,8 @@ $this->load->view('head');
             prev: "上一页",
             next: "下一页",
             jump: function (context, first) {
-                if(!first)
-                    eval(method+"(" + context.option.curr + ")");
+//                if(!first)
+//                    eval(method+"(" + context.option.curr + ")");
             }
         });
         $('#goods_search').collapse('close')
