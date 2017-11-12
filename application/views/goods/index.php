@@ -214,6 +214,7 @@ $this->load->view('head');
                     eval(method+"(" + context.option.curr + ")");
             }
         });
+        $('#goods_search').collapse('close')
     }
 
 
