@@ -27,7 +27,7 @@ $this->load->view('head');
 
         <div class="am-form-group">
             <label>分类</label>
-            <?= $category_list[$category_id] ?>
+            <?= isset($category_list[$category_id])?$category_list[$category_id]:"" ?>
         </div>
 
         <div class="am-form-group">

@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $this->load->view('head');
 ?>
 
-<input type="button" name="Submit" class="am-btn am-btn-default" onclick="javascript:history.back(-1);"
+<input type="button" name="Submit" autocomplete="off" class="am-btn am-btn-default" onclick="javascript:history.back(-1);"
        value="返回上一页">
 <form action="/sku/add_sku" class="am-form" id="doc-vld-msg" method="post" enctype="multipart/form-data">
     <fieldset>

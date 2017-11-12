@@ -5,7 +5,7 @@ $this->load->view('head');
 
 <input type="button" name="Submit" class="am-btn am-btn-default" onclick="javascript:history.back(-1);"
        value="返回上一页">
-<form action="/sku/add_sku" class="am-form" id="doc-vld-msg" method="post" enctype="multipart/form-data">
+<form action="/sku/add_sku" autocomplete="off" class="am-form" id="doc-vld-msg" method="post" enctype="multipart/form-data">
     <fieldset>
         <legend>添加商品</legend>
         <div class="am-form-group">
