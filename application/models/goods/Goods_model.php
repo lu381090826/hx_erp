@@ -220,7 +220,7 @@ class Goods_model extends HX_Model
         $this->total_num = $ret->num_rows();
 
 
-        $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1 {$params} ORDER BY Fcreate_time DESC LIMIT ? , ?";
+        $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1 {$params} ORDER BY Fmodify_time DESC LIMIT ? , ?";
 
         list($offset, $limit) = parent::pageUtils($request);
 
