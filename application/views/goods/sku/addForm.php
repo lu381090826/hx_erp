@@ -62,7 +62,7 @@ $this->load->view('head');
                     </option>
                 <?php endforeach; ?>
             </select>
-            <div id="color-select-info" style="border: black"></div>
+            <div id="color-select-info"></div>
         </div>
 
         <div class="am-form-group">

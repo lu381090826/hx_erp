@@ -40,15 +40,6 @@ $this->load->view('head');
         </div>
 
         <div class="am-form-group">
-            <label for="doc-select-1">添加到店铺:</label>
-            <select multiple data-am-selected="{searchBox: 1,maxHeight:200}">
-                <?php foreach ($shop_list as $shop): ?>
-                    <option value="<?=$shop['id']?>" <?php if($shop['is_check']):?>selected<?php endif;?>><?=$shop['name']?></option>
-                <?php endforeach;?>
-            </select>
-        </div>
-
-        <div class="am-form-group">
             <label for="doc-vld-price">价格（单位元）<span style="color: red">*</span>：</label>
             <input type="text" id="doc-vld-price" minlength="1" placeholder="输入"
                    name="price" class="am-form-field"
@@ -65,38 +56,44 @@ $this->load->view('head');
         </div>
 
         <div class="am-form-group">
+            <label for="doc-select-1">店铺：</label>
+            <select id="shop-select" multiple data-am-selected="{searchBox: 1,maxHeight:200}" name="shop_id[]">
+                <?php foreach ($shop_list as $shop): ?>
+                    <option value="<?=$shop['id']?>" <?php if($shop['is_check']):?>selected<?php endif;?>><?=$shop['name']?></option>
+                <?php endforeach;?>
+            </select>
+            <div id="shop-select-info"></div>
+        </div>
+
+        <div class="am-form-group">
             <label>颜色：</label>
-            <?php foreach ($color_list as $row): ?>
-                <div class="am-checkbox">
-                    <label>
-                        <input type="checkbox" name="color[]" value="<?= $row['id'] ?>"
-                            <?php if (!empty($row['is_select'])): ?>
-                                checked
-                            <?php endif; ?>
-                        > <span
-                            style="color: #<?= $row['color_code'] ?>;background: #<?= $row['color_code'] ?>;">
-                    ccc</span><?= $row['name'] ?> <?= $row['color_num'] ?>
-                    </label>
-                </div>
-            <?php endforeach; ?>
+            <select id="color-select" multiple data-am-selected="{searchBox: 1,maxHeight: 200}" name="color[]">
+                <?php foreach ($color_list as $row): ?>
+                    <option data="<?= $row['color_code'] ?>"
+                        <?php if (!empty($row['is_select'])): ?>
+                            selected
+                        <?php endif; ?>
+                            value="<?= $row['id'] ?>">
+                        <?= $row['name'] ?> <?= $row['color_num'] ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+            <div id="color-select-info"></div>
         </div>
 
         <div class="am-form-group">
             <label>尺码：</label>
-            <?php foreach ($size_list as $row): ?>
-                <div class="am-checkbox">
-                    <label>
-                        <input type="checkbox" name="size[]"
-                               value="<?= $row['id'] ?>"
-                            <?php if (!empty($row['is_select'])): ?>
-                                checked
-                            <?php endif; ?>
-                        >
-                        <?= $row['size_info'] ?>
-                         <?= $row['size_num'] ?>
-                    </label>
-                </div>
-            <?php endforeach; ?>
+            <select id="size-select" multiple data-am-selected="{searchBox: 1,maxHeight: 200}" name="size[]">
+                <?php foreach ($size_list as $row): ?>
+                    <option value="<?= $row['id'] ?>"
+                        <?php if (!empty($row['is_select'])): ?>
+                        selected
+                    <?php endif; ?>>
+                        <?= $row['size_info'] ?> <?= $row['size_num'] ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+            <div id="size-select-info"></div>
         </div>
 
         <div class="am-form-group">
@@ -116,8 +113,59 @@ $this->load->view('head');
 
 <?php $this->load->view('footer'); ?>
 <script>
-    $(".am-input-sm").on('change','input',function(){
-        alert(1);
-        console.log($(this).val())
-    })
+    function extracted_color() {
+        var append_color_text = "";
+        $(this).find("option:selected").each(function (i, o) {
+            var color_code = $(this).attr("data");
+            var color_name = $(this).text();
+            append_color_text += "<div><span style='color:#" + color_code + ";background: #" + color_code + "'>ccc</span>"
+                + color_name
+                + "</div>"
+        });
+        if (append_color_text != "") {
+            $('#color-select-info').html("已选：<br>" + append_color_text);
+        }
+    }
+    function extracted_size() {
+        var append_size_text = "";
+        $(this).find("option:selected").each(function (i, o) {
+            append_size_text += "<div>" + $(this).text() + " </div>";
+        });
+        if (append_size_text != "") {
+            $('#size-select-info').html("已选：<br>" + append_size_text);
+        }
+    }
+    function extracted_shop() {
+        var append_shop_text = "";
+        $(this).find("option:selected").each(function (i, o) {
+            append_shop_text += "<div>" + $(this).text() + "</div>";
+        });
+        if (append_shop_text != "") {
+            $('#shop-select-info').html("已选：<br>" + append_shop_text);
+        }
+    }
+
+    extracted_color.call($('#color-select'));
+    extracted_size.call($('#size-select'));
+    extracted_shop.call($('#shop-select'));
+
+    $(function () {
+        var $color_selected = $('#color-select');
+
+        $color_selected.on('change', function () {
+            extracted_color.call(this);
+        });
+
+        var $size_selected = $('#size-select');
+
+        $size_selected.on('change', function () {
+            extracted_size.call(this);
+        });
+
+        var $shop_selected = $('#shop-select');
+
+        $shop_selected.on('change', function () {
+            extracted_shop.call(this);
+        });
+    });
 </script>
