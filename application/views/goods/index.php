@@ -201,8 +201,19 @@ $this->load->view('head');
     });
 
     function search_goods() {
-        api_result = null;
         get_goods(1);
+        $("#page").empty();
+        $('#page').page({
+            pages: all_pages,
+            curr: curr_page,
+            groups: 5,
+            prev: "上一页",
+            next: "下一页",
+            jump: function (context, first) {
+                if(!first)
+                    eval(method+"(" + context.option.curr + ")");
+            }
+        });
     }
 
 
@@ -222,7 +233,8 @@ $this->load->view('head');
                     all_pages = result.pages;
                     from_contant.append(goods_show(result));
                 }
-            })
+            });
+
     }
 
     function goods_show(result) {
