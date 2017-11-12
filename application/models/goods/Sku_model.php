@@ -51,6 +51,9 @@ class Sku_model extends HX_Model
         $category_cache = $this->category_m->category_cache();
 
         foreach ($ret->result('array') as $row) {
+            if (empty($color_cache[$row['color_id']]) || empty($size_cache[$row['size_id']]) || empty($category_cache[$row['category_id']])) {
+                continue;
+            }
             $row['color_info'] = $color_cache[$row['color_id']];
             $row['size_info'] = $size_cache[$row['size_id']];
             $row['category_info'] = $category_cache[$row['category_id']];
