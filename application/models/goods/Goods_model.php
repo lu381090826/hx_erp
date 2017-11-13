@@ -29,7 +29,7 @@ class Goods_model extends HX_Model
     private function modify_goods_check($request)
     {
         $insert_params = [];
-        $insert_params['Fname'] = isset($request['name'])?$request['name']:'';
+        $insert_params['Fname'] = isset($request['name']) ? $request['name'] : '';
 
         if (empty($request['goods_id'])) {
             show_error('商品编号有误');
@@ -92,8 +92,8 @@ class Goods_model extends HX_Model
             $this->db->insert($this->table, $insert_params);
         }
 
-        if(!empty($request['shop_id'])){
-            $this->goods_addto_shop($request['shop_id'],$request['goods_id']);
+        if (!empty($request['shop_id'])) {
+            $this->goods_addto_shop($request['shop_id'], $request['goods_id']);
         }
 
     }
@@ -140,30 +140,31 @@ class Goods_model extends HX_Model
         return $ret->result('array');
     }
 
-    private function searchParams($request){
+    private function searchParams($request)
+    {
         $sql = "";
         if (!empty($request['goods_id'])) {
             $sql .= " AND Fgoods_id LIKE '%{$request['goods_id']}%' ";
         }
-        if(!empty($request['price_max'])){
+        if (!empty($request['price_max'])) {
             $sql .= " AND Fprice <= {$request['price_max']} ";
         }
-        if(!empty($request['price_min'])){
+        if (!empty($request['price_min'])) {
             $sql .= " AND Fprice >= {$request['price_min']} ";
         }
-        if(!empty($request['record_number'])){
+        if (!empty($request['record_number'])) {
             $sql .= " AND Frecord_number LIKE '%{$request['record_number']}%' ";
         }
-        if(!empty($request['brand'])){
+        if (!empty($request['brand'])) {
             $sql .= " AND Fbrand LIKE '%{$request['brand']}%' ";
         }
-        if(!empty($request['category_id'])){
+        if (!empty($request['category_id'])) {
             $sql .= " AND Fcategory_id = {$request['category_id']} ";
         }
-        if(!empty($request['category'])){
+        if (!empty($request['category'])) {
             $sql .= " AND Fcategory LIKE '%{$request['category']}%' ";
         }
-        if(!empty($request['begin_time'])){
+        if (!empty($request['begin_time'])) {
             $sql .= " AND Fcreate_time >= '{$request['begin_time']}' ";
         }
         if (!empty($request['end_time'])) {
@@ -219,8 +220,7 @@ class Goods_model extends HX_Model
         $ret = $this->db->query($s);
         $this->total_num = $ret->row(0, 'array')['count'];
 
-
-        $s = "SELECT Fgoods_id,Fcost,Fprice,Fpic,Fpic_normal,Fbrand,Fcategory_id,Fcategory,Fmemo,Fstatus,Fop_uid,Fcreate_time,Fmodify_time 
+        $s = "SELECT Fgoods_id 
               FROM {$this->table} WHERE Fstatus = 1 {$params} ORDER BY Fmodify_time DESC LIMIT ? , ?";
 
         list($offset, $limit) = parent::pageUtils($request);
@@ -231,6 +231,16 @@ class Goods_model extends HX_Model
         ]);
 
         $result_arr = $ret->result('array');
+
+        if (!empty($result_arr)) {
+            $s = "SELECT 
+              Fgoods_id,Fcost,Fprice,Fpic,Fpic_normal,Fbrand,Fcategory_id,Fcategory,
+              Fmemo,Fstatus,Fop_uid,Fcreate_time,Fmodify_time
+              FROM {$this->table} WHERE Fgoods_id in ('" . implode("','", array_column($result_arr, "goods_id")) . "')";
+
+            $ret = $this->db->query($s);
+            $result_arr = $ret->result('array');
+        }
 
         return $this->suc_out_put($result_arr);
     }
