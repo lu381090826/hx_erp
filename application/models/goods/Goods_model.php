@@ -215,9 +215,9 @@ class Goods_model extends HX_Model
     {
         $params = $this->searchParams($request);
 
-        $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1 {$params} ";
+        $s = "SELECT count(1) as Fcount FROM {$this->table} WHERE Fstatus = 1 {$params} ";
         $ret = $this->db->query($s);
-        $this->total_num = $ret->num_rows();
+        $this->total_num = $ret->row(0, 'array')['count'];
 
 
         $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1 {$params} ORDER BY Fmodify_time DESC LIMIT ? , ?";
