@@ -220,7 +220,7 @@ class Goods_model extends HX_Model
         $ret = $this->db->query($s);
         $this->total_num = $ret->row(0, 'array')['count'];
 
-        $s = "SELECT Fgoods_id 
+        $s = "SELECT Fgoods_id
               FROM {$this->table} WHERE Fstatus = 1 {$params} ORDER BY Fmodify_time DESC LIMIT ? , ?";
 
         list($offset, $limit) = parent::pageUtils($request);
@@ -229,7 +229,7 @@ class Goods_model extends HX_Model
             $offset,
             $limit
         ]);
-
+        log_in("sql1:".$this->db->last_query());
         $result_arr = $ret->result('array');
 
         if (!empty($result_arr)) {
@@ -239,6 +239,7 @@ class Goods_model extends HX_Model
               FROM {$this->table} WHERE Fgoods_id in ('" . implode("','", array_column($result_arr, "goods_id")) . "')";
 
             $ret = $this->db->query($s);
+            log_in("sql2:".$this->db->last_query());
             $result_arr = $ret->result('array');
         }
 
