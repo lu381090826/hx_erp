@@ -221,8 +221,7 @@ class Goods_model extends HX_Model
         log_in("sql0:".$this->db->last_query());
         $this->total_num = $ret->row(0, 'array')['count'];
 
-        $s = "SELECT Fgoods_id
-              FROM {$this->table} WHERE Fstatus = 1 {$params} ORDER BY Fmodify_time DESC LIMIT ? , ?";
+        $s = "SELECT Fgoods_id FROM {$this->table} WHERE Fstatus = 1 {$params} ORDER BY Fmodify_time DESC LIMIT ? , ?";
 
         list($offset, $limit) = parent::pageUtils($request);
 
@@ -234,10 +233,7 @@ class Goods_model extends HX_Model
         $result_arr = $ret->result('array');
 
         if (!empty($result_arr)) {
-            $s = "SELECT 
-              Fgoods_id,Fcost,Fprice,Fpic,Fpic_normal,Fbrand,Fcategory_id,Fcategory,
-              Fmemo,Fstatus,Fop_uid,Fcreate_time,Fmodify_time
-              FROM {$this->table} WHERE Fgoods_id in ('" . implode("','", array_column($result_arr, "goods_id")) . "')";
+            $s = "SELECT Fgoods_id,Fcost,Fprice,Fpic,Fpic_normal,Fbrand,Fcategory_id,Fcategory,Fmemo,Fstatus,Fop_uid,Fcreate_time,Fmodify_time FROM {$this->table} WHERE Fgoods_id in ('" . implode("','", array_column($result_arr, "goods_id")) . "')";
 
             $ret = $this->db->query($s);
             log_in("sql2:".$this->db->last_query());
