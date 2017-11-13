@@ -216,30 +216,24 @@ class Goods_model extends HX_Model
     {
         $params = $this->searchParams($request);
 
-        $s = "SELECT Fgoods_id as Fcount FROM {$this->table} WHERE Fstatus = 1 {$params} ";
-        $query = $this->db->query($s);
-        log_in("sql0:".$this->db->last_query());
-        $this->total_num = $query->num_rows();
+        $s = "SELECT count(Fgoods_id) as Fcount FROM (SELECT Fgoods_id FROM t_goods WHERE fstatus=1 {$params}) a";
+        $ret = $this->db->query($s);
+        $this->total_num = $ret->row(0, 'array')['count'];
 
         $s = "SELECT Fgoods_id FROM {$this->table} WHERE Fstatus = 1 {$params} ORDER BY Fmodify_time DESC LIMIT ? , ?";
 
         list($offset, $limit) = parent::pageUtils($request);
 
-
         $ret = $this->db->query($s, [
             $offset,
             $limit
         ]);
-
-        log_in("sql1:".$this->db->last_query());
         $result_arr = $ret->result('array');
-
 
         if (!empty($result_arr)) {
             $s = "SELECT Fgoods_id,Fcost,Fprice,Fpic,Fpic_normal,Fbrand,Fcategory_id,Fcategory,Fmemo,Fstatus,Fop_uid,Fcreate_time,Fmodify_time FROM {$this->table} WHERE Fgoods_id in ('" . implode("','", array_column($result_arr, "goods_id")) . "')";
 
             $ret = $this->db->query($s);
-            log_in("sql2:".$this->db->last_query());
             $result_arr = $ret->result('array');
         }
 
