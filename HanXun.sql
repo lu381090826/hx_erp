@@ -591,3 +591,5 @@ ALTER TABLE `t_shop_goods`
 ALTER TABLE `HanXun`.`t_goods` ADD INDEX `idx_modify_time` (`Fmodify_time`);
 ALTER TABLE `HanXun`.`t_sku` ADD INDEX `goods_id` (`Fgoods_id`);
 ALTER TABLE `HanXun`.`t_sku` ADD INDEX `idx_modify_time` (`Fmodify_time`);
+ALTER TABLE `HanXun`.`t_goods` ADD INDEX `idx_status` (`Fstatus`);
+ALTER TABLE `HanXun`.`t_goods` ADD INDEX `idx_goods_id_status` (`Fgoods_id`, `Fstatus`);

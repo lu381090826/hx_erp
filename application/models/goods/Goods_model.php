@@ -216,7 +216,7 @@ class Goods_model extends HX_Model
     {
         $params = $this->searchParams($request);
 
-        $s = "SELECT count(Fgoods_id) as Fcount FROM (SELECT Fgoods_id FROM t_goods WHERE fstatus=1 {$params}) a";
+        $s = "SELECT count(1) as Fcount FROM {$this->table} WHERE fstatus=1 {$params}";
         $ret = $this->db->query($s);
         $this->total_num = $ret->row(0, 'array')['count'];
 
