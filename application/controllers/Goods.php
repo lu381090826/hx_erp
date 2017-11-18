@@ -177,8 +177,8 @@ class Goods extends HX_Controller
         $category_list = $this->category_m->category_cache();
 
 //加载PHPExcel的类
-        $this->load->library('phpexcel');
-        $this->load->library('phpexcel/iofactory');
+        $this->load->library('PHPExcel');
+        $this->load->library('PHPExcel/IOFactory');
 //创建PHPExcel实例
         $excel = $this->phpexcel;
         $excel->getActiveSheet()->setCellValue("A1", "货号");
