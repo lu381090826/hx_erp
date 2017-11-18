@@ -10,10 +10,29 @@ class Goods extends HX_Controller
 
     public function index()
     {
-        $this->load->model('goods/category_model', 'm_category');
-        $data['category_list'] = $this->m_category->get_all_list()['result_rows'];
+        $this->load->model('goods/category_model', 'category_m');
+        $data['category_list'] = $this->category_m->category_cache();
 
-        $this->load->view('goods/index',$data);
+        $this->load->model('goods/color_model', 'color_m');
+        $data['color_list'] = $this->color_m->color_cache();
+
+        $this->load->model('goods/size_model', 'size_m');
+        $data['size_list'] = $this->size_m->size_cache();
+
+        $this->load->view('goods/index', $data);
+    }
+
+    public function action_export()
+    {
+        $this->load->model('goods/goods_model', 'goods_m');
+        $request = $this->input->post();
+
+        $request['limit'] = 10000;
+        $res = $this->goods_m->search_goods($request)['result_rows'];
+
+        $excel = $this->export_init($res);
+
+        $this->export_excel($excel);
     }
 
     public function get_category($page = 1)
@@ -102,7 +121,7 @@ class Goods extends HX_Controller
     public function get_goods($page = 0)
     {
         $this->load->model('goods/goods_model', 'goods_m');
-        $request=$this->input->post();
+        $request = $this->input->post();
         $request['page'] = $page;
         $res = $this->goods_m->search_goods($request);
         json_out_put($res);
@@ -117,7 +136,8 @@ class Goods extends HX_Controller
         $this->sku_m->unset_sku($goods_id);
     }
 
-    public function search_goods(){
+    public function search_goods()
+    {
         $this->load->model('goods/goods_model', 'goods_m');
 
         $request = $this->input->post();
@@ -125,5 +145,68 @@ class Goods extends HX_Controller
         $result = $this->goods_m->search_goods($request);
 
         json_out_put($result);
+    }
+
+    /**
+     * @param $excel
+     */
+    private function export_excel($excel)
+    {
+        //输出到浏览器
+        $write = new PHPExcel_Writer_Excel2007($excel);
+        header("Pragma: public");
+        header("Expires: 0");
+        header("Cache-Control:must-revalidate, post-check=0, pre-check=0");
+        header("Content-Type:application/force-download");
+        header("Content-Type:application/vnd.ms-execl");
+        header("Content-Type:application/octet-stream");
+        header("Content-Type:application/download");
+        header('Content-Disposition:attachment;filename="'.date('YmdHi').'.xlsx"');
+        header("Content-Transfer-Encoding:binary");
+        $write->save('php://output');
+    }
+
+    /**
+     * @param $res
+     * @param $category_list
+     * @return mixed
+     */
+    private function export_init($res)
+    {
+        $this->load->model('goods/category_model', 'category_m');
+        $category_list = $this->category_m->category_cache();
+
+//加载PHPExcel的类
+        $this->load->library('phpexcel');
+        $this->load->library('phpexcel/iofactory');
+//创建PHPExcel实例
+        $excel = $this->phpexcel;
+        $excel->getActiveSheet()->setCellValue("A1", "货号");
+        $excel->getActiveSheet()->setCellValue("B1", "成本");
+        $excel->getActiveSheet()->setCellValue("C1", "价格");
+        $excel->getActiveSheet()->setCellValue("D1", "品牌");
+        $excel->getActiveSheet()->setCellValue("F1", "分类");
+        $excel->getActiveSheet()->setCellValue("G1", "备注");
+        $excel->getActiveSheet()->setCellValue("H1", "状态");
+        $excel->getActiveSheet()->setCellValue("I1", "操作人");
+        $excel->getActiveSheet()->setCellValue("J1", "创建时间");
+        $excel->getActiveSheet()->setCellValue("K1", "修改时间");
+//下面介绍项目中用到的几个关于excel的操作
+        foreach ($res as $j => $r) {
+            $k = $j + 2;
+            //为单元格赋值
+            $excel->getActiveSheet()->setCellValue("A{$k}", $r['goods_id']);
+            $excel->getActiveSheet()->setCellValue("B{$k}", $r['cost']);
+            $excel->getActiveSheet()->setCellValue("C{$k}", $r['price']);
+            $excel->getActiveSheet()->setCellValue("D{$k}", $r['brand']);
+            $excel->getActiveSheet()->setCellValue("E{$k}", $category_list[$r['category_id']]);
+            $excel->getActiveSheet()->setCellValue("F{$k}", $r['category']);
+            $excel->getActiveSheet()->setCellValue("G{$k}", $r['memo']);
+            $excel->getActiveSheet()->setCellValue("H{$k}", $r['status']);
+            $excel->getActiveSheet()->setCellValue("I{$k}", $r['op_uid']);
+            $excel->getActiveSheet()->setCellValue("J{$k}", $r['create_time']);
+            $excel->getActiveSheet()->setCellValue("K{$k}", $r['modify_time']);
+        }
+        return $excel;
     }
 }

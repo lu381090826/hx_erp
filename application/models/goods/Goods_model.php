@@ -229,7 +229,6 @@ class Goods_model extends HX_Model
             $offset,
             $limit
         ]);
-        log_in($this->db->last_query());
         $result_arr = $ret->result('array');
 
         if (!empty($result_arr)) {
