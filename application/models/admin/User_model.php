@@ -141,4 +141,30 @@ class User_model extends HX_Model
         }
         return $user_info['result_rows'];
     }
+
+    public function user_cache()
+    {
+        $arr = [];
+        if ($this->config->item('redis_default')['cache_on']) {
+            $user_cache = 'USER_CACHE';
+            try {
+                $this->load->driver('cache');
+                if (empty($this->cache->redis->get($user_cache))) { //如果未设置
+                    $arr = $this->get_user_list();
+
+                    $this->cache->redis->save($user_cache, $arr, 86400); //设置
+                } else {
+                    $arr = $this->cache->redis->get($user_cache);  //从缓存中直接读取对应的值
+                }
+
+            } catch (Exception $e) {
+                log_error($e->getMessage());
+            }
+        }
+
+        if (empty($arr)) {
+            $arr = $this->get_user_list();
+        }
+        return $arr;
+    }
 }

@@ -97,6 +97,17 @@
                         </a>
                     </div>
                 <?php } ?>
+
+                <?php if (check_auth(6)) { ?>
+                    <div class="am-topbar-right">
+                        <a href="/data">
+                            <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span
+                                    class="am-icon-cogs"></span>
+                                数据报表
+                            </button>
+                        </a>
+                    </div>
+                <?php } ?>
                 <div class="am-topbar-right">
                     <a href="/login/login_out">
                         <button class="am-btn am-btn-primary am-topbar-btn am-btn-sm"><span

@@ -176,6 +176,9 @@ class Goods extends HX_Controller
         $this->load->model('goods/category_model', 'category_m');
         $category_list = $this->category_m->category_cache();
 
+        $this->load->model('admin/user_model', 'user_m');
+        $category_list = $this->user_m->category_cache();
+
 //加载PHPExcel的类
         $this->load->library('PHPExcel');
         $this->load->library('PHPExcel/IOFactory');
