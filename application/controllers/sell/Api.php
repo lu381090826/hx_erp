@@ -37,10 +37,25 @@ class Api extends CI_Controller {
 
         //查询
         $model = $this->m_client;
-        $model->name = $_REQUEST["name"];
-        $model->phone = $_REQUEST["phone"];
+        $model->load($_REQUEST);
 
         //保存
+        if($model->save())
+            $this->apiresult->sentApiSuccess($model);
+        else
+            $this->apiresult->sentApiError(-1,"fail");
+    }
+
+    public function save_client(){
+        //参数检测
+        $this->apiresult->checkApiParameter(['id'],-1);
+        $id = $_REQUEST["id"];
+
+        //获得用户
+        $model = $this->m_client->get($id);
+        $model->load($_REQUEST);
+
+        //保存用户
         if($model->save())
             $this->apiresult->sentApiSuccess($model);
         else
@@ -57,7 +72,7 @@ class Api extends CI_Controller {
 
         //查询
         $model = $this->m_client;
-        $result = $model->likeSearch($key);
+        $result = $model->searchLikeAll($key);
 
         //输出
         $this->apiresult->sentApiSuccess($result->list);

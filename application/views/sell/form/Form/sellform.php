@@ -65,14 +65,72 @@
                 <!--<a onclick="javascript:$('#modal-client-add').modal({show:true})"><span class="glyphicon glyphicon-plus"></span>添加</a>-->
                 <a type="button" data-am-modal="{target: '#modal-client-add', closeViaDimmer: 0}"><span class="glyphicon glyphicon-plus"></span>添加</a>
             </label>
-            <div class="input-compose">
-                <div><input type="text" class="form-control" placeholder="搜索客户" :value="clientKey" v-on:change="clientChange"></div>
-                <div v-if="client != null"><input type="text" class="form-control" placeholder="客户名称/电话" disabled :value="client | client_show"></div>
-                <div v-else><input type="text" class="form-control" placeholder="客户名称/电话" disabled></div>
-            </div>
-            <div class="form-group"></div>
-            <div class="form-group">
-                <button type="button" class="btn btn-primary" style="width: 100%" v-for="item in clientList" v-on:click="clientSelect(item)">{{item.name}}({{item.phone}})</button>
+            <div class="panel-group" id="accordion_client" role="tablist" aria-multiselectable="true">
+                <div class="panel panel-primary">
+                    <div class="panel-heading" role="tab" id="heading_client_1" >
+                        <a role="button" data-toggle="collapse" data-parent="#accordion_client" href="#collapse_client_1" aria-expanded="true" aria-controls="collapse_client_1">
+                            <h1 class="panel-title" >
+                                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                                <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
+                                销售客户：
+                                <span v-if="client != null">{{client.name}}</span>
+                                <span v-else>未设置</span>
+                            </h1>
+                        </a>
+                    </div>
+                    <div id="collapse_client_1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading_client_1">
+                        <div class="panel-body">
+                            <!-- 客户搜索 -->
+                            <div class="form-group">
+                                <label>搜索客户</label>
+                                <input type="text" class="form-control" placeholder="搜索客户" :value="clientKey" v-on:change="clientChange">
+                            </div>
+
+                            <!-- 客户信息 -->
+                            <div v-if="client != null">
+                                <!-- 客户名称 -->
+                                <div class="form-group">
+                                    <label>客户名称</label>
+                                    <div class="input-compose">
+                                        <div><input type="text" class="form-control" placeholder="客户名称" v-model="client.name"></div>
+                                        <div><input type="text" class="form-control" placeholder="客户ID" v-model="client.id" disabled></div>
+                                    </div>
+                                </div>
+
+                                <!-- 联系电话 -->
+                                <div class="form-group">
+                                    <label>联系电话</label>
+                                    <input type="text" class="form-control" placeholder="联系电话" v-model="client.phone">
+                                </div>
+
+                                <!-- 收货方式 -->
+                                <div class="form-group">
+                                    <label>收货方式</label>
+                                    <div class="input-compose">
+                                        <select class="form-control" v-model="client.delivery_type">
+                                            <option v-for="(item, index) in deliveryTypeMap" :value="index">{{item}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- 收货方式 -->
+                                <div class="form-group" v-if="client.delivery_type == 0">
+                                    <label>收货地址</label>
+                                    <input type="text" class="form-control" placeholder="收货地址" v-model="client.delivery_addr">
+                                </div>
+
+                                <!-- 保存按钮 -->
+                                <button type="button" class="btn btn-primary" v-on:click="clientSave()">保存信息</button>
+                            </div>
+
+                            <!-- 查询结果 -->
+                            <div class="form-group"></div>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" style="width: 100%" v-for="item in clientList" v-on:click="clientSelect(item)">{{item.name}}({{item.phone}})</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <!-- 付款方式 -->
@@ -290,6 +348,7 @@
                 "phone":"",
             },
             "paymentMap": <?=json_encode($paymentMap)?>,
+            "deliveryTypeMap": <?=json_encode($deliveryTypeMap)?>,
         },
         created:function() {
             //this
@@ -414,7 +473,7 @@
             //选择客户
             clientSelect:function(client){
                 //更改查询框内容
-                this.clientKey = client.id;
+                this.clientKey = client.name;
                 //更改客户
                 this.client = client;
                 this.clientList = [];
@@ -430,18 +489,17 @@
                     dataType:"json",
                     data:{
                         "name":this.client_input.name,
-                        "phone":this.client_input.phone
+                        "phone":this.client_input.phone,
+                        "addr":"",
+                        "delivery_type":0,
+                        "delivery_addr":"",
                     },
                     success:function(result) {
                         if(result.state.return_code == 0) {
                             //更改查询框内容
-                            _this.clientKey = result.data.id;
+                            _this.clientKey = result.data.name;
                             //更改客户信息
-                            _this.client.id = result.data.id;
-                            _this.client.name = result.data.name;
-                            _this.client.phone = result.data.phone;
-                            _this.client.source = result.data;
-                            _this.clientList = [];
+                            _this.client = result.data;
                             //关闭
                             var $modal = $('#modal-client-add');
                             $modal.modal('close');
@@ -452,6 +510,33 @@
                         else {
                             alert(result.state.return_msg)
                         }
+                    }
+                });
+            },
+            //保存用户信息
+            clientSave:function(){
+                //判断是否有选择用户
+                if(this.client == null)
+                    return;
+
+                //调用API保存
+                $.ajax({
+                    url:'<?=site_url($_controller->api."/save_client")?>',
+                    type:"post",
+                    dataType:"json",
+                    data:{
+                        "id":this.client.id,
+                        "name":this.client.name,
+                        "phone":this.client.phone,
+                        "addr":this.client.addr,
+                        "delivery_type":this.client.delivery_type,
+                        "delivery_addr":this.client.delivery_addr,
+                    },
+                    success:function(result) {
+                        if(result.state.return_code == 0)
+                            alert("保存成功");
+                        else
+                            alert("保存失败");
                     }
                 });
             },
