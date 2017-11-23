@@ -46,6 +46,9 @@ class Api extends CI_Controller {
             $this->apiresult->sentApiError(-1,"fail");
     }
 
+    /**
+     * 保存客户信息接口
+     */
     public function save_client(){
         //参数检测
         $this->apiresult->checkApiParameter(['id'],-1);

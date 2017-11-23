@@ -11,6 +11,7 @@ class Form_model extends BaseModel{
 	 * @fields
 	 */
 	public $id,$order_num,$user_id,$client_id,$total_num,$total_price,$payment,$status,$remark,$create_at,$update_at,$create_user_id,$update_user_id;
+	public $total_amount,$delivery_type,$delivery_addr,$receipt_date,$remark_images;
 
 	/**
 	 * Form_model constructor.
@@ -32,6 +33,7 @@ class Form_model extends BaseModel{
 			'client_id' => '客户ID',
 			'tatol_num' => '合计数量',
 			'total_price' => '合计金额',
+			'total_amount'=> '订单金额',
 			'payment' => '支付方法',
 			'remark' => '备注',
 			'status' => '状态',
@@ -39,6 +41,10 @@ class Form_model extends BaseModel{
 			'update_at' => '更新时间',
 			'create_user_id' => '创建人ID',
 			'update_user_id' => '更新人ID',
+			'delivery_type'=>'收货方式',
+			'delivery_addr'=>'收货地址',
+			'receipt_date'=>'收款日期',
+			'remark_images'=>'图片备注',
 		];
 	}
 
@@ -70,6 +76,7 @@ class Form_model extends BaseModel{
 		if(empty($this->id)){
 			$this->create_at = time();
 			$this->create_user_id = $this->session->uid;
+			$this->total_amount = $this->total_price;
 		}
 
 		//父类方法
@@ -130,6 +137,9 @@ class Form_model extends BaseModel{
 
 		//遍历spu
 		foreach($data["selectList"] as $spu_data){
+			//去除多余字段
+			unset($spu_data["filter"]);
+			//保存SKU
 			$spu = $this->MSpu->_new();
 			$spu->load($spu_data);
 			$spu->form_id = $this->id;
