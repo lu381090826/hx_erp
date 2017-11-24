@@ -84,6 +84,7 @@ class Form_model extends BaseModel{
 	}
 
 	/**
+	 * 获取状态名
 	 * @return string
 	 */
 	public function getStatusName(){
@@ -91,14 +92,27 @@ class Form_model extends BaseModel{
 			case 0:
 				return "待配货";
 			case 1:
-				return "已配货";
+				return "配货中";
 			case 2:
-				return "已完成";
+				return "已配货";
 			case 3:
-				return "已废弃";
+				return "已作废";
 			default:
 				return "其他";
 		}
+	}
+
+	/**
+	 * 获取状态映射表
+	 * @return object
+	 */
+	public function getStatusMap(){
+		return (object)[
+			0=> "待配货",
+			1=> "配货中",
+			2=> "已配货",
+			3=> "已作废",
+		];
 	}
 
 	/**
@@ -182,6 +196,75 @@ class Form_model extends BaseModel{
 		list($t1, $t2) = explode(' ', microtime());
 		$time = (float)sprintf('%.0f',(floatval($t1)+floatval($t2))*1000);
 		return "HXS".$time;
+	}
+
+	/**
+	 * 联表模糊查询
+	 * @param array $condition
+	 * @param array $sort
+	 * @return object
+	 */
+	public function searchLikeJoinAll($searchKey,$condition=[],$sort=[]){
+		//按照加官，使用sql前所有字段加F
+		$condition = $this->addPrefixKeyValue($condition);
+		$sort = $this->addPrefixKeyValue($sort);
+
+		//字段添加表名
+		$condition_table = array();
+		foreach($condition as $key=>$value){
+			$condition_table[$this->table.".".$key] = $value;
+		}
+
+		//查找数量
+		//$count = $this->db->where($condition)->count_all_results($this->table);
+		$count = $this->getCount($condition_table);
+
+		//条件筛选
+		$select = $this->db
+			->select(array(
+				$this->table.".*",
+				"client.Fname as Fclient_name",
+				"client.Fphone as Fclient_phone",
+				"user.Fname as Fseller_name",
+			))
+			->where($condition_table);
+
+		//模糊条件
+		$select = $select->group_start()
+			->or_like('client.Fname', $searchKey)
+			->or_like('client.Fphone', $searchKey)
+			->or_like('user.Fname', $searchKey)
+			->or_like($this->table.'.Ftotal_amount', $searchKey)
+			->group_end();
+
+		//排序
+		foreach($sort as $key=>$value){
+			$key = $this->table.".".$key;
+			$select = $select->order_by($key,$value);
+		}
+
+		//连接表
+		$select = $select
+			->join('client', $this->table.'.Fclient_id = client.Fid', 'left')
+			->join('user', $this->table.'.Fuser_id = user.Fuid', 'left');
+
+		//查询表
+		$select = $select->get($this->table);
+
+		//构成返回结果
+		$list = array();
+		foreach($select->result() as $data){
+			$item = $this->_new();
+			$item->load((array)$data);
+			$list[] = $item;
+		}
+
+		//返回
+		$result = (object)array();
+		$result->list = $list;
+		$result->count = $count;
+		$result->model = $this;
+		return $result;
 	}
 }
 ?>    

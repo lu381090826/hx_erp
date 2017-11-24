@@ -29,6 +29,19 @@
                     <td class="title">结束日期</td>
                     <td class="item"><input type="date" class="form-control" placeholder="结束日期" v-model="end_date"></td>
                 </tr>
+                <tr>
+                    <td class="title">模糊查询</td>
+                    <td class="item"><input type="text" class="form-control" placeholder="销售员姓名、客户姓名、客户电话、销售金额" v-model="key"></td>
+                </tr>
+                <tr>
+                    <td class="title">订单状态</td>
+                    <td class="item">
+                        <select class="form-control" v-model="status">
+                            <option value=""></option>
+                            <option v-for="(item, index) in statusMap" :value="index">{{item}}</option>
+                        </select>
+                    </td>
+                </tr>
             </table>
         </div>
         <div class="panel-footer">
@@ -38,7 +51,7 @@
     <!-- 过滤 -->
     <div class="input-group input-group-lg">
         <span class="input-group-addon"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></span>
-        <input type="text" class="form-control" placeholder="搜索" aria-describedby="" v-model="filter">
+        <input type="text" class="form-control" placeholder="过滤" aria-describedby="" v-model="filter">
     </div>
     <!-- 订单 -->
     <div class="order-list">
@@ -78,7 +91,10 @@
             "selected":null,
             "start_date":"<?=date("Y-m-d",time())?>",
             "end_date":"<?=date("Y-m-d",time())?>",
+            "key":"",
+            "status":"",
             "filter":"",
+            "statusMap":<?=json_encode($statusMap)?>,
         },
         created:function() {
             this.search();
@@ -102,15 +118,19 @@
                 //参数
                 var start_date = this.start_date;
                 var end_date = this.end_date;
+                var key = this.key;
+                var status = this.status!=""?this.status:null;
 
                 //Ajax
                 $.ajax({
-                    url:'<?=site_url($_controller->api."/search_sell")?>',
+                    url:'<?=site_url($_controller->api."/search_sell_like")?>',
                     type:"post",
                     dataType:"json",
                     data:{
+                        "key":key,
                         "start_date":start_date,
                         "end_date":end_date,
+                        "status":status,
                     },
                     success:function(result) {
                         if(result.state.return_code == 0)
