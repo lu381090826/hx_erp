@@ -82,6 +82,11 @@
                 </a>
             </li>
             <li class="sidebar-nav-link">
+                <a href="/goods">
+                    <i class="am-icon-shopping-basket sidebar-nav-link-logo"></i> 商品管理
+                </a>
+            </li>
+            <li class="sidebar-nav-link">
                 <a href="/data/export">
                     <i class="am-icon-table sidebar-nav-link-logo"></i> 导出管理
                 </a>

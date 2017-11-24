@@ -101,7 +101,7 @@ class Goods extends HX_Controller
         $data['result_rows']['category_list'] = $this->category_m->category_cache();
 
         log_out($data['result_rows']);
-        $this->load->view('/goods/goods/detail', $data['result_rows']);
+       view_adminV2('/goods/detail', $data['result_rows']);
     }
 
     public function goods_detail_edit($goods_id)
@@ -161,7 +161,7 @@ class Goods extends HX_Controller
         header("Content-Type:application/vnd.ms-execl");
         header("Content-Type:application/octet-stream");
         header("Content-Type:application/download");
-        header('Content-Disposition:attachment;filename="'.date('YmdHi').'.xlsx"');
+        header('Content-Disposition:attachment;filename="' . date('YmdHi') . '.xlsx"');
         header("Content-Transfer-Encoding:binary");
         $write->save('php://output');
     }
