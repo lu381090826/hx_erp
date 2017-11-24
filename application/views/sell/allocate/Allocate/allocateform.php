@@ -14,34 +14,116 @@
 <!-- 主体 -->
 <div id="app">
     <form class="am-form">
-        <div class="am-form-group">
-            <label for="doc-ipt-email-1">销售单号</label>
-            <input type="text" class="" id="doc-ipt-email-1" placeholder="销售单号" disabled :value="form.order_num">
+        <!-- 配货单信息 -->
+        <div class="panel-group" id="accordion_2" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-primary">
+                <div class="panel-heading" role="tab" id="heading_2_1" >
+                    <a role="button" data-toggle="collapse" data-parent="#accordion_2" href="#collapse_2_1" aria-expanded="false" aria-controls="collapse_2_1">
+                        <h1 class="panel-title" >
+                            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
+                            配货单信息
+                        </h1>
+                    </a>
+                </div>
+                <div id="collapse_2_1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading_2_1">
+                    <div class="panel-body">
+                        <div class="am-form-group">
+                            <label for="doc-ipt-email-1">配货单号</label>
+                            <input type="text" class="" id="doc-ipt-email-1" placeholder="配货单号" disabled :value="order_num">
+                        </div>
+
+                        <div class="am-form-group">
+                            <label for="doc-ipt-pwd-1">备注</label>
+                            <input type="text" class="" id="doc-ipt-pwd-1" placeholder="请填写备注" v-model="remark">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="am-form-group">
-            <label for="doc-ipt-email-1">配货单号</label>
-            <input type="text" class="" id="doc-ipt-email-1" placeholder="配货单号" disabled :value="order_num">
+        <!-- 销售单信息 -->
+        <div class="panel-group" id="accordion_1" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-primary">
+                <div class="panel-heading" role="tab" id="heading_1_1" >
+                    <a role="button" data-toggle="collapse" data-parent="#accordion_1" href="#collapse_1_1" aria-expanded="false" aria-controls="collapse_1_1">
+                        <h1 class="panel-title" >
+                            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
+                            销售单信息
+                        </h1>
+                    </a>
+                </div>
+                <div id="collapse_1_1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading_1_1">
+                    <div class="panel-body">
+
+                        <div class="am-form-group">
+                            <label for="doc-ipt-email-1">客户姓名：{{client.name}}</label>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label for="doc-ipt-email-1">销售单号：{{form.order_num}}</label>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label for="doc-ipt-pwd-1">开单员工：{{seller.name}}</label>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label for="doc-ipt-pwd-2">开单日期：{{form.create_date}}</label>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label for="doc-ipt-pwd-2">收款日期：{{form.receipt_date}}</label>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label for="doc-ipt-pwd-2">销售总量：{{form.total_num}}</label>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label for="doc-ipt-pwd-2">销售总额：{{form.total_price}} 元</label>
+                        </div>
+
+                        <div class="am-form-group" v-if="form.delivery_type == 0">
+                            <label for="doc-ipt-pwd-2">收货地址：{{form.delivery_addr}}</label>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label for="doc-ipt-pwd-2">备注信息：{{form.remark}}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
+        <!-- 搜索条 -->
         <div class="am-form-group">
-            <label for="doc-ipt-pwd-1">备注</label>
-            <input type="text" class="" id="doc-ipt-pwd-1" placeholder="请填写备注" v-model="remark">
+            <label>款号搜索</label>
+            <div class="am-input-group">
+                <span class="input-group-addon" id="sizing-addon2"><i class="am-icon-search"></i></span>
+                <input type="text" class="form-control" placeholder="查询款号" v-model="filter">
+            </div>
         </div>
 
+        <!-- 配货表 -->
         <div class="am-form-group">
             <table class="table table-striped">
                 <thead>
-                <td>款号</td><td>颜色</td><td>尺码</td><td>需求数量</td><td>已配数量</td><td>配货数量</td>
+                    <tr>
+                        <td>款号</td><td>颜色</td><td>尺码</td><td>需求数量</td><td>已配数量</td><td>配货数量</td>
+                    </tr>
                 </thead>
-                <tr v-for="item in list" v-bind:class="{ danger: parseInt(item.num) + parseInt(item.num_end) > item.num_sum }">
-                    <td>{{item.spu_id}}</td>
-                    <td>{{item.sku.color}}</td>
-                    <td>{{item.sku.size}}</td>
-                    <td>{{item.num_sum}}</td>
-                    <td>{{item.num_end}}</td>
-                    <td><input type="number" class="form-control" placeholder="单价" v-model="item.num"></td>
-                </tr>
+                <tbody>
+                    <tr v-for="item in list" v-bind:class="{ danger: parseInt(item.num) + parseInt(item.num_end) > item.num_sum }"  v-if="item.spu_id.indexOf(filter) != -1">
+                        <td>{{item.spu_id}}</td>
+                        <td>{{item.sku.color}}</td>
+                        <td>{{item.sku.size}}</td>
+                        <td>{{item.num_sum}}</td>
+                        <td>{{item.num_end}}</td>
+                        <td><input type="number" class="form-control" placeholder="单价" v-model="item.num"></td>
+                    </tr>
+                </tbody>
             </table>
         </div>
 
@@ -59,13 +141,16 @@
             user:null,
             remark:"",
             order_num:"",
+            filter:"",
             list:[],
         },
         created:function()
         {
+            this.order_num = "<?=$order_num?>";
             this.form = <?=json_encode($form)?>;
             this.list = <?=json_encode($list)?>;
-            this.order_num = "<?=$order_num?>";
+            this.seller = <?=json_encode($seller)?>;
+            this.client = <?=json_encode($client)?>;
 
             console.log(this.list);
         },

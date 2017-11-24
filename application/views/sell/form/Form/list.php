@@ -63,7 +63,7 @@
                         <div class="tag">{{item.status_name}}</div>
                     </div>
                     <div>{{item.date}}</div>
-                    <div>开单人：{{item.create_user_id}}</div>
+                    <div>开单人：{{item.seller_name}}</div>
                     <div>销售数量：{{item.total_num}}  销售金额：{{item.total_price}}</div>
                 </div>
                 <div class="icon">

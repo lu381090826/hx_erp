@@ -280,5 +280,25 @@ class Form_model extends BaseModel{
 		$result->model = $this;
 		return $result;
 	}
+
+	/**
+	 * 获取处理好的商列表
+	 * @return array
+	 */
+	public function getGoods(){
+		$spus = $this->MSpu->searchAll(['form_id'=>$this->id]);
+		$skus = $this->MSku->searchAll(['form_id'=>$this->id]);
+		$list = array();
+		foreach($spus->list as $spu){
+			$item = $spu;
+			$item->skus = array();
+			foreach($skus->list as $sku){
+				if($sku->form_spu_id == $spu->id)
+					$spu->skus[] = $sku;
+			}
+			$list[] = $item;
+		}
+		return $list;
+	}
 }
 ?>    
