@@ -3,3 +3,19 @@
     margin-left: 12px;
     margin-right: 12px;
 }
+
+/*项相关*/
+.panel-heading{
+}
+.panel-heading a{
+    color: white;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+.panel-heading a[aria-expanded=true] .glyphicon-plus-sign{
+    display: none;
+}
+.panel-heading a[aria-expanded=false] .glyphicon-minus-sign{
+    display: none;
+}

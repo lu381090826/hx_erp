@@ -13,7 +13,7 @@ class Allocate extends BaseController {
         //环境变量设置
         $this->_controller->views = "sell/allocate/Allocate";
         $this->_controller->controller = "sell/client/Allocate";
-        $this->_controller->layout = "layout/amaze/main";
+        $this->_controller->layout = "layout/amaze/hx";
 
         //类库
         $this->load->library('evon/ApiResult','','apiresult');
@@ -24,6 +24,8 @@ class Allocate extends BaseController {
         $this->load->model('sell/form/Form_model',"m_form",true);
         $this->load->model('sell/form/FormSpu_model',"m_spu",true);
         $this->load->model('sell/form/FormSku_model',"m_sku",true);
+        $this->load->model('sell/client/Client_model',"m_client",true);
+        $this->load->model('admin/User_model',"m_user",true);
     }
 
     /**
@@ -106,6 +108,7 @@ class Allocate extends BaseController {
     public function index($form_id){
         //获取销售单信息
         $form = $this->m_form->get($form_id);
+        $goods = $form->getGoods();
         $form->create_date = date("Y-m-d",$form->create_at);
 
         //获取列表
@@ -117,10 +120,17 @@ class Allocate extends BaseController {
             $list[] = $item;
         }
 
+        //获取销售员和客户
+        $seller = $this->m_user->get_user_info($form->user_id);
+        $client = $this->m_client->get($form->client_id);
+
         //页面显示
         $this->show("list",[
             "form"=>$form,
-            "list"=>$list
+            "list"=>$list,
+            "seller"=>$seller,
+            "client"=>$client,
+            "goods"=>$goods
         ]);
     }
 
@@ -131,6 +141,10 @@ class Allocate extends BaseController {
     public function add($form_id){
         //获取销售单信息
         $form = $this->m_form->get($form_id);
+
+        //获取销售员和客户
+        $seller = $this->m_user->get_user_info($form->user_id);
+        $client = $this->m_client->get($form->client_id);
 
         //获取已配数量
         $allocated = $this->m_item->getAllocateStatus($form_id);
@@ -178,6 +192,8 @@ class Allocate extends BaseController {
             "form"=>$form,
             "list"=>$list,
             "order_num"=>$order_num,
+            "seller"=>$seller,
+            "client"=>$client,
         ]);
     }
 
@@ -194,6 +210,10 @@ class Allocate extends BaseController {
 
         //获取销售单
         $form = $this->m_form->get($allocate->form_id);
+
+        //获取销售员和客户
+        $seller = $this->m_user->get_user_info($form->user_id);
+        $client = $this->m_client->get($form->client_id);
 
         //获取销售单SKU信息
         $form_items = $this->m_sku->searchAll(["form_id"=>$allocate->form_id])->list;
@@ -222,6 +242,8 @@ class Allocate extends BaseController {
             "allocate"=>$allocate,
             "form"=>$form,
             "list"=>$list,
+            "seller"=>$seller,
+            "client"=>$client,
         ]);
     }
 

@@ -37,10 +37,28 @@ class Api extends CI_Controller {
 
         //查询
         $model = $this->m_client;
-        $model->name = $_REQUEST["name"];
-        $model->phone = $_REQUEST["phone"];
+        $model->load($_REQUEST);
 
         //保存
+        if($model->save())
+            $this->apiresult->sentApiSuccess($model);
+        else
+            $this->apiresult->sentApiError(-1,"fail");
+    }
+
+    /**
+     * 保存客户信息接口
+     */
+    public function save_client(){
+        //参数检测
+        $this->apiresult->checkApiParameter(['id'],-1);
+        $id = $_REQUEST["id"];
+
+        //获得用户
+        $model = $this->m_client->get($id);
+        $model->load($_REQUEST);
+
+        //保存用户
         if($model->save())
             $this->apiresult->sentApiSuccess($model);
         else
@@ -57,14 +75,14 @@ class Api extends CI_Controller {
 
         //查询
         $model = $this->m_client;
-        $result = $model->likeSearch($key);
+        $result = $model->searchLikeAll($key);
 
         //输出
         $this->apiresult->sentApiSuccess($result->list);
     }
 
     /**
-     * 接口销售单
+     * 查询销售单
      */
     public function search_sell(){
         //查询
@@ -86,6 +104,54 @@ class Api extends CI_Controller {
 
         //查询
         $result = $model->searchAll($condition,$sort);
+
+        //遍历处理
+        $list = [];
+        foreach($result->list as $item){
+            //获取客户
+            $Mclient = $this->m_client->_new();
+            $client = $Mclient->get($item->client_id);
+
+            //添加数据
+            $item->client = $client;
+            $item->status_name = $item->getStatusName();
+            $item->date = date("Y/m/d",$item->create_at);
+
+            //加入列表
+            $list[] = $item;
+        }
+
+        //输出
+        $this->apiresult->sentApiSuccess($list);
+    }
+
+    /**
+     * 模糊查询订单接口
+     */
+    public function search_sell_like(){
+        //查询
+        $model = $this->m_form;
+        $param = $_REQUEST;
+        $start_date = isset($param["start_date"])?$param["start_date"]:null;
+        $end_date = isset($param["end_date"])?$param["end_date"]:null;
+        $key = isset($param["key"])?$param["key"]:null;
+        $status = isset($param["status"])?$param["status"]:null;
+        $sort = isset($param["sort"])?(array)json_decode($param["sort"]):[$model->getPk()=>"ASC"];
+
+        //设置时区
+        date_default_timezone_set('Asia/Shanghai');
+
+        //拼凑查询条件
+        $condition = [];
+        if($start_date)
+            $condition["create_at >"] = strtotime($start_date);
+        if($end_date)
+            $condition["create_at <="] = strtotime($end_date)+86400;
+        if($status)
+            $condition["status"] = $status;
+
+        //查询
+        $result = $model->searchLikeJoinAll($key,$condition,$sort);
 
         //遍历处理
         $list = [];

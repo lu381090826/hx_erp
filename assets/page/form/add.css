@@ -35,7 +35,7 @@
 .sku-table{
     margin-top: 6px;
 }
-.sku-table input{
+.sku-table table input{
     max-width: 75px;
 }
 .sku-actions{

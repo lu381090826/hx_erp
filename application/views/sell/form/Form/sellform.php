@@ -65,14 +65,72 @@
                 <!--<a onclick="javascript:$('#modal-client-add').modal({show:true})"><span class="glyphicon glyphicon-plus"></span>添加</a>-->
                 <a type="button" data-am-modal="{target: '#modal-client-add', closeViaDimmer: 0}"><span class="glyphicon glyphicon-plus"></span>添加</a>
             </label>
-            <div class="input-compose">
-                <div><input type="text" class="form-control" placeholder="搜索客户" :value="clientKey" v-on:change="clientChange"></div>
-                <div v-if="client != null"><input type="text" class="form-control" placeholder="客户名称/电话" disabled :value="client | client_show"></div>
-                <div v-else><input type="text" class="form-control" placeholder="客户名称/电话" disabled></div>
-            </div>
-            <div class="form-group"></div>
-            <div class="form-group">
-                <button type="button" class="btn btn-primary" style="width: 100%" v-for="item in clientList" v-on:click="clientSelect(item)">{{item.name}}({{item.phone}})</button>
+            <div class="panel-group" id="accordion_client" role="tablist" aria-multiselectable="true">
+                <div class="panel panel-primary">
+                    <div class="panel-heading" role="tab" id="heading_client_1" >
+                        <a role="button" data-toggle="collapse" data-parent="#accordion_client" href="#collapse_client_1" aria-expanded="true" aria-controls="collapse_client_1">
+                            <h1 class="panel-title" >
+                                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                                <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
+                                销售客户：
+                                <span v-if="client != null">{{client.name}}</span>
+                                <span v-else>未设置</span>
+                            </h1>
+                        </a>
+                    </div>
+                    <div id="collapse_client_1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading_client_1">
+                        <div class="panel-body">
+                            <!-- 客户搜索 -->
+                            <div class="form-group">
+                                <label>搜索客户</label>
+                                <input type="text" class="form-control" placeholder="搜索客户" :value="clientKey" v-on:change="clientChange">
+                            </div>
+
+                            <!-- 客户信息 -->
+                            <div v-if="client != null">
+                                <!-- 客户名称 -->
+                                <div class="form-group">
+                                    <label>客户名称</label>
+                                    <div class="input-compose">
+                                        <div><input type="text" class="form-control" placeholder="客户名称" v-model="client.name"></div>
+                                        <div><input type="text" class="form-control" placeholder="客户ID" v-model="client.id" disabled></div>
+                                    </div>
+                                </div>
+
+                                <!-- 联系电话 -->
+                                <div class="form-group">
+                                    <label>联系电话</label>
+                                    <input type="text" class="form-control" placeholder="联系电话" v-model="client.phone">
+                                </div>
+
+                                <!-- 收货方式 -->
+                                <div class="form-group">
+                                    <label>收货方式</label>
+                                    <div class="input-compose">
+                                        <select class="form-control" v-model="client.delivery_type">
+                                            <option v-for="(item, index) in deliveryTypeMap" :value="index">{{item}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- 收货方式 -->
+                                <div class="form-group" v-if="client.delivery_type == 0">
+                                    <label>收货地址</label>
+                                    <input type="text" class="form-control" placeholder="收货地址" v-model="client.delivery_addr">
+                                </div>
+
+                                <!-- 保存按钮 -->
+                                <!--<button type="button" class="btn btn-primary" v-on:click="clientSave()">保存信息</button>-->
+                            </div>
+
+                            <!-- 查询结果 -->
+                            <div class="form-group"></div>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" style="width: 100%" v-for="item in clientList" v-on:click="clientSelect(item)">{{item.name}}({{item.phone}})</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <!-- 付款方式 -->
@@ -82,13 +140,18 @@
                 <option v-for="(item, index) in paymentMap" :value="index">{{item}}</option>
             </select>
         </div>
+        <!-- 收款日期 -->
+        <div class="form-group">
+            <label>收款日期</label>
+            <input type="date" class="form-control" placeholder="收款日期" v-model="receipt_date">
+        </div>
         <!-- 备注信息 -->
         <div class="form-group">
             <label>备注</label>
             <input type="text" class="form-control" placeholder="请填写备注" v-model="remark">
         </div>
         <!-- 搜索商品 -->
-        <div class="form-group">
+        <div class="form-group" v-if="this.id == ''">
             <label>搜索商品</label>
             <input type="text" class="form-control" placeholder="请输入商品SPU" v-model="searchKey" v-on:change="searchChange">
         </div>
@@ -110,21 +173,37 @@
                             <div class="sku-content row">
                                 <div class="col-xs-3"><img :src="item.snap_pic" alt="" class="img-rounded"></div>
                                 <div class="col-xs-3"><label>单价</label></div>
-                                <div class="col-xs-6"><input type="text" class="form-control" placeholder="单价" v-bind:value="item.snap_price"></div>
+                                <div class="col-xs-6"><input type="text" class="form-control" placeholder="单价" v-bind:value="item.snap_price" disabled></div>
                             </div>
                             <div class="sku-table row">
+                                <!-- 颜色过滤 -->
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="sizing-addon2"><i class="am-icon-search"></i></span>
+                                    <input type="text" class="form-control" placeholder="查询颜色" v-model="item.filter">
+                                </div>
+                                <!-- SKU表 -->
                                 <table class="table table-striped">
                                     <thead>
-                                    <td>颜色</td><td>尺码</td><td>数量</td><td>操作</td>
+                                        <tr>
+                                            <td>颜色</td>
+                                            <td>尺码</td>
+                                            <td>数量</td>
+                                            <!--<td>操作</td>-->
+                                        </tr>
                                     </thead>
-                                    <tr v-for="sku in item.skus">
-                                        <td>{{sku.color}}</td><td>{{sku.size}}</td><td><input type="number" class="form-control" placeholder="数量" v-model="sku.num"></td><td><a v-on:click="skuDel(item,sku)">删除</a></td>
-                                    </tr>
+                                    <tbody>
+                                        <tr v-for="sku in item.skus" v-if="sku.color.indexOf(item.filter) != -1">
+                                            <td>{{sku.color}}</td>
+                                            <td>{{sku.size}}</td>
+                                            <td><input type="number" class="form-control" placeholder="数量" v-model="sku.num"></td>
+                                            <!--<td><a v-on:click="skuDel(item,sku)">删除</a></td>-->
+                                        </tr>
+                                    </tbody>
                                 </table>
                             </div>
                             <div class="sku-actions">
                                 <a v-on:click="selectAdd(item)">加入</a>
-                                <a v-on:click="searchClean(item)">清理未填写</a>
+                                <!--<a v-on:click="searchClean(item)">清理未填写</a>-->
                             </div>
                         </div>
                     </div>
@@ -156,13 +235,23 @@
                                 <div class="col-xs-6"><input type="text" class="form-control" placeholder="单价" v-model="item.snap_price"></div>
                             </div>
                             <div class="sku-table row">
+                                <!-- 颜色过滤 -->
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="sizing-addon2"><i class="am-icon-search"></i></span>
+                                    <input type="text" class="form-control" placeholder="查询颜色" v-model="item.filter">
+                                </div>
+                                <!-- SKU表 -->
                                 <table class="table table-striped">
                                     <thead>
-                                    <td>颜色</td><td>尺码</td><td>数量</td><td>操作</td>
+                                        <tr>
+                                            <td>颜色</td><td>尺码</td><td>数量</td><!--<td>操作</td>-->
+                                        </tr>
                                     </thead>
-                                    <tr v-for="sku in item.skus">
-                                        <td>{{sku.color}}</td><td>{{sku.size}}</td><td><input type="number" class="form-control" placeholder="数量" v-model="sku.num"></td><td><a v-on:click="skuDel(item,sku)">删除</a></td>
-                                    </tr>
+                                    <tbody>
+                                        <tr v-for="sku in item.skus" v-if="sku.color.indexOf(item.filter) != -1">
+                                            <td>{{sku.color}}</td><td>{{sku.size}}</td><td><input type="number" class="form-control" placeholder="数量" v-model="sku.num"></td><!--<td><a v-on:click="skuDel(item,sku)">删除</a></td>-->
+                                        </tr>
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
@@ -172,13 +261,19 @@
         </div>
         <!-- 销售总量 -->
         <div class="form-group">
-            <label>销售单总数量</label>
+            <label>销售总量</label>
             <input id="total_num" type="text" class="form-control" placeholder="" :value="selectList | total_num" disabled>
         </div>
         <!-- 销售总额 -->
         <div class="form-group">
-            <label>销售单总额</label>
+            <label>销售总额</label>
             <input id="total_price" type="text" class="form-control" placeholder="" :value="selectList | total_price" disabled>
+        </div>
+        <!-- 销售总额 -->
+        <div class="form-group">
+            <label>销售单金额</label>
+            <input id="total_price" type="text" class="form-control" placeholder="" v-model="total_amount" disabled v-if="this.id != ''">
+            <input id="total_price" type="text" class="form-control" placeholder=""  :value="selectList | total_price" disabled v-else>
         </div>
         <!-- 提交按钮 -->
         <button class="btn btn-primary from-submit" type="submit" v-on:click="submit()">提交</button>
@@ -278,7 +373,9 @@
             "user":null,
             "client":null,
             "payment":"0",
+            'receipt_date':"",
             "remark":"",
+            "remark_images":[],
             'selectList':[],
             //搜索、输入、映射
             "clientKey":"",
@@ -290,6 +387,9 @@
                 "phone":"",
             },
             "paymentMap": <?=json_encode($paymentMap)?>,
+            "deliveryTypeMap": <?=json_encode($deliveryTypeMap)?>,
+            //订单金额
+            'total_amount':0,
         },
         created:function() {
             //this
@@ -312,7 +412,17 @@
             this.client = <?=json_encode($model->client)?>;
             this.remark = '<?=$model->remark?>';
             this.payment = '<?=$model->payment?>';
-            this.selectList = <?=json_encode($model->goods)?>;
+            this.receipt_date = '<?=$model->receipt_date?>';
+            //添加过滤字段并设置selectList
+            var selectList = <?=json_encode($model->goods)?>;
+            this.selectList = this.addFilter(selectList);
+            this.total_amount = '<?=$model->total_amount?$model->total_amount:"0"?>';
+
+            //覆盖收款方式和地址
+            if(this.client != null) {
+                this.client.delivery_type = <?=$model->delivery_type?$model->delivery_type:0?>;
+                this.client.delivery_addr = '<?=$model->delivery_addr?>';
+            }
 
             //搜索值修正
             if(this.client)
@@ -335,6 +445,7 @@
                     },
                     success:function(result){
                         if(result.state.return_code == 0){
+                            result.data = _this.addFilter(result.data);
                             _this.searchList = result.data;
                             console.log(_this.searchList);
                         }
@@ -343,9 +454,34 @@
             },
             //加入列表
             selectAdd:function(item){
-                //克隆然后添加
-                var clone = JSON.parse(JSON.stringify(item));
-                this.selectList.push(clone);
+                //遍历已选
+                var isNew = true;
+                for(key in this.selectList){
+                    var select = this.selectList[key];
+                    if(item.spu_id == select.spu_id){
+                        //遍历添加SKU
+                        for(key_select in select.skus){
+                            var sku_select = select.skus[key_select];
+                            for(key_item in item.skus){
+                                var sku_item = item.skus[key_item];
+                                if(sku_select.sku_id == sku_item.sku_id){
+                                    //合并项目
+                                    sku_select.num = parseInt(sku_select.num) + parseInt(sku_item.num);
+                                }
+                            }
+                        }
+                        //设置非新项
+                        isNew = false;
+                    }
+                }
+
+                //如果没有合并项，则克隆然后添加
+                if(isNew){
+                    //克隆然后添加
+                    var clone = JSON.parse(JSON.stringify(item));
+                    this.selectList.push(clone);
+                }
+
                 //在搜索表中移除
                 this.searchDel(item);
             },
@@ -414,7 +550,7 @@
             //选择客户
             clientSelect:function(client){
                 //更改查询框内容
-                this.clientKey = client.id;
+                this.clientKey = client.name;
                 //更改客户
                 this.client = client;
                 this.clientList = [];
@@ -430,18 +566,17 @@
                     dataType:"json",
                     data:{
                         "name":this.client_input.name,
-                        "phone":this.client_input.phone
+                        "phone":this.client_input.phone,
+                        "addr":"",
+                        "delivery_type":0,
+                        "delivery_addr":"",
                     },
                     success:function(result) {
                         if(result.state.return_code == 0) {
                             //更改查询框内容
-                            _this.clientKey = result.data.id;
+                            _this.clientKey = result.data.name;
                             //更改客户信息
-                            _this.client.id = result.data.id;
-                            _this.client.name = result.data.name;
-                            _this.client.phone = result.data.phone;
-                            _this.client.source = result.data;
-                            _this.clientList = [];
+                            _this.client = result.data;
                             //关闭
                             var $modal = $('#modal-client-add');
                             $modal.modal('close');
@@ -452,6 +587,33 @@
                         else {
                             alert(result.state.return_msg)
                         }
+                    }
+                });
+            },
+            //保存用户信息
+            clientSave:function(){
+                //判断是否有选择用户
+                if(this.client == null)
+                    return;
+
+                //调用API保存
+                $.ajax({
+                    url:'<?=site_url($_controller->api."/save_client")?>',
+                    type:"post",
+                    dataType:"json",
+                    data:{
+                        "id":this.client.id,
+                        "name":this.client.name,
+                        "phone":this.client.phone,
+                        "addr":this.client.addr,
+                        "delivery_type":this.client.delivery_type,
+                        "delivery_addr":this.client.delivery_addr,
+                    },
+                    success:function(result) {
+                        if(result.state.return_code == 0)
+                            alert("保存成功");
+                        else
+                            alert("保存失败");
                     }
                 });
             },
@@ -473,13 +635,17 @@
                     data:{
                         "id":this.id,
                         "order_num":this.order_num,
-                        "user_id":this.user.id,
+                        "user_id":this.user.uid,
                         "client_id":this.client.id,
+                        "delivery_type":this.client.delivery_type,
+                        "delivery_addr":this.client.delivery_addr,
+                        "receipt_date":this.receipt_date,
                         "payment":this.payment,
                         "remark":this.remark,
                         "selectList":this.selectList,
                         "total_num":total_num,
                         "total_price":total_price,
+                        "client":this.client,           //客户最新信息
                     },
                     success:function(result) {
                         if(result.state.return_code == 0) {
@@ -493,6 +659,9 @@
             },
             //检测
             check:function(){
+                //总销售额
+                var total_price = $("#total_price").val();
+
                 if(this.client == null){
                     alert("请选择客户");
                     return false;
@@ -501,8 +670,24 @@
                     alert("销售单不能为空");
                     return false;
                 }
+                else if(this.client.delivery_type == 0 && this.client.delivery_addr == ""){
+                    alert("请填写客户收货地址");
+                    return false;
+                }
+                else if(this.id !="" && parseInt(this.total_amount) < parseInt(total_price)){
+                    alert("修改订单后，不能超过订单金额");
+                    return false;
+                }
 
                 return true;
+            },
+            //添加过滤字段
+            addFilter:function(list){
+                for(key in list){
+                    var item = list[key];
+                    item.filter = "";
+                }
+                return list;
             }
         }
     })
