@@ -105,7 +105,7 @@
                                 <div class="am-form-group">
                                     <div class="am-u-sm-12">
                                         <button type="button" class="am-btn am-btn-default"
-                                                onclick="search_goods()"><span class="am-icon-search"></span>搜索
+                                                onclick="expotr()"><span class="am-icon-search"></span>导出
                                         </button>
                                     </div>
                                 </div>
@@ -118,3 +118,4 @@
         </div>
     </div>
 <?php $this->load->view('adminV2/foot'); ?>
+<script type="text/javascript" src="/assets/js/goodsjs.js"></script>
