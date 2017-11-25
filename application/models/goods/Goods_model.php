@@ -77,8 +77,20 @@ class Goods_model extends HX_Model
         } else {
             $insert_params['Fstatus'] = 1;
         }
-        if (!empty($request['op_uid'])) {
-            $insert_params['Fop_uid'] = $this->session->uid;
+
+        $insert_params['Fop_uid'] = $this->session->uid;
+
+        if (!empty($request['sex'])) {
+            $insert_params['Fsex'] = $request['sex'];
+        }
+        if (!empty($request['year'])) {
+            $insert_params['Fyear'] = $request['year'];
+        }
+        if (!empty($request['month'])) {
+            $insert_params['Fmonth'] = $request['month'];
+        }
+        if (!empty($request['season'])) {
+            $insert_params['Fseason'] = $request['season'];
         }
         return $insert_params;
     }

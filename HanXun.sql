@@ -507,10 +507,15 @@ ALTER TABLE `t_goods`
   ADD `Fpic_normal` VARCHAR(256) NOT NULL DEFAULT ''
   AFTER `Fpic`;
 
-ALTER TABLE `t_goods` ADD `Fcost` VARCHAR(32) NOT NULL AFTER `Fgoods_id`;
-ALTER TABLE `t_goods` CHANGE `Fcost` `Fcost` DECIMAL(32) NOT NULL, CHANGE `Fprice` `Fprice` DECIMAL(32) NOT NULL;
-ALTER TABLE `t_sku` ADD `Fcost` DECIMAL NOT NULL AFTER `Fproperty_id`;
-
+ALTER TABLE `t_goods`
+  ADD `Fcost` VARCHAR(32) NOT NULL
+  AFTER `Fgoods_id`;
+ALTER TABLE `t_goods`
+  CHANGE `Fcost` `Fcost` DECIMAL(32) NOT NULL,
+  CHANGE `Fprice` `Fprice` DECIMAL(32) NOT NULL;
+ALTER TABLE `t_sku`
+  ADD `Fcost` DECIMAL NOT NULL
+  AFTER `Fproperty_id`;
 
 # 店铺
 CREATE TABLE `HanXun`.`t_shop` (
@@ -530,15 +535,21 @@ CREATE TABLE `HanXun`.`t_shop` (
   UNIQUE `key_shop_name` (`Fname`)
 )
   ENGINE = InnoDB;
-ALTER TABLE `t_shop` ADD `Fmemo` VARCHAR(256) NULL DEFAULT '' AFTER `Fversion`;
-ALTER TABLE `t_shop` ADD `Fstatus` BOOLEAN NOT NULL DEFAULT TRUE AFTER `Fmemo`;
+ALTER TABLE `t_shop`
+  ADD `Fmemo` VARCHAR(256) NULL DEFAULT ''
+  AFTER `Fversion`;
+ALTER TABLE `t_shop`
+  ADD `Fstatus` BOOLEAN NOT NULL DEFAULT TRUE
+  AFTER `Fmemo`;
 
-ALTER TABLE `t_sku` DROP `Fid`;
-ALTER TABLE `t_sku` ADD PRIMARY KEY( `Fsku_id`);
+ALTER TABLE `t_sku`
+  DROP `Fid`;
+ALTER TABLE `t_sku`
+  ADD PRIMARY KEY (`Fsku_id`);
 
 CREATE TABLE `HanXun`.`t_shop_seller` (
   `Fid`          INT                                  NOT NULL AUTO_INCREMENT,
-  `Fseller_id`    VARCHAR(32)                          NOT NULL DEFAULT '',
+  `Fseller_id`   VARCHAR(32)                          NOT NULL DEFAULT '',
   `Fshop_id`     VARCHAR(32)                          NOT NULL DEFAULT '',
   `Fstatus`      BOOLEAN                              NOT NULL DEFAULT TRUE,
   `Fversion`     INT                                  NOT NULL DEFAULT '0',
@@ -547,25 +558,30 @@ CREATE TABLE `HanXun`.`t_shop_seller` (
   PRIMARY KEY (`Fid`)
 )
   ENGINE = InnoDB;
-ALTER TABLE `HanXun`.`t_shop_seller` ADD UNIQUE `Frelation` (`Fseller_id`, `Fshop_id`);
-ALTER TABLE `t_shop_seller` ADD `Foperatror` INT NOT NULL DEFAULT '0' AFTER `Fversion`;
-ALTER TABLE `t_shop_seller` CHANGE `Foperatror` `Foperator` INT(11) NOT NULL DEFAULT '0';
-
+ALTER TABLE `HanXun`.`t_shop_seller`
+  ADD UNIQUE `Frelation` (`Fseller_id`, `Fshop_id`);
+ALTER TABLE `t_shop_seller`
+  ADD `Foperatror` INT NOT NULL DEFAULT '0'
+  AFTER `Fversion`;
+ALTER TABLE `t_shop_seller`
+  CHANGE `Foperatror` `Foperator` INT(11) NOT NULL DEFAULT '0';
 
 --
 -- 表的结构 `t_shop_goods`
 --
 
 CREATE TABLE `t_shop_goods` (
-  `Fid` int(11) NOT NULL,
-  `Fgoods_id` varchar(32) NOT NULL DEFAULT '',
-  `Fshop_id` varchar(32) NOT NULL DEFAULT '',
-  `Fstatus` tinyint(1) NOT NULL DEFAULT '1',
-  `Fversion` int(11) NOT NULL DEFAULT '0',
-  `Foperator` int(11) NOT NULL DEFAULT '0',
-  `Fcreate_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `Fmodify_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `Fid`          INT(11)     NOT NULL,
+  `Fgoods_id`    VARCHAR(32) NOT NULL DEFAULT '',
+  `Fshop_id`     VARCHAR(32) NOT NULL DEFAULT '',
+  `Fstatus`      TINYINT(1)  NOT NULL DEFAULT '1',
+  `Fversion`     INT(11)     NOT NULL DEFAULT '0',
+  `Foperator`    INT(11)     NOT NULL DEFAULT '0',
+  `Fcreate_time` DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `Fmodify_time` DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
 
 --
 -- Indexes for dumped tables
@@ -576,7 +592,7 @@ CREATE TABLE `t_shop_goods` (
 --
 ALTER TABLE `t_shop_goods`
   ADD PRIMARY KEY (`Fid`),
-  ADD UNIQUE KEY `Frelation` (`Fgoods_id`,`Fshop_id`);
+  ADD UNIQUE KEY `Frelation` (`Fgoods_id`, `Fshop_id`);
 
 --
 -- 在导出的表使用AUTO_INCREMENT
@@ -586,10 +602,36 @@ ALTER TABLE `t_shop_goods`
 -- 使用表AUTO_INCREMENT `t_shop_goods`
 --
 ALTER TABLE `t_shop_goods`
-  MODIFY `Fid` int(11) NOT NULL AUTO_INCREMENT;COMMIT;
+  MODIFY `Fid` INT(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
 
-ALTER TABLE `HanXun`.`t_goods` ADD INDEX `idx_modify_time` (`Fmodify_time`);
-ALTER TABLE `HanXun`.`t_sku` ADD INDEX `goods_id` (`Fgoods_id`);
-ALTER TABLE `HanXun`.`t_sku` ADD INDEX `idx_modify_time` (`Fmodify_time`);
-ALTER TABLE `HanXun`.`t_goods` ADD INDEX `idx_status` (`Fstatus`);
-ALTER TABLE `HanXun`.`t_goods` ADD INDEX `idx_goods_id_status` (`Fgoods_id`, `Fstatus`);
+ALTER TABLE `HanXun`.`t_goods`
+  ADD INDEX `idx_modify_time` (`Fmodify_time`);
+ALTER TABLE `HanXun`.`t_sku`
+  ADD INDEX `goods_id` (`Fgoods_id`);
+ALTER TABLE `HanXun`.`t_sku`
+  ADD INDEX `idx_modify_time` (`Fmodify_time`);
+ALTER TABLE `HanXun`.`t_goods`
+  ADD INDEX `idx_status` (`Fstatus`);
+ALTER TABLE `HanXun`.`t_goods`
+  ADD INDEX `idx_goods_id_status` (`Fgoods_id`, `Fstatus`);
+
+ALTER TABLE `t_goods`
+  ADD `Fyear` INT(5) UNSIGNED NOT NULL DEFAULT '2017'
+  AFTER `Fcategory_id`,
+  ADD `Fmonth` TINYINT(3) UNSIGNED NOT NULL DEFAULT '1'
+  AFTER `Fyear`,
+  ADD `Fseason` TINYINT(3) UNSIGNED NOT NULL DEFAULT '1'
+  AFTER `Fmonth`,
+  ADD `Fsex` TINYINT(3) UNSIGNED NOT NULL DEFAULT '1'
+  AFTER `Fseason`;
+
+ALTER TABLE `t_sku`
+  ADD `Fyear` INT(5) UNSIGNED NOT NULL DEFAULT '2017'
+  AFTER `Fcategory_id`,
+  ADD `Fmonth` TINYINT(3) UNSIGNED NOT NULL DEFAULT '1'
+  AFTER `Fyear`,
+  ADD `Fseason` TINYINT(3) UNSIGNED NOT NULL DEFAULT '1'
+  AFTER `Fmonth`,
+  ADD `Fsex` TINYINT(3) UNSIGNED NOT NULL DEFAULT '1'
+  AFTER `Fseason`;

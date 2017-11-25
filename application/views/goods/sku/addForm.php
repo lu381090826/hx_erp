@@ -5,7 +5,8 @@ $this->load->view('head');
 
 <input type="button" name="Submit" class="am-btn am-btn-default" onclick="javascript:history.back(-1);"
        value="返回上一页">
-<form action="/sku/add_sku" autocomplete="off" class="am-form" id="doc-vld-msg" method="post" enctype="multipart/form-data">
+<form action="/sku/add_sku" autocomplete="off" class="am-form" id="doc-vld-msg" method="post"
+      enctype="multipart/form-data">
     <fieldset>
         <legend>添加商品</legend>
         <div class="am-form-group">
@@ -16,13 +17,7 @@ $this->load->view('head');
         </div>
 
         <div class="am-form-group">
-            <label for="doc-vld-brand_id">品牌：</label>
-            <input type="text" id="doc-vld-brand_id" placeholder="输入" name="brand"
-                   class="am-form-field"/>
-        </div>
-
-        <div class="am-form-group">
-            <label for="doc-select-1">分类:</label>
+            <label for="doc-select-1">分类<span style="color: red">*</span>:</label>
             <select id="doc-select-1" name="category_id">
                 <?php foreach ($category_list as $k => $category): ?>
                     <option value="<?= $k ?>"><?= $category ?></option>
@@ -41,6 +36,13 @@ $this->load->view('head');
             <label for="doc-vld-cost">成本（单位元）<span style="color: red">*</span>：</label>
             <input type="text" id="doc-vld-cost" minlength="1" placeholder="输入" name="cost" class="am-form-field"
                    required/>
+        </div>
+
+
+        <div class="am-form-group">
+            <label for="doc-vld-brand_id">品牌：</label>
+            <input type="text" id="doc-vld-brand_id" placeholder="输入" name="brand"
+                   class="am-form-field"/>
         </div>
 
         <div class="am-form-group">
@@ -75,6 +77,60 @@ $this->load->view('head');
                 <?php endforeach; ?>
             </select>
             <div id="size-select-info"></div>
+        </div>
+
+        <div class="am-form-group">
+            <label>性别：</label>
+            <div class="am-u-sm-12">
+                <div class="am-u-sm-2 am-padding-left-0">
+                    <label>
+                        <input type="radio" name="doc-vld-sex" value="1" checked>
+                        男
+                    </label>
+                </div>
+                <div class="am-u-sm-2 am-padding-left-0 am-padding-right-8" style="float: left">
+                    <label>
+                        <input type="radio" name="doc-vld-sex" value="2">
+                        女
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="am-form-group">
+            <label for="doc-vld-brand_id">年份： </label>
+
+            <label>
+                <select data-am-selected="{maxHeight: 200,searchBox: 1}" name="year">
+                    <?php for ($i = 2000; $i < 2030; $i++): ?>
+                        <option value="<?= $i ?>" <?php if ($i == 2017): ?>selected<?php endif; ?>><?= $i ?></option>
+                    <?php endfor; ?>
+                </select>
+            </label>
+        </div>
+
+        <div class="am-form-group">
+            <label for="doc-vld-brand_id">月份：</label>
+            <label>
+                <select data-am-selected="{maxHeight: 200}" name="month">
+                    <?php for ($i = 1; $i < 13; $i++): ?>
+                        <option value="<?= $i ?>"
+                                <?php if ($i == date('m')): ?>selected<?php endif; ?>><?= $i ?></option>
+                    <?php endfor; ?>
+                </select>
+            </label>
+        </div>
+
+        <div class="am-form-group">
+            <label for="doc-vld-brand_id">季节：</label>
+            <label>
+                <select data-am-selected="{maxHeight: 200}" name="season">
+                    <option value="1">春</option>
+                    <option value="2">夏</option>
+                    <option value="3">秋</option>
+                    <option value="4">冬</option>
+                </select>
+            </label>
         </div>
 
         <div class="am-form-group">

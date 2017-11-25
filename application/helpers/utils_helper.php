@@ -46,6 +46,20 @@ if (!function_exists('json_out_put')) {
     }
 }
 
+if (!function_exists('json_ajax_out_put')) {
+    function json_ajax_out_put($code = 0, $msg = '', $arr)
+    {
+        $ret['code'] = $code;
+        $ret['msg'] = $msg;
+        $ret['data'] = $arr;
+
+        $CI = &get_instance();
+        $CI->output->set_header('Cache-Control: no-cache');
+        $CI->output->set_header('Content-type:application/json;charset=utf-8');
+        $CI->output->set_output(json_encode($ret, JSON_UNESCAPED_UNICODE));
+    }
+}
+
 //根据二维数组的建值去重
 if (!function_exists('arr_sort')) {
     function arr_sort($array, $key, $order = "asc")

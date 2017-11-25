@@ -219,8 +219,14 @@ class Category_model extends HX_Model
 
     public function category_delete_by_id($id)
     {
-        $this->cache_delete();
-        return $this->db->update($this->table, ['Fstatus' => 0, 'Fop_uid' => $this->session->uid], ['Fid' => $id]);
+        $s = "SELECT Fid,Fcategory_name FROM {$this->table} WHERE Fstatus = 1 AND Fpid = {$id}";
+        $ret = $this->db->query($s);
+        if (!empty($ret->result('array')) && count($ret->result('array')) > 0) {
+            json_ajax_out_put(500, "存在子类，需先删除子类");
+        } else {
+            $this->cache_delete();
+            return $this->db->update($this->table, ['Fstatus' => 0, 'Fop_uid' => $this->session->uid], ['Fid' => $id]);
+        }
     }
 
     /**

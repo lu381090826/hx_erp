@@ -66,6 +66,42 @@ $this->load->view('head');
 
 
         <div class="am-form-group">
+            <label>性别</label>
+            <?php if ($sex == 1) { ?>
+                男
+            <?php } else { ?>
+                女
+            <?php } ?>
+        </div>
+
+        <div class="am-form-group">
+            <label>年份</label>
+            <?= $year ?>年
+        </div>
+        <div class="am-form-group">
+            <label>月份</label>
+            <?= $month ?>月
+        </div>
+        <div class="am-form-group">
+            <label>季节</label>
+            <?php switch ($season) {
+                case 1:
+                    echo "春";
+                    break;
+                case 2:
+                    echo "夏";
+                    break;
+                case 3:
+                    echo "秋";
+                    break;
+                case 4:
+                    echo "冬";
+                    break;
+                default:
+                    break;
+            } ?>
+        </div>
+        <div class="am-form-group">
             <label>备注</label>
             <?= $memo ?>
         </div>
