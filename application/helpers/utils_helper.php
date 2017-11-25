@@ -23,6 +23,19 @@ if (!function_exists('check_auth')) {
     }
 }
 
+if (!function_exists('config_load')) {
+    function config_load($config, $name = '')
+    {
+        $CI = &get_instance();
+        $CI->config->load($config, $config);
+        if ($name != '') {
+            return $CI->config->item($config)[$name];
+        } else {
+            return $CI->config->item($config);
+        }
+    }
+}
+
 if (!function_exists('json_out_put')) {
     function json_out_put($arr)
     {

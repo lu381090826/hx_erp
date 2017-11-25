@@ -3,22 +3,21 @@ $(document).ready(function () {
 });
 
 function expotr() {
-    var form=$("<form>");//定义一个form表单
-    form.attr("style","display:none");
-    form.attr("target","");
-    form.attr("method","post");
-    form.attr("action","/goods/action_export");
+    var form = $("<form>");//定义一个form表单
+    form.attr("style", "display:none");
+    form.attr("target", "");
+    form.attr("method", "post");
+    form.attr("action", "/goods/action_export");
     var data = getFormJson($('#goods_search_form'));
-    $.each(data,function (i,o) {
-        var input=$("<input>");
-        input.attr("type","hidden");
-        input.attr("name",i);
-        input.attr("value",o);
+    $.each(data, function (i, o) {
+        var input = $("<input>");
+        input.attr("type", "hidden");
+        input.attr("name", i);
+        input.attr("value", o);
         form.append(input);
     });
 
     $("body").append(form);//将表单放置在web中
-    // console.log(input)
     // form.ajaxSubmit({url: '/goods/action_export', type: 'post'})
     form.submit();//表单提交
 }
@@ -62,9 +61,10 @@ function get_goods(curr) {
 function goods_show(result) {
     var goods_content = "";
     $.each(result.result_rows, function (i, o) {
-        var sell_state = "<div><a onclick=\"sell_state_off('" + o.goods_id + "')\">下架</a></button></div>";
-        if (o.state == 2) {
-            sell_state = "<div><a onclick=\"sell_state_on('" + o.goods_id + "')\">上架</a></button></div>";
+        if (o.status == 2) {
+            var sell_state = "<div><a onclick=\"sell_state_on('" + o.goods_id + "')\">上架</a></button></div>";
+        } else {
+            var sell_state = "<div><a onclick=\"sell_state_off('" + o.goods_id + "')\">下架</a></button></div>";
         }
         goods_content += "<tr>" +
             "<td><img class='pic' src='" + o.pic + "'></td>" +
@@ -74,7 +74,7 @@ function goods_show(result) {
             "<td>" + o.create_time + "</td>" +
             "<td align='center' valign='middle' style='word-break:break-all'>" +
             "<div><a href='/goods/goods_detail/" + o.goods_id + "'>详情</a><div>" +
-            "<div><a onclick=\"sku_delete('" + o.goods_id + "')\">删除</a></button></div>" +
+            "<div><a onclick=\"sku_delete('" + o.goods_id + "')\">删除</a></div>" +
             sell_state +
             "</td>" +
             "</tr>";
@@ -97,11 +97,11 @@ function get_category(curr) {
             var row = '';
             curr_page = curr;
             all_pages = result.pages;
-            $.each(result.result_rows, function (i, o) {
+            $.each(result, function (i, o) {
                 row += "<tr>" +
                     "<td>" + o.id + "</td>" +
                     "<td>" + o.category_name + "</td>" +
-                    "<td><a href='/category/delete_category/" + o.id + "'>删除</a></td>" +
+                    "<td><a href='javascript:;' data-id=" + o.id + " onclick='category_delete(" + o.id + ")'>删除</a></td>" +
                     "</tr>";
             });
             from_contant.append(row);
@@ -204,7 +204,6 @@ function color_delete(id) {
     $('#color-remove-confirm').modal({
         relatedTarget: this,
         onConfirm: function (options) {
-            console.log($(this.relatedTarget));
             $.post('/color/delete_color/' + delete_id);
             setTimeout(function () {
                 fromLoad('goods', 'get_color');
@@ -243,7 +242,7 @@ function sell_state_off(id) {
     $('#sell-off').modal({
         relatedTarget: this,
         onConfirm: function (options) {
-            $.post('/goods/sell_state_off/' + goods_id);
+            $.post('/goods/action_sell_state_off/' + goods_id);
             setTimeout(function () {
                 fromLoad('goods', 'get_goods');
             }, 300);
@@ -256,7 +255,7 @@ function sell_state_on(id) {
     $('#sell-on').modal({
         relatedTarget: this,
         onConfirm: function (options) {
-            $.post('/goods/sell_state_on/' + goods_id);
+            $.post('/goods/action_sell_state_on/' + goods_id);
             setTimeout(function () {
                 fromLoad('goods', 'get_goods');
             }, 300);
@@ -271,6 +270,18 @@ function shop_delete(id) {
             $.post('/shop/shop_delete/' + delete_id);
             setTimeout(function () {
                 fromLoad('goods', 'get_shop');
+            }, 300);
+        }
+    });
+}
+function category_delete(id) {
+    delete_id = id;
+    $('#categoty-remove-confirm').modal({
+        relatedTarget: this,
+        onConfirm: function (options) {
+            $.post('/category/delete_category/' + delete_id);
+            setTimeout(function () {
+                fromLoad('goods', 'get_category');
             }, 300);
         }
     });

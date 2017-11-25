@@ -50,7 +50,7 @@ class Category_model extends HX_Model
 
     public function get_all_list()
     {
-        $s = "SELECT Fid,Fcategory_name FROM {$this->table} WHERE Fstatus = 1";
+        $s = "SELECT Fid,Fpid,Fcategory_name FROM {$this->table} WHERE Fstatus = 1";
 
         $ret = $this->db->query($s);
 
@@ -66,7 +66,9 @@ class Category_model extends HX_Model
                 $this->load->driver('cache');
                 if (empty($this->cache->redis->get($category_cache))) { //如果未设置
                     $arr = $this->getCategoryList();
-
+                    foreach ($arr as $k => &$r) {
+                        $r = $this->category_cache_series()[$k]['category_name'];
+                    }
                     $this->cache->redis->save($category_cache, $arr, 86400); //设置
                 } else {
                     $arr = $this->cache->redis->get($category_cache);  //从缓存中直接读取对应的值
@@ -79,17 +81,123 @@ class Category_model extends HX_Model
 
         if (empty($arr)) {
             $arr = $this->getCategoryList();
+            foreach ($arr as $k => &$r) {
+                $r = $this->category_cache_series()[$k]['category_name'];
+            }
+        }
+        return $arr;
+    }
+
+    public function category_cache_tree()
+    {
+        $arr = [];
+        if ($this->config->item('redis_default')['cache_on']) {
+            $category_cache = 'CATEGORY_CACHE_TREE';
+            try {
+                $this->load->driver('cache');
+                if (empty($this->cache->redis->get($category_cache))) { //如果未设置
+
+                    $arr = $this->category_tree();
+
+                    $this->cache->redis->save($category_cache, $arr, 86400 * 365); //设置一年
+                } else {
+                    $arr = $this->cache->redis->get($category_cache);  //从缓存中直接读取对应的值
+                }
+
+            } catch (Exception $e) {
+                log_error($e->getMessage());
+            }
+        }
+
+        if (empty($arr)) {
+            $arr = $this->category_tree();
+        }
+        return $arr;
+    }
+
+    //系列缓存
+    public function category_cache_series()
+    {
+        $arr = [];
+        if ($this->config->item('redis_default')['cache_on']) {
+            $category_cache = 'CATEGORY_CACHE_SERIES';
+            try {
+                $this->load->driver('cache');
+                if (empty($this->cache->redis->get($category_cache))) { //如果未设置
+
+                    $arr = $this->category_series();
+
+                    $this->cache->redis->save($category_cache, $arr, 86400 * 365); //设置一年
+                } else {
+                    $arr = $this->cache->redis->get($category_cache);  //从缓存中直接读取对应的值
+                }
+
+            } catch (Exception $e) {
+                log_error($e->getMessage());
+            }
+        }
+
+        if (empty($arr)) {
+            $arr = $this->category_series();
         }
         return $arr;
     }
 
     public function cache_delete()
     {
-        $cache = 'CATEGORY_CACHE';
-        $this->load->driver('cache');
-        if ($this->cache->redis->get($cache) != null) { //如果未设置
-            $this->cache->redis->delete($cache);
+        if ($this->config->item('redis_default')['cache_on']) {
+            $cache = 'CATEGORY_CACHE';
+            $this->load->driver('cache');
+            if ($this->cache->redis->get($cache) != null) {
+                $this->cache->redis->delete($cache);
+            }
+
+            $cache = 'CATEGORY_CACHE_TREE';
+            if ($this->cache->redis->get($cache) != null) {
+                $this->cache->redis->delete($cache);
+            }
+
+            $cache = 'CATEGORY_CACHE_SERIES';
+            if ($this->cache->redis->get($cache) != null) {
+                $this->cache->redis->delete($cache);
+            }
         }
+
+    }
+
+    private function category_tree()
+    {
+        $arr = $this->get_all_list()['result_rows'];
+        $tree = [];
+        foreach ($arr as $r) {
+            if ($r['pid'] != 0) {
+                if (isset($tree[$r['pid']]['childs'])) {
+                    array_push($tree[$r['pid']]['childs'], $r);
+                } else {
+                    $tree[$r['pid']]['childs'][] = $r;
+                }
+            } else {
+                $tree[$r['id']] = $r;
+                $tree[$r['id']]['childs'] = [];
+
+            }
+        }
+        return $tree;
+    }
+
+    private function category_series()
+    {
+        $arr = $this->get_all_list()['result_rows'];
+        $result = [];
+        foreach ($arr as $r) {
+            $result[$r['id']] = $r;
+        }
+        foreach ($result as &$r) {
+            if ($r['pid'] != 0) {
+                $r['category_name'] = $result[$r['pid']]['category_name'] . " / " . $r['category_name'];
+            }
+        }
+        return $result;
     }
 
     public function get_list($page = 0)

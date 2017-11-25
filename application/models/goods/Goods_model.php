@@ -182,7 +182,12 @@ class Goods_model extends HX_Model
                 $sql .= " AND Fgoods_id = '0' ";
             }
         }
-
+        if (isset($request['status']) && $request['status'] != '') {
+            $status = "fstatus = {$request['status']}";
+        } else {
+            $status = "fstatus > 0";
+        }
+        $sql = "WHERE {$status} " . $sql;
         return $sql;
     }
 
@@ -212,16 +217,42 @@ class Goods_model extends HX_Model
         }
     }
 
+    public function sell_off($goods_id)
+    {
+        $status = config_load('goods_status', 'goods_sell_off');
+
+        $this->db->set('Fstatus', $status);
+        $this->db->where('Fgoods_id', $goods_id);
+        $this->db->update($this->table);
+
+        $this->db->set('Fstatus', $status);
+        $this->db->where('Fgoods_id', $goods_id);
+        $this->db->update('t_sku');
+    }
+
+    public function sell_on($goods_id)
+    {
+        $status = config_load('goods_status', 'goods_sell_on');
+
+        $this->db->set('Fstatus', $status);
+        $this->db->where('Fgoods_id', $goods_id);
+        $this->db->update($this->table);
+
+        $this->db->set('Fstatus', $status);
+        $this->db->where('Fgoods_id', $goods_id);
+        $this->db->update('t_sku');
+    }
+
     public function search_goods($request)
     {
         $params = $this->searchParams($request);
 
-        $s = "SELECT count(1) as Fcount FROM {$this->table} WHERE fstatus=1 {$params}";
+        $s = "SELECT count(1) as Fcount FROM {$this->table} {$params}";
         $ret = $this->db->query($s);
         log_in($this->db->last_query());
         $this->total_num = $ret->row(0, 'array')['count'];
 
-        $s = "SELECT Fgoods_id FROM {$this->table} WHERE Fstatus = 1 {$params} ORDER BY Fmodify_time DESC LIMIT ? , ?";
+        $s = "SELECT Fgoods_id FROM {$this->table} {$params} ORDER BY Fmodify_time DESC LIMIT ? , ?";
 
         list($offset, $limit) = parent::pageUtils($request);
 
@@ -232,7 +263,7 @@ class Goods_model extends HX_Model
         $result_arr = $ret->result('array');
 
         if (!empty($result_arr)) {
-            $s = "SELECT Fgoods_id,Fcost,Fprice,Fpic,Fpic_normal,Fbrand,Fcategory_id,Fcategory,Fmemo,Fstatus,Fop_uid,Fcreate_time,Fmodify_time FROM {$this->table} WHERE Fgoods_id in ('" . implode("','", array_column($result_arr, "goods_id")) . "')";
+            $s = "SELECT Fgoods_id,Fcost,Fprice,Fpic,Fpic_normal,Fbrand,Fcategory_id,Fcategory,Fmemo,Fstatus,Fop_uid,Fstatus,Fcreate_time,Fmodify_time FROM {$this->table} WHERE Fgoods_id in ('" . implode("','", array_column($result_arr, "goods_id")) . "')";
 
             $ret = $this->db->query($s);
             log_in($this->db->last_query());

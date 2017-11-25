@@ -22,6 +22,20 @@ class Goods extends HX_Controller
         $this->load->view('goods/index', $data);
     }
 
+    //商品下架
+    public function action_sell_state_off($goods_id)
+    {
+        $this->load->model('goods/goods_model', 'goods_m');
+        $this->goods_m->sell_off($goods_id);
+    }
+
+    //商品上架
+    public function action_sell_state_on($goods_id)
+    {
+        $this->load->model('goods/goods_model', 'goods_m');
+        $this->goods_m->sell_on($goods_id);
+    }
+
     public function action_export()
     {
         $this->load->model('goods/goods_model', 'goods_m');
@@ -35,10 +49,10 @@ class Goods extends HX_Controller
         $this->export_excel($excel);
     }
 
-    public function get_category($page = 1)
+    public function get_category()
     {
-        $this->load->model('goods/category_model', 'm_cagegory');
-        $result = $this->m_cagegory->get_list($page);
+        $this->load->model('goods/category_model', 'category_m');
+        $result = $this->category_m->category_cache_series();
 
         json_out_put($result);
     }
@@ -101,7 +115,7 @@ class Goods extends HX_Controller
         $data['result_rows']['category_list'] = $this->category_m->category_cache();
 
         log_out($data['result_rows']);
-       view_adminV2('/goods/detail', $data['result_rows']);
+        view_adminV2('/goods/detail', $data['result_rows']);
     }
 
     public function goods_detail_edit($goods_id)

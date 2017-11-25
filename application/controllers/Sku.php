@@ -17,6 +17,7 @@ class Sku extends HX_Controller
         $this->load->model('goods/category_model', 'm_category');
         $data['category_list'] = $this->m_category->category_cache();
 
+
         $this->load->model('goods/color_model', 'color_m');
         $data['color_list'] = $this->color_m->color_cache();
 

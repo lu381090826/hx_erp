@@ -54,6 +54,15 @@ $this->load->view('head');
 
 
                     <div class="am-form-group">
+                        <label class="am-form-label" for="search_status">状态</label>
+                        <select id="search_status" name="status">
+                            <option value="">全部</option>
+                            <option value="1">上架中</option>
+                            <option value="2">下架中</option>
+                        </select>
+                    </div>
+
+                    <div class="am-form-group">
                         <label class="am-form-label" for="search_category_id">分类</label>
                         <select id="search_category_id" name="category_id">
                             <option value="">全部</option>
@@ -214,6 +223,18 @@ $this->load->view('head');
     </div>
 </div>
 <div class="am-modal am-modal-confirm" tabindex="-1" id="shop-remove-confirm">
+    <div class="am-modal-dialog">
+        <div class="am-modal-hd">提示</div>
+        <div class="am-modal-bd">
+            确定要删除这条记录吗？
+        </div>
+        <div class="am-modal-footer">
+            <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+            <span class="am-modal-btn" data-am-modal-confirm>确定</span>
+        </div>
+    </div>
+</div>
+<div class="am-modal am-modal-confirm" tabindex="-1" id="categoty-remove-confirm">
     <div class="am-modal-dialog">
         <div class="am-modal-hd">提示</div>
         <div class="am-modal-bd">
