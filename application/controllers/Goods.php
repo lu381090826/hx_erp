@@ -115,7 +115,7 @@ class Goods extends HX_Controller
         $data['result_rows']['category_list'] = $this->category_m->category_cache();
 
         log_out($data['result_rows']);
-        view_adminV2('/goods/detail', $data['result_rows']);
+        $this->load->view('/goods/detail', $data['result_rows']);
     }
 
     public function goods_detail_edit($goods_id)
