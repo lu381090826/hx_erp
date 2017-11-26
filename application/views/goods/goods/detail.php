@@ -140,7 +140,7 @@ $this->load->view('footer');
             relatedTarget: this,
             onConfirm: function (options) {
                 $.post('/sku/action_delete_sku/' + delete_id);
-                location.href = "/goods/goods_detail/<?=$goods_id?>"
+                location.href = "/goods/goods_detail/<?=$goods_id?>?v=<?=rand(0,10000)?>"
             }
         });
     }
