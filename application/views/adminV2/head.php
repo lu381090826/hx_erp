@@ -9,13 +9,13 @@
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
-    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
     <link rel="icon" type="image/png" href="/assetsV2/assets/i/favicon.png">
     <link rel="apple-touch-icon-precomposed" href="/assetsV2/i/app-icon72x72@2x.png">
-    <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+    <meta name="apple-mobile-web-app-title" content="Amaze UI"/>
     <script src="/assetsV2/js/echarts.min.js"></script>
-    <link rel="stylesheet" href="/assetsV2/css/amazeui.min.css" />
-    <link rel="stylesheet" href="/assetsV2/css/amazeui.datatables.min.css" />
+    <link rel="stylesheet" href="/assetsV2/css/amazeui.min.css"/>
+    <link rel="stylesheet" href="/assetsV2/css/amazeui.datatables.min.css"/>
     <link rel="stylesheet" href="/assetsV2/css/app.css">
     <script src="/assetsV2/js/jquery.min.js"></script>
 
@@ -79,11 +79,6 @@
             <li class="sidebar-nav-link">
                 <a href="/data" class="active">
                     <i class="am-icon-home sidebar-nav-link-logo"></i> 首页
-                </a>
-            </li>
-            <li class="sidebar-nav-link">
-                <a href="/goods">
-                    <i class="am-icon-shopping-basket sidebar-nav-link-logo"></i> 商品管理
                 </a>
             </li>
             <li class="sidebar-nav-link">

@@ -186,4 +186,102 @@ class Sku extends HX_Controller
 
         $this->load->view('/goods/goods/detail_edit', $sku_info['result_rows']);
     }
+
+    public function action_export()
+    {
+        $this->load->model('goods/sku_model', 'sku_m');
+        $request = $this->input->post();
+
+        $request['limit'] = 10000;
+        $res = $this->sku_m->search_sku(1, $request)['result_rows'];
+
+        $excel = $this->export_init($res);
+
+        $this->export_excel($excel);
+    }
+
+    /**
+     * @param $excel
+     */
+    private function export_excel($excel)
+    {
+        //输出到浏览器
+        $write = new PHPExcel_Writer_Excel2007($excel);
+        header("Pragma: public");
+        header("Expires: 0");
+        header("Cache-Control:must-revalidate, post-check=0, pre-check=0");
+        header("Content-Type:application/force-download");
+        header("Content-Type:application/vnd.ms-execl");
+        header("Content-Type:application/octet-stream");
+        header("Content-Type:application/download");
+        header('Content-Disposition:attachment;filename="' . date('YmdHi') . '导出-' . $this->session->name . '.xlsx"');
+        header("Content-Transfer-Encoding:binary");
+        $write->save('php://output');
+    }
+
+    /**
+     * @param $res
+     * @param $category_list
+     * @return mixed
+     */
+    private function export_init($res)
+    {
+        $this->load->model('goods/category_model', 'category_m');
+        $category_list = $this->category_m->category_cache();
+
+        $this->load->model('goods/color_model', 'color_m');
+        $color_list = $this->color_m->color_cache();
+
+        $this->load->model('goods/size_model', 'size_m');
+        $size_list = $this->size_m->size_cache();
+
+        $this->load->model('admin/user_model', 'user_m');
+        $user_list = $this->user_m->user_cache();
+
+        $status = [0 => "已删除", 1 => "上架中", 2 => "已下架"];
+
+//加载PHPExcel的类
+        $this->load->library('PHPExcel');
+        $this->load->library('PHPExcel/IOFactory');
+//创建PHPExcel实例
+        $excel = $this->phpexcel;
+        $excel->getActiveSheet()->setCellValue("A1", "SKU_ID");
+        $excel->getActiveSheet()->setCellValue("B1", "货号");
+        $excel->getActiveSheet()->setCellValue("C1", "成本");
+        $excel->getActiveSheet()->setCellValue("D1", "价格");
+        $excel->getActiveSheet()->setCellValue("E1", "品牌");
+        $excel->getActiveSheet()->setCellValue("F1", "分类");
+        $excel->getActiveSheet()->setCellValue("G1", "颜色");
+        $excel->getActiveSheet()->setCellValue("H1", "颜色代码");
+        $excel->getActiveSheet()->setCellValue("I1", "尺寸");
+        $excel->getActiveSheet()->setCellValue("J1", "尺寸代码");
+        $excel->getActiveSheet()->setCellValue("K1", "备注");
+        $excel->getActiveSheet()->setCellValue("L1", "状态");
+        $excel->getActiveSheet()->setCellValue("M1", "操作人");
+        $excel->getActiveSheet()->setCellValue("N1", "创建时间");
+        $excel->getActiveSheet()->setCellValue("O1", "修改时间");
+
+//下面介绍项目中用到的几个关于excel的操作
+        foreach ($res as $j => $r) {
+            $k = $j + 2;
+            //为单元格赋值
+            $excel->getActiveSheet()->setCellValue("A{$k}", $r['sku_id']);
+            $excel->getActiveSheet()->setCellValue("B{$k}", $r['goods_id']);
+            $excel->getActiveSheet()->setCellValue("C{$k}", $r['cost']);
+            $excel->getActiveSheet()->setCellValue("D{$k}", $r['price']);
+            $excel->getActiveSheet()->setCellValue("E{$k}", $r['brand']);
+            $excel->getActiveSheet()->setCellValue("F{$k}", isset($category_list[$r['category_id']]) ? $category_list[$r['category_id']] : "");
+            $excel->getActiveSheet()->setCellValue("G{$k}", isset($color_list[$r['color_id']]['name']) ? $color_list[$r['color_id']]['name'] : "");
+            $excel->getActiveSheet()->setCellValue("H{$k}", $r['color_id']);
+            $excel->getActiveSheet()->setCellValue("I{$k}", isset($size_list[$r['size_id']]['size_info']) ? $size_list[$r['size_id']]['size_info'] : "");
+            $excel->getActiveSheet()->setCellValue("J{$k}", $r['size_id']);
+            $excel->getActiveSheet()->setCellValue("K{$k}", $r['memo']);
+            $excel->getActiveSheet()->setCellValue("L{$k}", $status[$r['status']]);
+            $excel->getActiveSheet()->setCellValue("M{$k}", isset($user_list[$r['op_uid']]) ? $user_list[$r['op_uid']]['name'] : "");
+            $excel->getActiveSheet()->setCellValue("N{$k}", $r['create_time']);
+            $excel->getActiveSheet()->setCellValue("O{$k}", $r['modify_time']);
+        }
+        return $excel;
+    }
+
 }

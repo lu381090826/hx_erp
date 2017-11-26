@@ -102,7 +102,7 @@
                     <div class="am-topbar-right">
                         <a href="/data">
                             <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span
-                                    class="am-icon-cogs"></span>
+                                    class="am-icon-dashboard"></span>
                                 数据报表
                             </button>
                         </a>

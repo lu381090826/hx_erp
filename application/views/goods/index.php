@@ -105,8 +105,7 @@ $this->load->view('head');
                             <div class="am-u-sm-5 am-padding-left-0">
                                 <input type="text" name="cost_min">
                             </div>
-                            -
-                            <div class="am-u-sm-5 am-padding-left-0 am-padding-right-0">
+                            <div class="am-u-sm-5 am-padding-left-0 am-padding-right-0" style="float: left">
                                 <input type="text" name="cost_max">
                             </div>
                         </div>
@@ -118,8 +117,7 @@ $this->load->view('head');
                             <div class="am-u-sm-5 am-padding-left-0">
                                 <input type="text" name="price_min">
                             </div>
-                            -
-                            <div class="am-u-sm-5 am-padding-left-0 am-padding-right-0">
+                            <div class="am-u-sm-5 am-padding-left-0 am-padding-right-0" style="float: left">
                                 <input type="text" name="price_max">
                             </div>
                         </div>
@@ -131,8 +129,7 @@ $this->load->view('head');
                             <div class="am-u-sm-5 am-padding-left-0">
                                 <input type="text" name="stock_min">
                             </div>
-                            -
-                            <div class="am-u-sm-5 am-padding-left-0 am-padding-right-0">
+                            <div class="am-u-sm-5 am-padding-left-0 am-padding-right-0" style="float: left">
                                 <input type="text" name="stock_max">
                             </div>
                         </div>

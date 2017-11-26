@@ -145,14 +145,21 @@ class User_model extends HX_Model
     public function user_cache()
     {
         $arr = [];
+        $res = [];
+
         if ($this->config->item('redis_default')['cache_on']) {
             $user_cache = 'USER_CACHE';
             try {
                 $this->load->driver('cache');
                 if (empty($this->cache->redis->get($user_cache))) { //如果未设置
-                    $arr = $this->get_user_list();
+                    $this->limit = 100000;
+                    $arr = $this->get_user_list(1)['result_rows'];
 
-                    $this->cache->redis->save($user_cache, $arr, 86400); //设置
+                    foreach ($arr as $r) {
+                        $res[$r['uid']] = $r;
+                    }
+
+                    $this->cache->redis->save($user_cache, $arr, 86400 * 365); //设置
                 } else {
                     $arr = $this->cache->redis->get($user_cache);  //从缓存中直接读取对应的值
                 }
@@ -163,8 +170,12 @@ class User_model extends HX_Model
         }
 
         if (empty($arr)) {
-            $arr = $this->get_user_list();
+            $this->limit = 100000;
+            $arr = $this->get_user_list(1)['result_rows'];
+            foreach ($arr as $r) {
+                $res[$r['uid']] = $r;
+            }
         }
-        return $arr;
+        return $res;
     }
 }

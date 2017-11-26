@@ -82,6 +82,127 @@ class Sku_model extends HX_Model
         return $this->suc_out_put($ret->result('array'));
     }
 
+    private function search_params($request)
+    {
+
+        $sql = "";
+        if (!empty($request['sku_id'])) {
+            $sql .= " AND Fsku_id LIKE '%{$request['sku_id']}%' ";
+        }
+
+        if (!empty($request['goods_id'])) {
+            $sql .= " AND Fgoods_id LIKE '%{$request['goods_id']}%' ";
+        }
+        if (!empty($request['price_max'])) {
+            $sql .= " AND Fprice <= {$request['price_max']} ";
+        }
+        if (!empty($request['price_min'])) {
+            $sql .= " AND Fprice >= {$request['price_min']} ";
+        }
+        if (!empty($request['record_number'])) {
+            $sql .= " AND Frecord_number LIKE '%{$request['record_number']}%' ";
+        }
+        if (!empty($request['brand'])) {
+            $sql .= " AND Fbrand LIKE '%{$request['brand']}%' ";
+        }
+        if (!empty($request['category_id'])) {
+            $sql .= " AND Fcategory_id = {$request['category_id']} ";
+        }
+        if (!empty($request['category'])) {
+            $sql .= " AND Fcategory LIKE '%{$request['category']}%' ";
+        }
+        if (!empty($request['begin_time'])) {
+            $sql .= " AND Fcreate_time >= '{$request['begin_time']}' ";
+        }
+        if (!empty($request['end_time'])) {
+            $sql .= " AND Fcreate_time <= '{$request['end_time']}' ";
+        }
+
+        if (!empty($request['year'])) {
+            $sql .= " AND Fyear = '{$request['year']}' ";
+        }
+        if (!empty($request['month'])) {
+            $sql .= " AND Fmonth = '{$request['month']}' ";
+        }
+        if (!empty($request['sex'])) {
+            $sql .= " AND Fsex = '{$request['sex']}' ";
+        }
+        if (!empty($request['season'])) {
+            $sql .= " AND Fseason = '{$request['season']}' ";
+        }
+
+        //销售只能看自己店铺的内容
+        $this->config->load('user_type', 'user_type');
+        if ($this->session->role_id == $this->config->item('user_type')['seller']) {
+            $goods_ids = $this->get_seller_goods();
+            if (!empty($goods_ids)) {
+                $goods_ids_str = implode('","', $this->get_seller_goods());
+                $sql .= " AND Fgoods_id in (\"{$goods_ids_str}\") ";
+            } else {
+                $sql .= " AND Fgoods_id = '0' ";
+            }
+        }
+
+        if (isset($request['status']) && $request['status'] != '') {
+            $status = "fstatus = {$request['status']}";
+        } else {
+            $status = "fstatus > 0";
+        }
+        $sql = "WHERE {$status} " . $sql;
+        return $sql;
+    }
+
+    private function get_seller_goods()
+    {
+        $s = "SELECT Fshop_id FROM t_shop_seller WHERE Fstatus = 1 AND Fseller_id = ? ORDER BY Fcreate_time DESC";
+        $ret = $this->db->query($s, [$this->session->uid]);
+        $shop_query = $ret->result('array');
+        $shop_ids = [];
+        foreach ($shop_query as $row) {
+            $shop_ids[] = $row['shop_id'];
+        }
+
+        if (count($shop_ids)) {
+            $shop_ids_str = implode("','", $shop_ids);
+            $s = "SELECT Fgoods_id FROM t_shop_goods WHERE Fstatus = 1 AND Fshop_id in ('{$shop_ids_str}')";
+            $ret = $this->db->query($s);
+            $goods_query = $ret->result('array');
+
+            $goods_ids = [];
+            foreach ($goods_query as $row) {
+                $goods_ids[] = $row['goods_id'];
+            }
+            return $goods_ids;
+        } else {
+            return null;
+        }
+    }
+
+    public function search_sku($page = 1, $request = [])
+    {
+        $params = "WHERE Fstatus = 1";
+        if (!empty($request)) {
+            $params = $this->search_params($request);
+        }
+
+        $s = "SELECT * FROM {$this->table} {$params}";
+        $ret = $this->db->query($s);
+        $this->total_num = $ret->num_rows();
+
+        $s = "SELECT * FROM {$this->table} {$params}  ORDER BY Fcreate_time DESC LIMIT ? , ?";
+        $this->offset = 0;
+        $this->limit = 10;
+        if ($page < 1) {
+            $page = 1;
+        }
+        $ret = $this->db->query($s, [
+            $this->offset + ($page - 1) * $this->limit,
+            $this->limit
+        ]);
+
+        return $this->suc_out_put($ret->result('array'));
+    }
+
     public function check_product_number_available($request)
     {
         $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1  AND Fproduct_number = ? ;";
@@ -100,6 +221,7 @@ class Sku_model extends HX_Model
         } else {
             show_error('缺少颜色或尺码');
         }
+        $request['op_uid'] = $this->session->uid;
         return $params;
     }
 
@@ -143,6 +265,18 @@ class Sku_model extends HX_Model
                 }
                 if (isset($request['category'])) {
                     $sku_info[$i]['Fcategory'] = $request['category'];
+                }
+                if (isset($request['sex'])) {
+                    $sku_info[$i]['Fsex'] = $request['sex'];
+                }
+                if (isset($request['year'])) {
+                    $sku_info[$i]['Fyear'] = $request['year'];
+                }
+                if (isset($request['month'])) {
+                    $sku_info[$i]['Fmonth'] = $request['month'];
+                }
+                if (isset($request['season'])) {
+                    $sku_info[$i]['Fseason'] = $request['season'];
                 }
                 if (isset($request['memo'])) {
                     $sku_info[$i]['Fmemo'] = $request['memo'];

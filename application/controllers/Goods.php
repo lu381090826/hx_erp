@@ -114,7 +114,6 @@ class Goods extends HX_Controller
         $this->load->model('goods/category_model', 'category_m');
         $data['result_rows']['category_list'] = $this->category_m->category_cache();
 
-        log_out($data['result_rows']);
         $this->load->view('/goods/goods/detail', $data['result_rows']);
     }
 
