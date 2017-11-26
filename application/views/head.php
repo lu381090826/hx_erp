@@ -18,6 +18,12 @@
     <!--    jquery   -->
     <script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
 </head>
+<style>
+    .am-topbar-right {
+        float: left;
+         margin-right: 1px;
+    }
+</style>
 <body>
 <header class="am-topbar am-topbar-fixed-top">
     <div class="am-container">
