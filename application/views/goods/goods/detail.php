@@ -55,7 +55,7 @@ $this->load->view('head');
                                     style="color: #<?= $color_cache[$row['color_id']]['color_code'] ?>;background: #<?= $color_cache[$row['color_id']]['color_code'] ?>;">
                     ccc</span><?= $color_cache[$row['color_id']]['name'] ?></td>
                             <td><?= $size_cache[$row['size_id']]['size_info'] ?></td>
-                            <td><a href="javascript:;" onclick="sku_id_delete(<?= $row['sku_id'] ?>)">删除</a></td>
+                            <td><a href="javascript:;" onclick="sku_id_delete('<?= $row['sku_id'] ?>')">删除</a></td>
                         </tr>
                     <?php endif; ?>
                 <?php endforeach; ?>
