@@ -20,8 +20,8 @@
 </head>
 <style>
     .am-topbar-right {
-        float: left;
-         margin-right: 1px;
+        /*float: left;*/
+        margin-right: 1px;
     }
 </style>
 <body>
