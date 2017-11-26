@@ -55,7 +55,7 @@ $this->load->view('head');
                                     style="color: #<?= $color_cache[$row['color_id']]['color_code'] ?>;background: #<?= $color_cache[$row['color_id']]['color_code'] ?>;">
                     ccc</span><?= $color_cache[$row['color_id']]['name'] ?></td>
                             <td><?= $size_cache[$row['size_id']]['size_info'] ?></td>
-                            <td>删除</td>
+                            <td><a href="javascript:;" onclick="sku_id_delete(<?= $row['sku_id'] ?>)">删除</a></td>
                         </tr>
                     <?php endif; ?>
                 <?php endforeach; ?>
@@ -117,7 +117,31 @@ $this->load->view('head');
         </div>
     </fieldset>
 </form>
-
+<div class="am-modal am-modal-confirm" tabindex="-1" id="sku_id-remove-confirm">
+    <div class="am-modal-dialog">
+        <div class="am-modal-hd">提示</div>
+        <div class="am-modal-bd">
+            确定要删除这条记录吗？
+        </div>
+        <div class="am-modal-footer">
+            <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+            <span class="am-modal-btn" data-am-modal-confirm>确定</span>
+        </div>
+    </div>
+</div>
 <?php
 $this->load->view('footer');
 ?>
+<script>
+    var delete_id = 0;
+    function sku_id_delete(id) {
+        delete_id = id;
+        $('#sku_id-remove-confirm').modal({
+            relatedTarget: this,
+            onConfirm: function (options) {
+                $.post('/sku/action_delete_sku/' + delete_id);
+                location.href = "/goods/goods_detail/<?=$goods_id?>"
+            }
+        });
+    }
+</script>

@@ -57,7 +57,7 @@ class Sku extends HX_Controller
         foreach ($data['shop_list'] as &$row) {
             if (array_keys($shops, ['shop_id' => $row['id']])) {
                 $row['is_check'] = true;
-            }else{
+            } else {
                 $row['is_check'] = false;
             }
         }
@@ -82,12 +82,9 @@ class Sku extends HX_Controller
         redirect("success");
     }
 
-    public function delete_sku($id)
+    public function action_delete_sku($id)
     {
         $this->sku_m->sku_delete_by_id($id);
-
-        $this->load->helper('url');
-        redirect("success");
     }
 
     /**
@@ -118,7 +115,8 @@ class Sku extends HX_Controller
         }
     }
 
-    private function imageCreateFromAny($filepath) {
+    private function imageCreateFromAny($filepath)
+    {
         $type = exif_imagetype($filepath); // [] if you don't have exif you could use getImageSize()
         $allowedTypes = array(
             1,  // [] gif

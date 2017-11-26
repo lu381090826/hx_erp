@@ -19,9 +19,9 @@ class Sku_model extends HX_Model
         $this->load->database();
     }
 
-    public function sku_delete_by_id($id)
+    public function sku_delete_by_id($sku_id)
     {
-        return $this->db->update($this->table, ['Fstatus' => 0, 'Fop_uid' => $this->session->uid], ['Fid' => $id]);
+        return $this->db->update($this->table, ['Fstatus' => 0, 'Fop_uid' => $this->session->uid], ['Fsku_id' => $sku_id]);
     }
 
     public function get_sku_list_by_goods_id($goods_id)
@@ -115,7 +115,7 @@ class Sku_model extends HX_Model
         foreach ($color_id_array as $k => $color_row) {
             foreach ($size_id_array as $z => $size_row) {
 
-                $curr_sku_id = $request['goods_id'] . str_pad($color_row,2,"0",STR_PAD_LEFT) . str_pad($size_row,2,"0",STR_PAD_LEFT) ;
+                $curr_sku_id = $request['goods_id'] . str_pad($color_row, 2, "0", STR_PAD_LEFT) . str_pad($size_row, 2, "0", STR_PAD_LEFT);
 
                 $sku_info[$i]['Fsku_id'] = $curr_sku_id;
                 $sku_info[$i]['Fgoods_id'] = $request['goods_id'];
