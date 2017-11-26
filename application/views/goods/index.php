@@ -30,11 +30,11 @@ $this->load->view('head');
         <button type="button" class="am-btn am-btn-default"
                 onclick="window.location.href='/sku/action_add_sku'"><span class="am-icon-plus"></span>新建商品
         </button>
-        <button type="button" class="am-btn am-btn-default" onclick="expotr()" id="exprot">
-            <span class="am-icon-file-excel-o">
-                导出
-            </span>
-        </button>
+        <!--        <button type="button" class="am-btn am-btn-default" onclick="expotr()" id="exprot">-->
+        <!--            <span class="am-icon-file-excel-o">-->
+        <!--                导出-->
+        <!--            </span>-->
+        <!--        </button>-->
         <button type="button" class="am-btn am-btn-default"
                 data-am-collapse="{parent: '#accordion', target: '#goods_search'}"><span class="am-icon-search"></span>
         </button>
@@ -62,8 +62,19 @@ $this->load->view('head');
                         </select>
                     </div>
 
+
                     <div class="am-form-group">
-                        <label class="am-form-label" for="search_category_id">分类</label>
+                        <label class="am-form-label" for="search_category_id">大分类</label>
+                        <select id="search_category_id" name="category_parent_id">
+                            <option value="">全部</option>
+                            <?php foreach ($category_parent_list as $key => $category): ?>
+                                <option value="<?= $key ?>"><?= $category['category_name'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label class="am-form-label" for="search_category_id">小分类</label>
                         <select id="search_category_id" name="category_id">
                             <option value="">全部</option>
                             <?php foreach ($category_list as $key => $category): ?>

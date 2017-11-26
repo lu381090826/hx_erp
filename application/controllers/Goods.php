@@ -12,6 +12,7 @@ class Goods extends HX_Controller
     {
         $this->load->model('goods/category_model', 'category_m');
         $data['category_list'] = $this->category_m->category_cache();
+        $data['category_parent_list'] = $this->category_m->category_cache_tree();
 
         $this->load->model('goods/color_model', 'color_m');
         $data['color_list'] = $this->color_m->color_cache();

@@ -108,6 +108,19 @@ class Sku_model extends HX_Model
         if (!empty($request['category_id'])) {
             $sql .= " AND Fcategory_id = {$request['category_id']} ";
         }
+
+        if (!empty($request['category_parent_id'])) {
+            $this->load->model('goods/category_model', 'category_m');
+            $cate = $this->category_m->category_cache_tree();
+            $cid = [];
+            if (isset($cate[$request['category_parent_id']]['childs'])) {
+                foreach ($cate[$request['category_parent_id']]['childs'] as $r) {
+                    $cid[] = $r['id'];
+                }
+            }
+            $sql .= " AND Fcategory_id in ({$request['category_parent_id']}," . implode($cid, ',') . ") ";
+        }
+
         if (!empty($request['category'])) {
             $sql .= " AND Fcategory LIKE '%{$request['category']}%' ";
         }
@@ -190,6 +203,7 @@ class Sku_model extends HX_Model
         $this->total_num = $ret->num_rows();
 
         $s = "SELECT * FROM {$this->table} {$params}  ORDER BY Fcreate_time DESC LIMIT ? , ?";
+
         $this->offset = 0;
         $this->limit = 10;
         if ($page < 1) {

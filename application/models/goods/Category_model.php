@@ -167,19 +167,21 @@ class Category_model extends HX_Model
 
     private function category_tree()
     {
-        $arr = $this->get_all_list()['result_rows'];
+        $list = $this->get_all_list()['result_rows'];
+        $arr = [];
+        foreach ($list as $r) {
+            $arr[$r['id']] = $r;
+        }
+
         $tree = [];
         foreach ($arr as $r) {
             if ($r['pid'] != 0) {
-                if (isset($tree[$r['pid']]['childs'])) {
-                    array_push($tree[$r['pid']]['childs'], $r);
-                } else {
+                if (isset($tree[$r['pid']])) {
                     $tree[$r['pid']]['childs'][] = $r;
                 }
             } else {
                 $tree[$r['id']] = $r;
                 $tree[$r['id']]['childs'] = [];
-
             }
         }
         return $tree;

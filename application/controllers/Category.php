@@ -15,7 +15,7 @@ class Category extends HX_Controller
 
     public function action_add_category()
     {
-        $data['category_list'] = $this->category_m->category_cache_series();
+        $data['category_list'] = $this->category_m->category_cache_tree();
         $this->load->view('goods/category/addForm', $data);
     }
 
