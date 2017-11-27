@@ -21,9 +21,9 @@ class Allocate extends BaseController {
         //加载模型
         $this->load->model('sell/allocate/Allocate_model',"model",true);
         $this->load->model('sell/allocate/AllocateItem_model',"m_item",true);
-        $this->load->model('sell/form/Form_model',"m_form",true);
-        $this->load->model('sell/form/FormSpu_model',"m_spu",true);
-        $this->load->model('sell/form/FormSku_model',"m_sku",true);
+        $this->load->model('sell/order/Order_model',"m_order",true);
+        $this->load->model('sell/order/OrderSpu_model',"m_spu",true);
+        $this->load->model('sell/order/OrderSku_model',"m_sku",true);
         $this->load->model('sell/client/Client_model',"m_client",true);
         $this->load->model('admin/User_model',"m_user",true);
     }
@@ -103,17 +103,17 @@ class Allocate extends BaseController {
 
     /**
      * list
-     * @param $form_id
+     * @param $order_id
      */
-    public function index($form_id){
+    public function index($order_id){
         //获取销售单信息
-        $form = $this->m_form->get($form_id);
-        $goods = $form->getGoods();
-        $form->create_date = date("Y-m-d",$form->create_at);
+        $order = $this->m_order->get($order_id);
+        $goods = $order->getGoods();
+        $order->create_date = date("Y-m-d",$order->create_at);
 
         //获取列表
         $list = array();
-        $allocates = $this->model->searchAll(["form_id"=>$form_id])->list;
+        $allocates = $this->model->searchAll(["order_id"=>$order_id])->list;
         foreach($allocates as $item){
             $item->create_data = date("Y-m-d",strtotime($item->create_at));
             $item->statusName = $item->getStatusName();
@@ -121,12 +121,12 @@ class Allocate extends BaseController {
         }
 
         //获取销售员和客户
-        $seller = $this->m_user->get_user_info($form->user_id);
-        $client = $this->m_client->get($form->client_id);
+        $seller = $this->m_user->get_user_info($order->user_id);
+        $client = $this->m_client->get($order->client_id);
 
         //页面显示
         $this->show("list",[
-            "form"=>$form,
+            "order"=>$order,
             "list"=>$list,
             "seller"=>$seller,
             "client"=>$client,
@@ -136,51 +136,51 @@ class Allocate extends BaseController {
 
     /**
      * add
-     * @param $form_id
+     * @param $order_id
      */
-    public function add($form_id){
+    public function add($order_id){
         //获取销售单信息
-        $form = $this->m_form->get($form_id);
+        $order = $this->m_order->get($order_id);
 
         //获取销售员和客户
-        $seller = $this->m_user->get_user_info($form->user_id);
-        $client = $this->m_client->get($form->client_id);
+        $seller = $this->m_user->get_user_info($order->user_id);
+        $client = $this->m_client->get($order->client_id);
 
         //获取已配数量
-        $allocated = $this->m_item->getAllocateStatus($form_id);
+        $allocated = $this->m_item->getAllocateStatus($order_id);
 
         //生成配货单号
         $order_num = $this->model->createOrderNum();
 
         //获取所有spu
-        $form_spus = $this->m_spu->searchAll(["form_id"=>$form_id])->list;
-        $form_skus = $this->m_sku->searchAll(["form_id"=>$form_id])->list;
+        $order_spus = $this->m_spu->searchAll(["order_id"=>$order_id])->list;
+        $order_skus = $this->m_sku->searchAll(["order_id"=>$order_id])->list;
 
         //获取
         $list = array();
-        foreach($form_spus as $form_spu){
-            foreach($form_skus as $form_sku){
+        foreach($order_spus as $order_spu){
+            foreach($order_skus as $order_sku){
                 //过滤
-                if($form_spu->id != $form_sku->form_spu_id)
+                if($order_spu->id != $order_sku->order_spu_id)
                     continue;
 
                 //设置项目
                 $item = $this->m_item->_new();
-                $item->form_id = $form->id;
-                $item->form_spu_id = $form_spu->id;
-                $item->form_sku_id = $form_sku->id;
-                $item->spu_id = $form_spu->spu_id;
-                $item->sku_id = $form_sku->sku_id;
+                $item->order_id = $order->id;
+                $item->order_spu_id = $order_spu->id;
+                $item->order_sku_id = $order_sku->id;
+                $item->spu_id = $order_spu->spu_id;
+                $item->sku_id = $order_sku->sku_id;
                 $item->num = 0;
                 $item->status = 0;
-                $item->spu = $form_spu;
-                $item->sku = $form_sku;
+                $item->spu = $order_spu;
+                $item->sku = $order_sku;
 
                 //设置可配数量
-                $item->num_sum = (int)$form_sku->num;
+                $item->num_sum = (int)$order_sku->num;
 
                 //设置已经配置数量
-                $item->num_end = isset($allocated[$form_sku->id])?(int)$allocated[$form_sku->id]:0;
+                $item->num_end = isset($allocated[$order_sku->id])?(int)$allocated[$order_sku->id]:0;
 
                 //添加到列表
                 $list[] = $item;
@@ -188,8 +188,8 @@ class Allocate extends BaseController {
         }
 
         //页面显示
-        $this->show("allocateform",[
-            "form"=>$form,
+        $this->show("allocate",[
+            "order"=>$order,
             "list"=>$list,
             "order_num"=>$order_num,
             "seller"=>$seller,
@@ -209,25 +209,25 @@ class Allocate extends BaseController {
         $allocate_items = $this->m_item->searchAll(["allocate_id"=>$allocate_id])->list;
 
         //获取销售单
-        $form = $this->m_form->get($allocate->form_id);
+        $order = $this->m_order->get($allocate->order_id);
 
         //获取销售员和客户
-        $seller = $this->m_user->get_user_info($form->user_id);
-        $client = $this->m_client->get($form->client_id);
+        $seller = $this->m_user->get_user_info($order->user_id);
+        $client = $this->m_client->get($order->client_id);
 
         //获取销售单SKU信息
-        $form_items = $this->m_sku->searchAll(["form_id"=>$allocate->form_id])->list;
+        $order_items = $this->m_sku->searchAll(["order_id"=>$allocate->order_id])->list;
 
         //组装列表
         $list = array();
-        foreach($form_items as $iform){
+        foreach($order_items as $iorder){
             foreach($allocate_items as $iallocate){
-                if($iform->id == $iallocate->form_sku_id){
+                if($iorder->id == $iallocate->order_sku_id){
                     $item = $iallocate;
                     //拼凑显示信息
-                    $item->size = $iform->size;
-                    $item->color = $iform->color;
-                    $item->num_sum = $iform->num;
+                    $item->size = $iorder->size;
+                    $item->color = $iorder->color;
+                    $item->num_sum = $iorder->num;
                     //添加到列表
                     $list[] = $item;
                 }
@@ -240,7 +240,7 @@ class Allocate extends BaseController {
         //页面显示
         $this->show("look",[
             "allocate"=>$allocate,
-            "form"=>$form,
+            "order"=>$order,
             "list"=>$list,
             "seller"=>$seller,
             "client"=>$client,
@@ -255,7 +255,7 @@ class Allocate extends BaseController {
         $data = $_REQUEST;
 
         //建立表单
-        $bool = $this->model->createForm($data);
+        $bool = $this->model->createOrder($data);
 
         //返回处理结果
         if($bool)

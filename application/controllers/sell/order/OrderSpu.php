@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 include_once(dirname(BASEPATH).'/inherit/BaseController.php');
-class FormSpu extends BaseController {
+class OrderSpu extends BaseController {
     /**
      * constructor.
      */
@@ -11,11 +11,11 @@ class FormSpu extends BaseController {
         parent::__construct();
 
         //环境变量设置
-        $this->_controller->views = "sell/form/FormSpu";
+        $this->_controller->views = "sell/order/OrderSpu";
         $this->_controller->layout = "layout/amaze/main";
 
         //加载模型
-        $this->load->model('sell/form/FormSpu_model',"model",true);
+        $this->load->model('sell/order/OrderSpu_model',"model",true);
     }
 
     /**

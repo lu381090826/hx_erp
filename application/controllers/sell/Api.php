@@ -14,10 +14,10 @@ class Api extends CI_Controller {
         $this->load->library('evon/ApiResult','','apiresult');
 
         //加载模型
-        $this->load->model('sell/form/Form_model',"m_form",true);
+        $this->load->model('sell/order/Order_model',"m_order",true);
         $this->load->model('sell/client/Client_model',"m_client",true);
-        $this->load->model('sell/form/FormSpu_model',"m_spu",true);
-        $this->load->model('sell/form/FormSku_model',"m_sku",true);
+        $this->load->model('sell/order/OrderSpu_model',"m_spu",true);
+        $this->load->model('sell/order/OrderSku_model',"m_sku",true);
         $this->load->model('goods/Goods_model',"m_goods",true);
         $this->load->model('goods/Sku_model',"m_good_sku",true);
         $this->load->model('admin/User_model',"m_user",true);
@@ -86,7 +86,7 @@ class Api extends CI_Controller {
      */
     public function search_sell(){
         //查询
-        $model = $this->m_form;
+        $model = $this->m_order;
         $param = $_REQUEST;
         $start_date = isset($param["start_date"])?$param["start_date"]:null;
         $end_date = isset($param["end_date"])?$param["end_date"]:null;
@@ -130,7 +130,7 @@ class Api extends CI_Controller {
      */
     public function search_sell_like(){
         //查询
-        $model = $this->m_form;
+        $model = $this->m_order;
         $param = $_REQUEST;
         $start_date = isset($param["start_date"])?$param["start_date"]:null;
         $end_date = isset($param["end_date"])?$param["end_date"]:null;

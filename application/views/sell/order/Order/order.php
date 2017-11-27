@@ -649,7 +649,7 @@
                     },
                     success:function(result) {
                         if(result.state.return_code == 0) {
-                            location.href="<?=site_url("sell/form/Form/index")?>";
+                            location.href="<?=site_url("sell/order/Order/index")?>";
                         }
                         else {
                             alert(result.state.return_msg)

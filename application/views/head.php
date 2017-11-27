@@ -48,7 +48,7 @@
             <?php } else { ?>
                 <?php if (check_auth(8)) { ?>
                     <div class="am-topbar-right">
-                        <a href="/sell/form/Form">
+                        <a href="/sell/order/Order">
                             <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span
                                     class="am-icon-female"></span>
                                 销售管理

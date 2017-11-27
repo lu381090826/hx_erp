@@ -5,8 +5,8 @@
 <div class="am-cf am-padding am-padding-bottom-0">
     <div class="am-fl am-cf">
         <a class="am-text-primary am-text-lg" href="<?=base_url()?>">HOME</a> /
-        <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/form/Form")?>">销售订单</a> /
-        <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/allocate/Allocate/index")."/$form->id"?>">配货订单</a> /
+        <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/order/Order")?>">销售订单</a> /
+        <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/allocate/Allocate/index")."/$order->id"?>">配货订单</a> /
         <small>查看配货</small>
     </div>
 </div>
@@ -60,7 +60,7 @@
                         </div>
 
                         <div class="am-form-group">
-                            <label for="doc-ipt-email-1">销售单号：{{form.order_num}}</label>
+                            <label for="doc-ipt-email-1">销售单号：{{order.order_num}}</label>
                         </div>
 
                         <div class="am-form-group">
@@ -68,27 +68,27 @@
                         </div>
 
                         <div class="am-form-group">
-                            <label for="doc-ipt-pwd-2">开单日期：{{form.create_date}}</label>
+                            <label for="doc-ipt-pwd-2">开单日期：{{order.create_date}}</label>
                         </div>
 
                         <div class="am-form-group">
-                            <label for="doc-ipt-pwd-2">收款日期：{{form.receipt_date}}</label>
+                            <label for="doc-ipt-pwd-2">收款日期：{{order.receipt_date}}</label>
                         </div>
 
                         <div class="am-form-group">
-                            <label for="doc-ipt-pwd-2">销售总量：{{form.total_num}}</label>
+                            <label for="doc-ipt-pwd-2">销售总量：{{order.total_num}}</label>
                         </div>
 
                         <div class="am-form-group">
-                            <label for="doc-ipt-pwd-2">销售总额：{{form.total_price}} 元</label>
+                            <label for="doc-ipt-pwd-2">销售总额：{{order.total_price}} 元</label>
                         </div>
 
-                        <div class="am-form-group" v-if="form.delivery_type == 0">
-                            <label for="doc-ipt-pwd-2">收货地址：{{form.delivery_addr}}</label>
+                        <div class="am-form-group" v-if="order.delivery_type == 0">
+                            <label for="doc-ipt-pwd-2">收货地址：{{order.delivery_addr}}</label>
                         </div>
 
                         <div class="am-form-group">
-                            <label for="doc-ipt-pwd-2">备注信息：{{form.remark}}</label>
+                            <label for="doc-ipt-pwd-2">备注信息：{{order.remark}}</label>
                         </div>
                     </div>
                 </div>
@@ -135,7 +135,7 @@
         },
         created:function()
         {
-            this.form = <?=json_encode($form)?>;
+            this.order = <?=json_encode($order)?>;
             this.allocate = <?=json_encode($allocate)?>;
             this.list = <?=json_encode($list)?>;
             this.seller = <?=json_encode($seller)?>;

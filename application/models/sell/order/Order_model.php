@@ -1,10 +1,10 @@
 <?php
 include_once(dirname(BASEPATH).'/inherit/BaseModel.php');
-class Form_model extends BaseModel{
+class Order_model extends BaseModel{
 	/**
 	 * @var table
 	 */
-	protected $table = "t_sell_form";
+	protected $table = "t_sell_order";
 	protected $pk = "id";
 
 	/**
@@ -15,11 +15,11 @@ class Form_model extends BaseModel{
 	public $isPrinted,$isReceipted;
 
 	/**
-	 * Form_model constructor.
+	 * Order_model constructor.
 	 */
 	function __construct(){
-		$this->load->model('sell/form/FormSpu_model',"MSpu",true);
-		$this->load->model('sell/form/FormSku_model',"MSku",true);
+		$this->load->model('sell/order/OrderSpu_model',"MSpu",true);
+		$this->load->model('sell/order/OrderSku_model',"MSku",true);
 	}
 
 	/**
@@ -150,7 +150,7 @@ class Form_model extends BaseModel{
 	/**
 	 * 添加/修改
 	 */
-	public function updateForm($data){
+	public function updateOrder($data){
 		//开始事务
 		$this->db->trans_strict(FALSE);
 		$this->db->trans_begin();
@@ -160,8 +160,8 @@ class Form_model extends BaseModel{
 		$this->save();
 
 		//删除所有旧项
-		$this->MSpu->deleteAll(["form_id" => $this->id]);
-		$this->MSku->deleteAll(["form_id" => $this->id]);
+		$this->MSpu->deleteAll(["order_id" => $this->id]);
+		$this->MSku->deleteAll(["order_id" => $this->id]);
 
 		//遍历spu
 		foreach($data["selectList"] as $spu_data){
@@ -170,7 +170,7 @@ class Form_model extends BaseModel{
 			//保存SKU
 			$spu = $this->MSpu->_new();
 			$spu->load($spu_data);
-			$spu->form_id = $this->id;
+			$spu->order_id = $this->id;
 			//$spu->spu_id = $spu_data["spu_id"];
 			//$spu->snap_price = $spu_data["snap_price"];
 			//$spu->snap_pic = $spu_data["snap_pic"];
@@ -180,8 +180,8 @@ class Form_model extends BaseModel{
 			foreach($spu_data["skus"] as $sku_data){
 				$sku = $this->MSku->_new();
 				$sku->load($sku_data);
-				$sku->form_id = $this->id;
-				$sku->form_spu_id = $spu->id;
+				$sku->order_id = $this->id;
+				$sku->order_spu_id = $spu->id;
 				/*$sku->sku_id = $sku_data["sku_id"];
 				$sku->color = $sku_data["color"];
 				$sku->size = $sku_data["size"];
@@ -286,14 +286,14 @@ class Form_model extends BaseModel{
 	 * @return array
 	 */
 	public function getGoods(){
-		$spus = $this->MSpu->searchAll(['form_id'=>$this->id]);
-		$skus = $this->MSku->searchAll(['form_id'=>$this->id]);
+		$spus = $this->MSpu->searchAll(['order_id'=>$this->id]);
+		$skus = $this->MSku->searchAll(['order_id'=>$this->id]);
 		$list = array();
 		foreach($spus->list as $spu){
 			$item = $spu;
 			$item->skus = array();
 			foreach($skus->list as $sku){
-				if($sku->form_spu_id == $spu->id)
+				if($sku->order_spu_id == $spu->id)
 					$spu->skus[] = $sku;
 			}
 			$list[] = $item;

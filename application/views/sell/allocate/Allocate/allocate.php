@@ -5,8 +5,8 @@
 <div class="am-cf am-padding am-padding-bottom-0">
     <div class="am-fl am-cf">
         <a class="am-text-primary am-text-lg" href="<?=base_url()?>">HOME</a> /
-        <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/form/Form")?>">销售订单</a> /
-        <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/allocate/Allocate/index")."/$form->id"?>">配货订单</a> /
+        <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/order/Order")?>">销售订单</a> /
+        <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/allocate/Allocate/index")."/$order->id"?>">配货订单</a> /
         <small>添加配货</small>
     </div>
 </div>
@@ -62,7 +62,7 @@
                         </div>
 
                         <div class="am-form-group">
-                            <label for="doc-ipt-email-1">销售单号：{{form.order_num}}</label>
+                            <label for="doc-ipt-email-1">销售单号：{{order.order_num}}</label>
                         </div>
 
                         <div class="am-form-group">
@@ -70,27 +70,27 @@
                         </div>
 
                         <div class="am-form-group">
-                            <label for="doc-ipt-pwd-2">开单日期：{{form.create_date}}</label>
+                            <label for="doc-ipt-pwd-2">开单日期：{{order.create_date}}</label>
                         </div>
 
                         <div class="am-form-group">
-                            <label for="doc-ipt-pwd-2">收款日期：{{form.receipt_date}}</label>
+                            <label for="doc-ipt-pwd-2">收款日期：{{order.receipt_date}}</label>
                         </div>
 
                         <div class="am-form-group">
-                            <label for="doc-ipt-pwd-2">销售总量：{{form.total_num}}</label>
+                            <label for="doc-ipt-pwd-2">销售总量：{{order.total_num}}</label>
                         </div>
 
                         <div class="am-form-group">
-                            <label for="doc-ipt-pwd-2">销售总额：{{form.total_price}} 元</label>
+                            <label for="doc-ipt-pwd-2">销售总额：{{order.total_price}} 元</label>
                         </div>
 
-                        <div class="am-form-group" v-if="form.delivery_type == 0">
-                            <label for="doc-ipt-pwd-2">收货地址：{{form.delivery_addr}}</label>
+                        <div class="am-form-group" v-if="order.delivery_type == 0">
+                            <label for="doc-ipt-pwd-2">收货地址：{{order.delivery_addr}}</label>
                         </div>
 
                         <div class="am-form-group">
-                            <label for="doc-ipt-pwd-2">备注信息：{{form.remark}}</label>
+                            <label for="doc-ipt-pwd-2">备注信息：{{order.remark}}</label>
                         </div>
                     </div>
                 </div>
@@ -137,7 +137,7 @@
         el:"#app",
         data: {
             //销售单
-            form:null,
+            order:null,
             user:null,
             remark:"",
             order_num:"",
@@ -147,7 +147,7 @@
         created:function()
         {
             this.order_num = "<?=$order_num?>";
-            this.form = <?=json_encode($form)?>;
+            this.order = <?=json_encode($order)?>;
             this.list = <?=json_encode($list)?>;
             this.seller = <?=json_encode($seller)?>;
             this.client = <?=json_encode($client)?>;
@@ -157,8 +157,8 @@
         methods: {
             //添加配货单
             add:function(){
-                if(this.form){
-                    window.location.href="<?=site_url($_controller->views."/add")?>/"+this.form.id;
+                if(this.order){
+                    window.location.href="<?=site_url($_controller->views."/add")?>/"+this.order.id;
                 }
             },
             //提交表单
@@ -171,7 +171,7 @@
                     type: "post",
                     dataType: "json",
                     data: {
-                        "form_id": this.form.id,
+                        "order_id": this.order.id,
                         "order_num":this.order_num,
                         "remark":this.remark,
                         "list":this.getSubmitList(),
@@ -179,7 +179,7 @@
                     success: function (result) {
                         console.log(result);
                         if (result.state.return_code == 0) {
-                            location.href = '<?=site_url($_controller->views . "/index/$form->id")?>'
+                            location.href = '<?=site_url($_controller->views . "/index/$order->id")?>'
                         }
                         else
                             alert(item.state.return_msg);

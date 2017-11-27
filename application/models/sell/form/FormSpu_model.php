@@ -1,1 +1,0 @@
-<?phpinclude_once(dirname(BASEPATH).'/inherit/BaseModel.php');class FormSpu_model extends BaseModel{ /**  * @var table  */ protected $table = "t_sell_form_spu"; protected $pk = "id"; /**  * @fields  */ public $id,$form_id,$spu_id,$snap_price,$snap_pic,$snap_pic_normal,$remark;}?>    

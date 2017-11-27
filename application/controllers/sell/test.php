@@ -14,8 +14,8 @@ class Test extends CI_Controller {
         $this->load->library('evon/ApiResult','','apiresult');
 
         //加载模型
-        $this->load->model('goods/Goods_model',"m_goods",true);
-        $this->load->model('goods/Sku_model',"m_sku",true);
+        $this->load->model('sell/form/FormSpu_model',"m_spu",true);
+        $this->load->model('sell/form/FormSku_model',"m_sku",true);
     }
 
     /**
@@ -23,17 +23,7 @@ class Test extends CI_Controller {
      */
     public function index()
     {
-        $key = "123";
-
-        //搜索出列表
-        $list = array();
-        $goods = $this->m_goods->search_goods(["goods_id"=>$key]);
-        foreach($goods["result_rows"] as $good){
-            $item = (object)$good;
-            $skus = $this->m_sku->get_sku_list_info_by_goods_id($good["goods_id"]);
-            $item->skus = $skus["result_rows"];
-            $list[] = $item;
-        }
-        var_dump($list);
+        $result = $this->m_sku->checkSkuExist("A124503052");
+        var_dump($result);
     }
 }
