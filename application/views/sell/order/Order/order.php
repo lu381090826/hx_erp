@@ -187,6 +187,7 @@
                                         <tr>
                                             <td>颜色</td>
                                             <td>尺码</td>
+                                            <td>库存</td>
                                             <td>数量</td>
                                             <!--<td>操作</td>-->
                                         </tr>
@@ -195,6 +196,7 @@
                                         <tr v-for="sku in item.skus" v-if="sku.color.indexOf(item.filter) != -1">
                                             <td>{{sku.color}}</td>
                                             <td>{{sku.size}}</td>
+                                            <td>0</td>
                                             <td><input type="number" class="form-control" placeholder="数量" v-model="sku.num"></td>
                                             <!--<td><a v-on:click="skuDel(item,sku)">删除</a></td>-->
                                         </tr>
@@ -244,12 +246,18 @@
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <td>颜色</td><td>尺码</td><td>数量</td><!--<td>操作</td>-->
+                                            <td>颜色</td><td>尺码</td><td>库存</td>
+                                            <td>已请求配货数量</td>
+                                            <td>数量</td><!--<td>操作</td>-->
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="sku in item.skus" v-if="sku.color.indexOf(item.filter) != -1">
-                                            <td>{{sku.color}}</td><td>{{sku.size}}</td><td><input type="number" class="form-control" placeholder="数量" v-model="sku.num"></td><!--<td><a v-on:click="skuDel(item,sku)">删除</a></td>-->
+                                        <tr v-for="sku in item.skus" v-if="sku.color.indexOf(item.filter) != -1" v-bind:class="{ danger: parseInt(sku.num) < parseInt(sku.num_allocat)}">
+                                            <td>{{sku.color}}</td>
+                                            <td>{{sku.size}}</td>
+                                            <td>0</td>
+                                            <td>{{sku.num_allocat}}</td>
+                                            <td><input type="number" class="form-control" placeholder="数量" v-model="sku.num"></td><!--<td><a v-on:click="skuDel(item,sku)">删除</a></td>-->
                                         </tr>
                                     </tbody>
                                 </table>
@@ -675,8 +683,22 @@
                     return false;
                 }
                 else if(this.id !="" && parseInt(this.total_amount) < parseInt(total_price)){
-                    alert("修改订单后，不能超过订单金额");
+                    alert("修改订单不能超过订单金额");
                     return false;
+                }
+
+                //修改是触发
+                if(this.id !=""){
+                    for(var key_spu in this.selectList){
+                        var spu = this.selectList[key_spu];
+                        for(var key_sku in spu.skus) {
+                            var sku = spu.skus[key_sku];
+                            if (parseInt(sku.num) < parseInt(sku.num_allocat)) {
+                                alert("款号："+spu.spu_id+"，存在不符合配货条件项");
+                                return false;
+                            }
+                        }
+                    }
                 }
 
                 return true;

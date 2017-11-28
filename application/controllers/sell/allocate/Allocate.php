@@ -115,7 +115,7 @@ class Allocate extends BaseController {
         $list = array();
         $allocates = $this->model->searchAll(["order_id"=>$order_id])->list;
         foreach($allocates as $item){
-            $item->create_data = date("Y-m-d",strtotime($item->create_at));
+            $item->create_data = date("Y-m-d",$item->create_at);
             $item->statusName = $item->getStatusName();
             $list[] = $item;
         }

@@ -87,12 +87,14 @@
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <td>款号</td><td>颜色</td><td>尺码</td><td>数量</td>
+                                        <td>款号</td><td>颜色</td><td>尺码</td>
+                                        <td>下单数量</td><td>请求配货数量</td><td>已配货数量</td>
                                     </tr>
                                 </thead>
                                 <tbody  v-for="item in goods">
                                     <tr v-for="sku in item.skus">
-                                        <td>{{item.spu_id}}</td><td>{{sku.color}}</td><td>{{sku.size}}</td><td>{{sku.num}}</td>
+                                        <td>{{item.spu_id}}</td><td>{{sku.color}}</td><td>{{sku.size}}</td>
+                                        <td>{{sku.num}}</td><td>{{sku.num_allocat}}</td><td>0</td>
                                     </tr>
                                 </tbody>
                             </table>

@@ -20,6 +20,7 @@ class Order_model extends BaseModel{
 	function __construct(){
 		$this->load->model('sell/order/OrderSpu_model',"MSpu",true);
 		$this->load->model('sell/order/OrderSku_model',"MSku",true);
+		$this->load->model('sell/allocate/AllocateItem_model',"m_item",true);
 	}
 
 	/**
@@ -167,25 +168,20 @@ class Order_model extends BaseModel{
 		foreach($data["selectList"] as $spu_data){
 			//去除多余字段
 			unset($spu_data["filter"]);
-			//保存SKU
+			//保存SPU
 			$spu = $this->MSpu->_new();
-			$spu->load($spu_data);
+			$spu->load_safe($spu_data);
 			$spu->order_id = $this->id;
-			//$spu->spu_id = $spu_data["spu_id"];
-			//$spu->snap_price = $spu_data["snap_price"];
-			//$spu->snap_pic = $spu_data["snap_pic"];
-			//$spu->snap_pic_normal = $spu_data["snap_normal"];
 			$spu->save();
 			//遍历sku
 			foreach($spu_data["skus"] as $sku_data){
+				//去除多余字段
+				unset($sku_data["num_allocat"]);
+				//保存SPU
 				$sku = $this->MSku->_new();
-				$sku->load($sku_data);
+				$sku->load_safe($sku_data);
 				$sku->order_id = $this->id;
 				$sku->order_spu_id = $spu->id;
-				/*$sku->sku_id = $sku_data["sku_id"];
-				$sku->color = $sku_data["color"];
-				$sku->size = $sku_data["size"];
-				$sku->num = $sku_data["num"];*/
 				$sku->save();
 			}
 		}
@@ -288,13 +284,24 @@ class Order_model extends BaseModel{
 	public function getGoods(){
 		$spus = $this->MSpu->searchAll(['order_id'=>$this->id]);
 		$skus = $this->MSku->searchAll(['order_id'=>$this->id]);
+		$allocated = $this->m_item->getAllocateStatus($this->id);
 		$list = array();
 		foreach($spus->list as $spu){
 			$item = $spu;
 			$item->skus = array();
 			foreach($skus->list as $sku){
-				if($sku->order_spu_id == $spu->id)
+				//添加配货完成数量
+				if($sku->order_spu_id == $spu->id){
+					//添加配货完成数量
+					foreach($allocated as $key=>$value){
+						if($key == $sku->id)
+							$sku->num_allocat = $value;
+					}
+					if(!isset($sku->num_allocat))
+						$sku->num_allocat = '0';
+					//添加sku
 					$spu->skus[] = $sku;
+				}
 			}
 			$list[] = $item;
 		}
