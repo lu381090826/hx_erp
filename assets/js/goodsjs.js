@@ -229,7 +229,18 @@ function sku_delete(id) {
     $('#goods-remove-confirm').modal({
         relatedTarget: this,
         onConfirm: function (options) {
-            $.post('/goods/delete_sku/' + delete_id);
+            // $.post('/goods/delete_sku/' + delete_id);
+            $.ajax({
+                type: 'post',
+                async: false,
+                url: '/goods/delete_sku/' + delete_id,
+                dateType: 'json',
+                success: function (result) {
+                    if (result.code != 0) {
+                        alert(result.code + '|' + result.msg);
+                    }
+                }
+            });
             setTimeout(function () {
                 fromLoad('goods', 'get_goods');
             }, 300);

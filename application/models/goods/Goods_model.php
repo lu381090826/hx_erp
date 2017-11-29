@@ -300,6 +300,12 @@ class Goods_model extends HX_Model
 
     public function delete_goods($goods_id)
     {
+        $this->load->model('sell/order/OrderSpu_model', "spu_m", true);
+        $orderExist = $this->spu_m->checkSpuExist($goods_id);
+        if (!$orderExist) {
+            throw new Exception("该商品已存在订单，不允许删除", 1000000);
+        }
+
         $this->db->update($this->table, ["Fstatus" => 0], ["Fgoods_id" => $goods_id]);
     }
 

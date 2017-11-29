@@ -47,7 +47,7 @@ if (!function_exists('json_out_put')) {
 }
 
 if (!function_exists('json_ajax_out_put')) {
-    function json_ajax_out_put($code = 0, $msg = '', $arr)
+    function json_ajax_out_put($code = 0, $msg = '', $arr = [])
     {
         $ret['code'] = $code;
         $ret['msg'] = $msg;
