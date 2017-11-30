@@ -29,4 +29,7 @@ class User extends HX_Controller
         $this->load->helper('url');
         redirect("success");
     }
+    public function test(){
+    	echo 123;
+    }
 }
