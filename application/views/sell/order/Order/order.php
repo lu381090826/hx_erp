@@ -204,7 +204,7 @@
                                             <td>{{sku.color}}</td>
                                             <td>{{sku.size}}</td>
                                             <td>0</td>
-                                            <td><input type="number" class="form-control" placeholder="数量" v-model="sku.num"></td>
+                                            <td><input type="number" class="form-control" placeholder="数量" v-model="sku.num" v-on:change="changeNum($event,sku,'num')"></td>
                                             <!--<td><a v-on:click="skuDel(item,sku)">删除</a></td>-->
                                         </tr>
                                     </tbody>
@@ -241,7 +241,7 @@
                             <div class="sku-content row">
                                 <div class="col-xs-3"><img :src="item.snap_pic" alt="" class="img-rounded"></div>
                                 <div class="col-xs-3"><label>单价</label></div>
-                                <div class="col-xs-6"><input type="text" class="form-control" placeholder="单价" v-model="item.snap_price"></div>
+                                <div class="col-xs-6"><input type="text" class="form-control" placeholder="单价" v-model="item.snap_price" v-on:change="changeFloat($event,item,'snap_price')"></div>
                             </div>
                             <div class="sku-table row">
                                 <!-- 颜色过滤 -->
@@ -264,7 +264,7 @@
                                             <td>{{sku.size}}</td>
                                             <td>0</td>
                                             <td>{{sku.num_allocat}}</td>
-                                            <td><input type="number" class="form-control" placeholder="数量" v-model="sku.num"></td><!--<td><a v-on:click="skuDel(item,sku)">删除</a></td>-->
+                                            <td><input type="number" class="form-control" placeholder="数量" v-model="sku.num" v-on:change="changeNum($event,sku,'num')"></td><!--<td><a v-on:click="skuDel(item,sku)">删除</a></td>-->
                                         </tr>
                                     </tbody>
                                 </table>
@@ -433,7 +433,6 @@
             this.selectList = this.addFilter(selectList);
             this.total_amount = '<?=$model->total_amount?$model->total_amount:"0"?>';
             this.remark_images = '<?=$model->remark_images?>';
-            console.log(this.remark_images);
 
             //覆盖收款方式和地址
             if(this.client != null) {
@@ -468,7 +467,7 @@
                         if(result.state.return_code == 0){
                             result.data = _this.addFilter(result.data);
                             _this.searchList = result.data;
-                            console.log(_this.searchList);
+                            //console.log(_this.searchList);
                         }
                     }
                 });
@@ -725,7 +724,28 @@
                     item.filter = "";
                 }
                 return list;
-            }
+            },
+            //数量改变(整数)
+            changeNum:function(e,item,attr){
+                //取项属性名
+                var attr = attr || "num";
+                //设置值
+                if(parseInt(item[attr]) >= 0)
+                    item[attr]=parseInt(item[attr]);
+                else
+                    item[attr] = 0;
+            },
+            //数量改变(浮点数)
+            changeFloat:function(e,item,attr){
+                //取项属性名
+                var attr = attr || "num";
+                console.log(attr);
+                //设置值
+                if(parseFloat(item[attr]) >= 0)
+                    item[attr]=parseFloat(item[attr]);
+                else
+                    item[attr] = 0;
+            },
         }
     })
 </script>

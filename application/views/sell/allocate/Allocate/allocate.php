@@ -121,7 +121,7 @@
                         <td>{{item.sku.size}}</td>
                         <td>{{item.num_sum}}</td>
                         <td>{{item.num_end}}</td>
-                        <td><input type="number" class="form-control" placeholder="单价" v-model="item.num"></td>
+                        <td><input type="number" class="form-control" placeholder="单价" v-model="item.num" v-on:change="changeNum($event,item,'num')"></td>
                     </tr>
                 </tbody>
             </table>
@@ -229,7 +229,17 @@
                 }
 
                 return true;
-            }
+            },
+            //数量改变(整数)
+            changeNum:function(e,item,attr){
+                //取项属性名
+                var attr = attr || "num";
+                //设置值
+                if(parseInt(item[attr]) >= 0)
+                    item[attr]=parseInt(item[attr]);
+                else
+                    item[attr] = 0;
+            },
         }
     })
 </script>

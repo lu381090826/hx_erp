@@ -136,13 +136,11 @@ $.fn.imagesInput = function(options) {
 
     //添加图片
     function add(plugin,path){
-        console.log(0);
         //添加元素
         var element = document.createElement('div');
         element.setAttribute("class", "images-input-element");
         $(plugin).find(".images-input-elements").append(element);
 
-        console.log(1);
         //设置元素内容
         var html = "<div class='images-input-shade'>" +
             "<div class='backdrop'></div>" +
@@ -151,7 +149,6 @@ $.fn.imagesInput = function(options) {
             "<img src='"+path+"'>";
         $(element).append(html);
 
-        console.log(2);
         //添加移除按钮
         $(element).find(".action span").on("click",function(){remove(plugin,path)});
 
@@ -166,13 +163,11 @@ $.fn.imagesInput = function(options) {
             value = [];
         }
 
-        console.log(3);
         //设置新值
         value.push(path);
         var value_new = JSON.stringify(value);
         input.val(value_new);
 
-        console.log(4);
         //触发事件
         event_changed(value_new);
     }
