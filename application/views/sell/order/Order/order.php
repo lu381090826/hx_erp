@@ -1,5 +1,7 @@
 <!-- 样式 -->
 <link rel="stylesheet" href="/assets/page/form/add.css">
+<link rel="stylesheet" href="/assets/plugin/images-input/images-input.css">
+<script src="/assets/plugin/images-input/images-input.js"></script>
 
 <!-- 面包屑 -->
 <div class="am-cf am-padding am-padding-bottom-0">
@@ -149,6 +151,11 @@
         <div class="form-group">
             <label>备注</label>
             <input type="text" class="form-control" placeholder="请填写备注" v-model="remark">
+        </div>
+        <!-- 照片备注 -->
+        <div class="form-group">
+            <label>照片备注</label>
+            <div id="remark_images" name="remark_images" path="<?=site_url($_controller->api."/upload_base64")?>" :value='remark_images'></div>
         </div>
         <!-- 搜索商品 -->
         <div class="form-group" v-if="this.id == ''">
@@ -425,6 +432,8 @@
             var selectList = <?=json_encode($model->goods)?>;
             this.selectList = this.addFilter(selectList);
             this.total_amount = '<?=$model->total_amount?$model->total_amount:"0"?>';
+            this.remark_images = '<?=$model->remark_images?>';
+            console.log(this.remark_images);
 
             //覆盖收款方式和地址
             if(this.client != null) {
@@ -435,6 +444,10 @@
             //搜索值修正
             if(this.client)
                 this.clientKey = this.client.id;
+        },
+        mounted:function(){
+            //构建插件
+            $("#remark_images").imagesInput({});
         },
         methods: {
             //搜索
@@ -634,6 +647,7 @@
                 //获取总额
                 var total_num = $("#total_num").val();
                 var total_price = $("#total_price").val();
+                var remark_images = $("input[name='remark_images']").val();
 
                 //Ajax
                 $.ajax({
@@ -654,6 +668,7 @@
                         "total_num":total_num,
                         "total_price":total_price,
                         "client":this.client,           //客户最新信息
+                        "remark_images":remark_images,
                     },
                     success:function(result) {
                         if(result.state.return_code == 0) {
