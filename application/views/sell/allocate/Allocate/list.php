@@ -116,7 +116,7 @@
                     <td>{{item.create_data}}</td>
                     <td>{{item.statusName}}</td>
                     <td>{{item.remark}}</td>
-                    <td><a href="#" @click="look(item.id)">查看</a></td>
+                    <td><a href="#" @click="look(item.id)">查看</a> <a href="#" @click="update(item.id)">修改</a></td>
                 </tr>
             </table>
         </div>
@@ -152,6 +152,10 @@
             //查看配货单
             look:function(allocate_id){
                 window.location.href="<?=site_url($_controller->views."/look")?>/"+allocate_id;
+            },
+            //查看配货单
+            update:function(allocate_id){
+                window.location.href="<?=site_url($_controller->views."/modify")?>/"+this.order.id+"/"+allocate_id;
             }
         }
     })

@@ -142,53 +142,49 @@ class Allocate extends BaseController {
         //获取销售单信息
         $order = $this->m_order->get($order_id);
 
+        //获取配货列表
+        $list = $order->getSkuList();
+
         //获取销售员和客户
         $seller = $this->m_user->get_user_info($order->user_id);
         $client = $this->m_client->get($order->client_id);
 
-        //获取已配数量
-        $allocated = $this->m_item->getAllocateStatus($order_id);
+        //生成配货单号
+        $order_num = $this->model->createOrderNum();
+
+        //页面显示
+        $this->show("allocate",[
+            "id"=>null,
+            "order"=>$order,
+            "list"=>$list,
+            "order_num"=>$order_num,
+            "seller"=>$seller,
+            "client"=>$client,
+        ]);
+    }
+
+    /**
+     * modify
+     * @param $allocate_id
+     */
+    public function modify($order_id,$allocate_id){
+        //获取销售单信息
+        $order = $this->m_order->get($order_id);
+
+        //获取配货列表
+        $allocate = $this->model->get($allocate_id);
+        $list = $allocate->getSkuList(true,true);
+
+        //获取销售员和客户
+        $seller = $this->m_user->get_user_info($order->user_id);
+        $client = $this->m_client->get($order->client_id);
 
         //生成配货单号
         $order_num = $this->model->createOrderNum();
 
-        //获取所有spu
-        $order_spus = $this->m_spu->searchAll(["order_id"=>$order_id])->list;
-        $order_skus = $this->m_sku->searchAll(["order_id"=>$order_id])->list;
-
-        //获取
-        $list = array();
-        foreach($order_spus as $order_spu){
-            foreach($order_skus as $order_sku){
-                //过滤
-                if($order_spu->id != $order_sku->order_spu_id)
-                    continue;
-
-                //设置项目
-                $item = $this->m_item->_new();
-                $item->order_id = $order->id;
-                $item->order_spu_id = $order_spu->id;
-                $item->order_sku_id = $order_sku->id;
-                $item->spu_id = $order_spu->spu_id;
-                $item->sku_id = $order_sku->sku_id;
-                $item->num = 0;
-                $item->status = 0;
-                $item->spu = $order_spu;
-                $item->sku = $order_sku;
-
-                //设置可配数量
-                $item->num_sum = (int)$order_sku->num;
-
-                //设置已经配置数量
-                $item->num_end = isset($allocated[$order_sku->id])?(int)$allocated[$order_sku->id]:0;
-
-                //添加到列表
-                $list[] = $item;
-            }
-        }
-
         //页面显示
         $this->show("allocate",[
+            "id"=>$allocate_id,
             "order"=>$order,
             "list"=>$list,
             "order_num"=>$order_num,
@@ -205,8 +201,8 @@ class Allocate extends BaseController {
         //获取配货单信息
         $allocate = $this->model->get($allocate_id);
 
-        //获取所有项目
-        $allocate_items = $this->m_item->searchAll(["allocate_id"=>$allocate_id])->list;
+        //获取配货列表
+        $list = $allocate->getSkuList(true,true);
 
         //获取销售单
         $order = $this->m_order->get($allocate->order_id);
@@ -214,28 +210,6 @@ class Allocate extends BaseController {
         //获取销售员和客户
         $seller = $this->m_user->get_user_info($order->user_id);
         $client = $this->m_client->get($order->client_id);
-
-        //获取销售单SKU信息
-        $order_items = $this->m_sku->searchAll(["order_id"=>$allocate->order_id])->list;
-
-        //组装列表
-        $list = array();
-        foreach($order_items as $iorder){
-            foreach($allocate_items as $iallocate){
-                if($iorder->id == $iallocate->order_sku_id){
-                    $item = $iallocate;
-                    //拼凑显示信息
-                    $item->size = $iorder->size;
-                    $item->color = $iorder->color;
-                    $item->num_sum = $iorder->num;
-                    //添加到列表
-                    $list[] = $item;
-                }
-            }
-        }
-
-        //var_dump($list);
-        //die;
 
         //页面显示
         $this->show("look",[
@@ -254,8 +228,15 @@ class Allocate extends BaseController {
         //获取参数
         $data = $_REQUEST;
 
-        //建立表单
-        $bool = $this->model->createOrder($data);
+        //路由成建立或者修改
+        if(isset($data['id']) && $data['id']){
+            //修改表单
+            $bool = $this->model->updateOrder($data);
+        }
+        else{
+            //建立表单
+            $bool = $this->model->createOrder($data);
+        }
 
         //返回处理结果
         if($bool)

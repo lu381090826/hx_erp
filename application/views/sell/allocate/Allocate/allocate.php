@@ -137,6 +137,7 @@
         el:"#app",
         data: {
             //销售单
+            id:"",
             order:null,
             user:null,
             remark:"",
@@ -146,13 +147,14 @@
         },
         created:function()
         {
+            this.id = "<?=$id?>";
             this.order_num = "<?=$order_num?>";
             this.order = <?=json_encode($order)?>;
             this.list = <?=json_encode($list)?>;
             this.seller = <?=json_encode($seller)?>;
             this.client = <?=json_encode($client)?>;
 
-            console.log(this.list);
+            //console.log(this.id);
         },
         methods: {
             //添加配货单
@@ -171,6 +173,7 @@
                     type: "post",
                     dataType: "json",
                     data: {
+                        "id": this.id,
                         "order_id": this.order.id,
                         "order_num":this.order_num,
                         "remark":this.remark,
