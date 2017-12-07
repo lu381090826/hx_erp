@@ -119,8 +119,6 @@ class User_model extends HX_Model
             show_error($ret['res_info']);
         }
 
-        $insert_arr['Fuid'] = $request['uid'];
-
         if (!empty($request['name'])) {
             $insert_arr['Fname'] = $request['name'];
         }
@@ -139,7 +137,7 @@ class User_model extends HX_Model
         if (!empty($request['memo'])) {
             $insert_arr['Fmemo'] = $request['memo'];
         }
-        $this->db->replace($this->table, $insert_arr);
+        $this->db->update($this->table, $insert_arr, ["Fuid" => $request['uid']]);
     }
 
     public function get_seller()
