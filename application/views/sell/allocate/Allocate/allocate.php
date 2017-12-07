@@ -121,7 +121,7 @@
                         <td>{{item.sku.size}}</td>
                         <td>{{item.num_sum}}</td>
                         <td>{{item.num_end}}</td>
-                        <td><input type="number" class="form-control" placeholder="单价" v-model="item.num"></td>
+                        <td><input type="number" class="form-control" placeholder="单价" v-model="item.num" v-on:change="changeNum($event,item,'num')"></td>
                     </tr>
                 </tbody>
             </table>
@@ -137,6 +137,7 @@
         el:"#app",
         data: {
             //销售单
+            id:"",
             order:null,
             user:null,
             remark:"",
@@ -146,13 +147,14 @@
         },
         created:function()
         {
+            this.id = "<?=$id?>";
             this.order_num = "<?=$order_num?>";
             this.order = <?=json_encode($order)?>;
             this.list = <?=json_encode($list)?>;
             this.seller = <?=json_encode($seller)?>;
             this.client = <?=json_encode($client)?>;
 
-            console.log(this.list);
+            //console.log(this.id);
         },
         methods: {
             //添加配货单
@@ -171,6 +173,7 @@
                     type: "post",
                     dataType: "json",
                     data: {
+                        "id": this.id,
                         "order_id": this.order.id,
                         "order_num":this.order_num,
                         "remark":this.remark,
@@ -229,7 +232,17 @@
                 }
 
                 return true;
-            }
+            },
+            //数量改变(整数)
+            changeNum:function(e,item,attr){
+                //取项属性名
+                var attr = attr || "num";
+                //设置值
+                if(parseInt(item[attr]) >= 0)
+                    item[attr]=parseInt(item[attr]);
+                else
+                    item[attr] = 0;
+            },
         }
     })
 </script>

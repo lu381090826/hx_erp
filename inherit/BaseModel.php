@@ -37,6 +37,25 @@ class BaseModel extends CI_Model {
     }
 
     /**
+     * @param $param
+     * @return bool|void
+     */
+    public function load_safe($param){
+        //判断是否为数组
+        if(!is_array($param))
+            return;
+
+        //载入参数
+        foreach($param as $key=>$value){
+            if(property_exists($this, $key))//是否拥有这个属性
+                $this->{$key} = $value;
+        }
+
+        //返回
+        return true;
+    }
+
+    /**
      * @param $id
      * @return $this
      * 获取模型

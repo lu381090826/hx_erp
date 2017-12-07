@@ -87,12 +87,14 @@
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <td>款号</td><td>颜色</td><td>尺码</td><td>数量</td>
+                                        <td>款号</td><td>颜色</td><td>尺码</td>
+                                        <td>下单数量</td><td>请求配货数量</td><td>已配货数量</td>
                                     </tr>
                                 </thead>
                                 <tbody  v-for="item in goods">
                                     <tr v-for="sku in item.skus">
-                                        <td>{{item.spu_id}}</td><td>{{sku.color}}</td><td>{{sku.size}}</td><td>{{sku.num}}</td>
+                                        <td>{{item.spu_id}}</td><td>{{sku.color}}</td><td>{{sku.size}}</td>
+                                        <td>{{sku.num}}</td><td>{{sku.num_allocat}}</td><td>0</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -114,7 +116,7 @@
                     <td>{{item.create_data}}</td>
                     <td>{{item.statusName}}</td>
                     <td>{{item.remark}}</td>
-                    <td><a href="#" @click="look(item.id)">查看</a></td>
+                    <td><a href="#" @click="look(item.id)">查看</a> <a href="#" @click="update(item.id)">修改</a></td>
                 </tr>
             </table>
         </div>
@@ -150,6 +152,10 @@
             //查看配货单
             look:function(allocate_id){
                 window.location.href="<?=site_url($_controller->views."/look")?>/"+allocate_id;
+            },
+            //查看配货单
+            update:function(allocate_id){
+                window.location.href="<?=site_url($_controller->views."/modify")?>/"+this.order.id+"/"+allocate_id;
             }
         }
     })

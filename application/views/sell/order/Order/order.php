@@ -1,5 +1,7 @@
 <!-- 样式 -->
 <link rel="stylesheet" href="/assets/page/form/add.css">
+<link rel="stylesheet" href="/assets/plugin/images-input/images-input.css">
+<script src="/assets/plugin/images-input/images-input.js"></script>
 
 <!-- 面包屑 -->
 <div class="am-cf am-padding am-padding-bottom-0">
@@ -150,6 +152,11 @@
             <label>备注</label>
             <input type="text" class="form-control" placeholder="请填写备注" v-model="remark">
         </div>
+        <!-- 照片备注 -->
+        <div class="form-group">
+            <label>照片备注</label>
+            <div id="remark_images" name="remark_images" path="<?=site_url($_controller->api."/upload_base64")?>" :value='remark_images'></div>
+        </div>
         <!-- 搜索商品 -->
         <div class="form-group" v-if="this.id == ''">
             <label>搜索商品</label>
@@ -187,6 +194,7 @@
                                         <tr>
                                             <td>颜色</td>
                                             <td>尺码</td>
+                                            <td>库存</td>
                                             <td>数量</td>
                                             <!--<td>操作</td>-->
                                         </tr>
@@ -195,7 +203,8 @@
                                         <tr v-for="sku in item.skus" v-if="sku.color.indexOf(item.filter) != -1">
                                             <td>{{sku.color}}</td>
                                             <td>{{sku.size}}</td>
-                                            <td><input type="number" class="form-control" placeholder="数量" v-model="sku.num"></td>
+                                            <td>0</td>
+                                            <td><input type="number" class="form-control" placeholder="数量" v-model="sku.num" v-on:change="changeNum($event,sku,'num')"></td>
                                             <!--<td><a v-on:click="skuDel(item,sku)">删除</a></td>-->
                                         </tr>
                                     </tbody>
@@ -232,7 +241,7 @@
                             <div class="sku-content row">
                                 <div class="col-xs-3"><img :src="item.snap_pic" alt="" class="img-rounded"></div>
                                 <div class="col-xs-3"><label>单价</label></div>
-                                <div class="col-xs-6"><input type="text" class="form-control" placeholder="单价" v-model="item.snap_price"></div>
+                                <div class="col-xs-6"><input type="text" class="form-control" placeholder="单价" v-model="item.snap_price" v-on:change="changeFloat($event,item,'snap_price')"></div>
                             </div>
                             <div class="sku-table row">
                                 <!-- 颜色过滤 -->
@@ -244,12 +253,18 @@
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <td>颜色</td><td>尺码</td><td>数量</td><!--<td>操作</td>-->
+                                            <td>颜色</td><td>尺码</td><td>库存</td>
+                                            <td>已请求配货数量</td>
+                                            <td>数量</td><!--<td>操作</td>-->
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="sku in item.skus" v-if="sku.color.indexOf(item.filter) != -1">
-                                            <td>{{sku.color}}</td><td>{{sku.size}}</td><td><input type="number" class="form-control" placeholder="数量" v-model="sku.num"></td><!--<td><a v-on:click="skuDel(item,sku)">删除</a></td>-->
+                                        <tr v-for="sku in item.skus" v-if="sku.color.indexOf(item.filter) != -1" v-bind:class="{ danger: parseInt(sku.num) < parseInt(sku.num_allocat)}">
+                                            <td>{{sku.color}}</td>
+                                            <td>{{sku.size}}</td>
+                                            <td>0</td>
+                                            <td>{{sku.num_allocat}}</td>
+                                            <td><input type="number" class="form-control" placeholder="数量" v-model="sku.num" v-on:change="changeNum($event,sku,'num')"></td><!--<td><a v-on:click="skuDel(item,sku)">删除</a></td>-->
                                         </tr>
                                     </tbody>
                                 </table>
@@ -417,6 +432,7 @@
             var selectList = <?=json_encode($model->goods)?>;
             this.selectList = this.addFilter(selectList);
             this.total_amount = '<?=$model->total_amount?$model->total_amount:"0"?>';
+            this.remark_images = '<?=$model->remark_images?>';
 
             //覆盖收款方式和地址
             if(this.client != null) {
@@ -427,6 +443,10 @@
             //搜索值修正
             if(this.client)
                 this.clientKey = this.client.id;
+        },
+        mounted:function(){
+            //构建插件
+            $("#remark_images").imagesInput({});
         },
         methods: {
             //搜索
@@ -447,7 +467,7 @@
                         if(result.state.return_code == 0){
                             result.data = _this.addFilter(result.data);
                             _this.searchList = result.data;
-                            console.log(_this.searchList);
+                            //console.log(_this.searchList);
                         }
                     }
                 });
@@ -626,6 +646,7 @@
                 //获取总额
                 var total_num = $("#total_num").val();
                 var total_price = $("#total_price").val();
+                var remark_images = $("input[name='remark_images']").val();
 
                 //Ajax
                 $.ajax({
@@ -646,6 +667,7 @@
                         "total_num":total_num,
                         "total_price":total_price,
                         "client":this.client,           //客户最新信息
+                        "remark_images":remark_images,
                     },
                     success:function(result) {
                         if(result.state.return_code == 0) {
@@ -675,8 +697,22 @@
                     return false;
                 }
                 else if(this.id !="" && parseInt(this.total_amount) < parseInt(total_price)){
-                    alert("修改订单后，不能超过订单金额");
+                    alert("修改订单不能超过订单金额");
                     return false;
+                }
+
+                //修改是触发
+                if(this.id !=""){
+                    for(var key_spu in this.selectList){
+                        var spu = this.selectList[key_spu];
+                        for(var key_sku in spu.skus) {
+                            var sku = spu.skus[key_sku];
+                            if (parseInt(sku.num) < parseInt(sku.num_allocat)) {
+                                alert("款号："+spu.spu_id+"，存在不符合配货条件项");
+                                return false;
+                            }
+                        }
+                    }
                 }
 
                 return true;
@@ -688,7 +724,28 @@
                     item.filter = "";
                 }
                 return list;
-            }
+            },
+            //数量改变(整数)
+            changeNum:function(e,item,attr){
+                //取项属性名
+                var attr = attr || "num";
+                //设置值
+                if(parseInt(item[attr]) >= 0)
+                    item[attr]=parseInt(item[attr]);
+                else
+                    item[attr] = 0;
+            },
+            //数量改变(浮点数)
+            changeFloat:function(e,item,attr){
+                //取项属性名
+                var attr = attr || "num";
+                console.log(attr);
+                //设置值
+                if(parseFloat(item[attr]) >= 0)
+                    item[attr]=parseFloat(item[attr]);
+                else
+                    item[attr] = 0;
+            },
         }
     })
 </script>
