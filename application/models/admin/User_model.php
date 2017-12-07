@@ -127,7 +127,7 @@ class User_model extends HX_Model
         if (!empty($request['mobile'])) {
             $insert_arr['Fmobile'] = $request['mobile'];
         }
-        if (!empty($request['password'])) {
+        if (!empty($request['password']) && $request['password'] != "") {
             $insert_arr['Fpassword'] = md5($request['password']);
         }
         if (!empty($request['email'])) {
