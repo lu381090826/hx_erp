@@ -29,7 +29,7 @@ $this->load->view('head');
         </tr>
         <tr>
             <td>角色</td>
-            <td>{role_name}<input type="hidden" value="{role_id}"></td>
+            <td>{role_name}<input type="hidden" name="role_id" value="{role_id}"></td>
         </tr>
         <tr>
             <td>创建时间</td>
