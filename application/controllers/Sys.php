@@ -3,32 +3,50 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Sys extends HX_Controller
 {
-    public function index()
+    public function index($page = 1)
     {
-        $this->load->view('sys/index');
+        $this->load->model('admin/user_model', 'user_m');
+        $result = $this->user_m->get_user_list($page);
+
+        $this->load->view('sys/index', $result);
+    }
+
+    public function user($page = 1)
+    {
+        $this->load->model('admin/user_model', 'user_m');
+        $result = $this->user_m->get_user_list($page);
+
+        $this->load->view('sys/index', $result);
     }
 
     public function get_users($page = 0)
     {
-        $this->load->model('admin/user_model', 'm_user');
-        $result = $this->m_user->get_user_list($page);
+        $this->load->model('admin/user_model', 'user_m');
+        $result = $this->user_m->get_user_list($page);
 
         json_out_put($result);
     }
 
     public function get_roles($page = 0)
     {
-        $this->load->model('role_model', 'm_role');
-        $result = $this->m_role->get_role_list($page);
+        $this->load->model('admin/role_model', 'role_m');
+        $result = $this->role_m->get_role_list($page);
         json_out_put($result);
     }
 
     //检查手机号是否可用
     public function check_mobile_available()
     {
-        $this->load->model('admin/user_model', 'm_user');
-        $result = $this->m_user->check_mobile_available($this->input->get());
+        $this->load->model('admin/user_model', 'user_m');
+        $result = $this->user_m->check_mobile_available($this->input->get());
 
         json_out_put($result);
+    }
+
+    public function role($page = 1)
+    {
+        $this->load->model('admin/role_model', 'role_m');
+        $result = $this->role_m->get_role_list($page);
+        $this->load->view('sys/role/index', $result);
     }
 }

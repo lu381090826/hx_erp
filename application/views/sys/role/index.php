@@ -4,18 +4,17 @@ $this->load->view('head');
 ?>
 <link rel="stylesheet" type="text/css" href="/assets/css/amazeui.page.css">
 <br>
-
 <!--功能选项-->
 <select data-am-selected id="method_select" title="选择功能">
-    <option value="user" selected>用户管理</option>
-    <option value="role">角色管理</option>
+    <option value="user">用户管理</option>
+    <option value="role" selected>角色管理</option>
     <!--    <option value="get_auths">权限管理</option>-->
 </select>
 <br>
 <br>
 <div>
     <button type="button" class="am-btn am-btn-success"
-            onclick="window.location.href='/user/action_add_user'">添加用户
+            onclick="window.location.href='/role/action_add_role'">添加角色
     </button>
 </div>
 <hr>
@@ -24,39 +23,33 @@ $this->load->view('head');
     <thead id="from_thead">
     <tr>
         <th>
-            用户名
+            角色ID
         </th>
         <th>
-            角色
+            角色名
         </th>
         <th>
-            手机号
+            备注
         </th>
         <th>
-            邮箱
-        </th>
-        <th>
-            操作
+            创建时间
         </th>
     </tr>
     </thead>
-    <tbody id="from_contant">
+    <tbody>
     <?php foreach ($result_rows as $key => $vale): ?>
         <tr>
             <td>
-                <?php echo $vale['name'] ?>
+                <?php echo $vale['id'] ?>
             </td>
             <td>
                 <?php echo $vale['role_name'] ?>
             </td>
             <td>
-                <?php echo $vale['mobile'] ?>
+                <?php echo $vale['memo'] ?>
             </td>
             <td>
-                <?php echo $vale['email'] ?>
-            </td>
-            <td>
-                <a href="/user/user_detail/<?php echo $vale['uid'] ?>">修改</a>
+                <?php echo $vale['create_time'] ?>
             </td>
         </tr>
     <?php endforeach; ?>

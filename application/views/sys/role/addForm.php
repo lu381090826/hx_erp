@@ -8,7 +8,7 @@ $this->load->view('head');
         <legend>添加角色</legend>
         <div class="am-form-group">
             <label for="doc-vld-name">角色名：</label>
-            <input type="text" id="doc-vld-name" minlength="3" placeholder="输入角色名" name="role_name" class="am-form-field"
+            <input type="text" id="doc-vld-name" minlength="2" placeholder="输入角色名" name="role_name" class="am-form-field"
                    required/>
         </div>
         <div class="am-form-group">

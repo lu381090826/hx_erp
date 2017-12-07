@@ -6,7 +6,7 @@ class Role extends HX_Controller
     //角色详情页
     public function role_detail($id)
     {
-        $this->load->model('role_model', 'm_role');
+        $this->load->model('admin/role_model', 'm_role');
         $role_info = $this->m_role->get_row_by_id($id);
 
         $this->load->model('admin/ra_model', 'm_ra');
@@ -37,7 +37,7 @@ class Role extends HX_Controller
             show_error('非法请求');
         }
         $post['role_id'] = $this->session->role_id;
-        $this->load->model('role_model', 'm_role');;
+        $this->load->model('admin/role_model', 'm_role');;
         $insert_id = $this->m_role->add_new_role($post);
 
         if ($insert_id) {
