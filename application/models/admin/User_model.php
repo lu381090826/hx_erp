@@ -113,16 +113,28 @@ class User_model extends HX_Model
 
     public function update_user($request)
     {
-        $this->insert_user_check($request);
+//        $this->insert_user_check($request);
+        $insert_arr['uid'] = $request['uid'];
 
-        $insert_arr = [
-            'Fname' => $request['name'],
-            'Fmobile' => $request['mobile'],
-            'Fpassword' => md5($request['password']),
-            'Femail' => $request['email'],
-            'Frole_id' => $request['role_id'],
-            'Fmemo' => '',
-        ];
+        if (!empty($request['name'])) {
+            $insert_arr['Fname'] = $request['name'];
+        }
+        if (!empty($request['mobile'])) {
+            $insert_arr['Fmobile'] = $request['mobile'];
+        }
+        if (!empty($request['password'])) {
+            $insert_arr['Fpassword'] = md5($request['password']);
+        }
+        if (!empty($request['email'])) {
+            $insert_arr['Femail'] = $request['email'];
+        }
+        if (!empty($request['role_id'])) {
+            $insert_arr['Frole_id'] = $request['role_id'];
+        }
+        if (!empty($request['memo'])) {
+            $insert_arr['Fmemo'] = $request['memo'];
+        }
+
         $this->db->replace($this->table, $insert_arr);
     }
 

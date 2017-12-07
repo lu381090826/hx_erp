@@ -24,6 +24,10 @@ $this->load->view('head');
             <td><input name="mobile" value="{mobile}"></td>
         </tr>
         <tr>
+            <td>密码</td>
+            <td><input name="password" value=""></td>
+        </tr>
+        <tr>
             <td>邮箱</td>
             <td><input name="email" value="{email}"></td>
         </tr>
