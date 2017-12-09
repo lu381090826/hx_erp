@@ -5,7 +5,8 @@
 <div class="am-cf am-padding am-padding-bottom-0">
     <div class="am-fl am-cf">
         <a class="am-text-primary am-text-lg" href="<?=base_url()?>">HOME</a> /
-        <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/order/Order")?>">销售订单</a> /
+        <!--<a class="am-text-primary am-text-lg" href="<?=site_url("/sell/order/Order")?>">销售订单</a> /-->
+        <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/allocate/Allocate/index2")?>">报货列表</a> /
         <small>配货订单</small>
     </div>
 </div>
@@ -116,10 +117,16 @@
                     <td>{{item.create_data}}</td>
                     <td>{{item.statusName}}</td>
                     <td>{{item.remark}}</td>
-                    <td><a href="#" @click="look(item.id)">查看</a> <a href="#" @click="update(item.id)">修改</a></td>
+                    <td>
+                        <a href="#" @click="look(item.id)">查看</a>
+                        <!--<a href="#" @click="update(item.id)">修改</a>-->
+                    </td>
                 </tr>
             </table>
         </div>
+
+
+        <a type="button" class="am-btn am-btn-success" href="javascript:window.history.go(-1);">返回</a>
     </form>
 </div>
 

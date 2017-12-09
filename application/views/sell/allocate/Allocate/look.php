@@ -5,7 +5,8 @@
 <div class="am-cf am-padding am-padding-bottom-0">
     <div class="am-fl am-cf">
         <a class="am-text-primary am-text-lg" href="<?=base_url()?>">HOME</a> /
-        <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/order/Order")?>">销售订单</a> /
+        <!--<a class="am-text-primary am-text-lg" href="<?=site_url("/sell/order/Order")?>">销售订单</a> /-->
+        <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/allocate/Allocate/index2")?>">报货列表</a> /
         <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/allocate/Allocate/index")."/$order->id"?>">配货订单</a> /
         <small>查看配货</small>
     </div>
@@ -14,6 +15,11 @@
 <!-- 主体 -->
 <div id="app">
     <form class="am-form">
+        <!-- 修改按钮 -->
+        <div class="am-form-group">
+            <a class="btn btn-success" href="<?=site_url("/sell/allocate/Allocate/modify")."/$order->id/$allocate->id"?>" role="button">修改订单</a>
+        </div>
+
         <!-- 配货单信息 -->
         <div class="panel-group" id="accordion_2" role="tablist" aria-multiselectable="true">
             <div class="panel panel-primary">

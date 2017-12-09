@@ -40,8 +40,15 @@ class Allocate extends BaseController {
         $condition = isset($param["condition"])?(array)json_decode($param["condition"]):[];
         $sort = isset($param["sort"])?(array)json_decode($param["sort"]):[$model->getPk()=>"ASC"];
 
-        $result = $model->search($page,$size,$condition,$sort);
+        //联表查询
+        $result = $model->searchLinkSell($page,$size,$condition,$sort);
 
+        //处理显示数据
+        foreach($result->list as $key=>$value){
+            $result->list[$key]->statusName = $result->list[$key]->getStatusName();
+        }
+
+        //调用视图
         $this->show("index",[
             "searched"=>$result,
             "page"=>$page,

@@ -5,7 +5,8 @@
 <div class="am-cf am-padding am-padding-bottom-0">
     <div class="am-fl am-cf">
         <a class="am-text-primary am-text-lg" href="<?=base_url()?>">HOME</a> /
-        <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/order/Order")?>">销售订单</a> /
+        <!--<a class="am-text-primary am-text-lg" href="<?=site_url("/sell/order/Order")?>">销售订单</a> /-->
+        <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/allocate/Allocate/index2")?>">报货列表</a> /
         <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/allocate/Allocate/index")."/$order->id"?>">配货订单</a> /
         <small>添加配货</small>
     </div>
@@ -127,7 +128,10 @@
             </table>
         </div>
 
-        <p><button type="button" class="am-btn am-btn-primary" @click="submit">提交</button></p>
+        <p>
+            <button type="button" class="am-btn am-btn-primary" @click="submit">提交</button>
+            <a type="button" class="am-btn am-btn-success" href="javascript:window.history.go(-1);">返回</a>
+        </p>
     </form>
 </div>
 
@@ -168,6 +172,11 @@
                 if(!this.check())
                     return;
 
+                //设置数据
+                var list = this.getSubmitList();
+                var total = this.getTotalNum(list);
+
+                //提交
                 $.ajax({
                     url: '<?=site_url($_controller->views . "/add_api")?>',
                     type: "post",
@@ -177,7 +186,8 @@
                         "order_id": this.order.id,
                         "order_num":this.order_num,
                         "remark":this.remark,
-                        "list":this.getSubmitList(),
+                        "total_num":total,
+                        "list":list,
                     },
                     success: function (result) {
                         console.log(result);
@@ -243,6 +253,15 @@
                 else
                     item[attr] = 0;
             },
+            //获取总数量
+            getTotalNum:function(list){
+                var total = 0;
+                for(var key in list){
+                    var item = list[key];
+                    total += parseInt(item.num);
+                }
+                return total;
+            }
         }
     })
 </script>
