@@ -3,18 +3,40 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $this->load->view('head');
 ?>
 <input type="button" name="Submit" class="am-btn am-btn-default" onclick="javascript:history.back(-1);" value="返回上一页">
-<input type="button" name="Submit" class="am-btn am-btn-default"
-       onclick="location.href='/sku/action_edit_sku/<?= $goods_id ?>'" value="编辑">
-<!--<input type="button" name="Submit" class="am-btn am-btn-default" onclick="" value="删除">-->
+<?php if (check_auth(10)): ?>
+    <input type="button" name="Submit" class="am-btn am-btn-default"
+           onclick="location.href='/sku/action_edit_sku/<?= $goods_id ?>'" value="编辑">
+    <?php if ($status == config_load('goods_status', 'goods_sell_off')): ?>
+        <input type="button" name="Submit" class="am-btn am-btn-warning"
+               onclick="sell_state_on('<?= $goods_id ?>')" value="上架">
+    <?php endif; ?>
+    <?php if ($status == config_load('goods_status', 'goods_sell_on')): ?>
+        <input type="button" name="Submit" class="am-btn am-btn-warning"
+               onclick="sell_state_off('<?= $goods_id ?>')" value="下架">
+    <?php endif; ?>
+    <input type="button" name="Submit" class="am-btn am-btn-danger"
+           onclick="sku_delete('<?= $goods_id ?>')" value="删除">
+<?php endif; ?>
 <form class="am-form">
     <fieldset>
         <legend>款号 <strong><?= $goods_id ?></strong></legend>
 
         <div class="am-form-group">
-            <label>成本</label>
-            ¥<?= $cost ?>
+            <label>状态</label>
+            <?php if ($status == config_load('goods_status', 'goods_sell_off')): ?>
+                已下架
+            <?php endif;?>
+            <?php if ($status == config_load('goods_status', 'goods_sell_on')): ?>
+                上架中
+            <?php endif;?>
         </div>
 
+        <?php if (check_auth(11)) : ?>
+            <div class="am-form-group">
+                <label>成本</label>
+                ¥<?= $cost ?>
+            </div>
+        <?php endif; ?>
         <div class="am-form-group">
             <label>价格</label>
             ¥<?= $price ?>
@@ -43,6 +65,7 @@ $this->load->view('head');
                     <th>sku_id</th>
                     <th>颜色</th>
                     <th>尺码</th>
+                    <th>状态</th>
                     <th>操作</th>
                 </tr>
                 </thead>
@@ -55,7 +78,17 @@ $this->load->view('head');
                                     style="color: #<?= $color_cache[$row['color_id']]['color_code'] ?>;background: #<?= $color_cache[$row['color_id']]['color_code'] ?>;">
                     ccc</span><?= $color_cache[$row['color_id']]['name'] ?></td>
                             <td><?= $size_cache[$row['size_id']]['size_info'] ?></td>
-                            <td><a href="javascript:;" onclick="sku_id_delete('<?= $row['sku_id'] ?>')">删除</a></td>
+                            <td>
+                                <?php if ($row['status'] == config_load('goods_status', 'goods_sell_off')): ?>
+                                    已下架
+                                <?php endif;?>
+                                <?php if ($row['status'] == config_load('goods_status', 'goods_sell_on')): ?>
+                                    上架中
+                                <?php endif;?>
+                            </td>
+                            <?php if (check_auth(10)): ?>
+                                <td><a href="javascript:;" onclick="sku_id_delete('<?= $row['sku_id'] ?>')">删除</a></td>
+                            <?php endif; ?>
                         </tr>
                     <?php endif; ?>
                 <?php endforeach; ?>
@@ -129,6 +162,45 @@ $this->load->view('head');
         </div>
     </div>
 </div>
+
+<div class="am-modal am-modal-confirm" tabindex="-1" id="sell-off">
+    <div class="am-modal-dialog">
+        <div class="am-modal-hd">提示</div>
+        <div class="am-modal-bd">
+            确定要下架吗？
+        </div>
+        <div class="am-modal-footer">
+            <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+            <span class="am-modal-btn" data-am-modal-confirm>确定</span>
+        </div>
+    </div>
+</div>
+
+<div class="am-modal am-modal-confirm" tabindex="-1" id="sell-on">
+    <div class="am-modal-dialog">
+        <div class="am-modal-hd">提示</div>
+        <div class="am-modal-bd">
+            确定要上架吗？
+        </div>
+        <div class="am-modal-footer">
+            <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+            <span class="am-modal-btn" data-am-modal-confirm>确定</span>
+        </div>
+    </div>
+</div>
+
+<div class="am-modal am-modal-confirm" tabindex="-1" id="goods-remove-confirm">
+    <div class="am-modal-dialog">
+        <div class="am-modal-hd">提示</div>
+        <div class="am-modal-bd">
+            确定要删除这条记录吗？
+        </div>
+        <div class="am-modal-footer">
+            <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+            <span class="am-modal-btn" data-am-modal-confirm>确定</span>
+        </div>
+    </div>
+</div>
 <?php
 $this->load->view('footer');
 ?>
@@ -140,8 +212,63 @@ $this->load->view('footer');
             relatedTarget: this,
             onConfirm: function (options) {
                 $.post('/sku/action_delete_sku/' + delete_id);
-                location.href = "/goods/goods_detail/<?=$goods_id?>?v=<?=rand(0,10000)?>"
+                setTimeout(function () {
+                    window.location.reload(true);
+                }, 300);
             }
         });
     }
+
+    //商品下架
+    var goods_id = 0;
+    function sell_state_off(id) {
+        goods_id = id;
+        $('#sell-off').modal({
+            relatedTarget: this,
+            onConfirm: function (options) {
+                $.post('/goods/action_sell_state_off/' + goods_id);
+                setTimeout(function () {
+                    window.location.reload(true);
+                }, 300);
+            }
+        });
+    }
+    //商品上架
+    function sell_state_on(id) {
+        goods_id = id;
+        $('#sell-on').modal({
+            relatedTarget: this,
+            onConfirm: function (options) {
+                $.post('/goods/action_sell_state_on/' + goods_id);
+                setTimeout(function () {
+                    window.location.reload(true);
+                }, 300);
+            }
+        });
+    }
+    //删除
+    function sku_delete(id) {
+        delete_id = id;
+        $('#goods-remove-confirm').modal({
+            relatedTarget: this,
+            onConfirm: function (options) {
+                // $.post('/goods/delete_sku/' + delete_id);
+                $.ajax({
+                    type: 'post',
+                    async: false,
+                    url: '/goods/delete_sku/' + delete_id,
+                    dateType: 'json',
+                    success: function (result) {
+                        if (result.code != 0) {
+                            alert(result.code + '|' + result.msg);
+                        }
+                    }
+                });
+                setTimeout(function () {
+                    window.location.reload(true);
+                }, 300);
+            }
+        });
+    }
+
 </script>

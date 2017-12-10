@@ -251,7 +251,8 @@ class Goods_model extends HX_Model
         $this->db->update($this->table);
 
         $this->db->set('Fstatus', $status);
-        $this->db->where('Fgoods_id', $goods_id);
+        $this->db->where('Fgoods_id', $goods_id)
+            ->where('Fstatus!=', '0');
         $this->db->update('t_sku');
     }
 
@@ -264,7 +265,9 @@ class Goods_model extends HX_Model
         $this->db->update($this->table);
 
         $this->db->set('Fstatus', $status);
-        $this->db->where('Fgoods_id', $goods_id);
+        $this->db->where('Fgoods_id', $goods_id)
+            ->where('Fstatus!=', '0');
+
         $this->db->update('t_sku');
     }
 

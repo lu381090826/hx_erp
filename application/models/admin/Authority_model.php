@@ -20,7 +20,13 @@ class Authority_model extends HX_Model
     public function get_all_by_auth_ids($ids)
     {
         $s = "SELECT * FROM {$this->table}  WHERE Fstatus = 1 AND Fid in(" . implode(',', array_unique($ids)) . ");";
-        $ret = $this->db->query($s)->result('array');
+        $ret_p = $this->db->query($s)->result('array');
+
+        //子权限
+        $s = "SELECT * FROM {$this->table}  WHERE Fstatus = 1 AND Fpid in(" . implode(',', array_unique($ids)) . ");";
+        $ret_c = $this->db->query($s)->result('array');
+
+        $ret = array_merge($ret_p,$ret_c);
 
         return $this->suc_out_put($ret);
     }
@@ -29,6 +35,15 @@ class Authority_model extends HX_Model
     public function get_all_by_auth_pids($ids)
     {
         $s = "SELECT * FROM {$this->table}  WHERE Fstatus = 1 AND Fpid in(" . implode(',', array_unique($ids)) . ");";
+        $ret = $this->db->query($s)->result('array');
+
+        return $this->suc_out_put($ret);
+    }
+
+    //查出所有子权限
+    public function all_auth_list()
+    {
+        $s = "SELECT * FROM {$this->table}  WHERE Fstatus = 1 ;";
         $ret = $this->db->query($s)->result('array');
 
         return $this->suc_out_put($ret);

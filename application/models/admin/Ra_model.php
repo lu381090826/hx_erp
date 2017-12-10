@@ -17,9 +17,10 @@ class Ra_model extends HX_Model
         $this->load->database();
     }
 
+    //根据角色id获取权限值
     public function get_all_by_role_id($id)
     {
-        $s = "SELECT Frole_id,Fauth_id FROM {$this->table}  WHERE Fstatus = 1 AND Frole_id = ? LIMIT 1;";
+        $s = "SELECT Frole_id,Fauth_id FROM {$this->table}  WHERE Fstatus = 1 AND Frole_id = ? ;";
         $ret = $this->db->query($s, [$id])->result('array');
 
         $auths = [];

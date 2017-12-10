@@ -61,11 +61,6 @@ function get_goods(curr) {
 function goods_show(result) {
     var goods_content = "";
     $.each(result.result_rows, function (i, o) {
-        if (o.status == 2) {
-            var sell_state = "<div><a onclick=\"sell_state_on('" + o.goods_id + "')\">上架</a></button></div>";
-        } else {
-            var sell_state = "<div><a onclick=\"sell_state_off('" + o.goods_id + "')\">下架</a></button></div>";
-        }
         goods_content += "<tr>" +
             "<td><img class='pic' src='" + o.pic + "'></td>" +
             "<td>" + o.goods_id + "</td>" +
@@ -74,8 +69,6 @@ function goods_show(result) {
             "<td>" + o.create_time + "</td>" +
             "<td align='center' valign='middle' style='word-break:break-all'>" +
             "<div><a href='/goods/goods_detail/" + o.goods_id + "'>详情</a><div>" +
-            "<div><a onclick=\"sku_delete('" + o.goods_id + "')\">删除</a></div>" +
-            sell_state +
             "</td>" +
             "</tr>";
     });
@@ -224,55 +217,7 @@ function size_delete(id) {
         }
     });
 }
-function sku_delete(id) {
-    delete_id = id;
-    $('#goods-remove-confirm').modal({
-        relatedTarget: this,
-        onConfirm: function (options) {
-            // $.post('/goods/delete_sku/' + delete_id);
-            $.ajax({
-                type: 'post',
-                async: false,
-                url: '/goods/delete_sku/' + delete_id,
-                dateType: 'json',
-                success: function (result) {
-                    if (result.code != 0) {
-                        alert(result.code + '|' + result.msg);
-                    }
-                }
-            });
-            setTimeout(function () {
-                fromLoad('goods', 'get_goods');
-            }, 300);
-        }
-    });
-}
-//商品下架
-function sell_state_off(id) {
-    goods_id = id;
-    $('#sell-off').modal({
-        relatedTarget: this,
-        onConfirm: function (options) {
-            $.post('/goods/action_sell_state_off/' + goods_id);
-            setTimeout(function () {
-                fromLoad('goods', 'get_goods');
-            }, 300);
-        }
-    });
-}
-//商品上架
-function sell_state_on(id) {
-    goods_id = id;
-    $('#sell-on').modal({
-        relatedTarget: this,
-        onConfirm: function (options) {
-            $.post('/goods/action_sell_state_on/' + goods_id);
-            setTimeout(function () {
-                fromLoad('goods', 'get_goods');
-            }, 300);
-        }
-    });
-}
+
 function shop_delete(id) {
     delete_id = id;
     $('#shop-remove-confirm').modal({

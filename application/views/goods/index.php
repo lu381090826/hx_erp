@@ -27,9 +27,11 @@ $this->load->view('head');
 </select>
 <div class="am-btn-group am-btn-group-xs">
     <div class="other-select" id="div-get_goods">
-        <button type="button" class="am-btn am-btn-default"
-                onclick="window.location.href='/sku/action_add_sku'"><span class="am-icon-plus"></span>新建商品
-        </button>
+        <?php if (check_auth(10)): ?>
+            <button type="button" class="am-btn am-btn-default"
+                    onclick="window.location.href='/sku/action_add_sku'"><span class="am-icon-plus"></span>新建商品
+            </button>
+        <?php endif; ?>
         <!--        <button type="button" class="am-btn am-btn-default" onclick="expotr()" id="exprot">-->
         <!--            <span class="am-icon-file-excel-o">-->
         <!--                导出-->
@@ -218,18 +220,6 @@ $this->load->view('head');
         </div>
     </div>
 </div>
-<div class="am-modal am-modal-confirm" tabindex="-1" id="goods-remove-confirm">
-    <div class="am-modal-dialog">
-        <div class="am-modal-hd">提示</div>
-        <div class="am-modal-bd">
-            确定要删除这条记录吗？
-        </div>
-        <div class="am-modal-footer">
-            <span class="am-modal-btn" data-am-modal-cancel>取消</span>
-            <span class="am-modal-btn" data-am-modal-confirm>确定</span>
-        </div>
-    </div>
-</div>
 <div class="am-modal am-modal-confirm" tabindex="-1" id="shop-remove-confirm">
     <div class="am-modal-dialog">
         <div class="am-modal-hd">提示</div>
@@ -254,30 +244,7 @@ $this->load->view('head');
         </div>
     </div>
 </div>
-<div class="am-modal am-modal-confirm" tabindex="-1" id="sell-off">
-    <div class="am-modal-dialog">
-        <div class="am-modal-hd">提示</div>
-        <div class="am-modal-bd">
-            确定要下架吗？
-        </div>
-        <div class="am-modal-footer">
-            <span class="am-modal-btn" data-am-modal-cancel>取消</span>
-            <span class="am-modal-btn" data-am-modal-confirm>确定</span>
-        </div>
-    </div>
-</div>
-<div class="am-modal am-modal-confirm" tabindex="-1" id="sell-on">
-    <div class="am-modal-dialog">
-        <div class="am-modal-hd">提示</div>
-        <div class="am-modal-bd">
-            确定要上架吗？
-        </div>
-        <div class="am-modal-footer">
-            <span class="am-modal-btn" data-am-modal-cancel>取消</span>
-            <span class="am-modal-btn" data-am-modal-confirm>确定</span>
-        </div>
-    </div>
-</div>
+
 <?php $this->load->view('footer'); ?>
 <script type="text/javascript" src="/assets/js/amazeui.page.js"></script>
 <script type="text/javascript" src="/assets/js/common/from.js"></script>
