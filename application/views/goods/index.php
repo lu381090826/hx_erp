@@ -20,10 +20,12 @@ $this->load->view('head');
 <!--功能选项-->
 <select data-am-selected id="method_select" class="am-u-sm-3" title="选择功能">
     <option value="get_goods">商品管理</option>
-    <option value="get_category">分类管理</option>
-    <option value="get_color">颜色管理</option>
-    <option value="get_size">尺码管理</option>
-    <option value="get_shop">店铺管理</option>
+    <?php if (check_auth(10)): ?>
+        <option value="get_category">分类管理</option>
+        <option value="get_color">颜色管理</option>
+        <option value="get_size">尺码管理</option>
+        <option value="get_shop">店铺管理</option>
+    <?php endif; ?>
 </select>
 <div class="am-btn-group am-btn-group-xs">
     <div class="other-select" id="div-get_goods">

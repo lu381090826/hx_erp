@@ -24,6 +24,11 @@ class Category_model extends HX_Model
         $check_res = [];
         if (isset($request['category_name'])) {
             $check_res['Fcategory_name'] = $request['category_name'];
+            //类名查重
+            $ret = $this->get_by_name($check_res['Fcategory_name']);
+            if (isset($ret['result_rows']) && count($ret['result_rows']) > 0) {
+                show_error("分类名已重复");
+            }
         } else {
             show_error("请输入类名");
         }
@@ -53,6 +58,15 @@ class Category_model extends HX_Model
         $s = "SELECT Fid,Fpid,Fcategory_name FROM {$this->table} WHERE Fstatus = 1";
 
         $ret = $this->db->query($s);
+
+        return $this->suc_out_put($ret->result('array'));
+    }
+
+    public function get_by_name($category_name)
+    {
+        $s = "SELECT Fid,Fpid,Fcategory_name FROM {$this->table} WHERE Fstatus = 1 AND Fcategory_name = ? LIMIT 1;";
+
+        $ret = $this->db->query($s, $category_name);
 
         return $this->suc_out_put($ret->result('array'));
     }
