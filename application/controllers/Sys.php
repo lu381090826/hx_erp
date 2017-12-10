@@ -7,7 +7,7 @@ class Sys extends HX_Controller
     {
         $this->load->model('admin/user_model', 'user_m');
         $result = $this->user_m->get_user_list($page);
-var_dump($result);die;
+
         $result['pagination'] = $this->pagination('/sys/user/',$result['total_num']);
 
         $this->load->view('sys/index', $result);
