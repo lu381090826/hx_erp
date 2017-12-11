@@ -77,6 +77,9 @@ class Sku extends HX_Controller
         $this->goods_m->modify_goods($post);
         $this->sku_m->modify_sku($post);
 
+//        if (!empty($_FILES['file_list'])) {
+//
+//        }
 
         $this->load->helper('url');
         redirect("success");
@@ -282,6 +285,22 @@ class Sku extends HX_Controller
             $excel->getActiveSheet()->setCellValue("O{$k}", $r['modify_time']);
         }
         return $excel;
+    }
+
+    public function fileinit()
+    {
+
+    }
+
+    public function fileupload()
+    {
+//        var_dump($_FILES);die;
+        echo "{\"status\":true,\"data\":{\"id\":\"431cbf5cfe3e45c4abcea878723d7b89" . rand(1, 10000) . "\"},\"message\":\"操作成功\"}";
+    }
+
+    public function img_download()
+    {
+
     }
 
 }

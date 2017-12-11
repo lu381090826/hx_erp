@@ -226,4 +226,90 @@ class Api extends CI_Controller {
             $this->apiresult->sentApiError(-1,"not logged in");
         }
     }
+
+    /**
+     * 单上传文件(Base64字符串)
+     * 必须存在$_POST['base64']
+     */
+    public function upload_base64(){
+        if (count($_POST)) {
+            $img = explode('|', $_POST['base64']);
+            //上传文件(遍历获取，但只取第一个)
+            for ($i = 0; $i <= count($img) - 1; $i++) {
+                $path = $this->__upload_base64($img[$i]);
+                break;
+            }
+            //返回数据
+            $this->apiresult->sentApiSuccess($path);
+        }
+        else
+            $this->apiresult->sentApiError(0,"image could not be saved.",null);
+    }
+
+
+
+    //region 辅助方法
+
+    /**
+     * 按照路径创建文件夹
+     * @param $path
+     * @return bool
+     */
+    private function __mkdirs($path){
+        //获取父路径和文件名
+        $info = pathinfo($path);
+        $dirname = $info['dirname'];
+
+        //判断父路径是否存在,不存在则递归
+        if(!is_dir($dirname))
+            self::__mkdirs($dirname);
+
+        //检测文件夹是否存在,不存在则新建
+        if(!is_dir($path))
+            mkdir($path);
+
+        //返回
+        return true;
+    }
+
+    /**
+     * 上传Base64函数
+     * @param $base64
+     * @return null|string
+     */
+    private function __upload_base64($base64){
+        if (strpos($base64, 'data:image/jpeg;base64,') === 0) {
+            $base64 = str_replace('data:image/jpeg;base64,', '', $base64);
+            $ext = '.jpeg';
+        }
+        if (strpos($base64, 'data:image/png;base64,') === 0) {
+            $base64 = str_replace('data:image/png;base64,', '', $base64);
+            $ext = '.png';
+        }
+
+        //获取图片文件内容
+        $base64 = str_replace(' ', '+', $base64);
+        $data = base64_decode($base64);
+
+        //生成文件路径
+        $datepath = date("Ymd",time());                             //生成日期
+        $filename =  uniqid().$ext;                                 //文件名
+        $relativePath = "upload/$datepath";                         //相对路径
+        $absolutePath = FCPATH."/$relativePath";                    //绝对路径
+        $this->__mkdirs($absolutePath);                               //建立文件夹(如果不存在)
+
+        //获取访问地址
+        $baseurl = "";                                              //获取web的访问路径(相对)
+        $filepath = $absolutePath."/$filename";                     //文件绝对路径
+        $url = "$baseurl/$relativePath/$filename";                  //上传后文件访问地址
+
+        //保存图片,并输出结果
+        if (file_put_contents($filepath, $data)) {
+            return $url;
+        } else {
+            return null;
+        }
+    }
+
+    //endregion;
 }

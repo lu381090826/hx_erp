@@ -40,6 +40,9 @@ class User_model extends HX_Model
         if (!$ret->row(0)) {
             return $this->suc_out_put();
         }
+        if ($ret->row(0)->uid == $request['uid']) {
+            return $this->suc_out_put();
+        }
         return $this->fail_out_put(1000, "手机号已存在");
     }
 
@@ -106,6 +109,35 @@ class User_model extends HX_Model
             'Fmemo' => '',
         ];
         $this->db->insert($this->table, $insert_arr);
+    }
+
+    public function update_user($request)
+    {
+
+        $ret = $this->check_mobile_available($request);
+        if ($ret['result'] != 0) {
+            show_error($ret['res_info']);
+        }
+
+        if (!empty($request['name'])) {
+            $insert_arr['Fname'] = $request['name'];
+        }
+        if (!empty($request['mobile'])) {
+            $insert_arr['Fmobile'] = $request['mobile'];
+        }
+        if (!empty($request['password']) && $request['password'] != "") {
+            $insert_arr['Fpassword'] = md5($request['password']);
+        }
+        if (!empty($request['email'])) {
+            $insert_arr['Femail'] = $request['email'];
+        }
+        if (!empty($request['role_id'])) {
+            $insert_arr['Frole_id'] = $request['role_id'];
+        }
+        if (!empty($request['memo'])) {
+            $insert_arr['Fmemo'] = $request['memo'];
+        }
+        $this->db->update($this->table, $insert_arr, ["Fuid" => $request['uid']]);
     }
 
     public function get_seller()

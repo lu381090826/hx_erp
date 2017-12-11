@@ -143,11 +143,16 @@ class Goods extends HX_Controller
 
     public function delete_sku($goods_id)
     {
-        $this->load->model('goods/goods_model', 'goods_m');
-        $this->goods_m->delete_goods($goods_id);
+        try {
+            $this->load->model('goods/goods_model', 'goods_m');
+            $this->goods_m->delete_goods($goods_id);
 
-        $this->load->model('goods/sku_model', 'sku_m');
-        $this->sku_m->unset_sku($goods_id);
+            $this->load->model('goods/sku_model', 'sku_m');
+            $this->sku_m->unset_sku($goods_id);
+        } catch (Exception $e) {
+            json_ajax_out_put($e->getCode(), $e->getMessage());
+        }
+
     }
 
     public function search_goods()

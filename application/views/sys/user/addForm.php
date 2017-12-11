@@ -8,7 +8,7 @@ $this->load->view('head');
         <legend>添加用户</legend>
         <div class="am-form-group">
             <label for="doc-vld-name">姓名：</label>
-            <input type="text" id="doc-vld-name" minlength="3" placeholder="输入姓名" name="name" class="am-form-field"
+            <input type="text" id="doc-vld-name" minlength="2" placeholder="输入姓名" name="name" class="am-form-field"
                    required/>
         </div>
         <div class="am-form-group">
@@ -20,7 +20,7 @@ $this->load->view('head');
         </div>
         <div class="am-form-group">
             <label for="doc-vld-password">密码：</label>
-            <input type="text" id="doc-vld-password" minlength="3" name="password" placeholder="输入密码"
+            <input type="text" id="doc-vld-password" minlength="6" name="password" placeholder="输入密码"
                    class="am-form-field" required/>
         </div>
         <div class="am-form-group">

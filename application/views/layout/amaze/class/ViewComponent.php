@@ -7,9 +7,14 @@ class ViewComponent
      * @param $_controller
      * @param $searched
      * @param $fields
+     * @param array $actions
      * @return string
+     * actions参数使用说明：
+     *      用于自定义项，如[array('label'=>"详情", 'url'=>site_url("/sell/allocate/Allocate/index/{{order_id}}")),]
+     *      label表示显示的文字
+     *      url表示跳转地址，{{order_id}}为占位符，其会替换成item的order_id属性
      */
-    static function DataGrid($_controller,$searched,$fields)
+    static function DataGrid($_controller,$searched,$fields,$actions=[])
     {
         //设置Html开头
         $html = '<table class="am-table am-table-striped am-table-hover table-main">' .
@@ -53,10 +58,27 @@ class ViewComponent
                 '<a class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" href="javascript:if(window.confirm(\'确定删除数据?\')) window.location.href=\''.UrlComponent::delete($_controller,$item).'\'"><span class="am-icon-trash-o"></span> 删除 </a>'.
                 '</div>'.
                 '</div>';*/
-            $html .= '<td>'.
-                '<a href="'.UrlComponent::update($_controller,$item).'"> 编辑 </a>'.
-                '<a href="javascript:if(window.confirm(\'确定删除数据?\')) window.location.href=\''.UrlComponent::delete($_controller,$item).'\'"> 删除 </a>'.
-                '</td>';
+            if(empty($actions)){
+                $html .= '<td>'.
+                    '<a href="'.UrlComponent::update($_controller,$item).'"> 编辑 </a>'.
+                    '<a href="javascript:if(window.confirm(\'确定删除数据?\')) window.location.href=\''.UrlComponent::delete($_controller,$item).'\'"> 删除 </a>'.
+                    '</td>';
+            }
+            else{
+                $html .= '<td>';
+                foreach($actions as $action) {
+                    //判断数据
+                    if(!isset($action["url"]) || !isset($action["label"])) continue;
+                    //定义按键
+                    $btn = '<a href="'.$action["url"].'"> ' . $action["label"] . ' </a>';
+                    //替换参数
+                    foreach($item as $attr_key=>$attr_value){
+                        $btn = str_replace("{{{$attr_key}}}",$attr_value,$btn);
+                    }
+                    //添加代码
+                    $html .= $btn;
+                }
+            }
 
 
             $html .= "</tr>";

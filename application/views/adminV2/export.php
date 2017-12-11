@@ -147,6 +147,7 @@
 
                                 <label>
                                     <select data-am-selected="{maxHeight: 200,searchBox: 1}" name="year">
+                                        <option value="0">全部</option>
                                         <?php for ($i = 2000; $i < 2030; $i++): ?>
                                             <option value="<?= $i ?>"
                                                     <?php if ($i == 2017): ?>selected<?php endif; ?>><?= $i ?></option>
@@ -159,7 +160,7 @@
                                 <label for="doc-vld-brand_id">月份：</label>
                                 <label>
                                     <select data-am-selected="{maxHeight: 200}" name="month">
-                                        <option value="">全部</option>
+                                        <option value="0">全部</option>
                                         <?php for ($i = 1; $i < 13; $i++): ?>
                                             <option value="<?= $i ?>"
                                                     <?php if ($i == date('m')): ?>selected<?php endif; ?>><?= $i ?></option>

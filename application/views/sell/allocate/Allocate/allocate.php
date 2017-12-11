@@ -5,7 +5,8 @@
 <div class="am-cf am-padding am-padding-bottom-0">
     <div class="am-fl am-cf">
         <a class="am-text-primary am-text-lg" href="<?=base_url()?>">HOME</a> /
-        <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/order/Order")?>">销售订单</a> /
+        <!--<a class="am-text-primary am-text-lg" href="<?=site_url("/sell/order/Order")?>">销售订单</a> /-->
+        <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/allocate/Allocate/index2")?>">报货列表</a> /
         <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/allocate/Allocate/index")."/$order->id"?>">配货订单</a> /
         <small>添加配货</small>
     </div>
@@ -121,13 +122,16 @@
                         <td>{{item.sku.size}}</td>
                         <td>{{item.num_sum}}</td>
                         <td>{{item.num_end}}</td>
-                        <td><input type="number" class="form-control" placeholder="单价" v-model="item.num"></td>
+                        <td><input type="number" class="form-control" placeholder="单价" v-model="item.num" v-on:change="changeNum($event,item,'num')"></td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-        <p><button type="button" class="am-btn am-btn-primary" @click="submit">提交</button></p>
+        <p>
+            <button type="button" class="am-btn am-btn-primary" @click="submit">提交</button>
+            <a type="button" class="am-btn am-btn-success" href="javascript:window.history.go(-1);">返回</a>
+        </p>
     </form>
 </div>
 
@@ -137,6 +141,7 @@
         el:"#app",
         data: {
             //销售单
+            id:"",
             order:null,
             user:null,
             remark:"",
@@ -146,13 +151,14 @@
         },
         created:function()
         {
+            this.id = "<?=$id?>";
             this.order_num = "<?=$order_num?>";
             this.order = <?=json_encode($order)?>;
             this.list = <?=json_encode($list)?>;
             this.seller = <?=json_encode($seller)?>;
             this.client = <?=json_encode($client)?>;
 
-            console.log(this.list);
+            //console.log(this.id);
         },
         methods: {
             //添加配货单
@@ -166,15 +172,22 @@
                 if(!this.check())
                     return;
 
+                //设置数据
+                var list = this.getSubmitList();
+                var total = this.getTotalNum(list);
+
+                //提交
                 $.ajax({
                     url: '<?=site_url($_controller->views . "/add_api")?>',
                     type: "post",
                     dataType: "json",
                     data: {
+                        "id": this.id,
                         "order_id": this.order.id,
                         "order_num":this.order_num,
                         "remark":this.remark,
-                        "list":this.getSubmitList(),
+                        "total_num":total,
+                        "list":list,
                     },
                     success: function (result) {
                         console.log(result);
@@ -229,6 +242,25 @@
                 }
 
                 return true;
+            },
+            //数量改变(整数)
+            changeNum:function(e,item,attr){
+                //取项属性名
+                var attr = attr || "num";
+                //设置值
+                if(parseInt(item[attr]) >= 0)
+                    item[attr]=parseInt(item[attr]);
+                else
+                    item[attr] = 0;
+            },
+            //获取总数量
+            getTotalNum:function(list){
+                var total = 0;
+                for(var key in list){
+                    var item = list[key];
+                    total += parseInt(item.num);
+                }
+                return total;
             }
         }
     })

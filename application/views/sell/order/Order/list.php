@@ -6,6 +6,7 @@
     <select data-am-selected id="subnav">
         <option value="#" selected>销售订单</option>
         <option value="<?=site_url("sell/client/Client")?>">客户管理</option>
+        <option value="<?=site_url("sell/allocate/Allocate/index2")?>">报货订单</option>
     </select>
 </div>
 <hr>

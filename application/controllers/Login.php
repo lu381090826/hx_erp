@@ -24,7 +24,12 @@ class Login extends CI_Controller
         //获取全部的权限id
         $auth_ids = $this->getAuthIds($res['role_id']);
 
-        $this->session->set_userdata(
+        $expire_time = 86400;
+        if (!empty($this->input->post('remember_me'))) {
+            $expire_time = 86400 * 15;
+        }
+
+        $this->session->set_tempdata(
             [
                 'name' => $res['name'],
                 'mobile' => $res['mobile'],
@@ -32,7 +37,7 @@ class Login extends CI_Controller
                 'role_id' => $res['role_id'],
                 'auths' => $auth_ids,
             ]
-        );
+            , null, $expire_time);
 
         $this->load->helper('url');
         redirect('');
@@ -67,8 +72,8 @@ class Login extends CI_Controller
      */
     private function getAuthIds($role_id)
     {
-        $this->load->model('admin/ra_model', 'm_ra');
-        $auths = $this->m_ra->get_all_by_role_id($role_id);
+        $this->load->model('admin/ra_model', 'ra_m');
+        $auths = $this->ra_m->get_all_by_role_id($role_id);
 
         $auth_ids = [];
         if (isset($auths['result_rows'])) {

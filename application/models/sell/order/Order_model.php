@@ -20,6 +20,7 @@ class Order_model extends BaseModel{
 	function __construct(){
 		$this->load->model('sell/order/OrderSpu_model',"MSpu",true);
 		$this->load->model('sell/order/OrderSku_model',"MSku",true);
+		$this->load->model('sell/allocate/AllocateItem_model',"m_item",true);
 	}
 
 	/**
@@ -167,25 +168,20 @@ class Order_model extends BaseModel{
 		foreach($data["selectList"] as $spu_data){
 			//去除多余字段
 			unset($spu_data["filter"]);
-			//保存SKU
+			//保存SPU
 			$spu = $this->MSpu->_new();
-			$spu->load($spu_data);
+			$spu->load_safe($spu_data);
 			$spu->order_id = $this->id;
-			//$spu->spu_id = $spu_data["spu_id"];
-			//$spu->snap_price = $spu_data["snap_price"];
-			//$spu->snap_pic = $spu_data["snap_pic"];
-			//$spu->snap_pic_normal = $spu_data["snap_normal"];
 			$spu->save();
 			//遍历sku
 			foreach($spu_data["skus"] as $sku_data){
+				//去除多余字段
+				unset($sku_data["num_allocat"]);
+				//保存SPU
 				$sku = $this->MSku->_new();
-				$sku->load($sku_data);
+				$sku->load_safe($sku_data);
 				$sku->order_id = $this->id;
 				$sku->order_spu_id = $spu->id;
-				/*$sku->sku_id = $sku_data["sku_id"];
-				$sku->color = $sku_data["color"];
-				$sku->size = $sku_data["size"];
-				$sku->num = $sku_data["num"];*/
 				$sku->save();
 			}
 		}
@@ -288,16 +284,78 @@ class Order_model extends BaseModel{
 	public function getGoods(){
 		$spus = $this->MSpu->searchAll(['order_id'=>$this->id]);
 		$skus = $this->MSku->searchAll(['order_id'=>$this->id]);
+		$allocated = $this->m_item->getAllocateStatus($this->id);
 		$list = array();
 		foreach($spus->list as $spu){
 			$item = $spu;
 			$item->skus = array();
 			foreach($skus->list as $sku){
-				if($sku->order_spu_id == $spu->id)
+				//添加配货完成数量
+				if($sku->order_spu_id == $spu->id){
+					//添加配货完成数量
+					foreach($allocated as $key=>$value){
+						if($key == $sku->id)
+							$sku->num_allocat = $value;
+					}
+					if(!isset($sku->num_allocat))
+						$sku->num_allocat = '0';
+					//添加sku
 					$spu->skus[] = $sku;
+				}
 			}
 			$list[] = $item;
 		}
+		return $list;
+	}
+
+	/**
+	 * 获取Sku列表(包含已经配货数量)
+	 * bool $getEndNum：是否查询已配货数量
+	 * string $filterAllocatId：统计配货数量时，过滤掉得配货单ID
+	 */
+	public function getSkuList($getEndNum=true,$filterAllocatId=null){
+		//获取所有spu
+		$order_spus = $this->m_spu->searchAll(["order_id"=>$this->id])->list;
+		$order_skus = $this->m_sku->searchAll(["order_id"=>$this->id])->list;
+
+		//获取已配数量
+		if($getEndNum)
+			$allocated = $this->m_item->getAllocateStatus($this->id,$filterAllocatId);
+
+		//获取
+		$list = array();
+		foreach($order_spus as $order_spu){
+			foreach($order_skus as $order_sku){
+				//过滤
+				if($order_spu->id != $order_sku->order_spu_id)
+					continue;
+
+				//设置项目
+				$item = $this->m_item->_new();
+				$item->order_id = $this->id;
+				$item->order_spu_id = $order_spu->id;
+				$item->order_sku_id = $order_sku->id;
+				$item->spu_id = $order_spu->spu_id;
+				$item->sku_id = $order_sku->sku_id;
+				$item->num = 0;
+				$item->status = 0;
+				$item->spu = $order_spu;
+				$item->sku = $order_sku;
+
+				//设置可配数量
+				$item->num_sum = (int)$order_sku->num;
+
+				//设置已经配置数量
+				if($getEndNum)
+					$item->num_end = isset($allocated[$order_sku->id])?(int)$allocated[$order_sku->id]:0;
+
+				//添加到列表
+				$list[] = $item;
+			}
+		}
+
+
+		//返回
 		return $list;
 	}
 }

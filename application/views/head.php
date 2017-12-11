@@ -56,7 +56,7 @@
                         </a>
                     </div>
                 <?php } ?>
-                <?php if (check_auth(2)) { ?>
+                <?php if (check_auth(2) || check_auth(9)) { ?>
                     <a href="/goods">
                         <div class="am-topbar-right">
                             <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span
