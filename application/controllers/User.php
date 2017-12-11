@@ -39,6 +39,6 @@ class User extends HX_Controller
         redirect("success");
     }
     public function test(){
-    	echo 1234;
+    	echo 123;
     }
 }
