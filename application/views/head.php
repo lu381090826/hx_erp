@@ -67,12 +67,14 @@
                 <?php } ?>
 
                 <?php if (check_auth(3)) { ?>
+                <a href="/depot/index/">
                     <div class="am-topbar-right">
                         <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span
                                 class="am-icon-cube"></span>
                             仓库管理
                         </button>
                     </div>
+                </a>
                 <?php } ?>
 
                 <?php if (check_auth(4)) { ?>
