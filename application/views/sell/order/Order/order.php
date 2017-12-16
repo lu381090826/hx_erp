@@ -146,7 +146,7 @@
             <div id="remark_images" name="remark_images" path="<?=site_url($_controller->api."/upload_base64")?>" :value='remark_images'></div>
         </div>
         <!-- 搜索商品 -->
-        <div class="form-group" v-if="this.id == ''">
+        <div class="form-group" v-if="this.id == '' || spuAllowChange">
             <label>搜索商品</label>
             <input type="text" class="form-control" placeholder="请输入商品SPU" v-model="searchKey" v-on:change="searchChange">
         </div>
@@ -417,6 +417,8 @@
             "allocateModeMap": <?=json_encode($allocateModeMap)?>,
             //订单金额
             'total_amount':0,
+            //是否允许修改SPI
+            'spuAllowChange':1,
         },
         created:function() {
             //this
@@ -446,6 +448,8 @@
             this.selectList = this.addFilter(selectList);
             this.total_amount = '<?=$model->total_amount?$model->total_amount:"0"?>';
             this.remark_images = '<?=$model->remark_images?>';
+            //是否允许修改spu
+            this.spuAllowChange = <?=$spuAllowChange?>;
 
             //覆盖收款方式和地址
             if(this.client != null) {
