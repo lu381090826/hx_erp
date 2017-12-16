@@ -159,6 +159,12 @@ class Allocate extends BaseController {
         //生成配货单号
         $order_num = $this->model->createOrderNum();
 
+        //设置初始填写的num数量
+        foreach($list as $key=>$item){
+            $num = $item->num_sum - $item->num_end;
+            $list[$key]->num = $num?$num:0;
+        }
+
         //页面显示
         $this->show("allocate",[
             "id"=>null,
