@@ -36,7 +36,7 @@
    <?=ViewComponent::DataGrid($_controller,$searched,[
        'sell_order_num',"order_num","client_name","client_phone","statusName","total_num"
        //'id','form_id','create_at','create_user_id','status','remark',
-   ],[array('label'=>"详情", 'url'=>site_url("/sell/allocate/Allocate/index/{{order_id}}")),]
+   ],[array('label'=>"详情", 'url'=>site_url("/sell/allocate/Allocate/look/{{id}}")),]
    )?>
    <!--分页条-->
    <?=ViewComponent::PagesBar($page,$size,$searched->count)?>

@@ -135,18 +135,6 @@
                 </div>
             </div>
         </div>
-        <!-- 付款方式 -->
-        <div class="form-group">
-            <label>付款方式</label>
-            <select class="form-control" v-model="payment">
-                <option v-for="(item, index) in paymentMap" :value="index">{{item}}</option>
-            </select>
-        </div>
-        <!-- 收款日期 -->
-        <div class="form-group">
-            <label>收款日期</label>
-            <input type="date" class="form-control" placeholder="收款日期" v-model="receipt_date">
-        </div>
         <!-- 备注信息 -->
         <div class="form-group">
             <label>备注</label>
@@ -290,8 +278,20 @@
             <input id="total_price" type="text" class="form-control" placeholder="" v-model="total_amount" disabled v-if="this.id != ''">
             <input id="total_price" type="text" class="form-control" placeholder=""  :value="selectList | total_price" disabled v-else>
         </div>
+        <!-- 付款方式 -->
+        <div class="form-group">
+            <label>付款方式</label>
+            <select class="form-control" v-model="payment">
+                <option v-for="(item, index) in paymentMap" :value="index">{{item}}</option>
+            </select>
+        </div>
+        <!-- 收款日期 -->
+        <div class="form-group">
+            <label>收款日期</label>
+            <input type="date" class="form-control" placeholder="收款日期" v-model="receipt_date">
+        </div>
         <!-- 提交按钮 -->
-        <button class="btn btn-primary from-submit" type="submit" v-on:click="submit()">提交</button>
+        <button class="btn btn-lg btn-primary from-submit" type="submit" v-on:click="submit()">提交</button>
     </div>
     <!-- 模拟框 (添加用户) -->
     <div class="am-modal am-modal-no-btn" tabindex="-1" id="modal-client-add">
@@ -317,6 +317,9 @@
         </div>
     </div>
 </div>
+
+<!-- 页脚占位 -->
+<div style="width: 100%;height: 32px"></div>
 
 <!-- 脚本 -->
 <script>
@@ -692,10 +695,11 @@
                     alert("销售单不能为空");
                     return false;
                 }
-                else if(this.client.delivery_type == 0 && this.client.delivery_addr == ""){
+                //判断收货类型为快递时，是否有收货地址
+                /*else if(this.client.delivery_type == 0 && this.client.delivery_addr == ""){
                     alert("请填写客户收货地址");
                     return false;
-                }
+                }*/
                 else if(this.id !="" && parseInt(this.total_amount) < parseInt(total_price)){
                     alert("修改订单不能超过订单金额");
                     return false;

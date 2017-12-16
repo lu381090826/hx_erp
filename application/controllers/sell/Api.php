@@ -137,6 +137,7 @@ class Api extends CI_Controller {
         $key = isset($param["key"])?$param["key"]:null;
         $status = isset($param["status"])?$param["status"]:null;
         $sort = isset($param["sort"])?(array)json_decode($param["sort"]):[$model->getPk()=>"ASC"];
+        $isReceipted = isset($param["isReceipted"])?$param["isReceipted"]:null;
 
         //设置时区
         date_default_timezone_set('Asia/Shanghai');
@@ -149,6 +150,8 @@ class Api extends CI_Controller {
             $condition["create_at <="] = strtotime($end_date)+86400;
         if($status)
             $condition["status"] = $status;
+        if($isReceipted)
+            $condition["isReceipted"] = $isReceipted;
 
         //查询
         $result = $model->searchLikeJoinAll($key,$condition,$sort);
@@ -245,8 +248,6 @@ class Api extends CI_Controller {
         else
             $this->apiresult->sentApiError(0,"image could not be saved.",null);
     }
-
-
 
     //region 辅助方法
 
