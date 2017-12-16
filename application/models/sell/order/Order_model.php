@@ -331,6 +331,16 @@ class Order_model extends BaseModel{
 	}
 
 	/**
+	 * 修改状态
+	 */
+	public function changeStatus($value,$allowBack = false){
+		if(!$allowBack && (int)$this->status <= (int)$value)
+			$this->status = $value;
+		else if($allowBack)
+			$this->status = $value;
+	}
+
+	/**
 	 * 获取Sku列表(包含已经配货数量)
 	 * bool $getEndNum：是否查询已配货数量
 	 * string $filterAllocatId：统计配货数量时，过滤掉得配货单ID

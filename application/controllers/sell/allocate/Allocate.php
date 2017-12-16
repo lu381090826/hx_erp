@@ -251,6 +251,14 @@ class Allocate extends BaseController {
             $bool = $this->model->createOrder($data);
         }
 
+        //更改订单状态
+        $order_id = $_REQUEST["order_id"];
+        $order = $this->m_order->get($order_id);
+        if($order){
+            $order->changeStatus(1);
+            $order->save();
+        }
+
         //返回处理结果
         if($bool)
             $this->apiresult->sentApiSuccess();
