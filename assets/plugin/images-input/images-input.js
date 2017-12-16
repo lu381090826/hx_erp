@@ -144,13 +144,19 @@ $.fn.imagesInput = function(options) {
         //设置元素内容
         var html = "<div class='images-input-shade'>" +
             "<div class='backdrop'></div>" +
-            "<div class='action'><span>移除</span></div>" +
+            "<div class='bar'><div class='remove'></div></div>"+
+            "<div class='action'>" +
+            "<div class='look'>查看</div>" +
+            "</div>" +
             "</div>" +
             "<img src='"+path+"'>";
         $(element).append(html);
 
+        //添加查看按钮
+        $(element).find(".action .look").on("click",function(){look(plugin,path)});
+
         //添加移除按钮
-        $(element).find(".action span").on("click",function(){remove(plugin,path)});
+        $(element).find(".bar .remove").on("click",function(){remove(plugin,path)});
 
         //获取旧值
         var input = $(plugin).find(".images-input-value");
@@ -170,6 +176,28 @@ $.fn.imagesInput = function(options) {
 
         //触发事件
         event_changed(value_new);
+    }
+
+    //查看按钮
+    function look(plugin,path){
+        //添加DIV
+        var div = document.createElement('div');
+        div.setAttribute("class", "images-input-look");
+        $("body").append(div);
+
+        //添加内容
+        var html = "<div class='images-input-look-content'><img src='"+path+"'/></div>" +
+            "<div class='images-input-look-shade'><div>";
+        $(div).append(html);
+
+        //添加事件
+        $(div).on("click",lookClose);
+    }
+
+    //查看按钮
+    function lookClose(){
+        //移除
+        $(this).remove();
     }
 
     //移除图片
