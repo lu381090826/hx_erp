@@ -162,7 +162,7 @@ class Allocate extends BaseController {
         //设置初始填写的num数量
         foreach($list as $key=>$item){
             $num = $item->num_sum - $item->num_end;
-            $list[$key]->num = $num?$num:0;
+            $list[$key]->num = $num>0?$num:0;
         }
 
         //页面显示

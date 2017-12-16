@@ -149,8 +149,7 @@
             filter:"",
             list:[],
         },
-        created:function()
-        {
+        created:function() {
             this.id = "<?=$id?>";
             this.order_num = "<?=$order_num?>";
             this.order = <?=json_encode($order)?>;
@@ -215,6 +214,7 @@
             //检测提交的表单
             check:function(){
                 var isNull = true;
+                var sumNum = 0;//用于统计总配货数量
                 for(var key in this.list){
                     //设置item
                     var item = this.list[key];
@@ -230,17 +230,29 @@
                     }
 
                     //判断配货数量是否正确
-                    if(parseInt(item.num) + parseInt(item.num_end) > item.num_sum){
+                    /*if(parseInt(item.num) + parseInt(item.num_end) > item.num_sum){
                         alert("配货超过了订单需求");
                         return false;
-                    }
+                    }*/
+
+                    //累加总配货数
+                    sumNum += parseInt(item.num_end);
+                    sumNum += parseInt(item.num);
                 }
 
+                //判断是否配货
                 if(isNull){
                     alert("请进行配货");
                     return false;
                 }
 
+                //判断是否超出销售总数
+                if(sumNum > parseInt(this.order.total_num)){
+                    alert("配货数量已超出销售总量");
+                    return false;
+                }
+
+                //返回
                 return true;
             },
             //数量改变(整数)
