@@ -278,6 +278,13 @@
             <input id="total_price" type="text" class="form-control" placeholder="" v-model="total_amount" disabled v-if="this.id != ''">
             <input id="total_price" type="text" class="form-control" placeholder=""  :value="selectList | total_price" disabled v-else>
         </div>
+        <!-- 配货方式 -->
+        <div class="form-group">
+            <label>配货方式</label>
+            <select class="form-control" v-model="allocate_mode">
+                <option v-for="(item, index) in allocateModeMap" :value="index">{{item}}</option>
+            </select>
+        </div>
         <!-- 付款方式 -->
         <div class="form-group">
             <label>付款方式</label>
@@ -395,6 +402,7 @@
             "remark":"",
             "remark_images":[],
             'selectList':[],
+            "allocate_mode":"0",
             //搜索、输入、映射
             "clientKey":"",
             "clientList":[],
@@ -406,6 +414,7 @@
             },
             "paymentMap": <?=json_encode($paymentMap)?>,
             "deliveryTypeMap": <?=json_encode($deliveryTypeMap)?>,
+            "allocateModeMap": <?=json_encode($allocateModeMap)?>,
             //订单金额
             'total_amount':0,
         },
@@ -431,6 +440,7 @@
             this.remark = '<?=$model->remark?>';
             this.payment = '<?=$model->payment?>';
             this.receipt_date = '<?=$model->receipt_date?>';
+            this.allocate_mode = '<?=$model->allocate_mode?>';
             //添加过滤字段并设置selectList
             var selectList = <?=json_encode($model->goods)?>;
             this.selectList = this.addFilter(selectList);
@@ -670,6 +680,7 @@
                         "total_num":total_num,
                         "total_price":total_price,
                         "client":this.client,           //客户最新信息
+                        "allocate_mode":this.allocate_mode,
                         "remark_images":remark_images,
                     },
                     success:function(result) {

@@ -13,6 +13,7 @@ class Order_model extends BaseModel{
 	public $id,$order_num,$user_id,$client_id,$total_num,$total_price,$payment,$status,$remark,$create_at,$update_at,$create_user_id,$update_user_id;
 	public $total_amount,$delivery_type,$delivery_addr,$receipt_date,$remark_images;
 	public $isPrinted,$isReceipted;
+	public $allocate_mode;
 
 	/**
 	 * Order_model constructor.
@@ -118,6 +119,15 @@ class Order_model extends BaseModel{
 	}
 
 	/**
+	 * 获取配货类型名
+	 */
+	public function getAllocateModeName(){
+		$list = $this->getAllocateModeMap();
+		$name = $list[$this->allocate_type];
+		return $name;
+	}
+
+	/**
 	 * 获取状态映射表
 	 * @return object
 	 */
@@ -127,6 +137,18 @@ class Order_model extends BaseModel{
 			1=> "配货中",
 			2=> "已配货",
 			3=> "已作废",
+		];
+	}
+
+	/**
+	 * 获取配货类型表
+	 */
+	public function getAllocateModeMap(){
+		return [
+			0=> "默认",
+			1=> "定制",
+			2=> "齐了配",
+			3=> "单款配齐",
 		];
 	}
 
