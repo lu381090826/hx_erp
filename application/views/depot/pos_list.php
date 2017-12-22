@@ -11,12 +11,12 @@
    <SCRIPT type="text/javascript">
   
 		    function delete_pos(id){
-		    	if(window.confirm('你确定要删除这篇文章吗？')){
+		    	if(window.confirm('你确定要删除这个库位吗？')){
 		    		 $.ajax({     
 		                 type:"POST",       
 		                 url:"/depot/depot/delete_pos",
 		                 dataType:"json",
-		                 data :{},
+		                 data :{"id":id},
 		                 cache:false,
 		                 beforeSend: function() {
 		                 },     
@@ -34,7 +34,7 @@
 
 
    </SCRIPT>
-   <title>仓库列表</title>
+   <title>库位列表</title>
  </head>
  <body>
   <div id="forms" class="mt10" style="margin-top:20px;">
@@ -60,14 +60,14 @@
               <?php 
               foreach($depot_data as $k=>$v){
               ?>
-              <tr class='tr' align='center'>  
+              <tr class='tr' align='center' id="d<?php echo $depot_data[$k]['id']?>">  
                 <td ><?php echo $depot_data[$k]['id']?></td>
                 <td ><?php echo $depot_data[$k]['pos_name'];?></td>
                 <td ><?php echo $depot_data[$k]['pos_code']?></td>
                 <td ><?php echo $depot_data[$k]['did']?></td>               
                 <td ><?php echo $depot_data[$k]['beizhu']?></td>
                 <td ><?php echo $depot_data[$k]['addtime']?></td>
-                <td ><a href="/depot/depot/add_pos_view?id=<?php echo $depot_data[$k]['id']?>">修改</a>　　<a href="#" onclick="delete_pos('')">删除</a></td>
+                <td ><a href="/depot/depot/add_pos_view?id=<?php echo $depot_data[$k]['id']?>">修改</a>　　<a href="#" onclick="delete_pos('<?php echo $depot_data[$k]['id']?>')">删除</a></td>
               </tr>
               <?php }?>
               </table>

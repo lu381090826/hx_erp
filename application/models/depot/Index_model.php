@@ -28,4 +28,16 @@ class Index_model extends CI_Model {
     	$query = $this->db->get_where('t_group_list',array('Fgid' => $gid));
     	return $query->result_array();
     }
+    
+
+    public function count_db($dbname,$sql = false){
+    	if(!$sql){
+    		$query = $this->db->get($dbname);
+    		return $query->num_rows();
+    	}
+    	else{
+    		$query = $this->db->query($sql);
+    		return $query->num_rows();
+    	}
+    }
 }
