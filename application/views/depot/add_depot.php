@@ -19,7 +19,7 @@
                <table class="form_table pt15 pb15" width="100%" border="0" cellpadding="0" cellspacing="0" id="add_tr">
                <tr>
                   <td class="td_right"><span class="bitian">*</span> 仓库名称:</td>
-                  <td><input type="text" name="depot_name" id="depot_name"  value="<?php echo @$depot_data['depot_name'];?>" class="input-text lh25" size="40"></td>  
+                  <td style="width:100px;"><input type="text" name="depot_name" id="depot_name"  value="<?php echo @$depot_data['depot_name'];?>" class="input-text lh25" size="40"></td>  
                   <td class="td_right"><span class="bitian">*</span> 仓库联系人:</td>
                   <td><input type="text" name="name" id="name"  value="<?php echo @$depot_data['name'];?>" class="input-text lh25" size="40"></td>         
                </tr>

@@ -1,7 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 include_once(dirname(BASEPATH).'/inherit/XMG_Controller.php');
-class Depot extends XMG_Controller {
+
+class Storage extends XMG_Controller {
 
 	
 	public $pageStr;
@@ -13,14 +14,38 @@ class Depot extends XMG_Controller {
                 
     }
 
-    public function add_depot_view(){
+    public function add_storage_view(){
+    	
+    	$page_data = $this->get_page("pos","");
+    	 
+    	$data['page_data'] = $page_data['pageStr'];
+    	
     	if(@$_REQUEST['id']){
-    		$data['depot_data'] = $this->depot_model->get_depot(@$_REQUEST['id']);
-    		$this->load->view("depot/add_depot",$data);
+    		$data['storage_data'] = $this->stock_model->get_stock(@$_REQUEST['id']);
+    		$this->load->view("depot/add_storage",$data);
     	}
     	else{
-    		$this->load->view("depot/add_depot");
+    		//读取仓库
+    		$data['depot_data'] = $this->depot_model->get_all_depot();
+    		$this->load->view("depot/add_storage",$data);
     	}   	
+    }
+    
+    public function storage_list_view(){  	 
+    	//分页
+    	$page_data = $this->get_page("pos","");
+    
+    	$data['page_data'] = $page_data['pageStr'];
+    	 
+    	if(@$_REQUEST['id']){
+    		$data['storage_data'] = $this->stock_model->get_stock(@$_REQUEST['id']);
+    		$this->load->view("depot/storage_list",$data);
+    	}
+    	else{
+    		//读取仓库
+    		$data['storage_data'] = $this->depot_model->get_all_pos();
+    		$this->load->view("depot/storage_list",$data);
+    	}
     }
     
     public function add_pos_view(){
@@ -78,9 +103,6 @@ class Depot extends XMG_Controller {
     	$id = @$_REQUEST['id'];
     	$delete_result = $this->depot_model->delete_depot($id);
     	
-    	//删除旗下所有库位
-    	$delete_all_pos = $this->depot_model->delete_all_pos($id);
-    	
     	if($delete_result){
     		$this->return_msg(array("result"=>'1',"msg"=>"删除成功"));
     	}
@@ -91,7 +113,7 @@ class Depot extends XMG_Controller {
     
     //查
     public function depot_list_view(){
-    	$page_data = $this->get_page("depot","");
+    	$page_data = $this->get_page("depot","","depot_model");
     	
     	$data['page_data'] = $page_data['pageStr'];
     	//读取仓库
@@ -149,8 +171,8 @@ class Depot extends XMG_Controller {
         
         if($search){
         	$sql = "select Fid from t_pos where Fpos_name like '%{$search}%' or Fpos_code like '%{$search}%'";
-        	$page_data = $this->get_page("pos",$sql);
-        	
+        	$page_data = $this->get_page("pos",$sql,"depot_model");
+        	 
         	$data['page_data'] = $page_data['pageStr'];
         	//读取仓库
         	$data['depot_data'] = $this->depot_model->get_all_pos($page_data['page'],$search);
@@ -158,9 +180,9 @@ class Depot extends XMG_Controller {
         	$this->load->view("depot/pos_list",$data);
         }
         else{        	
-        	$page_data = $this->get_page("pos","");
+        	$page_data = $this->get_page("pos","","depot_model");
+        	 
         	$data['page_data'] = $page_data['pageStr'];
-        	
         	//读取仓库
         	$data['depot_data'] = $this->depot_model->get_all_pos($page_data['page']);
         	

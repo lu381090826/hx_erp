@@ -10,13 +10,15 @@ class XMG_Controller extends CI_Controller
         $this->load->helper('url');
         
         $this->addtime = date("Y-m-d H:i:s");
+        
+        $this->load->model("depot/index_model");
     }
-    public function get_page($dbname,$sql,$modelname){
+    public function get_page($dbname,$sql){
     
     	$page = @isset($_REQUEST['page'])?$_REQUEST['page']:1;
     	$page_url = @$_SERVER["REQUEST_URI"];
     
-    	$count = $this->$modelname->count_db($dbname,$sql);
+    	$count = $this->index_model->count_db($dbname,$sql);
     
     	$params = array('count' => $count, 'page' => $page,'page_url'=>$page_url);
     

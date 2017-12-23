@@ -1,6 +1,6 @@
 <?php
 
-class Depot_model extends CI_Model {
+class Stock_model extends CI_Model {
 
     public function __construct()
     {
@@ -48,10 +48,6 @@ class Depot_model extends CI_Model {
     //删
     public function delete_pos($id){
     	return $this->db->delete('pos', array('Fid' => $id));
-    }
-    
-    public function delete_all_pos($did){
-    	return $this->db->delete('pos', array('Fdid' => $did));
     }
     
     public function get_all_depot($page_number = 1){
@@ -109,4 +105,14 @@ class Depot_model extends CI_Model {
     }
     
 
+    public function count_db($dbname,$sql = false){
+    	if(!$sql){
+    		$query = $this->db->get($dbname);
+    		return $query->num_rows();
+    	}
+    	else{
+          $query = $this->db->query($sql);
+          return $query->num_rows();          
+    	}
+    }
 }

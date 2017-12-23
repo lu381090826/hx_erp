@@ -11,7 +11,7 @@
    <SCRIPT type="text/javascript">
   
 		    function delete_depot(id){
-		    	if(window.confirm('你确定要删除这个仓库吗？')){
+		    	if(window.confirm('你确定要删除这个仓库吗？删除了仓库下所有库位都会被删除！')){
 		    		 $.ajax({     
 		                 type:"POST",       
 		                 url:"/depot/depot/delete_depot",
