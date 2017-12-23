@@ -53,9 +53,11 @@ class Goods extends HX_Controller
     public function get_category()
     {
         $this->load->model('goods/category_model', 'category_m');
-        $result = $this->category_m->category_cache_series();
+        $result = $this->category_m->category_series_tree();
 
-        json_out_put($result);
+        $data = $this->category_m->showList($result);
+
+        json_out_put($data);
     }
 
     public function get_color($page = 0)

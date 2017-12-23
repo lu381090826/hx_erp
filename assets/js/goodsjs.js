@@ -39,7 +39,7 @@ function search_goods() {
 }
 
 function get_goods(curr) {
-    tableClean();
+    contentClean();
     var fromThead = "<tr style='text-align: center'> <th style='width: 80px'>小图</th> <th>款号</th><th>价格</th><th>库存</th><th>发布时间</th> <th style='text-align: center;width: 80px' class='am-text-nowrap'>操作</th> </tr>";
     from_thead.append(fromThead);
 
@@ -76,10 +76,7 @@ function goods_show(result) {
 }
 
 function get_category(curr) {
-    tableClean();
-
-    var content = "<tr> <th>id</th> <th>类别</th> <th>操作</th> </tr>";
-    from_thead.append(content);
+    contentClean();
 
     $.ajax({
         type: 'get',
@@ -88,21 +85,19 @@ function get_category(curr) {
         dateType: 'json',
         success: function (result) {
             var row = '';
-            curr_page = curr;
-            all_pages = result.pages;
             $.each(result, function (i, o) {
-                row += "<tr>" +
-                    "<td>" + o.id + "</td>" +
-                    "<td>" + o.category_name + "</td>" +
-                    "<td><a href='javascript:;' data-id=" + o.id + " onclick='category_delete(" + o.id + ")'>删除</a></td>" +
-                    "</tr>";
+                row += "<li>" + o.type + "&nbsp;&nbsp;&nbsp;<i onclick='category_edit(" + o.id + ",\"" + o.category_name + "\")' class=\"am-icon-edit\"></i></li>";
             });
-            from_contant.append(row);
+
+            ul_contant.append(row);
+            ul_contant.show();
         }
     })
+
+
 }
 function get_color(curr) {
-    tableClean();
+    contentClean();
     var content = "<tr> <th>颜色</th> <th>颜色代码</th> <th>颜色展示</th>  <th>操作</th> </tr>";
     from_thead.append(content);
 
@@ -130,7 +125,7 @@ function get_color(curr) {
 }
 
 function get_size(curr) {
-    tableClean();
+    contentClean();
 
     var content = "<tr> <th>尺码</th> <th>尺码代码</th>  <th>操作</th> </tr>";
     from_thead.append(content);
@@ -157,7 +152,7 @@ function get_size(curr) {
 }
 
 function get_shop(curr) {
-    tableClean();
+    contentClean();
 
     var content = "<tr> <th>Id</th> <th>店名</th><th>负责人</th><th>负责电话</th><th>创建时间</th> <th style='text-align: center;width: 80px' class='am-text-nowrap'>操作</th> </tr>";
     from_thead.append(content);
@@ -232,10 +227,27 @@ function shop_delete(id) {
 }
 function category_delete(id) {
     delete_id = id;
+    $('#categoty-edit-confirm').modal('close');
     $('#categoty-remove-confirm').modal({
         relatedTarget: this,
         onConfirm: function (options) {
             $.post('/category/delete_category/' + delete_id);
+            setTimeout(function () {
+                fromLoad('goods', 'get_category');
+            }, 300);
+        }
+    });
+}
+
+var edit_id = 0;
+function category_edit(id, name) {
+    edit_id = id;
+    delete_id = id;
+    $('#categoty-edit-confirm').find('#doc-ipt-name').val(name);
+    $('#categoty-edit-confirm').modal({
+        relatedTarget: this,
+        onConfirm: function (options) {
+            $.post('/category/edit_category/' + edit_id, {name: $('#categoty-edit-confirm').find('#doc-ipt-name').val()});
             setTimeout(function () {
                 fromLoad('goods', 'get_category');
             }, 300);

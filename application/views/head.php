@@ -16,7 +16,7 @@
     <!--    韩迅css   -->
     <link rel="stylesheet" href="/assets/css/app.css"/>
     <!--    jquery   -->
-    <script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="/assets/js/1.11.1/jquery.min.js"></script>
 </head>
 <style>
     .am-topbar-right {

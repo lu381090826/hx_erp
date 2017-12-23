@@ -15,8 +15,20 @@ class Category extends HX_Controller
 
     public function action_add_category()
     {
-        $data['category_list'] = $this->category_m->category_cache_tree();
+        $this->load->model('goods/category_model', 'category_m');
+        $result = $this->category_m->category_series_tree();
+
+        $data['category_list'] = $this->category_m->showList($result);
+
         $this->load->view('goods/category/addForm', $data);
+    }
+
+    public function edit_category($id)
+    {
+        $post = $this->input->post();
+
+        $this->load->model('goods/category_model', 'category_m');
+        $this->category_m->update_name($id, $post['name']);
     }
 
     public function action_show_child($pid)

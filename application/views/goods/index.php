@@ -191,6 +191,11 @@ $this->load->view('head');
     <tbody id="from_contant">
     </tbody>
 </table>
+
+<ul class="am-list am-list-static am-list-border" id="ul-content" style="display: none;">
+
+</ul>
+
 <br>
 
 <!--分页-->
@@ -243,6 +248,26 @@ $this->load->view('head');
         <div class="am-modal-footer">
             <span class="am-modal-btn" data-am-modal-cancel>取消</span>
             <span class="am-modal-btn" data-am-modal-confirm>确定</span>
+        </div>
+    </div>
+</div>
+<div class="am-modal am-modal-confirm" tabindex="-1" id="categoty-edit-confirm">
+    <div class="am-modal-dialog">
+        <div class="am-modal-hd">提示</div>
+        <div class="am-modal-bd">
+            <div class="am-form">
+                <div class="am-form-group">
+                    <label for="doc-ipt-name">分类名</label>
+                    <input type="text" id="doc-ipt-name" placeholder="" class="am-form-field" required>
+                </div>
+            </div>
+            <div class="am-form">
+                <button type="button" onclick="category_delete(delete_id)" class="am-btn am-btn-danger">删除该分类</button>
+            </div>
+        </div>
+        <div class="am-modal-footer">
+            <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+            <span class="am-modal-btn" data-am-modal-confirm>保存</span>
         </div>
     </div>
 </div>

@@ -20,7 +20,7 @@ $this->load->view('head');
             <label for="doc-select-1">分类<span style="color: red">*</span>:</label>
             <select id="doc-select-1" name="category_id">
                 <?php foreach ($category_list as $k => $category): ?>
-                    <option value="<?= $k ?>"><?= $category ?></option>
+                    <option value="<?= $category['id'] ?>"><?= $category['type'] ?></option>
                 <?php endforeach; ?>
             </select>
             <span class="am-form-caret"></span>
