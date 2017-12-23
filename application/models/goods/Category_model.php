@@ -314,6 +314,6 @@ class Category_model extends HX_Model
 
     public function update_name($id, $name)
     {
-        return $this->db->update($this->table, ['Fcategory_name' => $name], ['Fid' => $id]);
+        return $this->db->update($this->table, ['Fcategory_name' => $name, 'Fop_uid' => $this->session->uid], ['Fid' => $id]);
     }
 }
