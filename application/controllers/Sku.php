@@ -32,8 +32,9 @@ class Sku extends HX_Controller
         $this->load->model('goods/shop_model', 'shop_m');
         $data['shop_list'] = $this->shop_m->get_shop_list_all()['result_rows'];
 
-        $this->load->model('goods/category_model', 'm_category');
-        $data['category_list'] = $this->m_category->category_cache();
+        $this->load->model('goods/category_model', 'category_m');
+        $result = $this->category_m->category_series_tree();
+        $data['category_list'] = $this->category_m->showList($result);
 
         $this->load->model('goods/color_model', 'color_m');
         $data['color_list'] = $this->color_m->color_cache();
