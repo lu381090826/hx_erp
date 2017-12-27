@@ -11,9 +11,31 @@ class Storage extends XMG_Controller {
         parent::__construct();
 
         $this->load->model("depot/depot_model");
-                
+        $this->load->model("depot/index_model");
+
+
     }
 
+    public function get_spu_sku(){
+    	$spu = @$_REQUEST['spu'];
+    	if(!$spu){
+    		$this->return_msg(array("result"=>'0',"msg"=>"搜索内容不能为空！"));
+    	}
+
+    	//获取商品sku
+    	$sql = "select a.Fgoods_id,a.Fsku_id,b.Fname,c.Fsize_info from t_sku a,t_color b,t_size c where a.Fcolor_id = b.Fid and a.Fsize_id=c.Fid and a.Fgoods_id like '%{$spu}%';";
+    	$back_data = $this->index_model->get_query($sql);
+    	if(empty($back_data)){
+    		$this->return_msg(array("result"=>'0',"msg"=>"搜索错误！"));
+    	}
+    	else{
+    		$page_data = $this->get_page("t_sku",$sql);
+    		 
+    		$page_data = $page_data['pageStr'];
+    		
+    		$this->return_msg(array("result"=>'1',"msg"=>"成功","data"=>$back_data,"page"=>$page_data));
+    	}
+    }
     public function add_storage_view(){
     	
     	$page_data = $this->get_page("pos","");

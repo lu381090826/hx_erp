@@ -156,7 +156,7 @@ border-left: 1px solid #d3dbde;
 	text-align: right;
 }
 .td_right, .td_center, .td_left{
-	width: 200px;
+	width: 150px;
     line-height: 40px;
 }
 
@@ -278,6 +278,17 @@ border-radius: 2px;
 box-shadow: 2px 2px 2px  #e7f1f7 inset;
 width: 310px;
 }
+.select1{ 
+border:1px solid #bac7d2; 
+padding:4px 3px; 
+font-size:12px; 
+height:35px; 
+*margin:-1px; 
+border-radius: 2px;
+box-shadow: 2px 2px 2px  #e7f1f7 inset;
+width: 170px;
+}
+
 .check_select{ 
 border:1px solid #bac7d2; 
 padding:4px 3px; 

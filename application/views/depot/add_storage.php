@@ -6,6 +6,7 @@
    <link rel="stylesheet" href="/style/css/main.css">
    <link rel="stylesheet" href="/style/css/page.css">
    <script type="text/javascript" src="/style/js/jquery.min.js"></script>
+   <script type="text/javascript" src="/style/js/Calendar.js"></script>
    <script type="text/javascript" src="/style/js/colResizable-1.3.min.js"></script>
    <script type="text/javascript" src="/style/js/common.js"></script>
    <script type="text/javascript">
@@ -24,7 +25,13 @@
                <table class="form_table pt15 pb15" width="100%" border="0" cellpadding="0" cellspacing="0" id="add_tr">
                <tr>
                   <td class="td_right"><span class="bitian">*</span> 入库单号:</td>
-                  <td style="width:100px;"><input type="text" name="sb" id="sn"  value="<?php echo @$pos_data['sn'];?>" class="input-text lh25" size="40"></td> 
+                  <td style="width:100px;"><input type="text" name="sn" id="sn"  value="<?php echo 'sn213213';?>" disabled="true" style="background-color: rgba(10, 3, 31, 0.2);"class="input-text lh25" size="40"></td> 
+                  <td class="td_right"><span class="bitian">*</span> 手工单号:</td>
+                  <td style="width:100px;"><input type="text" name="sn" id="sn"  value="<?php echo @$pos_data['sn'];?>" class="input-text lh25" size="40"></td>
+                  <td class="td_right"><span class="bitian">*</span> 入库日期:</td>
+                  <td><input type="text" name="start_date" id="start_date" value="<?php echo date("Y-m-d",time());?>" onClick="SelectDate(this,'yyyy-MM-dd')" readonly="true"  class="input-text lh25" size="20"></td>                             
+               </tr>
+               <tr> 
                   <td class="td_right"><span class="bitian">*</span> 入库类型:</td>
                   <td>
                   <select name="storage_type" id="storage_type" class="select" >
@@ -34,20 +41,12 @@
                   <option value="3" >调拨入库</option>
                   <option value="4" >其他入库</option>
                   </select>
-                  </td>            
-               </tr>
-               <tr> 
-                  <td class="td_right"><span class="bitian">*</span> 入库日期:</td>
-                  <td><input type="text" name="date" id="date"  value="<?php echo @$pos_data['date'];?>" class="input-text lh25" size="40"></td>
-                  <td class="td_right"><span class="bitian">*</span> 经办人:</td>
-                  <td><input type="text" name="sb" id="sn"  value="<?php echo @$pos_data['sn'];?>" class="input-text lh25" size="40"></td>
-               </tr>               
-               <tr >
+                  </td> 
                <td class="td_right"><span class="bitian">*</span> 进入仓库:</td>
                <td><select name="enter_depot" id="enter_depot" class="select" ><?php foreach(@$depot_data as $k=>$v){echo '<option value="'.$depot_data[$k]['id'].'" >'.$depot_data[$k]['depot_name'].'</option>';} ?></select></td>
-               <td class="td_right"><span class="bitian">*</span> 调拨仓库:</td><td><select name="source_depot" id="source_depot" class="select" ><?php foreach(@$depot_data as $k=>$v){echo '<option value="'.$depot_data[$k]['id'].'" >'.$depot_data[$k]['depot_name'].'</option>';} ?></select></td>
-               </tr>
-               
+                  <td class="td_right"><span class="bitian">*</span> 经办人:</td>
+                  <td><input type="text" name="sb" id="sn"  value="<?php echo @$pos_data['sn'];?>" class="input-text lh25" size="20"></td>
+               </tr>               
                <tr >
                <td class="td_right"><span class="bitian">*</span> 供应商:</td>
                <td>
@@ -57,12 +56,17 @@
                {echo '<option value="'.$depot_data[$k]['id'].'" >'.$depot_data[$k]['depot_name'].'</option>';} ?>
                </select>
                </td>
+               
+               <td class="td_right"><span class="bitian">*</span> 调拨仓库:</td><td><select name="source_depot" id="source_depot" class="select" ><?php foreach(@$depot_data as $k=>$v){echo '<option value="'.$depot_data[$k]['id'].'" >'.$depot_data[$k]['depot_name'].'</option>';} ?></select></td>
+              
                <td class="td_right"><span class="bitian">*</span> 退单号:</td>
-               <td><select name="return_sn" id="return_sn" class="select" >
+               <td><select name="return_sn" id="return_sn" class="select1" >
                <option value="">请选择退单号</option>
                </select>
                </td>
-               </tr>            
+               
+               </tr>
+           
                <tr> 
                   <td class="td_right">备注:</td>
                   <td><input type="text" name="beizhu" id="beizhu"  value="<?php echo @$pos_data['date'];?>" class="input-text lh25" size="40"></td>
@@ -80,23 +84,22 @@
         
 <div style="margin-top:1%;">
 <div class="box_top"><b class="pl15" >搜索列表</b></div>
-<input type="text" name="search" id="search" value="<?php echo @$search;?>"  placeholder="请输入款号spu" class="input-text lh25" size="20">
+<input type="text" name="spu" id="spu" value="<?php echo @$search;?>"  placeholder="请输入款号spu" class="input-text lh25" size="20">
 <input type="button" name="button" class="btn btn82 btn_search" onclick="check()" value="搜索">
+
+<input type="button" name="button" class="btn btn82 btn_add" onclick="" value="添加">
+<span id="notice" style="color:red;"></span>
         <div id="table" class="mt10">
         <div class="box span10 oh">
               <table  border="0" cellpadding="0" cellspacing="0" class="list_table">
               <tr>
-               <th width="20%">商品图片</th>
                <th width="20%">商品款号</th>
                <th width="10%">商品颜色</th>               
                <th width="10%">商品尺码</th>
-               <th width="5%">添加数量</th>
-               <th width="20%">备注</th>
-               <th width="10%">操作</th>         
+               <th width="10%">添加数量</th>   
               </tr>
-
               </table>
-<?php echo @$page_data;?>
+<div id="page"></div>
         </div>
      </div>
 </div>
@@ -134,7 +137,33 @@
 <script type="text/javascript">
    
    function check(){
-	   $(".list_table").append('<tr class="tr" align="center"><td ><img src="/style/images/a.png" width="100" height="100"></td><td >TS001</td><td >红色</td><td >175A</td><td ><input type="text" name="number1" id="number1"  placeholder="请输入数量" class="input-text lh25" size="8"></td><td><input type="text" name="beizhu1" id="beizhu1"  placeholder="请输入备注" class="input-text lh25" size="20"></td><td ><a href="javascript:void(0);" onclick="add()">添加</a></td></tr>');	  
+	   var spu = $("#spu").val();
+		 $.ajax({
+             url:"/depot/storage/get_spu_sku",
+             type:"POST",
+             data:{"spu":spu},
+             dataType:"json",
+             async:false,
+             error: function() {
+                 //alert('服务器超时，请稍后再试');
+             },
+             success:function(data){                
+                if(data.result=='1'){
+                	$(".tr").remove();
+                	$("#page").html("");
+                	$("#notice").html("");
+	             	 var i;
+	             	 for(i=0;i<data.data.length;i++){
+	             		$(".list_table").append('<tr class="tr" id ="s'+data.data[i].sku_id+'" align="center"><td >'+data.data[i].goods_id+'</td><td >'+data.data[i].name+'</td><td >'+data.data[i].size_info+'</td><td ><input type="text" name="number1" id ="c'+data.data[i].sku_id+'"  placeholder="请输入数量" class="input-text lh25" size="8"></td></tr>');	  
+			         }
+	             	$("#page").append(data.page); 
+              }
+              else{
+            	  $("#notice").html(data.msg);
+               }           
+             }
+         });
+	   
    }
 
   function add(){
