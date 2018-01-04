@@ -108,5 +108,47 @@ class Depot_model extends CI_Model {
     	return true;
     }
     
-
+    public function add_supplier($data){
+    
+    	$this->db->insert('supplier', $data);
+    	$id = $this->db->insert_id();
+    	return $id;
+    }
+    
+    //删
+    public function delete_supplier($id){
+    	return $this->db->delete('supplier', array('Fid' => $id));
+    }
+    
+    //查
+    public function get_supplier($id){
+    	$query = $this->db->get_where('supplier',array("Fid"=>$id));
+    	$data = $query->row_array();
+    	return $data ;
+    }
+    
+    //改
+    public function update_supplier($data,$id){
+    
+    	$this->db->where("Fid",$id);
+    	$this->db->update('supplier',$data);
+    
+    	return true;
+    }
+    public function get_all_supplier($page_number = 1,$search = false){
+    	$page_count = ($page_number-1)*15;
+    	if($search){
+    		$this->db->order_by('Fid', 'DESC');
+    		$this->db->or_like('Fsupplier_name',$search);
+    		$this->db->or_like('Fname', $search);
+    		$query = $this->db->get('supplier','15',$page_count);
+    		$data = $query->result_array();
+    	}
+    	else{
+    		$this->db->order_by('Fid', 'DESC');
+    		$query = $this->db->get('supplier','15',$page_count);
+    		$data = $query->result_array();
+    	}
+    	return $data ;
+    }
 }

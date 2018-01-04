@@ -12,6 +12,7 @@ class Index extends CI_Controller {
         $this->load->helper('url');
         $this->url = $this->config->item('url');
         
+        
         $this->back_data = array(
         		"url"=>$this->url,
         );

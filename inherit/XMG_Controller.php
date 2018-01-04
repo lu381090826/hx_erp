@@ -29,6 +29,39 @@ class XMG_Controller extends CI_Controller
     
     	return array("page"=>$page,"pageStr"=>$this->pageStr);
     }
+    
+    public function get_storage_page($dbname,$sql){
+    
+    	$page = @isset($_REQUEST['page'])?$_REQUEST['page']:1;
+    
+    	$count = $this->index_model->count_db($dbname,$sql);
+    
+    	$params = array('count' => $count, 'page' => $page);
+    
+    	//加载分页类
+    	$this->load->library('storage_page',$params);
+    
+    	$this->pageStr = $this->storage_page->GetPagerContent();
+    
+    	return $this->pageStr;
+    }
+    
+    public function get_order_page($dbname,$sql){
+    
+    	$page = @isset($_REQUEST['page'])?$_REQUEST['page']:1;
+    
+    	$count = $this->index_model->count_db($dbname,$sql);
+    
+    	$params = array('count' => $count, 'page' => $page);
+    
+    	//加载分页类
+    	$this->load->library('order_page',$params);
+    
+    	$this->pageStr = $this->order_page->GetPagerContent();
+    
+    	return $this->pageStr;
+    }
+    
     function return_msg($array=NULL,$format='json'){
     	if ($format=='xml'){
     		echo "<data>";
