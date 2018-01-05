@@ -249,6 +249,26 @@ class Api extends CI_Controller {
             $this->apiresult->sentApiError(0,"image could not be saved.",null);
     }
 
+    //region 报表方法
+
+    //客户精选查询
+    public function search_report_client(){
+        $param = $_REQUEST;
+
+        $list = $this->m_order->getReportClient($param);
+        $this->apiresult->sentApiSuccess($list);
+    }
+
+    //客户精选查询
+    public function search_report_date(){
+        $param = $_REQUEST;
+
+        $list = $this->m_order->getReportDate($param);
+        $this->apiresult->sentApiSuccess($list);
+    }
+
+    //endregion
+
     //region 辅助方法
 
     /**
