@@ -8,6 +8,8 @@ class Sys extends HX_Controller
         $this->load->model('admin/user_model', 'user_m');
         $result = $this->user_m->get_user_list($page);
 
+        $result['pagination'] = $this->pagination('/sys/user/',$result['total_num']);
+
         $this->load->view('sys/index', $result);
     }
 
@@ -15,6 +17,8 @@ class Sys extends HX_Controller
     {
         $this->load->model('admin/user_model', 'user_m');
         $result = $this->user_m->get_user_list($page);
+
+        $result['pagination'] = $this->pagination('/sys/user/',$result['total_num']);
 
         $this->load->view('sys/index', $result);
     }
@@ -43,10 +47,23 @@ class Sys extends HX_Controller
         json_out_put($result);
     }
 
+    //角色详情页
+    public function auth()
+    {
+        $this->load->model('admin/authority_model', 'm_auth');
+        $auth_list = $this->m_auth->all_auth_list();
+
+        $this->load->view('sys/auth/index', $auth_list);
+    }
+
+
     public function role($page = 1)
     {
         $this->load->model('admin/role_model', 'role_m');
         $result = $this->role_m->get_role_list($page);
+
+        $result['pagination'] = $this->pagination('/sys/role/',$result['total_num']);
+
         $this->load->view('sys/role/index', $result);
     }
 }

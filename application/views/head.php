@@ -16,7 +16,7 @@
     <!--    韩迅css   -->
     <link rel="stylesheet" href="/assets/css/app.css"/>
     <!--    jquery   -->
-    <script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="/assets/js/1.11.1/jquery.min.js"></script>
 </head>
 <style>
     .am-topbar-right {
@@ -56,7 +56,7 @@
                         </a>
                     </div>
                 <?php } ?>
-                <?php if (check_auth(2)) { ?>
+                <?php if (check_auth(2) || check_auth(9)) { ?>
                     <a href="/goods">
                         <div class="am-topbar-right">
                             <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span
@@ -67,12 +67,14 @@
                 <?php } ?>
 
                 <?php if (check_auth(3)) { ?>
+                <a href="/depot/index/">
                     <div class="am-topbar-right">
                         <button class="am-btn am-btn-default am-topbar-btn am-btn-sm"><span
                                 class="am-icon-cube"></span>
                             仓库管理
                         </button>
                     </div>
+                </a>
                 <?php } ?>
 
                 <?php if (check_auth(4)) { ?>

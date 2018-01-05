@@ -20,7 +20,7 @@ $this->load->view('head');
             <label for="doc-select-1">分类<span style="color: red">*</span>:</label>
             <select id="doc-select-1" name="category_id">
                 <?php foreach ($category_list as $k => $category): ?>
-                    <option value="<?= $k ?>"><?= $category ?></option>
+                    <option value="<?= $category['id'] ?>"><?= $category['type'] ?></option>
                 <?php endforeach; ?>
             </select>
             <span class="am-form-caret"></span>
@@ -84,13 +84,13 @@ $this->load->view('head');
             <div class="am-u-sm-12">
                 <div class="am-u-sm-2 am-padding-left-0">
                     <label>
-                        <input type="radio" name="doc-vld-sex" value="1" checked>
+                        <input type="radio" name="sex" value="1" checked>
                         男
                     </label>
                 </div>
                 <div class="am-u-sm-2 am-padding-left-0 am-padding-right-8" style="float: left">
                     <label>
-                        <input type="radio" name="doc-vld-sex" value="2">
+                        <input type="radio" name="sex" value="2">
                         女
                     </label>
                 </div>
@@ -138,6 +138,29 @@ $this->load->view('head');
             <input type="file" id="doc-vld-pic" name="pic" class="am-btn am-btn-default am-btn-sm"/>
         </div>
 
+        <div class="am-form-group" style="display: none">
+            <div class="am-panel am-panel-default">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">上传多图：</h3>
+                </div>
+                <div class="am-panel-bd">
+                    <label>选择上传的图片</label>
+                    <div class="file_list">
+                        <div class="am-g am-g-fixed">
+                            <input type="file" id="doc-vld-pic" name="file_list[]"
+                                   class="am-btn am-btn-default am-btn-sm am-u-sm-10"/>
+                            <input type="button"
+                                   class="am-btn am-btn-danger am-btn-sm sub_upload_img"
+                                   value="-">
+                        </div>
+                    </div>
+                    <input type="button" class="am-btn am-btn-success" onclick="add_upload_img()" value="+">
+                </div>
+
+            </div>
+
+        </div>
+
         <div class="am-form-group">
             <label for="doc-vld-memo">备注：</label>
             <input type="text" id="doc-vld-memo" placeholder="输入" name="memo" class="am-form-field"/>
@@ -150,3 +173,14 @@ $this->load->view('head');
 
 <?php $this->load->view('footer'); ?>
 <script src="/assets/js/select.js"></script>
+
+<!--<script type="text/javascript">-->
+<!--    function add_upload_img() {-->
+<!--        $('.file_list').append('<div class="am-g am-g-fixed"> <input type="file" id="doc-vld-pic" name="file_list[]" class="am-btn am-btn-default am-btn-sm am-u-sm-10"/> <input type="button" class="am-btn am-btn-danger am-btn-sm sub_upload_img" value="-"> </div>');-->
+<!--    }-->
+<!---->
+<!--    $('.file_list').delegate('.sub_upload_img','click',function(){　　　　//动态事件绑定  为页面所有的dd添加一个事件 包括新增的节点-->
+<!--    console.log($(this))-->
+<!--        $(this).parent().remove();-->
+<!--    });-->
+<!--</script>-->

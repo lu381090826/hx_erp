@@ -22,8 +22,8 @@ class Role extends HX_Controller
     //添加角色页
     public function action_add_role()
     {
-        $this->load->model('admin/authority_model', 'm_authority');
-        $data['auth_list'] = $this->m_authority->get_all_by_auth_pids($this->session->auths);
+        $this->load->model('admin/authority_model', 'auth_m');
+        $data['auth_list'] = $this->auth_m->all_auth_list($this->session->auths);
 
         $this->load->view('sys/role/addForm', $data);
     }

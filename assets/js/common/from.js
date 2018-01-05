@@ -2,6 +2,7 @@ var __CONTROLLER__ = '';
 var method = $('#method_select').val();
 var from_thead = $('#from_thead');
 var from_contant = $('#from_contant');
+var ul_contant = $('#ul-content');
 var other_select_div = $('.div-' + method);
 var other_select = $('.other-select');
 var page = $('#page');
@@ -14,12 +15,14 @@ function getContentUrl() {
 function fromClean() {
     from_thead.empty();
     from_contant.empty();
+    ul_contant.empty();
     page.empty();
     other_select.hide();
 }
-function tableClean() {
+function contentClean() {
     from_thead.empty();
     from_contant.empty();
+    ul_contant.empty();
 }
 
 function getFormJson(frm) {

@@ -39,7 +39,7 @@ function search_goods() {
 }
 
 function get_goods(curr) {
-    tableClean();
+    contentClean();
     var fromThead = "<tr style='text-align: center'> <th style='width: 80px'>小图</th> <th>款号</th><th>价格</th><th>库存</th><th>发布时间</th> <th style='text-align: center;width: 80px' class='am-text-nowrap'>操作</th> </tr>";
     from_thead.append(fromThead);
 
@@ -61,11 +61,6 @@ function get_goods(curr) {
 function goods_show(result) {
     var goods_content = "";
     $.each(result.result_rows, function (i, o) {
-        if (o.status == 2) {
-            var sell_state = "<div><a onclick=\"sell_state_on('" + o.goods_id + "')\">上架</a></button></div>";
-        } else {
-            var sell_state = "<div><a onclick=\"sell_state_off('" + o.goods_id + "')\">下架</a></button></div>";
-        }
         goods_content += "<tr>" +
             "<td><img class='pic' src='" + o.pic + "'></td>" +
             "<td>" + o.goods_id + "</td>" +
@@ -74,8 +69,6 @@ function goods_show(result) {
             "<td>" + o.create_time + "</td>" +
             "<td align='center' valign='middle' style='word-break:break-all'>" +
             "<div><a href='/goods/goods_detail/" + o.goods_id + "'>详情</a><div>" +
-            "<div><a onclick=\"sku_delete('" + o.goods_id + "')\">删除</a></div>" +
-            sell_state +
             "</td>" +
             "</tr>";
     });
@@ -83,10 +76,7 @@ function goods_show(result) {
 }
 
 function get_category(curr) {
-    tableClean();
-
-    var content = "<tr> <th>id</th> <th>类别</th> <th>操作</th> </tr>";
-    from_thead.append(content);
+    contentClean();
 
     $.ajax({
         type: 'get',
@@ -95,21 +85,19 @@ function get_category(curr) {
         dateType: 'json',
         success: function (result) {
             var row = '';
-            curr_page = curr;
-            all_pages = result.pages;
             $.each(result, function (i, o) {
-                row += "<tr>" +
-                    "<td>" + o.id + "</td>" +
-                    "<td>" + o.category_name + "</td>" +
-                    "<td><a href='javascript:;' data-id=" + o.id + " onclick='category_delete(" + o.id + ")'>删除</a></td>" +
-                    "</tr>";
+                row += "<li>" + o.type + "&nbsp;&nbsp;&nbsp;<i onclick='category_edit(" + o.id + ",\"" + o.category_name + "\")' class=\"am-icon-edit\"></i></li>";
             });
-            from_contant.append(row);
+
+            ul_contant.append(row);
+            ul_contant.show();
         }
     })
+
+
 }
 function get_color(curr) {
-    tableClean();
+    contentClean();
     var content = "<tr> <th>颜色</th> <th>颜色代码</th> <th>颜色展示</th>  <th>操作</th> </tr>";
     from_thead.append(content);
 
@@ -137,7 +125,7 @@ function get_color(curr) {
 }
 
 function get_size(curr) {
-    tableClean();
+    contentClean();
 
     var content = "<tr> <th>尺码</th> <th>尺码代码</th>  <th>操作</th> </tr>";
     from_thead.append(content);
@@ -164,7 +152,7 @@ function get_size(curr) {
 }
 
 function get_shop(curr) {
-    tableClean();
+    contentClean();
 
     var content = "<tr> <th>Id</th> <th>店名</th><th>负责人</th><th>负责电话</th><th>创建时间</th> <th style='text-align: center;width: 80px' class='am-text-nowrap'>操作</th> </tr>";
     from_thead.append(content);
@@ -224,55 +212,7 @@ function size_delete(id) {
         }
     });
 }
-function sku_delete(id) {
-    delete_id = id;
-    $('#goods-remove-confirm').modal({
-        relatedTarget: this,
-        onConfirm: function (options) {
-            // $.post('/goods/delete_sku/' + delete_id);
-            $.ajax({
-                type: 'post',
-                async: false,
-                url: '/goods/delete_sku/' + delete_id,
-                dateType: 'json',
-                success: function (result) {
-                    if (result.code != 0) {
-                        alert(result.code + '|' + result.msg);
-                    }
-                }
-            });
-            setTimeout(function () {
-                fromLoad('goods', 'get_goods');
-            }, 300);
-        }
-    });
-}
-//商品下架
-function sell_state_off(id) {
-    goods_id = id;
-    $('#sell-off').modal({
-        relatedTarget: this,
-        onConfirm: function (options) {
-            $.post('/goods/action_sell_state_off/' + goods_id);
-            setTimeout(function () {
-                fromLoad('goods', 'get_goods');
-            }, 300);
-        }
-    });
-}
-//商品上架
-function sell_state_on(id) {
-    goods_id = id;
-    $('#sell-on').modal({
-        relatedTarget: this,
-        onConfirm: function (options) {
-            $.post('/goods/action_sell_state_on/' + goods_id);
-            setTimeout(function () {
-                fromLoad('goods', 'get_goods');
-            }, 300);
-        }
-    });
-}
+
 function shop_delete(id) {
     delete_id = id;
     $('#shop-remove-confirm').modal({
@@ -287,10 +227,27 @@ function shop_delete(id) {
 }
 function category_delete(id) {
     delete_id = id;
+    $('#categoty-edit-confirm').modal('close');
     $('#categoty-remove-confirm').modal({
         relatedTarget: this,
         onConfirm: function (options) {
             $.post('/category/delete_category/' + delete_id);
+            setTimeout(function () {
+                fromLoad('goods', 'get_category');
+            }, 300);
+        }
+    });
+}
+
+var edit_id = 0;
+function category_edit(id, name) {
+    edit_id = id;
+    delete_id = id;
+    $('#categoty-edit-confirm').find('#doc-ipt-name').val(name);
+    $('#categoty-edit-confirm').modal({
+        relatedTarget: this,
+        onConfirm: function (options) {
+            $.post('/category/edit_category/' + edit_id, {name: $('#categoty-edit-confirm').find('#doc-ipt-name').val()});
             setTimeout(function () {
                 fromLoad('goods', 'get_category');
             }, 300);

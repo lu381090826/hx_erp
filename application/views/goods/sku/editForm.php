@@ -30,10 +30,10 @@ $this->load->view('head');
             <select id="doc-select-1" name="category_id">
                 <?php foreach ($category_list as $k => $category): ?>
                     <option value="<?= $k ?>"
-                        <?php if ($goods_info['category_id'] == $k): ?>
+                        <?php if ($goods_info['category_id'] == $category['id']): ?>
                             selected="selected"
                         <?php endif; ?>>
-                        <?= $category ?>
+                        <?= $category['type'] ?>
                     </option>
                 <?php endforeach; ?>
             </select>

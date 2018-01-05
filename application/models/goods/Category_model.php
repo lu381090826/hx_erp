@@ -24,6 +24,11 @@ class Category_model extends HX_Model
         $check_res = [];
         if (isset($request['category_name'])) {
             $check_res['Fcategory_name'] = $request['category_name'];
+            //类名查重
+            $ret = $this->get_by_name($check_res['Fcategory_name']);
+            if (isset($ret['result_rows']) && count($ret['result_rows']) > 0) {
+                show_error("分类名已重复");
+            }
         } else {
             show_error("请输入类名");
         }
@@ -57,6 +62,15 @@ class Category_model extends HX_Model
         return $this->suc_out_put($ret->result('array'));
     }
 
+    public function get_by_name($category_name)
+    {
+        $s = "SELECT Fid,Fpid,Fcategory_name FROM {$this->table} WHERE Fstatus = 1 AND Fcategory_name = ? LIMIT 1;";
+
+        $ret = $this->db->query($s, $category_name);
+
+        return $this->suc_out_put($ret->result('array'));
+    }
+
     public function category_cache()
     {
         $arr = [];
@@ -86,6 +100,21 @@ class Category_model extends HX_Model
             }
         }
         return $arr;
+    }
+
+    public $cate_list = [];
+
+    public function showList(&$result, $level = 0)
+    {
+        foreach ($result as $k => &$row) {
+            $row['type'] = str_repeat('|-', $level) . '|-' . $row['category_name'];
+            $this->cate_list[] = $row;
+
+            if (!empty($row['children']) && count($row['children']) > 0) {
+                $this->showList($row['children'], $level + 1);
+            }
+        }
+        return $this->cate_list;
     }
 
     public function category_cache_tree()
@@ -202,6 +231,42 @@ class Category_model extends HX_Model
         return $result;
     }
 
+    public function category_series_tree()
+    {
+        $list = $this->get_all_list()['result_rows'];
+
+        $tree = [];
+        $this->getNodeTree($list, $tree);
+
+        return $tree;
+    }
+
+    function getNodeTree(&$list, &$tree, $pid = 0)
+    {
+        $tree = [];
+        foreach ($list as $key => $value) {
+            if ($pid == $value['pid']) {
+                $tree[$value['id']] = $value;
+                unset($list[$key]);
+                self::getNodeTree($list, $tree[$value['id']]['children'], $value['id']);
+                reset($list);
+            }
+        }
+    }
+
+    function getNodeLevel(&$tree, &$res, $pid = 0, $level = 0)
+    {
+        foreach ($tree as $k => $r) {
+            $tree[$k]['level'] = $level;
+            $res[] = $tree[$k];
+            if ($r['pid'] == $pid) {
+                if (count($r['children']) > 0) {
+                    self::getNodeLevel($tree[$k]['children'], $res, $r['id'], ++$level);
+                }
+            }
+        }
+    }
+
     public function get_list($page = 0)
     {
         $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1";
@@ -245,5 +310,10 @@ class Category_model extends HX_Model
             $arr[$row['id']] = $row['category_name'];
         }
         return $arr;
+    }
+
+    public function update_name($id, $name)
+    {
+        return $this->db->update($this->table, ['Fcategory_name' => $name, 'Fop_uid' => $this->session->uid], ['Fid' => $id]);
     }
 }
