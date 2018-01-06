@@ -107,7 +107,7 @@ class Category_model extends HX_Model
     public function showList(&$result, $level = 0)
     {
         foreach ($result as $k => &$row) {
-            $row['type'] = str_repeat('|-', $level) . '|-' . $row['category_name'];
+            $row['type'] = str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;', $level) . '|-' . $row['category_name'];
             $this->cate_list[] = $row;
 
             if (!empty($row['children']) && count($row['children']) > 0) {
