@@ -30,8 +30,20 @@ class Index_model extends CI_Model {
     }
     
 
-    public function count_db($dbname,$sql = false){
+    public function get_query($sql){
+    	if($sql){
+    		$query = $this->db->query($sql);
+    		return $query->result_array();
+    	}
+    	else{
+    		return false;
+    	}
+    }
+    public function count_db($dbname = false,$sql = false){
     	if(!$sql){
+    		if(!$dbname){
+    			return false;
+    		}
     		$query = $this->db->get($dbname);
     		return $query->num_rows();
     	}

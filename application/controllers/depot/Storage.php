@@ -11,9 +11,105 @@ class Storage extends XMG_Controller {
         parent::__construct();
 
         $this->load->model("depot/depot_model");
-                
+        $this->load->model("depot/index_model");
+        $this->load->model("depot/storage_model");
+
     }
 
+    public function get_spu_sku(){
+    	$spu = @$_REQUEST['spu'];
+    	$page = @isset($_REQUEST['page'])?$_REQUEST['page']:1;   	
+    	$page_count = ($page-1)*10;
+    	
+    	if(!$spu){
+    		$this->return_msg(array("result"=>'0',"msg"=>"搜索内容不能为空！"));
+    	}
+
+    	//获取总条数
+    	$get_count = "select a.Fgoods_id,a.Fsku_id,b.Fname,c.Fsize_info from t_sku a,t_color b,t_size c where a.Fcolor_id = b.Fid and a.Fsize_id=c.Fid and a.Fgoods_id like '%{$spu}%'";
+    
+    	//获取该页的数量
+    	$sql = "select a.Fgoods_id,a.Fsku_id,b.Fname,c.Fsize_info from t_sku a,t_color b,t_size c where a.Fcolor_id = b.Fid and a.Fsize_id=c.Fid and a.Fgoods_id like '%{$spu}%' order by a.Fcreate_time desc limit {$page_count},10";
+    	
+    	$back_data = $this->index_model->get_query($sql);
+    	if(empty($back_data)){
+    		$this->return_msg(array("result"=>'0',"msg"=>"搜索错误！"));
+    	}
+    	else{
+    		$page_data = $this->get_storage_page("t_sku",$get_count);   		 
+    		
+    		$this->return_msg(array("result"=>'1',"msg"=>"成功","data"=>$back_data,"page"=>$page_data));
+    	}
+    }
+    
+    public function add_storage_sku(){
+
+    	$add_result = $this->storage_model->add_storage_sku();
+    	
+    	
+    	$storage_sn = @$_REQUEST['storage_sn'];
+    	$sql = "select * from t_storage_list_detail where Fstorage_sn='{$storage_sn}'";
+    		
+    	 
+    	$page_data = $this->get_order_page("t_storage_list_detail",$sql);
+    	   	
+    	
+    	if(empty($add_result)){
+    		$this->return_msg(array("result"=>'0',"msg"=>"失败"));
+    	}
+    	else{
+    		$this->return_msg(array("result"=>'1',"msg"=>"添加成功","data"=>$add_result,"page"=>$page_data));
+    	}
+      	
+    }
+    
+    public function get_order_list_page(){
+    	 
+    	$storage_sn = @$_REQUEST['storage_sn'];
+    	$sql = "select * from t_storage_list_detail where Fstorage_sn='{$storage_sn}'";
+    		
+    	 
+    	$page_data = $this->get_order_page("t_storage_list_detail",$sql);
+        	 
+    	 
+    	$result = $this->storage_model->get_all_storage_sku($storage_sn);
+    	 
+    	if(empty($result)){
+    		$this->return_msg(array("result"=>'0',"msg"=>"失败"));
+    	}
+    	else{
+    		$this->return_msg(array("result"=>'1',"msg"=>"添加成功","data"=>$result,"page"=>$page_data));
+    	}
+    	 
+    }
+    
+    public function change_storage_sku(){
+    
+    	$change_result = $this->storage_model->change_storage_sku();
+
+    	 
+    	if(empty($change_result)){
+    		$this->return_msg(array("result"=>'0',"msg"=>"修改失败"));
+    	}
+    	else{
+    		$this->return_msg(array("result"=>'1',"msg"=>"改变成功"));
+    	}
+    	 
+    }
+    public function change_storage_sku_beizhu(){
+    
+    	$change_result = $this->storage_model->change_storage_sku_beizhu();
+    
+    
+    	if(empty($change_result)){
+    		$this->return_msg(array("result"=>'0',"msg"=>"修改失败"));
+    	}
+    	else{
+    		$this->return_msg(array("result"=>'1',"msg"=>"改变成功"));
+    	}
+    
+    }
+    
     public function add_storage_view(){
     	
     	$page_data = $this->get_page("pos","");
@@ -27,6 +123,10 @@ class Storage extends XMG_Controller {
     	else{
     		//读取仓库
     		$data['depot_data'] = $this->depot_model->get_all_depot();
+    		//读取供应商
+    		$data['supplier_data'] = $this->depot_model->get_all_supplier();
+    		//系统自动生成订单号
+    		$data['storage_sn'] = "sn".time();
     		$this->load->view("depot/add_storage",$data);
     	}   	
     }
@@ -44,52 +144,24 @@ class Storage extends XMG_Controller {
     	else{
     		//读取仓库
     		$data['storage_data'] = $this->depot_model->get_all_pos();
+
     		$this->load->view("depot/storage_list",$data);
     	}
     }
     
-    public function add_pos_view(){
-    	if(@$_REQUEST['id']){
-    		//读取仓库
-    		$data['pos_data'] = $this->depot_model->get_pos(@$_REQUEST['id']);
-	    	//读取仓库
-	    	$data['depot_data'] = $this->depot_model->get_all_depot();
-	    	
-	    	$this->load->view("depot/add_pos",$data);
-    	}
-    	else{
-    		//读取仓库
-    		$data['depot_data'] = $this->depot_model->get_all_depot();
-    		 
-    		$this->load->view("depot/add_pos",$data);
-    	}
-
-    }
-    
     //增 改
-    public function add_depot(){
+    public function add_storage(){
 
-    	$save_data = array();
-    	$save_data['Fdepot_name'] = $depot_name = @$_REQUEST['depot_name'];
-    	$save_data['Fdepot_address'] = $depot_address = @$_REQUEST['depot_address'];
-    	$save_data['Fname'] = $name = @$_REQUEST['name'];
-    	$save_data['Fmobile'] = @$mobile = @$_REQUEST['mobile'];
-    	$save_data['Ftype'] = @$type = @$_REQUEST['type'];
-    	$save_data['Fbeizhu'] = @$beizhu = @$_REQUEST['beizhu'];
-    	$save_data['Faddtime'] = $this->addtime;
-
-    	if(!$depot_name||!$depot_address||!$depot_name){
-    		$this->return_msg(array("result"=>'0',"msg"=>"仓库名字、仓库地址和仓库联系人必填"));
-    	} 
-    	
+    	 
     	if(@$_REQUEST['id']){
-    		$save_result = $this->depot_model->update_depot($save_data,@$_REQUEST['id']);
+    		$save_result = $this->storage_model->update_storage();
     	}
     	else{
-    		$save_result = $this->depot_model->add_depot($save_data);
+    		$save_result = $this->storage_model->add_storage();
     	}
-
-    	
+    
+    
+    
     	if($save_result){
     		$this->return_msg(array("result"=>'1',"msg"=>"添加成功"));
     	}
@@ -98,99 +170,5 @@ class Storage extends XMG_Controller {
     	}
     }
     
-    //删
-    public function delete_depot(){
-    	$id = @$_REQUEST['id'];
-    	$delete_result = $this->depot_model->delete_depot($id);
-    	
-    	if($delete_result){
-    		$this->return_msg(array("result"=>'1',"msg"=>"删除成功"));
-    	}
-    	else{
-    		$this->return_msg(array("result"=>'0',"msg"=>"删除失败"));
-    	}
-    }
-    
-    //查
-    public function depot_list_view(){
-    	$page_data = $this->get_page("depot","","depot_model");
-    	
-    	$data['page_data'] = $page_data['pageStr'];
-    	//读取仓库
-    	$data['depot_data'] = $this->depot_model->get_all_depot();
-    	$this->load->view("depot/depot_list",$data);
-    }
-    
-    //增 改
-    public function add_pos(){
-    	$save_data = array();
-    	$save_data['Fpos_name'] = $pos_name = @$_REQUEST['pos_name'];
-    	$save_data['Fpos_code'] = $pos_code = @$_REQUEST['pos_code'];
-    	$save_data['Fbeizhu'] = $beizhu = @$_REQUEST['beizhu'];
-    	$save_data['Fdid'] = $did = @$_REQUEST['did'];
-    	$save_data['Faddtime'] = $this->addtime;
-    
-    	if(!$pos_name||!$pos_code||!$did){
-    		$this->return_msg(array("result"=>'0',"msg"=>"库位名字、库位代号和仓库名字必填"));
-    	}
-    	
-    	if(@$_REQUEST['id']){
-    		$save_result = $this->depot_model->update_pos($save_data,@$_REQUEST['id']);
-    	}
-    	else{
-    		$save_result = $this->depot_model->add_pos($save_data);
-    	}
-    	 
-
-    	 
-    	if($save_result){
-    		$this->return_msg(array("result"=>'1',"msg"=>"添加成功"));
-    	}
-    	else{
-    		$this->return_msg(array("result"=>'0',"msg"=>"添加失败"));
-    	}
-    }
-
-    //删
-    public function delete_pos(){
-    	$id = @$_REQUEST['id'];
-    	$delete_result = $this->depot_model->delete_pos($id);
-    	 
-    	if($delete_result){
-    		$this->return_msg(array("result"=>'1',"msg"=>"删除成功"));
-    	}
-    	else{
-    		$this->return_msg(array("result"=>'0',"msg"=>"删除失败"));
-    	}
-    }
-    
-    //查
-    public function pos_list_view(){
-    	
-        $search = @$_REQUEST['search'];
-        
-        if($search){
-        	$sql = "select Fid from t_pos where Fpos_name like '%{$search}%' or Fpos_code like '%{$search}%'";
-        	$page_data = $this->get_page("pos",$sql,"depot_model");
-        	 
-        	$data['page_data'] = $page_data['pageStr'];
-        	//读取仓库
-        	$data['depot_data'] = $this->depot_model->get_all_pos($page_data['page'],$search);
-        	$data['search'] =  $search;
-        	$this->load->view("depot/pos_list",$data);
-        }
-        else{        	
-        	$page_data = $this->get_page("pos","","depot_model");
-        	 
-        	$data['page_data'] = $page_data['pageStr'];
-        	//读取仓库
-        	$data['depot_data'] = $this->depot_model->get_all_pos($page_data['page']);
-        	
-        	$this->load->view("depot/pos_list",$data);
-        }
-
-    }
-    
-
     
 }

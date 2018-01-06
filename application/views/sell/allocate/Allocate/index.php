@@ -4,6 +4,7 @@
   <option value="<?=site_url("sell/order/Order")?>">销售订单</option>
   <option value="<?=site_url("sell/client/Client")?>">客户管理</option>
   <option value="#" selected>报货订单</option>
+  <option value="<?=site_url("sell/report/Report")?>">报表查询</option>
  </select>
 </div>
 <hr>
@@ -36,7 +37,7 @@
    <?=ViewComponent::DataGrid($_controller,$searched,[
        'sell_order_num',"order_num","client_name","client_phone","statusName","total_num"
        //'id','form_id','create_at','create_user_id','status','remark',
-   ],[array('label'=>"详情", 'url'=>site_url("/sell/allocate/Allocate/index/{{order_id}}")),]
+   ],[array('label'=>"详情", 'url'=>site_url("/sell/allocate/Allocate/look/{{id}}")),]
    )?>
    <!--分页条-->
    <?=ViewComponent::PagesBar($page,$size,$searched->count)?>

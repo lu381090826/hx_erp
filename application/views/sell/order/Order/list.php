@@ -7,6 +7,7 @@
         <option value="#" selected>销售订单</option>
         <option value="<?=site_url("sell/client/Client")?>">客户管理</option>
         <option value="<?=site_url("sell/allocate/Allocate/index2")?>">报货订单</option>
+        <option value="<?=site_url("sell/report/Report")?>">报表查询</option>
     </select>
 </div>
 <hr>
@@ -40,6 +41,16 @@
                         <select class="form-control" v-model="status">
                             <option value=""></option>
                             <option v-for="(item, index) in statusMap" :value="index">{{item}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">收款状态</td>
+                    <td class="item">
+                        <select class="form-control" v-model="isReceipted">
+                            <option value></option>
+                            <option value="0">未收款</option>
+                            <option value="1">已收款</option>
                         </select>
                     </td>
                 </tr>
@@ -96,6 +107,7 @@
             "status":"",
             "filter":"",
             "statusMap":<?=json_encode($statusMap)?>,
+            "isReceipted":null,
         },
         created:function() {
             this.search();
@@ -121,7 +133,9 @@
                 var end_date = this.end_date;
                 var key = this.key;
                 var status = this.status!=""?this.status:null;
+                var isReceipted = this.isReceipted?parseInt(this.isReceipted):null;
 
+                console.log(isReceipted);
                 //Ajax
                 $.ajax({
                     url:'<?=site_url($_controller->api."/search_sell_like")?>',
@@ -132,6 +146,7 @@
                         "start_date":start_date,
                         "end_date":end_date,
                         "status":status,
+                        "isReceipted":isReceipted
                     },
                     success:function(result) {
                         if(result.state.return_code == 0)

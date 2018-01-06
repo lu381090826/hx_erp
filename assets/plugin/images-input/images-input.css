@@ -28,11 +28,11 @@ div.images-input .images-input-elements .images-input-element .images-input-shad
     width: 100%;
     height: 100%;
     position: absolute;
-    opacity: 0;
+    visibility: hidden;
 }
 
-div.images-input .images-input-elements .images-input-element .images-input-shade:hover{
-    opacity: 1;
+div.images-input .images-input-elements .images-input-element:hover .images-input-shade{
+    visibility: visible;
 }
 
 div.images-input .images-input-elements .images-input-element .images-input-shade .backdrop{
@@ -42,6 +42,26 @@ div.images-input .images-input-elements .images-input-element .images-input-shad
     background-color: black;
     z-index: 1;
     opacity: 0.5;
+}
+
+div.images-input .images-input-elements .images-input-element .images-input-shade .bar{
+    width: 100%;
+    position: absolute;
+    color: white;
+    z-index: 3;
+    display: flex;
+    justify-content: flex-end;
+}
+
+div.images-input .images-input-elements .images-input-element .images-input-shade .bar .remove{
+    margin: 3px 3px;
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+    background:url(./icon/close.png);
+    background-size:100% 100%;
+    background-size:contain;
+
 }
 
 div.images-input .images-input-elements .images-input-element .images-input-shade .action{
@@ -56,7 +76,7 @@ div.images-input .images-input-elements .images-input-element .images-input-shad
     z-index: 2;
 }
 
-div.images-input .images-input-elements .images-input-element .images-input-shade .action span{
+div.images-input .images-input-elements .images-input-element .images-input-shade .action .look{
     cursor: pointer;
 }
 
@@ -127,4 +147,42 @@ div.images-input .images-input-loading .images-input-icon{
 @-webkit-keyframes rotation{
     from {-webkit-transform: rotate(0deg);}
     to {-webkit-transform: rotate(360deg);}
+}
+
+/* 预览相关 */
+div.images-input-look{
+    position: fixed;
+    z-index: 99;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+}
+
+div.images-input-look .images-input-look-content{
+    position: absolute;
+    z-index: 2;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+div.images-input-look .images-input-look-content img{
+    max-width: 80%;
+    max-height: 80%;
+}
+
+div.images-input-look .images-input-look-shade{
+    position: absolute;
+    z-index: 1;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background: black;
+    opacity: 0.5;
 }

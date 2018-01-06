@@ -169,6 +169,89 @@ class Depot extends XMG_Controller {
 
     }
     
-
+    public function add_supplier_view(){
+    	if(@$_REQUEST['id']){
+    		//读取供应商
+    		$data['supplier_data'] = $this->depot_model->get_supplier($_REQUEST['id']);
+    
+    		$this->load->view("depot/add_supplier",$data);
+    	}
+    	else{
+    		 
+    		$this->load->view("depot/add_supplier");
+    	}
+    
+    }
+    //增 改
+    public function add_supplier(){
+    	$save_data = array();
+    	$save_data['Fsupplier_name'] = $supplier_name = @$_REQUEST['supplier_name'];
+    	$save_data['Fsupplier_address'] = $supplier_address = @$_REQUEST['supplier_address'];
+    	$save_data['Fsupplier_bank_number'] = $supplier_bank_number = @$_REQUEST['supplier_bank_number'];
+    	$save_data['Fname'] = $name = @$_REQUEST['name'];
+    	$save_data['Fmobile'] = $mobile = @$_REQUEST['mobile'];
+    	$save_data['Fbeizhu'] = $beizhu = @$_REQUEST['beizhu'];
+    	$save_data['Faddtime'] = $this->addtime;
+    
+    	if(!$supplier_name||!$supplier_address||!$name||!$mobile){
+    		$this->return_msg(array("result"=>'0',"msg"=>"内容不能为空"));
+    	}
+    	 
+    	if(@$_REQUEST['id']){
+    		$save_result = $this->depot_model->update_supplier($save_data,@$_REQUEST['id']);
+    	}
+    	else{
+    		$save_result = $this->depot_model->add_supplier($save_data);
+    	}
+    
+    
+    
+    	if($save_result){
+    		$this->return_msg(array("result"=>'1',"msg"=>"添加成功"));
+    	}
+    	else{
+    		$this->return_msg(array("result"=>'0',"msg"=>"添加失败"));
+    	}
+    }
+    
+    //删
+    public function delete_supplier(){
+    	$id = @$_REQUEST['id'];
+    	$delete_result = $this->depot_model->delete_supplier($id);
+    
+    	if($delete_result){
+    		$this->return_msg(array("result"=>'1',"msg"=>"删除成功"));
+    	}
+    	else{
+    		$this->return_msg(array("result"=>'0',"msg"=>"删除失败"));
+    	}
+    }
+    
+    //查
+    public function supplier_list_view(){
+    	 
+    	$search = @$_REQUEST['search'];
+    
+    	if($search){
+    		$sql = "select Fid from t_supplier where Fsupplier_name like '%{$search}%' or Fname like '%{$search}%'";
+    		$page_data = $this->get_page("supplier",$sql);
+    		 
+    		$data['page_data'] = $page_data['pageStr'];
+    		//读取仓库
+    		$data['supplier_data'] = $this->depot_model->get_all_supplier($page_data['page'],$search);
+    		$data['search'] =  $search;
+    		$this->load->view("depot/supplier_list",$data);
+    	}
+    	else{
+    		$page_data = $this->get_page("supplier","");
+    		$data['page_data'] = $page_data['pageStr'];
+    		 
+    		//读取所有供应商数据
+    		$data['supplier_data'] = $this->depot_model->get_all_supplier($page_data['page']);
+    		 
+    		$this->load->view("depot/supplier_list",$data);
+    	}
+    
+    }
     
 }

@@ -31,10 +31,8 @@ class BaseController extends CI_Controller {
      */
     function show($path,$param=[]){
         //设置环境变量
-        if(isset($this->model)) {
-            $this->_controller->describe = $this->model->describe();
-            $param["_controller"] = $this->_controller;
-        }
+        if(isset($this->model)) {$this->_controller->describe = $this->model->describe();}
+        $param["_controller"] = $this->_controller;
 
         //重构造参数
         $list = array(

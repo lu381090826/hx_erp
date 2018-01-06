@@ -13,6 +13,7 @@ class Order_model extends BaseModel{
 	public $id,$order_num,$user_id,$client_id,$total_num,$total_price,$payment,$status,$remark,$create_at,$update_at,$create_user_id,$update_user_id;
 	public $total_amount,$delivery_type,$delivery_addr,$receipt_date,$remark_images;
 	public $isPrinted,$isReceipted;
+	public $allocate_mode;
 
 	/**
 	 * Order_model constructor.
@@ -118,6 +119,15 @@ class Order_model extends BaseModel{
 	}
 
 	/**
+	 * 获取配货类型名
+	 */
+	public function getAllocateModeName(){
+		$list = $this->getAllocateModeMap();
+		$name = $list[$this->allocate_type];
+		return $name;
+	}
+
+	/**
 	 * 获取状态映射表
 	 * @return object
 	 */
@@ -127,6 +137,18 @@ class Order_model extends BaseModel{
 			1=> "配货中",
 			2=> "已配货",
 			3=> "已作废",
+		];
+	}
+
+	/**
+	 * 获取配货类型表
+	 */
+	public function getAllocateModeMap(){
+		return [
+			0=> "默认",
+			1=> "定制",
+			2=> "齐了配",
+			3=> "单款配齐",
 		];
 	}
 
@@ -309,6 +331,16 @@ class Order_model extends BaseModel{
 	}
 
 	/**
+	 * 修改状态
+	 */
+	public function changeStatus($value,$allowBack = false){
+		if(!$allowBack && (int)$this->status <= (int)$value)
+			$this->status = $value;
+		else if($allowBack)
+			$this->status = $value;
+	}
+
+	/**
 	 * 获取Sku列表(包含已经配货数量)
 	 * bool $getEndNum：是否查询已配货数量
 	 * string $filterAllocatId：统计配货数量时，过滤掉得配货单ID
@@ -354,6 +386,196 @@ class Order_model extends BaseModel{
 			}
 		}
 
+
+		//返回
+		return $list;
+	}
+
+	/**
+	 * 获取精选客户
+	 */
+	public function getReportClient($params = array()){
+		$select = $this->db
+			->select([
+				"$this->table.Fclient_id",
+				"t_client.Fname AS Fclient_name",
+				"t_sell_order_spu.Fspu_id",
+				"t_sell_order_sku.Fsku_id",
+				"t_sell_order_sku.Fcolor",
+				"t_sell_order_sku.Fsize",
+				"SUM(t_sell_order_sku.Fnum) AS Fnum",
+				"SUM(t_sell_order_sku.Fnum * t_sell_order_spu.Fsnap_price) AS Famount",
+			])
+			->join('t_client', "$this->table.Fclient_id = t_client.Fid", 'left')
+			->join('t_sell_order_spu', "$this->table.Fid = t_sell_order_spu.Forder_id", 'left')
+			->join('t_sell_order_sku', "t_sell_order_spu.Fid = t_sell_order_sku.Forder_spu_id", 'left')
+			->group_by("$this->table.Fclient_id,t_sell_order_spu.Fspu_id
+			,t_sell_order_sku.Fsku_id,t_sell_order_sku.Fcolor,t_sell_order_sku.Fsize");
+
+		//筛选条件
+		if(isset($params["start_date"]) && !empty($params["start_date"]))
+			$select = $select->where("$this->table.Fcreate_at >=", strtotime($params["start_date"]));
+		if(isset($params["stop_date"]) && !empty($params["stop_date"]))
+			$select = $select->where("$this->table.Fcreate_at <=", strtotime($params["stop_date"]));
+		if(isset($params["spu_id"]) && !empty($params["spu_id"]))
+			$select = $select->like("t_sell_order_spu.Fspu_id",$params["spu_id"]);
+		if(isset($params["client_name"]) && !empty($params["client_name"]))
+			$select = $select->like("t_client.Fname",$params["client_name"]);
+
+		//查询表
+		$select = $select->get($this->table);
+
+		//DEBUG
+		//echo $this->db->last_query();
+		//die;
+
+		//构成返回结果，并遍历添加SKU
+		$list = array();
+		foreach($select->result() as $data){
+			if(isset($list[$data->client_id])){
+				//判断是否有SKU项
+				if(isset($list[$data->client_id]->sku[$data->sku_id])){
+					//存在则累加数量
+					$list[$data->client_id]->sku[$data->sku_id]->num += (int)$data->num;
+					$list[$data->client_id]->sku[$data->sku_id]->amount += (int)$data->amount;
+				}
+				else{
+					//不存在则添加项
+					$sku_item = (object)array(
+						"spu_id"=>$data->spu_id,
+						"sku_id"=>$data->sku_id,
+						"color"=>$data->color,
+						"size"=>$data->size,
+						"num"=>(int)$data->num,
+						"amount"=>(double)$data->amount,
+					);
+					$list[$data->client_id]->sku[$data->sku_id] = $sku_item;
+					$list[$data->client_id]->sku_count ++;
+				}
+				//累加总数量
+				$list[$data->client_id]->num += (int)$data->num;
+				$list[$data->client_id]->amount += (int)$data->amount;
+			}
+			else
+			{
+				//设置数据
+				$item = (object)array(
+					"client_id"=>$data->client_id,
+					"client_name"=>$data->client_name,
+					"num"=>(int)$data->num,
+					"amount"=>(double)$data->amount,
+					"sku_count"=>1,
+				);
+				$sku_item = (object)array(
+					"spu_id"=>$data->spu_id,
+					"sku_id"=>$data->sku_id,
+					"color"=>$data->color,
+					"size"=>$data->size,
+					"num"=>(int)$data->num,
+					"amount"=>(double)$data->amount,
+				);
+				$item->sku[$data->sku_id] = $sku_item;
+
+				//添加到列表
+				$list[$data->client_id] = $item;
+			}
+		}
+
+		//返回
+		return $list;
+	}
+
+	/**
+	 * 获取日报表
+	 */
+	public function getReportDate($params = array()){
+		$select = $this->db
+			->select([
+				"t_sell_order_spu.Fspu_id",
+				"t_sell_order_spu.Fsnap_pic",
+				"t_sell_order_spu.Fsnap_pic_normal",
+				"t_sell_order_sku.Fsku_id",
+				"t_sell_order_sku.Fcolor",
+				"t_sell_order_sku.Fsize",
+				"SUM(t_sell_order_sku.Fnum) AS Fnum",
+				"SUM(t_sell_order_sku.Fnum * t_sell_order_spu.Fsnap_price) AS Famount",
+			])
+			->join('t_client', "$this->table.Fclient_id = t_client.Fid", 'left')
+			->join('t_sell_order_spu', "$this->table.Fid = t_sell_order_spu.Forder_id", 'left')
+			->join('t_sell_order_sku', "t_sell_order_spu.Fid = t_sell_order_sku.Forder_spu_id", 'left')
+			->group_by("t_sell_order_spu.Fspu_id,t_sell_order_spu.Fsnap_pic,t_sell_order_spu.Fsnap_pic_normal
+			,t_sell_order_sku.Fsku_id,t_sell_order_sku.Fcolor,t_sell_order_sku.Fsize");
+
+		//筛选条件
+		if(isset($params["start_date"]) && !empty($params["start_date"]))
+			$select = $select->where("$this->table.Fcreate_at >=", strtotime($params["start_date"]));
+		if(isset($params["stop_date"]) && !empty($params["stop_date"]))
+			$select = $select->where("$this->table.Fcreate_at <=", strtotime($params["stop_date"]));
+		if(isset($params["spu_id"]) && !empty($params["spu_id"]))
+			$select = $select->like("t_sell_order_spu.Fspu_id",$params["spu_id"]);
+		if(isset($params["client_name"]) && !empty($params["client_name"]))
+			$select = $select->like("t_client.Fname",$params["client_name"]);
+
+		//查询表
+		$select = $select->get($this->table);
+
+		//DEBUG
+		//var_dump($select->result());
+		//echo $this->db->last_query();
+		//die;
+
+		//构成返回结果，并遍历添加SKU
+		$list = array();
+		foreach($select->result() as $data){
+			//判断是否有此SPU项目
+			if(isset($list[$data->spu_id]))
+			{
+				//判断是否有SKU项
+				if(isset($list[$data->spu_id]->sku[$data->sku_id])) {
+					//存在则累加数量
+					$list[$data->client_id]->sku[$data->sku_id]->num += (int)$data->num;
+					$list[$data->client_id]->sku[$data->sku_id]->amount += (int)$data->amount;
+				}
+				else{
+					//不存在则添加项
+					$sku_item = (object)array(
+						"sku_id"=>$data->sku_id,
+						"color"=>$data->color,
+						"size"=>$data->size,
+						"num"=>(int)$data->num,
+						"amount"=>(double)$data->amount,
+					);
+					$list[$data->spu_id]->sku[$data->sku_id] = $sku_item;
+					$list[$data->spu_id]->sku_count ++;
+				}
+				//累加总数量
+				$list[$data->spu_id]->num += (int)$data->num;
+				$list[$data->spu_id]->amount += (int)$data->amount;
+			}
+			else
+			{
+				//设置数据
+				$item = (object)array(
+					"spu_id"=>$data->spu_id,
+					"snap_pic"=>$data->snap_pic,
+					"snap_pic_normal"=>$data->snap_pic_normal,
+					"num"=>(int)$data->num,
+					"amount"=>(double)$data->amount,
+					"sku_count" => 1,
+				);
+				$sku_item = (object)array(
+					"sku_id"=>$data->sku_id,
+					"color"=>$data->color,
+					"size"=>$data->size,
+					"num"=>(int)$data->num,
+					"amount"=>(double)$data->amount,
+				);
+				$item->sku[$data->sku_id] = $sku_item;
+
+				//添加到列表
+				$list[$data->spu_id] = $item;
+			}
+		}
 
 		//返回
 		return $list;

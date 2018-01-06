@@ -83,7 +83,7 @@ function menuScroll(num){
               <a href="#" id="gy">&nbsp;</a>
               <a href="javascript:void" onclick="login_out()">&nbsp;</a>
             </div>
-            <div class="info_center">仓库管理员 
+            <div class="info_center"><?php print_r(@$_SESSION['name']);?>
             </div>
           </div>
         </div>
