@@ -193,7 +193,7 @@ class Allocate extends BaseController {
         $client = $this->m_client->get($order->client_id);
 
         //生成配货单号
-        $order_num = $this->model->createOrderNum();
+        $order_num = $allocate->order_num;
 
         //页面显示
         $this->show("allocate",[

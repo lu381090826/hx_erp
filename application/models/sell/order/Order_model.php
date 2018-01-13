@@ -386,10 +386,21 @@ class Order_model extends BaseModel{
 			}
 		}
 
-
 		//返回
 		return $list;
 	}
+
+    /**
+     * 获取Sku可配货列表
+     */
+    public function getSkuCanAllocate(){
+        $list = $this->getSkuList();
+        $result = array();
+        foreach ($list as $item){
+            $result[$item->sku_id]=$item->num_sum - $item->num_end;
+        }
+        return $result;
+    }
 
 	/**
 	 * 获取精选客户
