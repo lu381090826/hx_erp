@@ -7,6 +7,13 @@
     .am-table > tbody + tbody tr:first-child td{
         border-top-width: 1px;
     }
+    .actions-bar{
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    .actions-bar button{
+        margin-bottom: 10px;
+    }
 </style>
 
 <!-- 面包屑 -->
@@ -22,33 +29,34 @@
 
 <div id="app">
     <!-- 搜索表格 -->
-    <div class="am-panel am-panel-primary">
-        <div class="am-panel-hd">搜索</div>
-        <div class="am-panel-bd">
-            <form class="am-form-inline" role="form">
-                <div class="am-form-group">
-                    <label for="doc-ipt-email-1">开始日期</label>
-                    <input type="date" class="am-form-field" placeholder="开始日期" v-model="start_date">
-                </div>
-                <div class="am-form-group">
-                    <label for="doc-ipt-email-1">结束日期</label>
-                    <input type="date" class="am-form-field" placeholder="结束日期" v-model="stop_date">
-                </div>
-                <div class="am-form-group">
-                    <label for="doc-ipt-email-1">款号</label>
-                    <input type="text" class="am-form-field" placeholder="款号" v-model="spu_id">
-                </div>
-                <div class="am-form-group">
-                    <label for="doc-ipt-email-1">客户</label>
-                    <input type="text" class="am-form-field" placeholder="客户" v-model="client_name">
-                </div>
-                <div class="am-form-group">
-                    <button type="button" class="am-btn am-btn-primary" v-on:click="search_date">查看日报表</button>
-                    <button type="button" class="am-btn am-btn-primary" v-on:click="search_client">客户精选</button>
-                </div>
-            </form>
+    <form class="am-form-inline" role="form">
+        <div>
+            <div class="am-form-group">
+                <label for="doc-ipt-email-1">开始日期</label>
+                <input type="date" class="am-form-field" placeholder="开始日期" v-model="start_date">
+            </div>
+            <div class="am-form-group">
+                <label for="doc-ipt-email-1">结束日期</label>
+                <input type="date" class="am-form-field" placeholder="结束日期" v-model="stop_date">
+            </div>
+            <div class="am-form-group">
+                <label for="doc-ipt-email-1">款号</label>
+                <input type="text" class="am-form-field" placeholder="款号" v-model="spu_id">
+            </div>
+            <div class="am-form-group">
+                <label for="doc-ipt-email-1">客户</label>
+                <input type="text" class="am-form-field" placeholder="客户" v-model="client_name">
+            </div>
         </div>
-    </div>
+        <div class="actions-bar">
+            <button type="button" class="am-btn am-btn-primary" v-on:click="search_date">查看日报表</button>
+            <button type="button" class="am-btn am-btn-primary" v-on:click="search_client">客户精选</button>
+            <button type="button" class="am-btn am-btn-success" v-on:click="report_date">导出日报表</button>
+            <button type="button" class="am-btn am-btn-success" v-on:click="report_client">导出客户精选</button>
+        </div>
+    </form>
+
+    <br>
 
     <!-- 日报表 -->
     <div id="report-date" class="am-panel am-panel-secondary" v-if="list_date != null">
@@ -112,6 +120,9 @@
         </div>
     </div>
 </div>
+<form id="export" action="<?=site_url($_controller->controller."/export")?>" method="post">
+    <input type="hidden" name="data">
+</form>
 
 <script>
     //vue构造器
@@ -129,7 +140,6 @@
             list_date:null
         },
         created:function() {
-            /*this.list = <?=json_encode($list)?>;*/
         },
         methods: {
             search_client(){
@@ -169,6 +179,26 @@
                     }
                 });
             },
+            report_client(){
+                data = {
+                    export_type:"client",
+                    start_date:this.start_date,
+                    stop_date:this.stop_date,
+                    spu_id:this.spu_id,
+                    client_name:this.client_name,};
+                $("#export input[name='data']").val(JSON.stringify(data));
+                $("#export").submit();
+            },
+            report_date(){
+                data = {
+                    export_type:"date",
+                    start_date:this.start_date,
+                    stop_date:this.stop_date,
+                    spu_id:this.spu_id,
+                    client_name:this.client_name,};
+                $("#export input[name='data']").val(JSON.stringify(data));
+                $("#export").submit();
+            }
         }
     })
 </script>
