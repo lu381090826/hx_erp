@@ -5,8 +5,8 @@
 <div class="am-cf am-padding am-padding-bottom-0">
     <div class="am-fl am-cf">
         <a class="am-text-primary am-text-lg" href="<?=base_url()?>">HOME</a> /
-        <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/refund/Refund/index")?>">退货列表</a> /
-        <small>配货订单</small>
+        <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/refund/Refund/index")?>">退货单</a> /
+        <small>销售单退货</small>
     </div>
 </div>
 

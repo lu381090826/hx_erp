@@ -6,8 +6,8 @@
     <select data-am-selected id="subnav">
         <option value="#" selected>销售订单</option>
         <option value="<?=site_url("sell/client/Client")?>">客户管理</option>
-        <option value="<?=site_url("sell/allocate/Allocate/index2")?>">报货订单</option>
-        <option value="<?=site_url("sell/refund/Refund")?>">退货订单</option>
+        <option value="<?=site_url("sell/allocate/Allocate")?>">报货单</option>
+        <option value="<?=site_url("sell/refund/Refund")?>">退货单</option>
         <option value="<?=site_url("sell/report/Report")?>">报表查询</option>
     </select>
 </div>
@@ -86,7 +86,7 @@
             <div class="options" v-if="item === selected">
                 <ul class="list-group">
                     <li class="list-group-item">打印</li>
-                    <li class="list-group-item" v-if="item.status == 0 || item.status == 1" v-on:click="allocate(item)">配货</li>
+                    <li class="list-group-item" v-if="item.status == 0 || item.status == 1" v-on:click="allocate(item)">报货</li>
                     <li class="list-group-item" v-if="item.status == 0" v-on:click="modify(item)">修改</li>
                     <li class="list-group-item" v-if="item.status == 0" v-on:click="scrap(item)">作废</li>
                     <li class="list-group-item" v-if="item.status == 0" v-on:click="refund(item)">退货</li>

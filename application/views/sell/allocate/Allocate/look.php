@@ -5,7 +5,7 @@
 <div class="am-cf am-padding am-padding-bottom-0">
     <div class="am-fl am-cf">
         <a class="am-text-primary am-text-lg" href="<?=base_url()?>">HOME</a> /
-        <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/allocate/Allocate/index")?>">报货列表</a> /
+        <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/allocate/Allocate")?>">报货单</a> /
         <small>查看配货</small>
     </div>
 </div>

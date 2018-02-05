@@ -3,8 +3,8 @@
  <select data-am-selected id="subnav">
   <option value="<?=site_url("sell/order/Order")?>">销售订单</option>
   <option value="<?=site_url("sell/client/Client")?>">客户管理</option>
-  <option value="#" selected>报货订单</option>
-     <option value="<?=site_url("sell/refund/Refund")?>">退货订单</option>
+  <option value="#" selected>报货单</option>
+     <option value="<?=site_url("sell/refund/Refund")?>">退货单</option>
   <option value="<?=site_url("sell/report/Report")?>">报表查询</option>
  </select>
 </div>
@@ -14,7 +14,7 @@
 <div class="am-cf am-padding am-padding-bottom-0">
  <div class="am-fl am-cf">
   <a class="am-text-primary am-text-lg" href="<?=base_url()?>">HOME</a> /
-  <small>报货列表</small>
+     <small><?=$_controller->describe->desc?></small>
  </div>
 </div>
 <hr>
@@ -36,7 +36,9 @@
   <form class="am-form">
    <!--DataGrid-->
    <?=ViewComponent::DataGrid($_controller,$searched,[
-       'sell_order_num',"order_num","client_name","client_phone","statusName","total_num"
+       'sell_order_num',"order_num","client_name","client_phone","statusName","total_num",
+
+
        //'id','form_id','create_at','create_user_id','status','remark',
    ],[array('label'=>"详情", 'url'=>site_url("/sell/allocate/Allocate/look/{{id}}")),]
    )?>
