@@ -200,7 +200,7 @@
                             location.href = '<?=site_url($_controller->views . "/order/$order->id")?>'
                         }
                         else
-                            alert(item.state.return_msg);
+                            alert(result.state.return_msg);
                     }
                 });
             },
@@ -211,8 +211,6 @@
                     var item = JSON.parse(JSON.stringify(this.list[key]));
                     delete item.spu;
                     delete item.sku;
-                    delete item.num_sum;
-                    delete item.num_end;
                     list.push(item);
                 }
                 return list;

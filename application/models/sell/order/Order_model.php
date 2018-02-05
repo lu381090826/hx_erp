@@ -314,14 +314,14 @@ class Order_model extends BaseModel{
 	 * 获取订单下，所有Sku配货列表(包含已经配货数量)
 	 * string $filterAllocatId：统计配货数量时，过滤掉得配货单ID
 	 */
-	public function getAllocateSkuList($filterId=null){
+	public function getAllocateSkuList($filter_id=null){
 		//获取所有spu
 		$order_spus = $this->m_spu->searchAll(["order_id"=>$this->id])->list;
 		$order_skus = $this->m_sku->searchAll(["order_id"=>$this->id])->list;
 
         //获取报配数量和退货数量
-        $allocated = $this->m_allocate_item->getAllocateStatus($this->id,$filterId);
-        $refund = $this->m_refund_item->getRefundStatus($this->id,$filterId);
+        $allocated = $this->m_allocate_item->getAllocateStatus($this->id,$filter_id);
+        $refund = $this->m_refund_item->getRefundStatus($this->id,$filter_id);
 
 		//获取
 		$list = array();
@@ -363,14 +363,14 @@ class Order_model extends BaseModel{
      * 获取订单下，所有Sku退货列表(包含已经退货数量)
      * string $filterId：统计配货数量时，过滤掉得配货单ID
      */
-	public function getRefundSkuList($filterId=null){
+	public function getRefundSkuList($filter_id=null){
         //获取所有spu
         $order_spus = $this->m_spu->searchAll(["order_id"=>$this->id])->list;
         $order_skus = $this->m_sku->searchAll(["order_id"=>$this->id])->list;
 
         //获取报配数量和退货数量
-        $allocated = $this->m_allocate_item->getAllocateStatus($this->id,$filterId);
-        $refund = $this->m_refund_item->getRefundStatus($this->id,$filterId);
+        $allocated = $this->m_allocate_item->getAllocateStatus($this->id,$filter_id);
+        $refund = $this->m_refund_item->getRefundStatus($this->id,$filter_id);
 
         //获取
         $list = array();
@@ -411,14 +411,28 @@ class Order_model extends BaseModel{
     /**
      * 获取Sku可配货列表
      */
-    public function getSkuCanAllocate($filterId=null){
-        $list = $this->getAllocateSkuList($filterId);
+    public function getSkuCanAllocate($filter_id=null){
+        $list = $this->getAllocateSkuList($filter_id);
         $result = array();
         foreach ($list as $item){
             $result[$item->sku_id]=$item->num_order - $item->num_allocate;
         }
         return $result;
     }
+
+    /**
+	 * 获取sku可退货列表
+     * @param null $filter_id
+     * @return array
+     */
+    public function getSkuCanRefund($filter_id = null){
+        $list = $this->getRefundSkuList($filter_id);
+        $result = array();
+        foreach ($list as $item){
+            $result[$item->sku_id]=$item->num_order - $item->num_refund;
+        }
+        return $result;
+	}
 
 	/**
 	 * 获取精选客户
