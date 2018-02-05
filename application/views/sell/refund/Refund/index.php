@@ -1,5 +1,17 @@
 <!-- 面包屑 -->
 <div class="am-cf am-padding am-padding-bottom-0">
+    <select data-am-selected id="subnav">
+        <option value="<?=site_url("sell/order/Order")?>">销售订单</option>
+        <option value="<?=site_url("sell/client/Client")?>">客户管理</option>
+        <option value="<?=site_url("sell/allocate/Allocate")?>" selected>报货订单</option>
+        <option value="#" selected>退货订单</option>
+        <option value="<?=site_url("sell/report/Report")?>">报表查询</option>
+    </select>
+</div>
+<hr>
+
+<!-- 面包屑 -->
+<div class="am-cf am-padding am-padding-bottom-0">
     <div class="am-fl am-cf">
         <a class="am-text-primary am-text-lg" href="<?=base_url()?>">HOME</a> /
         <small><?=$_controller->describe->desc?></small>

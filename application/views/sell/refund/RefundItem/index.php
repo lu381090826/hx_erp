@@ -22,7 +22,7 @@
         <form class="am-form">
             <!--DataGrid-->
             <?=ViewComponent::DataGrid($_controller,$searched,[
-                'id','order_id','refund_id','order_sup_id','order_sku_id','spu_id','sku_id','num','status',
+                'id','order_id','refund_id','order_spu_id','order_sku_id','spu_id','sku_id','num','status',
             ])?>
             <!--分页条-->
             <?=ViewComponent::PagesBar($page,$size,$searched->count)?>

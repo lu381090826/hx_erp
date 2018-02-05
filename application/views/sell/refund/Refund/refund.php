@@ -5,10 +5,9 @@
 <div class="am-cf am-padding am-padding-bottom-0">
     <div class="am-fl am-cf">
         <a class="am-text-primary am-text-lg" href="<?=base_url()?>">HOME</a> /
-        <!--<a class="am-text-primary am-text-lg" href="<?=site_url("/sell/order/Order")?>">销售订单</a> /-->
-        <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/refund/Refund/index2")?>">退货列表</a> /
-        <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/refund/Refund/index")."/$order->id"?>">退货订单</a> /
-        <small>添加配货</small>
+        <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/refund/Refund/index")?>">退货列表</a> /
+        <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/refund/Refund/order")."/$order->id"?>">退货订单</a> /
+        <small>添加退货</small>
     </div>
 </div>
 
@@ -112,17 +111,23 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <td>款号</td><td>颜色</td><td>尺码</td><td>需求数量</td><td>已配数量</td><td>请求数量</td><td>配货数量</td>
+                    <td>款号</td><td>颜色</td><td>尺码</td>
+                    <td>订单数量</td>
+                    <td>报货数量</td><td>完成报货</td>
+                    <td>退货数量</td><td>完成退货</td>
+                    <td>退货</td>
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="item in list" v-bind:class="{ danger: parseInt(item.num) + parseInt(item.num_end) > item.num_sum }"  v-if="item.spu_id.indexOf(filter) != -1">
+                <tr v-for="item in list" v-bind:class="{ danger: parseInt(item.num) + parseInt(item.num_refund) > item.num_order }"  v-if="item.spu_id.indexOf(filter) != -1">
                     <td>{{item.spu_id}}</td>
                     <td>{{item.sku.color}}</td>
                     <td>{{item.sku.size}}</td>
-                    <td>{{item.num_sum}}</td>
-                    <td>0</td>
-                    <td>{{item.num_end}}</td>
+                    <td>{{item.num_order}}</td>
+                    <td>{{item.num_allocate}}</td>
+                    <td>{{item.num_allocated}}</td>
+                    <td>{{item.num_refund}}</td>
+                    <td>{{item.num_refunded}}</td>
                     <td><input type="number" class="form-control" placeholder="单价" v-model="item.num" v-on:change="changeNum($event,item,'num')"></td>
                 </tr>
                 </tbody>
@@ -169,8 +174,8 @@
             },
             //提交表单
             submit:function(){
-                /*if(!this.check())
-                    return;*/
+                if(!this.check())
+                    return;
 
                 //设置数据
                 var list = this.getSubmitList();
@@ -178,7 +183,7 @@
 
                 //提交
                 $.ajax({
-                    url: '<?=site_url($_controller->views . "/add_api")?>',
+                    url: '<?=site_url($_controller->views . "/submit")?>',
                     type: "post",
                     dataType: "json",
                     data: {
@@ -192,7 +197,7 @@
                     success: function (result) {
                         console.log(result);
                         if (result.state.return_code == 0) {
-                            location.href = '<?=site_url($_controller->views . "/index/$order->id")?>'
+                            location.href = '<?=site_url($_controller->views . "/order/$order->id")?>'
                         }
                         else
                             alert(item.state.return_msg);
@@ -215,7 +220,7 @@
             //检测提交的表单
             check:function(){
                 var isNull = true;
-                var sumNum = 0;//用于统计总配货数量
+                var sumNum = 0;//用于统计总数量
                 for(var key in this.list){
                     //设置item
                     var item = this.list[key];
@@ -226,30 +231,24 @@
 
                     //判断数量是否为正数
                     if(parseInt(item.num) < 0){
-                        alert("配货数量有误");
+                        alert("退货数量有误");
                         return false;
                     }
 
                     //判断配货数量是否正确
-                    /*if(parseInt(item.num) + parseInt(item.num_end) > item.num_sum){
-                        alert("配货超过了订单需求");
+                    if(parseInt(item.num) + parseInt(item.num_refund) > item.num_order){
+                        alert("退货数量超过了订单数量");
                         return false;
-                    }*/
+                    }
 
                     //累加总配货数
-                    sumNum += parseInt(item.num_end);
+                    sumNum += parseInt(item.num_refund);
                     sumNum += parseInt(item.num);
                 }
 
                 //判断是否配货
                 if(isNull){
-                    alert("请进行配货");
-                    return false;
-                }
-
-                //判断是否超出销售总数
-                if(sumNum > parseInt(this.order.total_num)){
-                    alert("配货数量已超出销售总量");
+                    alert("请填写退货数量");
                     return false;
                 }
 

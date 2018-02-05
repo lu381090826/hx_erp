@@ -16,6 +16,9 @@ class Refund extends BaseController {
         //$this->_controller->layout = "layout/amaze/main";
         $this->_controller->layout = "layout/amaze/hx";
 
+        //类库
+        $this->load->library('evon/ApiResult','','apiresult');
+
         //加载模型
         $this->load->model('admin/User_model',"m_user",true);
         $this->load->model('sell/order/Order_model',"m_order",true);
@@ -26,9 +29,9 @@ class Refund extends BaseController {
     }
 
     /**
-     * index
+     * 列表页
      */
-    public function index2()
+    public function index()
     {
         $model = $this->model;
         $param = $_REQUEST;
@@ -47,62 +50,10 @@ class Refund extends BaseController {
     }
 
     /**
-     * create
-     */
-    public function create(){
-        $model = $this->model;
-        $param = $_REQUEST;
-
-        if (!empty($param) && $model->load($param) && $model->save()) {
-            redirect($this->_controller->views."/index");
-        } else {
-            $this->show("create",[
-                "model"=>$model,
-            ]);
-        }
-    }
-
-    /**
-     * update
-     */
-    public function update($id){
-        $model = $this->model->get($id);
-        $param = $_REQUEST;
-
-        if (!empty($param) && $model->load($param) && $model->save()) {
-            redirect($this->_controller->views."/index");
-        } else {
-            $this->show("update",[
-                "model"=>$model,
-            ]);
-        }
-    }
-
-    /**
-     * delete
-     */
-    public function delete($id){
-        $model = $this->model->get($id);
-        $bool = $model->delete();
-
-        if($bool)
-            redirect($this->_controller->views."/index");
-    }
-
-    /**
-     * view
-     */
-    public function view($id){
-        $model = $this->model->get($id);
-
-        var_dump($model);
-    }
-
-    /**
-     * list
+     * 退货单页
      * @param $order_id
      */
-    public function index($order_id){
+    public function order($order_id){
         //获取销售单信息
         $order = $this->m_order->get($order_id);
         $goods = $order->getGoods();
@@ -122,7 +73,7 @@ class Refund extends BaseController {
         $client = $this->m_client->get($order->client_id);
 
         //页面显示
-        $this->show("list",[
+        $this->show("order",[
             "order"=>$order,
             "list"=>$list,
             "seller"=>$seller,
@@ -132,7 +83,7 @@ class Refund extends BaseController {
     }
 
     /**
-     * add
+     * 添加退货单
      * @param $order_id
      */
     public function add($order_id){
@@ -141,7 +92,6 @@ class Refund extends BaseController {
 
         //获取配货列表
         $list = $order->getRefundSkuList();
-        var_dump($list);
 
         //获取销售员和客户
         $seller = $this->m_user->get_user_info($order->user_id);
@@ -152,7 +102,7 @@ class Refund extends BaseController {
 
         //设置初始填写的num数量
         foreach($list as $key=>$item){
-            $num = $item->num_sum - $item->num_end;
+            $num = $item->num_order - $item->num_refund;
             $list[$key]->num = $num>0?$num:0;
         }
 
@@ -168,9 +118,79 @@ class Refund extends BaseController {
     }
 
     /**
-     * add_api
+     * 修改退货单
+     * @param $allocate_id
      */
-    public function add_api(){
+    public function modify($order_id,$allocate_id){
+        //获取销售单信息
+        $order = $this->m_order->get($order_id);
+
+        //获取配货列表
+        $allocate = $this->model->get($allocate_id);
+        $list = $allocate->getSkuList();
+
+        //获取销售员和客户
+        $seller = $this->m_user->get_user_info($order->user_id);
+        $client = $this->m_client->get($order->client_id);
+
+        //生成配货单号
+        $order_num = $allocate->order_num;
+
+        //页面显示
+        $this->show("refund",[
+            "id"=>$allocate_id,
+            "order"=>$order,
+            "list"=>$list,
+            "order_num"=>$order_num,
+            "seller"=>$seller,
+            "client"=>$client,
+        ]);
+    }
+
+    /**
+     * 查看退货单
+     * @param $refund_id
+     */
+    public function look($refund_id){
+        //获取配货单信息
+        $refund = $this->model->get($refund_id);
+
+        //获取配货列表
+        $list = $refund->getSkuList(true,true);
+
+        //获取销售单
+        $order = $this->m_order->get($refund->order_id);
+
+        //获取销售员和客户
+        $seller = $this->m_user->get_user_info($order->user_id);
+        $client = $this->m_client->get($order->client_id);
+
+        //页面显示
+        $this->show("look",[
+            "refund"=>$refund,
+            "order"=>$order,
+            "list"=>$list,
+            "seller"=>$seller,
+            "client"=>$client,
+        ]);
+    }
+
+    /**
+     * 删除退货单
+     * @param $id
+     */
+    public function delete($id){
+        $model = $this->model->get($id);
+        $bool = $model->delete();
+
+        if($bool)
+            redirect($this->_controller->views."/index");
+    }
+
+    /**
+     * 异步提交:添加/修改
+     */
+    public function submit(){
         //获取参数
         $data = $_REQUEST;
 

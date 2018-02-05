@@ -301,37 +301,6 @@ class Order_model extends BaseModel{
 	}
 
 	/**
-	 * 获取处理好的商列表
-	 * @return array
-	 */
-	public function getGoods(){
-		$spus = $this->MSpu->searchAll(['order_id'=>$this->id]);
-		$skus = $this->MSku->searchAll(['order_id'=>$this->id]);
-		$allocated = $this->m_allocate_item->getAllocateStatus($this->id);
-		$list = array();
-		foreach($spus->list as $spu){
-			$item = $spu;
-			$item->skus = array();
-			foreach($skus->list as $sku){
-				//添加配货完成数量
-				if($sku->order_spu_id == $spu->id){
-					//添加配货完成数量
-					foreach($allocated as $key=>$value){
-						if($key == $sku->id)
-							$sku->num_allocat = $value;
-					}
-					if(!isset($sku->num_allocat))
-						$sku->num_allocat = '0';
-					//添加sku
-					$spu->skus[] = $sku;
-				}
-			}
-			$list[] = $item;
-		}
-		return $list;
-	}
-
-	/**
 	 * 修改状态
 	 */
 	public function changeStatus($value,$allowBack = false){
@@ -390,15 +359,18 @@ class Order_model extends BaseModel{
 
     /**
      * 获取订单下，所有Sku退货列表(包含已经退货数量)
-     * string $filterAllocatId：统计配货数量时，过滤掉得配货单ID
+     * string $filterId：统计配货数量时，过滤掉得配货单ID
      */
-	public function getRefundSkuList($filterRefundId=null){
+	public function getRefundSkuList($filterId=null){
         //获取所有spu
         $order_spus = $this->m_spu->searchAll(["order_id"=>$this->id])->list;
         $order_skus = $this->m_sku->searchAll(["order_id"=>$this->id])->list;
 
+        //获取已配数量
+        $allocated = $this->m_allocate_item->getAllocateStatus($this->id,$filterId);
+
         //获取已退数量
-        $refund = $this->m_refund_item->getRefundStatus($this->id,$filterRefundId);
+        $refund = $this->m_refund_item->getRefundStatus($this->id,$filterId);
 
         //获取
         $list = array();
@@ -420,11 +392,12 @@ class Order_model extends BaseModel{
                 $item->spu = $order_spu;
                 $item->sku = $order_sku;
 
-                //设置可配数量
-                $item->num_sum = (int)$order_sku->num;
-
-                //设置已经配置数量
-                $item->num_end = isset($refund[$order_sku->id])?(int)$refund[$order_sku->id]:0;
+                //设置数量
+                $item->num_order = (int)$order_sku->num;                                                      //订单数量
+				$item->num_allocate = isset($allocated[$order_sku->id])?(int)$allocated[$order_sku->id]:0;   //配货数量
+				$item->num_allocated = $this->getRefundedNum($order_sku);                                     //配货完成数量
+				$item->num_refund = isset($refund[$order_sku->id])?(int)$refund[$order_sku->id]:0;;          //退货数量
+				$item->num_refunded = $this->getRefundedNum($order_sku);                                      //退货完成数量
 
                 //添加到列表
                 $list[] = $item;
@@ -636,5 +609,67 @@ class Order_model extends BaseModel{
 		//返回
 		return $list;
 	}
+
+	//region 对外接口获取的方法
+
+    /**
+     * 获取处理好的商列表
+     * @return array
+     */
+    public function getGoods(){
+        $spus = $this->MSpu->searchAll(['order_id'=>$this->id]);
+        $skus = $this->MSku->searchAll(['order_id'=>$this->id]);
+        $allocate = $this->m_allocate_item->getAllocateStatus($this->id);
+        $refund = $this->m_refund_item->getRefundStatus($this->id);
+        $list = array();
+        foreach($spus->list as $spu){
+            $item = $spu;
+            $item->skus = array();
+            foreach($skus->list as $sku){
+                if($sku->order_spu_id == $spu->id){
+                    //添加配货数量
+                    foreach($allocate as $key=>$value){
+                        if($key == $sku->id)
+                            $sku->num_allocat = $value;
+                    }
+                    if(!isset($sku->num_allocat))
+                        $sku->num_allocat = '0';
+
+                    //添加退货数量
+                    foreach($refund as $key=>$value){
+                        if($key == $sku->id)
+                            $sku->num_refund = $value;
+                    }
+                    if(!isset($sku->num_refund))
+                        $sku->num_refund = '0';
+
+                    //获取配货数量
+                    $sku->num_allocated = $this->getAllocatedNum($sku);
+
+                    //获取退货完成数量
+                    $sku->num_refunded = $this->getRefundedNum($sku);
+
+                    //添加sku
+                    $spu->skus[] = $sku;
+                }
+                //添加退货数量
+
+            }
+            $list[] = $item;
+        }
+        return $list;
+    }
+
+	//获取配货完成数量
+	public function getAllocatedNum($sku){
+		return 0;
+	}
+
+	//获取退货完成数量
+	public function getRefundedNum($sku){
+		return 0;
+	}
+
+	//endregion
 }
 ?>    

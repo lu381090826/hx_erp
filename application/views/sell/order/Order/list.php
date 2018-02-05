@@ -195,7 +195,7 @@
             },
             //退货
             refund:function(item){
-                var url = '<?=site_url("sell/refund/Refund/index")?>/'+item.id;
+                var url = '<?=site_url("sell/refund/Refund/order")?>/'+item.id;
                 location.href = url;
             }
         }
