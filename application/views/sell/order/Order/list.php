@@ -190,7 +190,7 @@
             },
             //配货
             allocate:function(item){
-                var url = '<?=site_url("sell/allocate/Allocate/index")?>/'+item.id;
+                var url = '<?=site_url("sell/allocate/Allocate/order")?>/'+item.id;
                 location.href = url;
             },
             //退货

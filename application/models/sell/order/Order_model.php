@@ -314,13 +314,14 @@ class Order_model extends BaseModel{
 	 * 获取订单下，所有Sku配货列表(包含已经配货数量)
 	 * string $filterAllocatId：统计配货数量时，过滤掉得配货单ID
 	 */
-	public function getAllocateSkuList($filterAllocatId=null){
+	public function getAllocateSkuList($filterId=null){
 		//获取所有spu
 		$order_spus = $this->m_spu->searchAll(["order_id"=>$this->id])->list;
 		$order_skus = $this->m_sku->searchAll(["order_id"=>$this->id])->list;
 
-		//获取已配数量
-		$allocated = $this->m_allocate_item->getAllocateStatus($this->id,$filterAllocatId);
+        //获取报配数量和退货数量
+        $allocated = $this->m_allocate_item->getAllocateStatus($this->id,$filterId);
+        $refund = $this->m_refund_item->getRefundStatus($this->id,$filterId);
 
 		//获取
 		$list = array();
@@ -342,11 +343,12 @@ class Order_model extends BaseModel{
 				$item->spu = $order_spu;
 				$item->sku = $order_sku;
 
-				//设置可配数量
-				$item->num_sum = (int)$order_sku->num;
-
-				//设置已经配置数量
-				$item->num_end = isset($allocated[$order_sku->id])?(int)$allocated[$order_sku->id]:0;
+                //设置数量
+                $item->num_order = (int)$order_sku->num;                                                      //订单数量
+                $item->num_allocate = isset($allocated[$order_sku->id])?(int)$allocated[$order_sku->id]:0;   //配货数量
+                $item->num_allocated = $this->getRefundedNum($order_sku);                                     //配货完成数量
+                $item->num_refund = isset($refund[$order_sku->id])?(int)$refund[$order_sku->id]:0;;          //退货数量
+                $item->num_refunded = $this->getRefundedNum($order_sku);                                      //退货完成数量
 
 				//添加到列表
 				$list[] = $item;
@@ -366,10 +368,8 @@ class Order_model extends BaseModel{
         $order_spus = $this->m_spu->searchAll(["order_id"=>$this->id])->list;
         $order_skus = $this->m_sku->searchAll(["order_id"=>$this->id])->list;
 
-        //获取已配数量
+        //获取报配数量和退货数量
         $allocated = $this->m_allocate_item->getAllocateStatus($this->id,$filterId);
-
-        //获取已退数量
         $refund = $this->m_refund_item->getRefundStatus($this->id,$filterId);
 
         //获取
@@ -411,11 +411,11 @@ class Order_model extends BaseModel{
     /**
      * 获取Sku可配货列表
      */
-    public function getSkuCanAllocate(){
-        $list = $this->getAllocateSkuList();
+    public function getSkuCanAllocate($filterId=null){
+        $list = $this->getAllocateSkuList($filterId);
         $result = array();
         foreach ($list as $item){
-            $result[$item->sku_id]=$item->num_sum - $item->num_end;
+            $result[$item->sku_id]=$item->num_order - $item->num_allocate;
         }
         return $result;
     }

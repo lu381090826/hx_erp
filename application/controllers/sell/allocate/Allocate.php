@@ -29,9 +29,9 @@ class Allocate extends BaseController {
     }
 
     /**
-     * index
+     * 报货单列表
      */
-    public function index2()
+    public function index()
     {
         $model = $this->model;
         $param = $_REQUEST;
@@ -57,62 +57,10 @@ class Allocate extends BaseController {
     }
 
     /**
-     * create
-     */
-    public function create(){
-        $model = $this->model;
-        $param = $_REQUEST;
-
-        if (!empty($param) && $model->load($param) && $model->save()) {
-            redirect($this->_controller->views."/index");
-        } else {
-            $this->show("create",[
-                "model"=>$model,
-            ]);
-        }
-    }
-
-    /**
-     * update
-     */
-    public function update($id){
-        $model = $this->model->get($id);
-        $param = $_REQUEST;
-
-        if (!empty($param) && $model->load($param) && $model->save()) {
-            redirect($this->_controller->views."/index");
-        } else {
-            $this->show("update",[
-                "model"=>$model,
-            ]);
-        }
-    }
-
-    /**
-     * delete
-     */
-    public function delete($id){
-        $model = $this->model->get($id);
-        $bool = $model->delete();
-
-        if($bool)
-            redirect($this->_controller->views."/index");
-    }
-
-    /**
-     * view
-     */
-    public function view($id){
-        $model = $this->model->get($id);
-
-        var_dump($model);
-    }
-
-    /**
-     * list
+     * 销售单下，报货单列表
      * @param $order_id
      */
-    public function index($order_id){
+    public function order($order_id){
         //获取销售单信息
         $order = $this->m_order->get($order_id);
         $goods = $order->getGoods();
@@ -132,7 +80,7 @@ class Allocate extends BaseController {
         $client = $this->m_client->get($order->client_id);
 
         //页面显示
-        $this->show("list",[
+        $this->show("order",[
             "order"=>$order,
             "list"=>$list,
             "seller"=>$seller,
@@ -142,7 +90,7 @@ class Allocate extends BaseController {
     }
 
     /**
-     * add
+     * 添加报货单
      * @param $order_id
      */
     public function add($order_id){
@@ -161,7 +109,7 @@ class Allocate extends BaseController {
 
         //设置初始填写的num数量
         foreach($list as $key=>$item){
-            $num = $item->num_sum - $item->num_end;
+            $num = $item->num_order - $item->num_allocate;
             $list[$key]->num = $num>0?$num:0;
         }
 
@@ -177,7 +125,7 @@ class Allocate extends BaseController {
     }
 
     /**
-     * modify
+     * 修改报货单
      * @param $allocate_id
      */
     public function modify($order_id,$allocate_id){
@@ -207,7 +155,7 @@ class Allocate extends BaseController {
     }
 
     /**
-     * look
+     * 查看配货单
      * @param $allocate_id
      */
     public function look($allocate_id){
@@ -215,7 +163,7 @@ class Allocate extends BaseController {
         $allocate = $this->model->get($allocate_id);
 
         //获取配货列表
-        $list = $allocate->getSkuList(true,true);
+        $list = $allocate->getSkuList(true);
 
         //获取销售单
         $order = $this->m_order->get($allocate->order_id);
@@ -235,9 +183,21 @@ class Allocate extends BaseController {
     }
 
     /**
-     * add_api
+     * 删除报货单
+     * @param $id
      */
-    public function add_api(){
+    public function delete($id){
+        $model = $this->model->get($id);
+        $bool = $model->delete();
+
+        if($bool)
+            redirect($this->_controller->views."/index");
+    }
+
+    /**
+     * 异步提交:添加/修改
+     */
+    public function submit(){
         //获取参数
         $data = $_REQUEST;
 

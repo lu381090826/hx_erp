@@ -5,9 +5,7 @@
 <div class="am-cf am-padding am-padding-bottom-0">
     <div class="am-fl am-cf">
         <a class="am-text-primary am-text-lg" href="<?=base_url()?>">HOME</a> /
-        <!--<a class="am-text-primary am-text-lg" href="<?=site_url("/sell/order/Order")?>">销售订单</a> /-->
-        <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/allocate/Allocate/index2")?>">报货列表</a> /
-        <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/allocate/Allocate/index")."/$order->id"?>">配货订单</a> /
+        <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/allocate/Allocate/index")?>">报货列表</a> /
         <small>查看配货</small>
     </div>
 </div>
@@ -114,13 +112,17 @@
         <div class="am-form-group">
             <table class="table table-striped">
                 <thead>
-                <td>款号</td><td>颜色</td><td>尺码</td><td>需求数量</td><td>配货数量</td>
+                <td>款号</td><td>颜色</td><td>尺码</td>
+                <td>订单数量</td>
+                <td>已报总数</td>
+                <td>报货数量</td>
                 </thead>
                 <tr v-for="item in list" v-if="item.spu_id.indexOf(filter) != -1">
                     <td>{{item.spu_id}}</td>
                     <td>{{item.color}}</td>
                     <td>{{item.size}}</td>
-                    <td>{{item.num_sum}}</td>
+                    <td>{{item.num_order}}</td>
+                    <td>{{parseInt(item.num_allocate) + parseInt(item.num)}}</td>
                     <td>{{item.num}}</td>
                 </tr>
             </table>
