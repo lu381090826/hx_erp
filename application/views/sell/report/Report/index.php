@@ -22,6 +22,7 @@
         <option value="<?=site_url("sell/order/Order")?>">销售订单</option>
         <option value="<?=site_url("sell/client/Client")?>">客户管理</option>
         <option value="<?=site_url("sell/allocate/Allocate/index2")?>">报货订单</option>
+        <option value="<?=site_url("sell/refund/Refund")?>">退货订单</option>
         <option value="#" selected>报表查询</option>
     </select>
 </div>
@@ -142,7 +143,7 @@
         created:function() {
         },
         methods: {
-            search_client(){
+            search_client:function(){
                 //Ajax
                 $.ajax({
                     url:'<?=site_url($_controller->api."/search_report_client")?>',
@@ -160,7 +161,7 @@
                     }
                 });
             },
-            search_date(){
+            search_date:function(){
                 //Ajax
                 $.ajax({
                     url:'<?=site_url($_controller->api."/search_report_date")?>',
@@ -179,7 +180,7 @@
                     }
                 });
             },
-            report_client(){
+            report_client:function(){
                 data = {
                     export_type:"client",
                     start_date:this.start_date,
@@ -189,7 +190,7 @@
                 $("#export input[name='data']").val(JSON.stringify(data));
                 $("#export").submit();
             },
-            report_date(){
+            report_date:function(){
                 data = {
                     export_type:"date",
                     start_date:this.start_date,

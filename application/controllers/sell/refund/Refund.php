@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 include_once(dirname(BASEPATH).'/inherit/BaseController.php');
-class Allocate extends BaseController {
+class Refund extends BaseController {
     /**
      * constructor.
      */
@@ -11,21 +11,18 @@ class Allocate extends BaseController {
         parent::__construct();
 
         //环境变量设置
-        $this->_controller->views = "sell/allocate/Allocate";
-        $this->_controller->controller = "sell/client/Allocate";
+        $this->_controller->views = "sell/refund/Refund";
+        $this->_controller->controller = "sell/refund/Refund";
+        //$this->_controller->layout = "layout/amaze/main";
         $this->_controller->layout = "layout/amaze/hx";
 
-        //类库
-        $this->load->library('evon/ApiResult','','apiresult');
-
         //加载模型
-        $this->load->model('sell/allocate/Allocate_model',"model",true);
-        $this->load->model('sell/allocate/AllocateItem_model',"m_item",true);
+        $this->load->model('admin/User_model',"m_user",true);
         $this->load->model('sell/order/Order_model',"m_order",true);
         $this->load->model('sell/order/OrderSpu_model',"m_spu",true);
         $this->load->model('sell/order/OrderSku_model',"m_sku",true);
+        $this->load->model('sell/refund/Refund_model',"model",true);
         $this->load->model('sell/client/Client_model',"m_client",true);
-        $this->load->model('admin/User_model',"m_user",true);
     }
 
     /**
@@ -40,15 +37,8 @@ class Allocate extends BaseController {
         $condition = isset($param["condition"])?(array)json_decode($param["condition"]):[];
         $sort = isset($param["sort"])?(array)json_decode($param["sort"]):[$model->getPk()=>"ASC"];
 
-        //联表查询
-        $result = $model->searchLinkSell($page,$size,$condition,$sort);
+        $result = $model->search($page,$size,$condition,$sort);
 
-        //处理显示数据
-        foreach($result->list as $key=>$value){
-            $result->list[$key]->statusName = $result->list[$key]->getStatusName();
-        }
-
-        //调用视图
         $this->show("index",[
             "searched"=>$result,
             "page"=>$page,
@@ -150,7 +140,8 @@ class Allocate extends BaseController {
         $order = $this->m_order->get($order_id);
 
         //获取配货列表
-        $list = $order->getAllocateSkuList();
+        $list = $order->getRefundSkuList();
+        var_dump($list);
 
         //获取销售员和客户
         $seller = $this->m_user->get_user_info($order->user_id);
@@ -166,69 +157,11 @@ class Allocate extends BaseController {
         }
 
         //页面显示
-        $this->show("allocate",[
+        $this->show("refund",[
             "id"=>null,
             "order"=>$order,
             "list"=>$list,
             "order_num"=>$order_num,
-            "seller"=>$seller,
-            "client"=>$client,
-        ]);
-    }
-
-    /**
-     * modify
-     * @param $allocate_id
-     */
-    public function modify($order_id,$allocate_id){
-        //获取销售单信息
-        $order = $this->m_order->get($order_id);
-
-        //获取配货列表
-        $allocate = $this->model->get($allocate_id);
-        $list = $allocate->getSkuList(true,true);
-
-        //获取销售员和客户
-        $seller = $this->m_user->get_user_info($order->user_id);
-        $client = $this->m_client->get($order->client_id);
-
-        //生成配货单号
-        $order_num = $allocate->order_num;
-
-        //页面显示
-        $this->show("allocate",[
-            "id"=>$allocate_id,
-            "order"=>$order,
-            "list"=>$list,
-            "order_num"=>$order_num,
-            "seller"=>$seller,
-            "client"=>$client,
-        ]);
-    }
-
-    /**
-     * look
-     * @param $allocate_id
-     */
-    public function look($allocate_id){
-        //获取配货单信息
-        $allocate = $this->model->get($allocate_id);
-
-        //获取配货列表
-        $list = $allocate->getSkuList(true,true);
-
-        //获取销售单
-        $order = $this->m_order->get($allocate->order_id);
-
-        //获取销售员和客户
-        $seller = $this->m_user->get_user_info($order->user_id);
-        $client = $this->m_client->get($order->client_id);
-
-        //页面显示
-        $this->show("look",[
-            "allocate"=>$allocate,
-            "order"=>$order,
-            "list"=>$list,
             "seller"=>$seller,
             "client"=>$client,
         ]);

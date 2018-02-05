@@ -21,7 +21,8 @@ class Order_model extends BaseModel{
 	function __construct(){
 		$this->load->model('sell/order/OrderSpu_model',"MSpu",true);
 		$this->load->model('sell/order/OrderSku_model',"MSku",true);
-		$this->load->model('sell/allocate/AllocateItem_model',"m_item",true);
+		$this->load->model('sell/allocate/AllocateItem_model',"m_allocate_item",true);
+        $this->load->model('sell/refund/RefundItem_model',"m_refund_item",true);
 	}
 
 	/**
@@ -306,7 +307,7 @@ class Order_model extends BaseModel{
 	public function getGoods(){
 		$spus = $this->MSpu->searchAll(['order_id'=>$this->id]);
 		$skus = $this->MSku->searchAll(['order_id'=>$this->id]);
-		$allocated = $this->m_item->getAllocateStatus($this->id);
+		$allocated = $this->m_allocate_item->getAllocateStatus($this->id);
 		$list = array();
 		foreach($spus->list as $spu){
 			$item = $spu;
@@ -341,18 +342,16 @@ class Order_model extends BaseModel{
 	}
 
 	/**
-	 * 获取Sku列表(包含已经配货数量)
-	 * bool $getEndNum：是否查询已配货数量
+	 * 获取订单下，所有Sku配货列表(包含已经配货数量)
 	 * string $filterAllocatId：统计配货数量时，过滤掉得配货单ID
 	 */
-	public function getSkuList($getEndNum=true,$filterAllocatId=null){
+	public function getAllocateSkuList($filterAllocatId=null){
 		//获取所有spu
 		$order_spus = $this->m_spu->searchAll(["order_id"=>$this->id])->list;
 		$order_skus = $this->m_sku->searchAll(["order_id"=>$this->id])->list;
 
 		//获取已配数量
-		if($getEndNum)
-			$allocated = $this->m_item->getAllocateStatus($this->id,$filterAllocatId);
+		$allocated = $this->m_allocate_item->getAllocateStatus($this->id,$filterAllocatId);
 
 		//获取
 		$list = array();
@@ -363,7 +362,7 @@ class Order_model extends BaseModel{
 					continue;
 
 				//设置项目
-				$item = $this->m_item->_new();
+				$item = $this->m_allocate_item->_new();
 				$item->order_id = $this->id;
 				$item->order_spu_id = $order_spu->id;
 				$item->order_sku_id = $order_sku->id;
@@ -378,8 +377,7 @@ class Order_model extends BaseModel{
 				$item->num_sum = (int)$order_sku->num;
 
 				//设置已经配置数量
-				if($getEndNum)
-					$item->num_end = isset($allocated[$order_sku->id])?(int)$allocated[$order_sku->id]:0;
+				$item->num_end = isset($allocated[$order_sku->id])?(int)$allocated[$order_sku->id]:0;
 
 				//添加到列表
 				$list[] = $item;
@@ -391,10 +389,57 @@ class Order_model extends BaseModel{
 	}
 
     /**
+     * 获取订单下，所有Sku退货列表(包含已经退货数量)
+     * string $filterAllocatId：统计配货数量时，过滤掉得配货单ID
+     */
+	public function getRefundSkuList($filterRefundId=null){
+        //获取所有spu
+        $order_spus = $this->m_spu->searchAll(["order_id"=>$this->id])->list;
+        $order_skus = $this->m_sku->searchAll(["order_id"=>$this->id])->list;
+
+        //获取已退数量
+        $refund = $this->m_refund_item->getRefundStatus($this->id,$filterRefundId);
+
+        //获取
+        $list = array();
+        foreach($order_spus as $order_spu){
+            foreach($order_skus as $order_sku){
+                //过滤
+                if($order_spu->id != $order_sku->order_spu_id)
+                    continue;
+
+                //设置项目
+                $item = $this->m_refund_item->_new();
+                $item->order_id = $this->id;
+                $item->order_spu_id = $order_spu->id;
+                $item->order_sku_id = $order_sku->id;
+                $item->spu_id = $order_spu->spu_id;
+                $item->sku_id = $order_sku->sku_id;
+                $item->num = 0;
+                $item->status = 0;
+                $item->spu = $order_spu;
+                $item->sku = $order_sku;
+
+                //设置可配数量
+                $item->num_sum = (int)$order_sku->num;
+
+                //设置已经配置数量
+                $item->num_end = isset($refund[$order_sku->id])?(int)$refund[$order_sku->id]:0;
+
+                //添加到列表
+                $list[] = $item;
+            }
+        }
+
+        //返回
+        return $list;
+    }
+
+    /**
      * 获取Sku可配货列表
      */
     public function getSkuCanAllocate(){
-        $list = $this->getSkuList();
+        $list = $this->getAllocateSkuList();
         $result = array();
         foreach ($list as $item){
             $result[$item->sku_id]=$item->num_sum - $item->num_end;

@@ -6,8 +6,8 @@
     <div class="am-fl am-cf">
         <a class="am-text-primary am-text-lg" href="<?=base_url()?>">HOME</a> /
         <!--<a class="am-text-primary am-text-lg" href="<?=site_url("/sell/order/Order")?>">销售订单</a> /-->
-        <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/allocate/Allocate/index2")?>">报货列表</a> /
-        <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/allocate/Allocate/index")."/$order->id"?>">配货订单</a> /
+        <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/refund/Refund/index2")?>">退货列表</a> /
+        <a class="am-text-primary am-text-lg" href="<?=site_url("/sell/refund/Refund/index")."/$order->id"?>">退货订单</a> /
         <small>添加配货</small>
     </div>
 </div>
@@ -111,20 +111,20 @@
         <div class="am-form-group">
             <table class="table table-striped">
                 <thead>
-                    <tr>
-                        <td>款号</td><td>颜色</td><td>尺码</td><td>需求数量</td><td>已配数量</td><td>请求数量</td><td>配货数量</td>
-                    </tr>
+                <tr>
+                    <td>款号</td><td>颜色</td><td>尺码</td><td>需求数量</td><td>已配数量</td><td>请求数量</td><td>配货数量</td>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="item in list" v-bind:class="{ danger: parseInt(item.num) + parseInt(item.num_end) > item.num_sum }"  v-if="item.spu_id.indexOf(filter) != -1">
-                        <td>{{item.spu_id}}</td>
-                        <td>{{item.sku.color}}</td>
-                        <td>{{item.sku.size}}</td>
-                        <td>{{item.num_sum}}</td>
-                        <td>0</td>
-                        <td>{{item.num_end}}</td>
-                        <td><input type="number" class="form-control" placeholder="单价" v-model="item.num" v-on:change="changeNum($event,item,'num')"></td>
-                    </tr>
+                <tr v-for="item in list" v-bind:class="{ danger: parseInt(item.num) + parseInt(item.num_end) > item.num_sum }"  v-if="item.spu_id.indexOf(filter) != -1">
+                    <td>{{item.spu_id}}</td>
+                    <td>{{item.sku.color}}</td>
+                    <td>{{item.sku.size}}</td>
+                    <td>{{item.num_sum}}</td>
+                    <td>0</td>
+                    <td>{{item.num_end}}</td>
+                    <td><input type="number" class="form-control" placeholder="单价" v-model="item.num" v-on:change="changeNum($event,item,'num')"></td>
+                </tr>
                 </tbody>
             </table>
         </div>
@@ -169,8 +169,8 @@
             },
             //提交表单
             submit:function(){
-                if(!this.check())
-                    return;
+                /*if(!this.check())
+                    return;*/
 
                 //设置数据
                 var list = this.getSubmitList();
@@ -262,7 +262,7 @@
                 var attr = attr || "num";
                 //设置值
                 if(parseInt(item[attr]) >= 0)
-                    item[attr]=parseInt(item[attr]);
+                    item[attr] = parseInt(item[attr]);
                 else
                     item[attr] = 0;
             },

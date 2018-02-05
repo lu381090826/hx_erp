@@ -4,6 +4,7 @@
   <option value="<?=site_url("sell/order/Order")?>">销售订单</option>
   <option value="<?=site_url("sell/client/Client")?>">客户管理</option>
   <option value="#" selected>报货订单</option>
+     <option value="<?=site_url("sell/refund/Refund")?>">退货订单</option>
   <option value="<?=site_url("sell/report/Report")?>">报表查询</option>
  </select>
 </div>
