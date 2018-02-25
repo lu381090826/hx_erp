@@ -89,6 +89,7 @@ class Login extends CI_Controller
     {
         $get_token_url = 'https://oapi.dingtalk.com/sns/gettoken?appid=dingoa13doiljtowaexzbj&appsecret=2jYpcZeHicrowSCn4If6hdlGpt3SNxknjZ-EGGyxD-9xcXSnYVe4vEf-X9nq48lt';
         $ret = file_get_contents($get_token_url);
+        log_out($ret);
         $token = (array)$ret['access_toke'];
 
         $get_persistent_code = 'https://oapi.dingtalk.com/sns/get_persistent_code?access_token=' . $token;
