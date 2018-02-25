@@ -85,8 +85,9 @@ class Login extends CI_Controller
         return $auth_ids;
     }
 
-    public function checkLogin($code)
+    public function checkLogin()
     {
+        $code = $this->input->get('code');
         $get_token_url = 'https://oapi.dingtalk.com/sns/gettoken?appid=dingoa13doiljtowaexzbj&appsecret=2jYpcZeHicrowSCn4If6hdlGpt3SNxknjZ-EGGyxD-9xcXSnYVe4vEf-X9nq48lt';
         $ret = file_get_contents($get_token_url);
         log_out($ret);
