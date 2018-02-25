@@ -96,8 +96,8 @@ class Login extends CI_Controller
             ),
         );
         $ret = file_get_contents($get_token_url,false,stream_context_create($arrContextOptions));
-        log_out($ret);
-        $token = (array)$ret['access_toke'];
+        $token = json_decode($ret)['access_toke'];
+        log_out($token);
 
         $get_persistent_code = 'https://oapi.dingtalk.com/sns/get_persistent_code?access_token=' . $token;
         $data = ["tmp_auth_code" => $code];
