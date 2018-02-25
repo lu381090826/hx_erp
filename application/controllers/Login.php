@@ -106,24 +106,22 @@ class Login extends CI_Controller
      */
     private function send_post($url, $post_data)
     {
+        $params = json_encode($post_data);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($params)
+        ));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_BINARYTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
 
-        $postdata = http_build_query($post_data);
-        $options = array(
-            'http' => array(
-                'method' => 'POST',
-                'header' => 'Content-Type: application/json',
-                'content' => $postdata,
-                'timeout' => 15 * 60 // 超时时间（单位:s）
-            ),
-            "ssl" => array(
-                "verify_peer" => false,
-                "verify_peer_name" => false,
-            ),
-        );
-        $context = stream_context_create($options);
-        $result = file_get_contents($url, false, $context);
+        $res = curl_exec($ch);
+        curl_close($ch);
 
-        return $result;
+        return $res;
     }
 
     /**
