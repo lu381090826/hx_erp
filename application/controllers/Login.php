@@ -89,15 +89,8 @@ class Login extends CI_Controller
     {
         $code = $this->input->get('code');
         $get_token_url = 'https://oapi.dingtalk.com/sns/gettoken?appid=dingoa13doiljtowaexzbj&appsecret=2jYpcZeHicrowSCn4If6hdlGpt3SNxknjZ-EGGyxD-9xcXSnYVe4vEf-X9nq48lt';
-        $arrContextOptions=array(
-            "ssl"=>array(
-                "verify_peer"=>false,
-                "verify_peer_name"=>false,
-            ),
-        );
-        $ret = json_decode(file_get_contents($get_token_url,false,stream_context_create($arrContextOptions)), true);
+        $ret = $this->send_get($get_token_url);
         $token = $ret['access_token'];
-        sprintf($token);
 
         $get_persistent_code = 'https://oapi.dingtalk.com/sns/get_persistent_code?access_token=' . $token;
         $data = ["tmp_auth_code" => $code];
@@ -123,11 +116,31 @@ class Login extends CI_Controller
                 'header' => 'Content-type:application/x-www-form-urlencoded',
                 'content' => $postdata,
                 'timeout' => 15 * 60 // 超时时间（单位:s）
-            )
+            ),
+            "ssl" => array(
+                "verify_peer" => false,
+                "verify_peer_name" => false,
+            ),
         );
         $context = stream_context_create($options);
         $result = file_get_contents($url, false, $context);
 
         return $result;
+    }
+
+    /**
+     * @param $get_token_url
+     * @return mixed
+     */
+    private function send_get($get_token_url)
+    {
+        $arrContextOptions = array(
+            "ssl" => array(
+                "verify_peer" => false,
+                "verify_peer_name" => false,
+            ),
+        );
+        $ret = json_decode(file_get_contents($get_token_url, false, stream_context_create($arrContextOptions)), true);
+        return $ret;
     }
 }
