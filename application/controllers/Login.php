@@ -94,9 +94,7 @@ class Login extends CI_Controller
 
         $get_persistent_code = 'https://oapi.dingtalk.com/sns/get_persistent_code?access_token=' . $token;
         $data = ["tmp_auth_code" => $code];
-        log_in($data);
         $ret = $this->send_post($get_persistent_code, $data);
-        log_out($ret);
         var_dump($ret);
     }
 
