@@ -96,8 +96,7 @@ class Login extends CI_Controller
             ),
         );
         $ret = json_decode(file_get_contents($get_token_url,false,stream_context_create($arrContextOptions)), true);
-        var_dump($ret);
-        $token = $ret['access_toke'];
+        $token = $ret['access_token'];
         sprintf($token);
 
         $get_persistent_code = 'https://oapi.dingtalk.com/sns/get_persistent_code?access_token=' . $token;
@@ -105,7 +104,7 @@ class Login extends CI_Controller
         log_in($data);
         $ret = $this->send_post($get_persistent_code, $data);
         log_out($ret);
-        sprintf($ret);
+        var_dump($ret);
     }
 
     /**
