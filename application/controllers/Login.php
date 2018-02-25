@@ -111,7 +111,7 @@ class Login extends CI_Controller
         $options = array(
             'http' => array(
                 'method' => 'POST',
-                'header' => 'Content-type:application/x-www-form-urlencoded',
+                'header' => 'Content-type:application/json',
                 'content' => $postdata,
                 'timeout' => 15 * 60 // 超时时间（单位:s）
             ),
