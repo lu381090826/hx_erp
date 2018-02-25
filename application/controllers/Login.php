@@ -87,15 +87,33 @@ class Login extends CI_Controller
 
     public function checkLogin()
     {
+        //获取access_token
         $code = $this->input->get('code');
         $get_token_url = 'https://oapi.dingtalk.com/sns/gettoken?appid=dingoa13doiljtowaexzbj&appsecret=2jYpcZeHicrowSCn4If6hdlGpt3SNxknjZ-EGGyxD-9xcXSnYVe4vEf-X9nq48lt';
         $ret = $this->send_get($get_token_url);
-        $token = $ret['access_token'];
+        $access_token = $ret['access_token'];
 
-        $get_persistent_code = 'https://oapi.dingtalk.com/sns/get_persistent_code?access_token=' . $token;
+        //获取openid，unionid
+        $get_persistent_code = 'https://oapi.dingtalk.com/sns/get_persistent_code?access_token=' . $access_token;
         $data = ["tmp_auth_code" => $code];
         $ret = $this->send_post($get_persistent_code, $data);
-        var_dump($ret);
+        //钉钉的uid
+        $unionid = $ret['unionid'];
+        //钉钉的openid
+        $openid = $ret['openid'];
+        $persistent_code = $ret['persistent_code'];
+
+        //获取SNS_TOKEN
+        $url = 'https://oapi.dingtalk.com/sns/get_sns_token?access_token=' . $access_token;
+        $data = ['openid' => $openid, 'persistent_code' => $persistent_code];
+        $ret = $this->send_post($url, $data);
+        $sns_token = $ret['sns_token'];
+
+        //获取个人信息
+        $url = 'https://oapi.dingtalk.com/sns/getuserinfo?sns_token=' . $sns_token;
+        $ret = $this->send_get($url);
+        $user_info = $ret['user_info'];
+        var_dump($user_info);
     }
 
     /**
@@ -120,8 +138,7 @@ class Login extends CI_Controller
 
         $res = curl_exec($ch);
         curl_close($ch);
-
-        return $res;
+        return json_decode($res, true);
     }
 
     /**
