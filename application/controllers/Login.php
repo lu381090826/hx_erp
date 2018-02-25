@@ -97,7 +97,9 @@ class Login extends CI_Controller
         $get_persistent_code = 'https://oapi.dingtalk.com/sns/get_persistent_code?access_token=' . $access_token;
         $data = ["tmp_auth_code" => $code];
         $ret = $this->send_post($get_persistent_code, $data);
-        var_dump($ret);
+        if ($ret['errcode'] != 0) {
+            throw new Exception($ret['errmsg'], $ret['errcode']);
+        }
         //钉钉的uid
         $unionid = $ret['unionid'];
         //钉钉的openid
