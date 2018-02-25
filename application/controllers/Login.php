@@ -95,9 +95,10 @@ class Login extends CI_Controller
                 "verify_peer_name"=>false,
             ),
         );
-        $ret = file_get_contents($get_token_url,false,stream_context_create($arrContextOptions));
-        $token = json_decode($ret, true)['access_toke'];
-        log_out($token);
+        $ret = json_decode(file_get_contents($get_token_url,false,stream_context_create($arrContextOptions)), true);
+        sprintf($ret);
+        $token = $ret['access_toke'];
+        sprintf($token);
 
         $get_persistent_code = 'https://oapi.dingtalk.com/sns/get_persistent_code?access_token=' . $token;
         $data = ["tmp_auth_code" => $code];
