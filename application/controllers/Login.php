@@ -96,7 +96,7 @@ class Login extends CI_Controller
             ),
         );
         $ret = json_decode(file_get_contents($get_token_url,false,stream_context_create($arrContextOptions)), true);
-        sprintf($ret);
+        var_dump($ret);
         $token = $ret['access_toke'];
         sprintf($token);
 
