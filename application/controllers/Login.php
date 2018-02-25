@@ -84,4 +84,42 @@ class Login extends CI_Controller
         }
         return $auth_ids;
     }
+
+    public function checkLogin($code)
+    {
+        $get_token_url = 'https://oapi.dingtalk.com/sns/gettoken?appid=dingoa13doiljtowaexzbj&appsecret=2jYpcZeHicrowSCn4If6hdlGpt3SNxknjZ-EGGyxD-9xcXSnYVe4vEf-X9nq48lt';
+        $ret = file_get_contents($get_token_url);
+        $token = (array)$ret['access_toke'];
+
+        $get_persistent_code = 'https://oapi.dingtalk.com/sns/get_persistent_code?access_token=' . $token;
+        $data = ["tmp_auth_code" => $code];
+        log_in($data);
+        $ret = $this->send_post($get_persistent_code, $data);
+        log_out($ret);
+        sprintf($ret);
+    }
+
+    /**
+     * 发送post请求
+     * @param string $url 请求地址
+     * @param array $post_data post键值对数据
+     * @return string
+     */
+    private function send_post($url, $post_data)
+    {
+
+        $postdata = http_build_query($post_data);
+        $options = array(
+            'http' => array(
+                'method' => 'POST',
+                'header' => 'Content-type:application/x-www-form-urlencoded',
+                'content' => $postdata,
+                'timeout' => 15 * 60 // 超时时间（单位:s）
+            )
+        );
+        $context = stream_context_create($options);
+        $result = file_get_contents($url, false, $context);
+
+        return $result;
+    }
 }
