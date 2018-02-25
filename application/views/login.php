@@ -63,7 +63,7 @@
 </body>
 <script>
     function ding() {
-        location = 'https://oapi.dingtalk.com/connect/oauth2/sns_authorize?appid=dingoa13doiljtowaexzbj&response_type=code&scope=snsapi_login&redirect_uri=http://www.gzhx-thxgiving.com/';
+        location = 'https://oapi.dingtalk.com/connect/oauth2/sns_authorize?appid=dingoa13doiljtowaexzbj&response_type=code&scope=snsapi_login&redirect_uri=http://www.gzhx-thxgiving.com/checkLogin';
     }
 </script>
 </html>
