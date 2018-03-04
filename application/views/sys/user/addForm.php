@@ -25,7 +25,7 @@ $this->load->view('head');
         </div>
         <div class="am-form-group">
             <label for="doc-vld-emai">邮箱：</label>
-            <input type="email" id="doc-vld-emai" minlength="3" name="email" placeholder="输入邮箱" class="am-form-field"/>
+            <input type="email" id="doc-vld-emai" name="email" placeholder="输入邮箱" class="am-form-field"/>
         </div>
         <div class="am-form-group">
             <div class="am-form-group">

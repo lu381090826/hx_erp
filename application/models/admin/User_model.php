@@ -40,7 +40,7 @@ class User_model extends HX_Model
         if (!$ret->row(0)) {
             return $this->suc_out_put();
         }
-        if ($ret->row(0)->uid == $request['uid']) {
+        if (isset($request['uid']) && $ret->row(0)->uid == $request['uid']) {
             return $this->suc_out_put();
         }
         return $this->fail_out_put(1000, "手机号已存在");

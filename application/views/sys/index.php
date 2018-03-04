@@ -18,6 +18,9 @@ $this->load->view('head');
     <button type="button" class="am-btn am-btn-success"
             onclick="window.location.href='/user/action_add_user'">添加用户
     </button>
+    <button type="button" class="am-btn am-btn-primary"
+            onclick="window.location.href='/user/action_add_user_from_dingtalk'">从钉钉通信录添加用户
+    </button>
 </div>
 <hr>
 <!--表格子-->

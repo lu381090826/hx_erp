@@ -15,7 +15,7 @@ class Test extends CI_Controller
         $this->load->view('login');
     }
 
-    public function testGetUser()
+    public function testDK()
     {
         $this->load->model('admin/dingtalk_model', 'dingtalk_m');
         $ret = $this->dingtalk_m->get_user_list_by_depid();
