@@ -94,6 +94,7 @@ $this->load->view('head');
                 dateType: false,
                 type: 'get',
                 success: function (result) {
+                    $('#user_name').empty();
                     $.each(result.data, function (v, o) {
                         $('#user_name').append("<option value='" + o.name + "' data-mobile='" + o.mobile + "' data-userid='" + o.userid + "' data-email='" + o.email + "' >" + o.name + "</option>")
                     })
