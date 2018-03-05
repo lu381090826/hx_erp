@@ -50,21 +50,6 @@ class Dingtalk_model extends HX_Model
         }
         //钉钉的uid
         $unionid = $ret['unionid'];
-//        //钉钉的openid
-//        $openid = $ret['openid'];
-//        $persistent_code = $ret['persistent_code'];
-//
-//        //获取SNS_TOKEN
-//        $url = 'https://oapi.dingtalk.com/sns/get_sns_token?access_token=' . $access_token;
-//        $data = ['openid' => $openid, 'persistent_code' => $persistent_code];
-//        $ret = $this->send_post($url, $data);
-//        $sns_token = $ret['sns_token'];
-//
-//        //获取个人信息
-//        $url = 'https://oapi.dingtalk.com/sns/getuserinfo';
-//        $params = ['sns_token' => $sns_token];
-//        $ret = $this->send_get($url, $params);
-//        $user_info = $ret['user_info'];
 
         $url = 'https://oapi.dingtalk.com/user/getUseridByUnionid';
         $params = [
@@ -72,6 +57,9 @@ class Dingtalk_model extends HX_Model
             'unionid' => $unionid,
         ];
         $user_info = $this->send_get($url, $params);
+        if ($user_info['errcode'] != 0) {
+            throw new Exception($user_info['errmsg'], $user_info['errcode']);
+        }
 
         log_out($user_info);
 
