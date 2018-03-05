@@ -98,6 +98,8 @@ class Dingtalk_model extends HX_Model
 
         $url = 'https://oapi.dingtalk.com/user/getuserinfo';
         $params['code'] = $code;
+
+        log_in([$url, $params]);
         $result = $this->send_get($url, $params);
 
         log_out($result);
