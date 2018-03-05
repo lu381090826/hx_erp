@@ -137,4 +137,30 @@ class Dingtalk_model extends HX_Model
         return $this->send_get($url, $params);
     }
 
+    /**
+     * 发送post请求
+     * @param string $url 请求地址
+     * @param array $post_data post键值对数据
+     * @return string
+     */
+    private function send_post($url, $post_data)
+    {
+        $params = json_encode($post_data);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($params)
+        ));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_BINARYTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+
+        $res = curl_exec($ch);
+        curl_close($ch);
+        return json_decode($res, true);
+    }
+
+
 }
