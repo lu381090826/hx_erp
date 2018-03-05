@@ -30,7 +30,7 @@ class Dingtalk_model extends HX_Model
         return $ret['access_token'];
     }
 
-    private function get_user_info_by_code($code)
+    public function get_user_info_by_code($code)
     {
         //获取access_token
         $get_token_url = 'https://oapi.dingtalk.com/sns/gettoken?appid=dingoa13doiljtowaexzbj&appsecret=2jYpcZeHicrowSCn4If6hdlGpt3SNxknjZ-EGGyxD-9xcXSnYVe4vEf-X9nq48lt';
