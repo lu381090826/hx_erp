@@ -90,8 +90,38 @@ class Login extends CI_Controller
         $code = $this->input->get('code');
 
         $this->load->model('admin/dingtalk_model', 'dingtalk_m');
-        var_dump($this->dingtalk_m->get_user_info($code));
+        $ret = $this->dingtalk_m->get_userinfo($code);
+        $userid = $ret['userid'];
 
+        $this->load->model('admin/user_model', 'user_m');
+        $res = $this->user_m->get_user_info_by_dingtalk_userid($userid);
+
+        if (!$res) {
+            show_error('登录失败，请联系系统管理员');
+            return $res;
+        }
+
+        //获取全部的权限id
+        $auth_ids = $this->getAuthIds($res['role_id']);
+
+        $expire_time = 86400;
+        if (!empty($this->input->post('remember_me'))) {
+            $expire_time = 86400 * 15;
+        }
+
+        $this->session->set_tempdata(
+            [
+                'name' => $res['name'],
+                'mobile' => $res['mobile'],
+                'uid' => $res['uid'],
+                'role_id' => $res['role_id'],
+                'auths' => $auth_ids,
+            ]
+            , null, $expire_time);
+
+        $this->load->helper('url');
+        redirect('');
+        return null;
     }
 
     /**

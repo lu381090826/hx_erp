@@ -91,4 +91,26 @@ class Dingtalk_model extends HX_Model
         return implode("&", $ret);
     }
 
+    public function get_userinfo($code = '')
+    {
+        $asscess_token = $this->get_asscess_token();
+        $params['access_token'] = $asscess_token;
+
+        $url = 'https://oapi.dingtalk.com/user/getuserinfo';
+        $params['code'] = $code;
+
+        return $this->send_get($url, $params);
+    }
+
+    public function get_user_info_detail($userid = '')
+    {
+        $asscess_token = $this->get_asscess_token();
+        $params['access_token'] = $asscess_token;
+
+        $url = 'https://oapi.dingtalk.com/user/get';
+        $params['userid'] = $userid;
+
+        return $this->send_get($url, $params);
+    }
+
 }

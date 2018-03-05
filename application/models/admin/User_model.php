@@ -30,6 +30,17 @@ class User_model extends HX_Model
         return $ret->row(0, 'array');
     }
 
+    public function get_user_info_by_dingtalk_userid($userid)
+    {
+        $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1 AND Fdk_userid = ? ;";
+
+        $ret = $this->db->query($s, [
+            $userid
+        ]);
+
+        return $ret->row(0, 'array');
+    }
+
     public function check_mobile_available($request)
     {
         $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1  AND Fmobile = ? ;";
