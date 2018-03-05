@@ -8,8 +8,8 @@
  */
 class Dingtalk_model extends HX_Model
 {
-    private $appId = 'dingoa13doiljtowaexzbj';
-    private $appsecret = '2jYpcZeHicrowSCn4If6hdlGpt3SNxknjZ-EGGyxD-9xcXSnYVe4vEf-X9nq48lt';
+    private $appId = 'dingoal1cfrgtqznvz0ete';
+    private $appsecret = 'JjrBnmUtM2Odpvr3Tg35DErwHme8DXthMdUAsBNPI9guxYqsYgGJId9DQA7aKkeM';
 
 //    private $corpId = 'dingc3c2773ee7e7819b35c2f4657eb6378f';
 //    private $corpSecret = 'Ma035iAZDeXFsBMClECO1Km9JtRNqcmaNpsJqM6vYeBl58x0LxW5u3Xgd5RjyWKT';
@@ -24,6 +24,19 @@ class Dingtalk_model extends HX_Model
         $params = [
             'corpid' => $this->corpId,
             'corpsecret' => $this->corpSecret,
+        ];
+
+        $ret = $this->send_get($get_token_url, $params);
+        return $ret['access_token'];
+    }
+
+    private function get_login_asscess_token()
+    {
+        //获取access_token
+        $get_token_url = 'https://oapi.dingtalk.com/sns/gettoken';
+        $params = [
+            'appid' => $this->appId,
+            'appsecret' => $this->appsecret,
         ];
 
         $ret = $this->send_get($get_token_url, $params);
@@ -91,13 +104,12 @@ class Dingtalk_model extends HX_Model
         return implode("&", $ret);
     }
 
-    public function get_userinfo($code = '')
+    public function get_userinfo_for_login($code = '')
     {
-        $asscess_token = $this->get_asscess_token();
-        $params['access_token'] = $asscess_token;
 
         $url = 'https://oapi.dingtalk.com/user/getuserinfo';
         $params['code'] = $code;
+        $params['access_token'] = $this->get_login_asscess_token();
 
         log_in([$url, $params]);
         $result = $this->send_get($url, $params);

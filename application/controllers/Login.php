@@ -90,7 +90,7 @@ class Login extends CI_Controller
         $code = $this->input->get('code');
 
         $this->load->model('admin/dingtalk_model', 'dingtalk_m');
-        $ret = $this->dingtalk_m->get_userinfo($code);
+        $ret = $this->dingtalk_m->get_userinfo_for_login($code);
         $userid = $ret['userid'];
 
         $this->load->model('admin/user_model', 'user_m');
