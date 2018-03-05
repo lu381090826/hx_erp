@@ -25,8 +25,12 @@ $this->load->view('head');
 
         <div class="am-form-group">
             <label for="doc-vld-password">密码：</label>
-            <input type="text" id="doc-vld-password" minlength="6" name="password" placeholder="输入密码"
-                   class="am-form-field" required/>
+            <div class="am-g">
+                <input type="text" id="doc-vld-password" minlength="6" name="password" placeholder="输入密码"
+                       class="am-form-field am-u-sm-300" required/>
+                <input type="button" id="create_password" class="am-u-sm-100 am-btn-default" value="生成随机密码"/>
+            </div>
+
         </div>
 
         <div class="am-form-group">
@@ -113,6 +117,10 @@ $this->load->view('head');
             $('#doc-vld-email').val(email);
             $('#userid').val(userid);
 
+        })
+
+        $('#create_password').click(function () {
+            $('#doc-vld-password').val(Math.random().toString().slice(-6))
         })
 
     });
