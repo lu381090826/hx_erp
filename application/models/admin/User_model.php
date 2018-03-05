@@ -106,9 +106,11 @@ class User_model extends HX_Model
             'Fpassword' => md5($request['password']),
             'Femail' => $request['email'],
             'Frole_id' => $request['role_id'],
+            'Fdk_userid' => isset($request['userid']) ? $request['userid'] : '',
             'Fmemo' => '',
         ];
         $this->db->insert($this->table, $insert_arr);
+        var_dump($this->db->last_query());
     }
 
     public function update_user($request)

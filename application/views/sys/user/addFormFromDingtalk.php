@@ -54,7 +54,7 @@ $this->load->view('head');
                 <span class="am-form-caret"></span>
             </div>
         </div>
-        <input type="hidden" value="" id="userid">
+        <input type="hidden" value="" id="userid" name="userid">
 
         <button class="am-btn am-btn-secondary" type="submit" id="submit">提交</button>
     </fieldset>
