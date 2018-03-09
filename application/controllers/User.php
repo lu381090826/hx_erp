@@ -93,6 +93,20 @@ class User extends HX_Controller
         redirect("success");
     }
 
+    public function delete_user($uid)
+    {
+        $this->load->model('admin/user_model', 'user_m');
+        $arr = [
+            'status' => 3,
+            'uid' => $uid,
+            'memo' => sprintf("被%s禁用", $this->session->name),
+        ];
+        $this->user_m->update_user($arr);
+
+        $this->load->helper('url');
+        redirect("success");
+    }
+
     public function test()
     {
         echo 123;

@@ -150,6 +150,10 @@ class User_model extends HX_Model
         if (!empty($request['memo'])) {
             $insert_arr['Fmemo'] = $request['memo'];
         }
+        if (!empty($request['status'])) {
+            $insert_arr['Fstatus'] = $request['status'];
+        }
+        $insert_arr['Fmodify_time'] = date("Y-m-d H:i:s");
         $this->db->update($this->table, $insert_arr, ["Fuid" => $request['uid']]);
     }
 
