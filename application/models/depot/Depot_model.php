@@ -99,6 +99,7 @@ class Depot_model extends CI_Model {
     	return $data ;
     }
 
+    
     //改
     public function update_pos($data,$id){
 
