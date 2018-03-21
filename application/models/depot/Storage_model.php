@@ -441,7 +441,7 @@ class Storage_model extends CI_Model {
                     "Fsize"=>$sku_data[$k]['size'],
                     "Fcount"=>$sku_data[$k]['total_count'],
                     "Ftotal_count"=>$sku_data[$k]['total_count'],
-                    "Fhis_count"=>$sku_data[$k]['his_count']
+                    "Fhis_count"=>$sku_data[$k]['total_count']
                 );
                 $this->db->insert('stock_list', $stock_data);
             }
