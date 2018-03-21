@@ -90,7 +90,7 @@ function menuScroll(num){
       </div>
       <div id="side_here">
         <a href="/index.php"><div id="side_here_l" class="fl"></div></a>
-        <div id="here_area" class="fl" >当前位置：<a href="/index.php" class='set'>系统主页</a>─>仓库管理后台主页</div>
+        <div id="here_area" class="fl" >当前位置：<a href="/index.php" class='set'>系统主页</a>─>仓库管理后台主页 </div>
       </div>
     </div>
     <div class="side">
