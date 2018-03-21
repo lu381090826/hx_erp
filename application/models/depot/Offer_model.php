@@ -69,6 +69,9 @@ class Offer_model extends CI_Model {
             //已配
             $data[$k]['send_count'] = $stock_data['send_count'];
             
+            if(!$data[$k]['send_count']){
+                $data[$k]['send_count'] = '0';
+            }
             //查库位
             $query = $this->db->get_where('pos',array("Fid"=>$stock_data['pos_id']));
             $pos_data = $query->row_array();
