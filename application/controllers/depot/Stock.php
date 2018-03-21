@@ -23,14 +23,14 @@ class Stock extends XMG_Controller {
     	 
     	if(@$_REQUEST['id']){
     		$data['stock_list'] = $this->stock_model->get_stock_list(@$_REQUEST['id']);
-    		$this->load->view("depot/stock_list",$data);
+    		$this->load->view("depot/stock",$data);
     	}
     	else{
     	    //读取仓库
     	    $data['depot_data'] = $this->depot_model->get_all_depot();
     		//读取库存
     		$data['stock_data'] = $this->stock_model->get_stock_list($page_data['page']);
-    		$this->load->view("depot/stock_list",$data);
+    		$this->load->view("depot/stock",$data);
     	}
     }
   
