@@ -288,7 +288,7 @@ class Order_model extends BaseModel{
 		$list = array();
 		foreach($select->result() as $data){
 			$item = $this->_new();
-			$item->load_safe((array)$data);
+			$item->load((array)$data);
 			$list[] = $item;
 		}
 
