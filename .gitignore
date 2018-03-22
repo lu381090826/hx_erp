@@ -30,3 +30,4 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 
 #upload
 sku_pic_uploads/*
+upload/*
