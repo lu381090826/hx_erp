@@ -124,6 +124,12 @@ font-size:16px;
 	border-top: 1px solid #d3dbde;
 	border-right: 1px solid #d3dbde;
 }
+
+.show_table{
+	width: 100%;
+	border-top: 1px solid #d3dbde;
+	border-right: 1px solid #d3dbde;
+}
 .add_table th{
 height: 37px;
 background: url('../images/box_top.png') 0px 0px repeat-x;
@@ -131,6 +137,17 @@ line-height: 37px;
 border-left: 1px solid #d3dbde;
 }
 .add_table td{
+	border-bottom: 1px solid #d3dbde;
+    border-left: 1px solid #d3dbde;
+    padding: 5px;
+}
+.show_table th{
+height: 37px;
+background: url('../images/box_top.png') 0px 0px repeat-x;
+line-height: 37px;
+border-left: 1px solid #d3dbde;
+}
+.show_table td{
 	border-bottom: 1px solid #d3dbde;
     border-left: 1px solid #d3dbde;
     padding: 5px;

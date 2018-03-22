@@ -103,7 +103,7 @@ if (!function_exists('log_out')) {
         log_message('INFO', json_encode($in, JSON_UNESCAPED_UNICODE));
     }
 }
-//log_out
+//log_error
 if (!function_exists('log_error')) {
     function log_error($request = '')
     {
@@ -115,7 +115,7 @@ if (!function_exists('log_error')) {
         log_message('ERROR', json_encode($in, JSON_UNESCAPED_UNICODE));
     }
 }
-//log_out
+//adminV2View
 if (!function_exists('adminV2View')) {
     function view_adminV2($path, $params)
     {

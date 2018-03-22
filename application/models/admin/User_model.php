@@ -30,6 +30,17 @@ class User_model extends HX_Model
         return $ret->row(0, 'array');
     }
 
+    public function get_user_info_by_dingtalk_userid($userid)
+    {
+        $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1 AND Fdk_userid = ? ;";
+
+        $ret = $this->db->query($s, [
+            $userid
+        ]);
+
+        return $ret->row(0, 'array');
+    }
+
     public function check_mobile_available($request)
     {
         $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1  AND Fmobile = ? ;";
@@ -40,7 +51,7 @@ class User_model extends HX_Model
         if (!$ret->row(0)) {
             return $this->suc_out_put();
         }
-        if ($ret->row(0)->uid == $request['uid']) {
+        if (isset($request['uid']) && $ret->row(0)->uid == $request['uid']) {
             return $this->suc_out_put();
         }
         return $this->fail_out_put(1000, "手机号已存在");
@@ -106,9 +117,11 @@ class User_model extends HX_Model
             'Fpassword' => md5($request['password']),
             'Femail' => $request['email'],
             'Frole_id' => $request['role_id'],
+            'Fdk_userid' => isset($request['userid']) ? $request['userid'] : '',
             'Fmemo' => '',
         ];
         $this->db->insert($this->table, $insert_arr);
+        var_dump($this->db->last_query());
     }
 
     public function update_user($request)
@@ -137,6 +150,10 @@ class User_model extends HX_Model
         if (!empty($request['memo'])) {
             $insert_arr['Fmemo'] = $request['memo'];
         }
+        if (!empty($request['status'])) {
+            $insert_arr['Fstatus'] = $request['status'];
+        }
+        $insert_arr['Fmodify_time'] = date("Y-m-d H:i:s");
         $this->db->update($this->table, $insert_arr, ["Fuid" => $request['uid']]);
     }
 

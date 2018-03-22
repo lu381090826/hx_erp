@@ -84,4 +84,85 @@ class Login extends CI_Controller
         }
         return $auth_ids;
     }
+
+    public function checkLogin()
+    {
+        $code = $this->input->get('code');
+
+        $this->load->model('admin/dingtalk_model', 'dingtalk_m');
+        $ret = $this->dingtalk_m->get_user_info_by_code($code);
+        $userid = $ret['userid'];
+
+
+        $this->load->model('admin/user_model', 'user_m');
+        $res = $this->user_m->get_user_info_by_dingtalk_userid($userid);
+
+        if (!$res) {
+            show_error('登录失败，请联系系统管理员');
+            return $res;
+        }
+
+        //获取全部的权限id
+        $auth_ids = $this->getAuthIds($res['role_id']);
+
+        $expire_time = 86400;
+        if (!empty($this->input->post('remember_me'))) {
+            $expire_time = 86400 * 15;
+        }
+
+        $this->session->set_tempdata(
+            [
+                'name' => $res['name'],
+                'mobile' => $res['mobile'],
+                'uid' => $res['uid'],
+                'role_id' => $res['role_id'],
+                'auths' => $auth_ids,
+            ]
+            , null, $expire_time);
+
+        $this->load->helper('url');
+        redirect('');
+        return null;
+    }
+
+    /**
+     * 发送post请求
+     * @param string $url 请求地址
+     * @param array $post_data post键值对数据
+     * @return string
+     */
+    private function send_post($url, $post_data)
+    {
+        $params = json_encode($post_data);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($params)
+        ));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_BINARYTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+
+        $res = curl_exec($ch);
+        curl_close($ch);
+        return json_decode($res, true);
+    }
+
+    /**
+     * @param $get_token_url
+     * @return mixed
+     */
+    private function send_get($get_token_url)
+    {
+        $arrContextOptions = array(
+            "ssl" => array(
+                "verify_peer" => false,
+                "verify_peer_name" => false,
+            ),
+        );
+        $ret = json_decode(file_get_contents($get_token_url, false, stream_context_create($arrContextOptions)), true);
+        return $ret;
+    }
 }

@@ -21,7 +21,7 @@ class Order_page {
     private $pageUrl;    
     private static $_instance;    
 
-    public function __construct($params, $p_pageSize = 3,$p_initNum=3,$p_initMaxNum=5) {    
+    public function __construct($params, $p_pageSize = 10,$p_initNum=3,$p_initMaxNum=5) {    
         if (! isset ( $params['count'] ) || !isset($params['page'])) {    
             die ( "pager initial error" );    
         }    

@@ -16,7 +16,7 @@
      <div id="forms" class="mt10">
         <div class="box">
           <div class="box_border">
-           <div class="box_top"><b class="pl15">添加库位</b></div>
+           <div class="box_top"><b class="pl15">添加库位</b><b class="pl15" style="float: right;padding-right: 15px;"><a href="#" onclick="javascript:history.go(-1);">返回上一页</a></b></div>
            
             <div class="box_center">
             <form action="" method="post" class="jqtransform" enctype="multipart/form-data">

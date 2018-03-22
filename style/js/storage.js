@@ -2,12 +2,20 @@
 //添加入库数量
 function add_count(sku_id,value){
 	var storage_sn = $("#storage_sn").val();
+	var depot_id = $("#enter_depot").val();
+	var source_depot = $("#source_depot").val();
+	var storage_type = $("#storage_type").val();
+	
+	var storage_date = $("#storage_date").val();
+	!storage_sn?storage_sn = $("#storage_sn").html():storage_sn;
+	
+	   
 	//验证输入框
     if((/^(\+|-)?\d+$/.test( value ))&&value>0){  
 		 $.ajax({
              url:"/depot/storage/add_storage_sku",
              type:"POST",
-             data:{"storage_sn":storage_sn,"sku_id":sku_id,"count":value},
+             data:{"storage_sn":storage_sn,"sku_id":sku_id,"count":value,"depot_id":depot_id,"storage_date":storage_date,"source_depot":source_depot,"storage_type":storage_type},
              dataType:"json",
              async:false,
              error: function() {
@@ -19,9 +27,10 @@ function add_count(sku_id,value){
                 	$("#s_page").html("");
 	             	 var i;
 	             	 for(i=0;i<data.data.length;i++){
-	             		  $(".add_table").append('<tr class="dr"  align="center"><td >'+data.data[i].goods_id+'</td><td >'+data.data[i].color+'</td><td >'+data.data[i].size+'</td><td ><input type="text" name="number1" id ="'+data.data[i].sku_id+'" value="'+data.data[i].count+'" onchange="change_count(this.id,this.value)" placeholder="请输入数量" class="input-text lh25" size="8"></td><td ><input type="text" name="beizhu" id ="'+data.data[i].sku_id+'"   value="'+data.data[i].beizhu+'" onchange="change_beizhu(this.id,this.value)" placeholder="请输入备注" class="input-text lh25" size=50"></td></tr>');	  
+	             		  $(".add_table").append('<tr class="dr" id="d'+data.data[i].sku_id+'" align="center"><td >'+data.data[i].goods_id+'</td><td >'+data.data[i].color+'</td><td >'+data.data[i].size+'</td><td ><input type="text" name="number1" id ="'+data.data[i].sku_id+'" value="'+data.data[i].count+'" onchange="change_count(this.id,this.value)" placeholder="请输入数量" class="input-text lh25" size="8"></td><td ><input type="text" name="beizhu" id ="b'+data.data[i].sku_id+'"   value="'+data.data[i].beizhu+'" onchange="change_beizhu(this.id,this.value)" placeholder="请输入备注" class="input-text lh25" size=50"></td><td><a href="javascript:void(0)" onclick=delete_storage_sku_id("'+data.data[i].sku_id+'","'+data.data[i].storage_sn+'")>删除</a></td></tr>');	  
 	             		  
 			         }
+
 	             	$("#s_page").append(data.page);
 	             	change_dr();
 	             	 
@@ -43,12 +52,28 @@ function add_count(sku_id,value){
 //改变入库数量
 function change_count(sku_id,value){
 	var storage_sn = $("#storage_sn").val();
+	var storage_type = $("#storage_type").val();
+	var enter_depot = $("#enter_depot").val();
+	var source_depot = $("#source_depot").val();
+	
+	!storage_sn?storage_sn = $("#storage_sn").html():storage_sn;
+	if(!enter_depot||!storage_type){
+		alert("进货仓库和进货类型不能为空！");  return;
+	}
+	if(storage_type=='3'){
+		   if(!source_depot){
+			   alert('请选择出货仓库');return;
+		   }
+		   if(source_depot==enter_depot){
+			   alert('进货仓库不能与出货仓库一样');return;
+		   }
+	   }
 	//验证输入框
     if((/^(\+|-)?\d+$/.test( value ))&&value>0){  
 		 $.ajax({
              url:"/depot/storage/change_storage_sku",
              type:"POST",
-             data:{"storage_sn":storage_sn,"sku_id":sku_id,"count":value},
+             data:{"storage_sn":storage_sn,"sku_id":sku_id,"count":value,"storage_type":storage_type,"enter_depot":enter_depot,"source_depot":source_depot},
              dataType:"json",
              async:false,
              error: function() {
@@ -72,6 +97,7 @@ function change_count(sku_id,value){
 //改变入库备注
 function change_beizhu(sku_id,beizhu){
 	var storage_sn = $("#storage_sn").val(); 
+	!storage_sn?storage_sn = $("#storage_sn").html():storage_sn;
 		 $.ajax({
              url:"/depot/storage/change_storage_sku_beizhu",
              type:"POST",
@@ -92,7 +118,33 @@ function change_beizhu(sku_id,beizhu){
 
    function jump_page(i){
 	   var spu = $("#spu").val();
-	   
+		var storage_sn = $("#storage_sn").val();
+		var depot_id = $("#enter_depot").val();
+		var source_depot = $("#source_depot").val();
+		var storage_type = $("#storage_type").val();
+		
+		var storage_date = $("#storage_date").val();
+		!storage_sn?storage_sn = $("#storage_sn").html():storage_sn;
+		
+		   if(!storage_date){
+			   alert('入库日期不能为空！');return;
+		   }
+		   if(!depot_id){
+			   alert('进货仓库不能为空！');return;
+		   }
+		   
+		   if(!storage_type){
+			   alert('入库类型不能为空！');return;
+		   }
+
+		   if(storage_type=='3'){
+			   if(!source_depot){
+				   alert('请选择出货仓库');return;
+			   }
+			   if(source_depot==depot_id){
+				   alert('进货仓库不能与出货仓库一样');return;
+			   }
+		   }
 		 $.ajax({
              url:"/depot/storage/get_spu_sku",
              type:"POST",
@@ -111,6 +163,10 @@ function change_beizhu(sku_id,beizhu){
 	             	 for(i=0;i<data.data.length;i++){
 	             		$(".list_table").append('<tr class="tr" align="center"><td >'+data.data[i].goods_id+'</td><td >'+data.data[i].name+'</td><td >'+data.data[i].size_info+'</td><td ><input type="text" name="number1" id ="'+data.data[i].sku_id+'" onchange="add_count(this.id,this.value)" placeholder="请输入数量" class="input-text lh25" size="8"></td></tr>');	  
 			         }
+		             	$("#source_depot").attr("disabled","disabled")
+		             	$("#enter_depot").attr("disabled","disabled")
+		             	$("#storage_type").attr("disabled","disabled")
+		             	$("#storage_date").attr("disabled","disabled")
 	             	$("#page").append(data.page);
 	             	change_tr();
 	             	 
@@ -127,11 +183,13 @@ function change_beizhu(sku_id,beizhu){
 
    function order_page(i){
 	   var storage_sn = $("#storage_sn").val();
-	   
+	   var depot_id = $("#enter_depot").val();
+	    !storage_sn?storage_sn = $("#storage_sn").html():storage_sn
+	    		
 		 $.ajax({
              url:"/depot/storage/get_order_list_page",
              type:"POST",
-             data:{"storage_sn":storage_sn,"page":i},
+             data:{"storage_sn":storage_sn,"page":i,"enter_depot":depot_id},
              dataType:"json",
              async:false,
              error: function() {
@@ -143,7 +201,7 @@ function change_beizhu(sku_id,beizhu){
                 	$("#s_page").html("");
 	             	 var i;
 	             	 for(i=0;i<data.data.length;i++){
-	             		  $(".add_table").append('<tr class="dr"  align="center"><td >'+data.data[i].goods_id+'</td><td >'+data.data[i].color+'</td><td >'+data.data[i].size+'</td><td ><input type="text" name="number1" id ="'+data.data[i].sku_id+'" value="'+data.data[i].count+'" onchange="change_count(this.id,this.value)" placeholder="请输入数量" class="input-text lh25" size="8"></td><td ><input type="text" name="beizhu" id ="'+data.data[i].sku_id+'"   placeholder="请输入备注" value="'+data.data[i].beizhu+'" onchange="change_beizhu(this.id,this.value)" class="input-text lh25" size=50"></td></tr>');	  
+	             		  $(".add_table").append('<tr class="dr" id="d'+data.data[i].sku_id+'" align="center"><td >'+data.data[i].goods_id+'</td><td >'+data.data[i].color+'</td><td >'+data.data[i].size+'</td><td ><input type="text" name="number1" id ="'+data.data[i].sku_id+'" value="'+data.data[i].count+'" onchange=change_count(this.id,this.value) placeholder="请输入数量" class="input-text lh25" size="8"></td><td ><input type="text" name="beizhu" id ="b'+data.data[i].sku_id+'"   placeholder="请输入备注" value="'+data.data[i].beizhu+'" onchange="change_beizhu(this.id,this.value)" class="input-text lh25" size=50"></td><td><a href="javascript:void(0)" onclick=delete_storage_sku_id("'+data.data[i].sku_id+'","'+data.data[i].storage_sn+'")>删除</a></td></tr>');	  
 	             		  
 			         }
 	             	$("#s_page").append(data.page);
@@ -194,6 +252,7 @@ function change_beizhu(sku_id,beizhu){
    function add_storage(){
 	   var id = $("#hide_id").val();
 	   var storage_sn = $("#storage_sn").val();
+	   !storage_sn?storage_sn = $("#storage_sn").html():storage_sn;
 	   var sn = $("#sn").val();
 	   var storage_date = $("#storage_date").val();
 	   var storage_type = $("#storage_type").val();
@@ -202,14 +261,42 @@ function change_beizhu(sku_id,beizhu){
 	   var supplier = $("#supplier").val();
 	   var source_depot = $("#source_depot").val();
 	   var beizhu = $("#beizhu").val();
+	   var upload_images  = $(".images-input-value").val()
 
-	   if(!storage_sn||!sn||!storage_date||!storage_type||!enter_depot){
-		   alert('内容不能为空');return;
+	   if(!sn){
+		   alert('手工单号不能为空！');return;
+	   }
+	   if(!name){
+		   alert('经办人不能为空！');return;
+	   }
+	   if(!storage_date){
+		   alert('入库日期不能为空！');return;
+	   }
+	   if(!enter_depot){
+		   alert('进货仓库不能为空！');return;
+	   }
+	   
+	   if(!storage_type){
+		   alert('入库类型不能为空！');return;
+	   }
+
+	   if(storage_type=='1'){
+		   if(!supplier){
+			   alert('请选择供应商');return;
+		   }
+	   }
+	   if(storage_type=='3'){
+		   if(!source_depot){
+			   alert('请选择出货仓库');return;
+		   }
+		   if(source_depot==enter_depot){
+			   alert('进货仓库不能与出货仓库一样');return;
+		   }
 	   }
 		 $.ajax({
              url:"/depot/storage/add_storage",
              type:"POST",
-             data:{"id":id,"storage_sn":storage_sn,'sn':sn,"storage_date":storage_date,"storage_type":storage_type,"enter_depot":enter_depot,"name":name,"supplier":supplier,"source_depot":source_depot,"beizhu":beizhu},
+             data:{"id":id,"storage_sn":storage_sn,'sn':sn,"storage_date":storage_date,"storage_type":storage_type,"enter_depot":enter_depot,"name":name,"supplier":supplier,"source_depot":source_depot,"beizhu":beizhu,"upload_images":upload_images},
              dataType:"json",
              async:false,
              error: function() {
@@ -218,6 +305,7 @@ function change_beizhu(sku_id,beizhu){
              success:function(data){                
                 if(data.result=='1'){
                     alert(data.msg);
+                    window.location.href= "/depot/storage/storage_list_view";
               }
               else{
                     alert(data.msg);
