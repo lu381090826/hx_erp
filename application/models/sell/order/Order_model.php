@@ -180,7 +180,7 @@ class Order_model extends BaseModel{
 		$this->db->trans_begin();
 
 		//保存订单
-		$this->load($data);
+		$this->load_safe($data);
 		$this->save();
 
 		//删除所有旧项
@@ -288,7 +288,7 @@ class Order_model extends BaseModel{
 		$list = array();
 		foreach($select->result() as $data){
 			$item = $this->_new();
-			$item->load((array)$data);
+			$item->load_safe((array)$data);
 			$list[] = $item;
 		}
 
