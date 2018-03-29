@@ -88,8 +88,8 @@
                     <li class="list-group-item">打印</li>
                     <li class="list-group-item" v-if="item.status == 0 || item.status == 1" v-on:click="allocate(item)">报货</li>
                     <li class="list-group-item" v-if="item.status == 0" v-on:click="modify(item)">修改</li>
-                    <li class="list-group-item" v-if="item.status == 0" v-on:click="scrap(item)">作废</li>
-                    <li class="list-group-item" v-if="item.status == 0" v-on:click="refund(item)">退货</li>
+                    <li class="list-group-item" v-on:click="scrap(item)">作废</li>
+                    <li class="list-group-item" v-on:click="refund(item)">退货</li>
                 </ul>
             </div>
         </div>
@@ -103,7 +103,7 @@
         data: {
             "list":[],
             "selected":null,
-            "start_date":"<?=date("Y-m-d",time())?>",
+            "start_date":"<?=date("Y-m-d",strtotime("-1 day"))?>",
             "end_date":"<?=date("Y-m-d",time())?>",
             "key":"",
             "status":"",

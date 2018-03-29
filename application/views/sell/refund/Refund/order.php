@@ -92,7 +92,7 @@
                                 </tr>
                                 </thead>
                                 <tbody  v-for="item in goods">
-                                <tr v-for="sku in item.skus">
+                                <tr v-for="sku in item.skus" v-if="sku.num > 0">
                                     <td>{{item.spu_id}}</td><td>{{sku.color}}</td><td>{{sku.size}}</td>
                                     <td>{{sku.num}}</td>
                                     <td>{{sku.num_allocat}}</td><td>{{sku.num_allocated}}</td><td>{{sku.num_refund}}</td><td>{{sku.num_refunded}}</td>
@@ -105,7 +105,7 @@
             </div>
         </div>
 
-        <button type="button" class="am-btn am-btn-primary" @click="add()">添加配货</button>
+        <button type="button" class="am-btn am-btn-primary" @click="add()">添加退货</button>
 
         <div class="am-form-group">
             <table class="table table-striped">

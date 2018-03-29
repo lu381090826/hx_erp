@@ -65,7 +65,7 @@
                 <!--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-client-add"><span class="glyphicon glyphicon-plus"></span>添加</button>-->
                 <!--<a data-toggle="modal" data-target="#modal-client-add"><span class="glyphicon glyphicon-plus"></span>添加</a>-->
                 <!--<a onclick="javascript:$('#modal-client-add').modal({show:true})"><span class="glyphicon glyphicon-plus"></span>添加</a>-->
-                <a type="button" data-am-modal="{target: '#modal-client-add', closeViaDimmer: 0}"><span class="glyphicon glyphicon-plus"></span>添加</a>
+                <button id="add-client" type="button" class="btn btn-default btn-xs" data-am-modal="{target: '#modal-client-add', closeViaDimmer: 0}"><span class="glyphicon glyphicon-plus"></span>添加</button>
             </label>
             <div class="panel-group" id="accordion_client" role="tablist" aria-multiselectable="true">
                 <div class="panel panel-primary">
@@ -477,6 +477,7 @@
                     url: '<?=site_url($_controller->api."/search_goods")?>',
                     type: "get",
                     dataType: "json",
+                    async : false,
                     data: {
                         "key": input_value,
                     },
@@ -486,6 +487,9 @@
                             _this.searchList = result.data;
                             //console.log(_this.searchList);
                         }
+                    },
+                    complete:function(){
+                        _this.searchKey = '';
                     }
                 });
             },

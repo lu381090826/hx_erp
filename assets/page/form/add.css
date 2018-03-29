@@ -47,3 +47,8 @@
 .from-submit{
     width: 100%;
 }
+
+/*添加客户按钮*/
+#add-client{
+    color:#337ab7;
+}

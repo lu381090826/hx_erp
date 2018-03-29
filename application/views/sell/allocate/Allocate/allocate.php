@@ -114,11 +114,11 @@
                         <td>订单数量</td>
                         <td>报货数量</td><td>完成报货</td>
                         <td>退货数量</td><td>完成退货</td>
-                        <td>退货</td>
+                        <td>报货</td>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="item in list" v-bind:class="{ danger: parseInt(item.num) + parseInt(item.num_allocate) > item.num_order }"  v-if="item.spu_id.indexOf(filter) != -1">
+                    <tr v-for="item in list" v-bind:class="{ danger: parseInt(item.num) + parseInt(item.num_allocate) > item.num_order }"  v-if="item.spu_id.indexOf(filter) != -1 &&  item.num_order > 0">
                         <td>{{item.spu_id}}</td>
                         <td>{{item.sku.color}}</td>
                         <td>{{item.sku.size}}</td>
