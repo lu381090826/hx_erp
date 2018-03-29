@@ -419,6 +419,8 @@
             'total_amount':0,
             //是否允许修改SPI
             'spuAllowChange':1,
+            //是否为旧单
+            'isNew':1,
         },
         created:function() {
             //this
@@ -450,6 +452,7 @@
             this.remark_images = '<?=$model->remark_images?>';
             //是否允许修改spu
             this.spuAllowChange = <?=$spuAllowChange?>;
+            this.isNew = <?=$isNew?>;
 
             //覆盖收款方式和地址
             if(this.client != null) {
@@ -719,8 +722,17 @@
                     alert("请填写客户收货地址");
                     return false;
                 }*/
-                else if(this.id !="" && parseInt(this.total_amount) < parseInt(total_price)){
+                //判断修改订单不能超过订单金额
+                /*else if(this.id !="" && parseInt(this.total_amount) < parseInt(total_price)){
                     alert("修改订单不能超过订单金额");
+                    return false;
+                }*/
+                //判断修改订单不能超过订单金额,如果是新单则可随意修改
+                else if(!this.isNew){
+                    if(this.id !="" && parseInt(this.total_amount) < parseInt(total_price)){
+                        alert("修改订单不能超过订单金额");
+                        return false;
+                    }
                     return false;
                 }
 
