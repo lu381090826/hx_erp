@@ -190,12 +190,12 @@
             },
             //配货
             allocate:function(item){
-                var url = '<?=site_url("sell/allocate/Allocate/order")?>/'+item.id;
+                var url = '<?=site_url("sell/allocate/Allocate/add")?>/'+item.id;
                 location.href = url;
             },
             //退货
             refund:function(item){
-                var url = '<?=site_url("sell/refund/Refund/order")?>/'+item.id;
+                var url = '<?=site_url("sell/refund/Refund/add")?>/'+item.id;
                 location.href = url;
             }
         }

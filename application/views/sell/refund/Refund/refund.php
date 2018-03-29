@@ -136,6 +136,7 @@
         <p>
             <button type="button" class="am-btn am-btn-primary" @click="submit">提交</button>
             <a type="button" class="am-btn am-btn-success" href="javascript:window.history.go(-1);">返回</a>
+            <button type="button" class="am-btn am-btn-secondary" @click="toOrder">历史退货</button>
         </p>
     </form>
 </div>
@@ -270,6 +271,12 @@
                     total += parseInt(item.num);
                 }
                 return total;
+            },
+            //查看历史退货
+            toOrder:function () {
+                if(this.order){
+                    window.location.href="<?=site_url($_controller->views."/order")?>/"+this.order.id;
+                }
             }
         }
     })

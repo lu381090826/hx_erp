@@ -13,6 +13,7 @@
 <!-- 主体 -->
 <div id="app">
     <form class="am-form">
+
         <!-- 配货单信息 -->
         <div class="panel-group" id="accordion_2" role="tablist" aria-multiselectable="true">
             <div class="panel panel-primary">
@@ -136,6 +137,7 @@
         <p>
             <button type="button" class="am-btn am-btn-primary" @click="submit">提交</button>
             <a type="button" class="am-btn am-btn-success" href="javascript:window.history.go(-1);">返回</a>
+            <button type="button" class="am-btn am-btn-secondary" @click="toOrder">历史报货</button>
         </p>
     </form>
 </div>
@@ -271,6 +273,12 @@
                     total += parseInt(item.num);
                 }
                 return total;
+            },
+            //查看历史报货
+            toOrder:function () {
+                if(this.order){
+                    window.location.href="<?=site_url($_controller->views."/order")?>/"+this.order.id;
+                }
             }
         }
     })
