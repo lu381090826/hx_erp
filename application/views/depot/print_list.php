@@ -21,7 +21,7 @@
   <div class="container"> 
      <div id="table" class="mt10">
         <div class="box span10 oh">
-              <table  border="0" cellpadding="0" cellspacing="0" class="show_table">
+              <table  border="3" cellpadding="0" cellspacing="0" class="show_table">
               <tr>
                <th width="10%">出库单号</th>
                <th width="10%">出库仓库</th>
@@ -32,12 +32,12 @@
               </tr>
 
               <tr class='lr' align='center'">  
-                <td ><?php echo @$data['odo_data']['odo_sn'];?></td>
-                <td ><?php echo @$data['odo_data']['depot_name'];?></td>
-                <td ><?php echo @$data['odo_data']['name'];?></td>
-                <td ><?php echo @$data['odo_data']['total_count'];?></td>
-                <td ><?php echo @$data['odo_data']['odo_date'];?></td>
-                <td ><?php echo @$data['odo_data']['beizhu'];?></td>
+                <th><?php echo @$data['odo_data']['odo_sn'];?></th>
+                <th ><?php echo @$data['odo_data']['depot_name'];?></th>
+                <th ><?php echo @$data['odo_data']['name'];?></td>
+                <th ><?php echo @$data['odo_data']['total_count'];?></th>
+                <th ><?php echo @$data['odo_data']['odo_date'];?></th>
+                <th ><?php echo @$data['odo_data']['beizhu'];?></th>
               </tr>
               </table>
               
@@ -47,7 +47,7 @@
    </div>        
         <div id="table" class="mt10">
         <div class="box span10 oh">
-              <table  border="0" cellpadding="0" cellspacing="0" class="add_table">
+              <table  border="3" cellpadding="0" cellspacing="0" class="add_table">
               <tr>
                <th width="10%">销售单号</th>
                <th width="10%">报货单号</th>
@@ -65,15 +65,15 @@
            foreach($data['odo_detail_data'] as $k=>$v){
            ?>
               <tr class='tr' align='center' > 
-                <td ><?php echo $data['odo_detail_data'][$k]['sell_order']?></td>
-                <td ><?php echo $data['odo_detail_data'][$k]['allocate_order']?></td>
-                 <td ><?php echo $data['odo_detail_data'][$k]['pos_name']?></td>
-                <td ><?php echo $data['odo_detail_data'][$k]['sku_id']?></td>
-                <td ><?php echo $data['odo_detail_data'][$k]['spu']?></td>
-                <td ><?php echo $data['odo_detail_data'][$k]['color']?></td>
-                <td ><?php echo $data['odo_detail_data'][$k]['size']?></td>
-                <td ><?php echo $data['odo_detail_data'][$k]['allocate_count']?>/<?php echo $data['odo_detail_data'][$k]['send_num']?></td>
-                <td ><?php echo $data['odo_detail_data'][$k]['send_count']?></td>
+                <th ><?php echo $data['odo_detail_data'][$k]['sell_order']?></th>
+                <th ><?php echo $data['odo_detail_data'][$k]['allocate_order']?></th>
+                 <th ><?php echo $data['odo_detail_data'][$k]['pos_name']?></th>
+                <th ><?php echo $data['odo_detail_data'][$k]['sku_id']?></th>
+                <th ><?php echo $data['odo_detail_data'][$k]['spu']?></th>
+                <th ><?php echo $data['odo_detail_data'][$k]['color']?></th>
+                <th ><?php echo $data['odo_detail_data'][$k]['size']?></th>
+                <th ><?php echo $data['odo_detail_data'][$k]['allocate_count']?>/<?php echo $data['odo_detail_data'][$k]['send_num']?></th>
+                <th ><?php echo $data['odo_detail_data'][$k]['send_count']?></th>
                
               </tr>
          <?php 
