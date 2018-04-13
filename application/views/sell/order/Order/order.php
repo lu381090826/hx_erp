@@ -39,11 +39,11 @@
                     <div id="collapse_1_1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading_1_1">
                         <div class="panel-body">
                             <!-- 项目内容 -->
-                            <div class="form-group" v-if="user.shop_info">
-                                <label>销售仓库</label>
+                            <div class="form-group" v-if="shop">
+                                <label>销售店铺</label>
                                 <div class="input-compose">
-                                    <div><input type="text" class="form-control" placeholder="Amount" disabled v-model="user.shop_info[0].name"></div>
-                                    <div><input type="text" class="form-control" placeholder="Amount" disabled v-model="user.shop_info[0].id"></div>
+                                    <div><input type="text" class="form-control" placeholder="Amount" disabled v-model="shop.name"></div>
+                                    <div><input type="text" class="form-control" placeholder="Amount" disabled v-model="shop.id"></div>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -421,10 +421,14 @@
             'spuAllowChange':1,
             //是否为旧单
             'isNew':1,
+            //店铺信息
+            'shop':<?=json_encode($shop)?>,
         },
         created:function() {
             //this
             var _this = this;
+
+            console.log(this.shop);
 
             //获取当前用户信息
             $.ajax({
@@ -681,6 +685,7 @@
                         "id":this.id,
                         "order_num":this.order_num,
                         "user_id":this.user.uid,
+                        "shop_id":this.shop?this.shop.id:null,
                         "client_id":this.client.id,
                         "delivery_type":this.client.delivery_type,
                         "delivery_addr":this.client.delivery_addr,

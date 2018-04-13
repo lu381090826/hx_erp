@@ -10,7 +10,7 @@ class Order_model extends BaseModel{
 	/**
 	 * @fields
 	 */
-	public $id,$order_num,$user_id,$client_id,$total_num,$total_price,$payment,$status,$remark,$create_at,$update_at,$create_user_id,$update_user_id;
+	public $id,$order_num,$user_id,$client_id,$shop_id,$total_num,$total_price,$payment,$status,$remark,$create_at,$update_at,$create_user_id,$update_user_id;
 	public $total_amount,$delivery_type,$delivery_addr,$receipt_date,$remark_images;
 	public $isPrinted,$isReceipted;
 	public $allocate_mode;
@@ -35,6 +35,7 @@ class Order_model extends BaseModel{
 			'order_num' => '销售单号',
 			'user_id' => '销售员ID',
 			'client_id' => '客户ID',
+            'shop_id' => '店铺ID',
 			'tatol_num' => '合计数量',
 			'total_price' => '合计金额',
 			'total_amount'=> '订单金额',
