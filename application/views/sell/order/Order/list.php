@@ -85,7 +85,7 @@
             </div>
             <div class="options" v-if="item === selected">
                 <ul class="list-group">
-                    <li class="list-group-item">打印</li>
+                    <li class="list-group-item" v-on:click="printout(item)">打印</li>
                     <li class="list-group-item" v-if="item.status == 0 || item.status == 1" v-on:click="allocate(item)">报货</li>
                     <li class="list-group-item" v-if="item.status == 0" v-on:click="modify(item)">修改</li>
                     <li class="list-group-item" v-on:click="scrap(item)">作废</li>
@@ -196,6 +196,11 @@
             //退货
             refund:function(item){
                 var url = '<?=site_url("sell/refund/Refund/add")?>/'+item.id;
+                location.href = url;
+            },
+            //打印
+            printout:function(item){
+                var url = '<?=site_url("sell/order/Order/printout")?>/'+item.id;
                 location.href = url;
             }
         }
