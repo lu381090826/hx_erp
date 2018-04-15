@@ -12,7 +12,7 @@ $this->load->view('head');
         <div class="am-form-group">
             <label for="doc-vld-goods_id">款号<span style="color: red">*</span>：</label>
             <input type="text" id="doc-vld-goods_id" minlength="1" placeholder="输入" name="goods_id"
-                   class="am-form-field"
+                   class="am-form-field" autocomplete="off"
                    required/>
         </div>
 
@@ -28,13 +28,15 @@ $this->load->view('head');
 
         <div class="am-form-group">
             <label for="doc-vld-price">价格（单位元）<span style="color: red">*</span>：</label>
-            <input type="text" id="doc-vld-price" minlength="1" placeholder="输入" name="price" class="am-form-field"
+            <input type="text" id="doc-vld-price" minlength="1" placeholder="输入" name="price"
+                   class="am-form-field" autocomplete="off"
                    required/>
         </div>
 
         <div class="am-form-group">
             <label for="doc-vld-cost">成本（单位元）<span style="color: red">*</span>：</label>
-            <input type="text" id="doc-vld-cost" minlength="1" placeholder="输入" name="cost" class="am-form-field"
+            <input type="text" id="doc-vld-cost" minlength="1" placeholder="输入" name="cost"
+                   class="am-form-field" autocomplete="off"
                    required/>
         </div>
 
@@ -42,7 +44,7 @@ $this->load->view('head');
         <div class="am-form-group">
             <label for="doc-vld-brand_id">品牌：</label>
             <input type="text" id="doc-vld-brand_id" placeholder="输入" name="brand"
-                   class="am-form-field"/>
+                   class="am-form-field" autocomplete="off"/>
         </div>
 
         <div class="am-form-group">
@@ -135,7 +137,7 @@ $this->load->view('head');
 
         <div class="am-form-group">
             <label for="doc-vld-pic">上传小图：</label>
-            <input type="file" id="doc-vld-pic" name="pic" class="am-btn am-btn-default am-btn-sm"/>
+            <input type="file" id="doc-vld-pic" name="pic" class="am-btn am-btn-default am-btn-sm" autocomplete="off"/>
         </div>
 
         <div class="am-form-group" style="display: none">
@@ -154,7 +156,7 @@ $this->load->view('head');
                                    value="-">
                         </div>
                     </div>
-                    <input type="button" class="am-btn am-btn-success" onclick="add_upload_img()" value="+">
+                    <input type="button" class="am-btn am-btn-success" autocomplete="off" onclick="add_upload_img()" value="+">
                 </div>
 
             </div>

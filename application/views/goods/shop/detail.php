@@ -12,7 +12,7 @@ $this->load->view('head');
 
         <div class="am-form-group">
             <label>店铺id</label>
-            <?= $id?>
+            <?= $id ?>
         </div>
         <div class="am-form-group">
             <label>负责人</label>
@@ -37,6 +37,34 @@ $this->load->view('head');
         <div class="am-form-group">
             <label>官网</label>
             <?= $web_home ?>
+        </div>
+        <div class="am-form-group">
+            <label>官网</label>
+            <?= $web_home ?>
+        </div>
+        <div class="am-form-group">
+            <label>二维码图片</label>
+            <img src="<?= $code_img ?>" style="width:100px">
+        </div>
+        <div class="am-form-group">
+            <label>银行账号</label>
+            <?= $bank_account ?>
+        </div>
+        <div class="am-form-group">
+            <label>银行开户名</label>
+            <?= $bank_name ?>
+        </div>
+        <div class="am-form-group">
+            <label>银行开户行</label>
+            <?= $bank_deposit ?>
+        </div>
+        <div class="am-form-group">
+            <label>支付宝账号</label>
+            <?= $alipay_account ?>
+        </div>
+        <div class="am-form-group">
+            <label>支付宝户名</label>
+            <?= $alipay_name ?>
         </div>
         <div class="am-form-group">
             <label>备注</label>
