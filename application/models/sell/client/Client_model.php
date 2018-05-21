@@ -47,7 +47,8 @@ class Client_model extends BaseModel{
     static function getDeliveryTypeMap(){
         return (object)[
             0=> "快递",
-            1=> "现场取货",
+            1=> "仓库自提",
+            2=> "档口自提",
         ];
     }
 

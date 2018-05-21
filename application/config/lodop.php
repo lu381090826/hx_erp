@@ -1,7 +1,7 @@
 <?php
 $config = array(
     "lodop"=>array(
-        "ip"=>"127.0.0.1",
+        "ip"=>"119.23.35.69",
         "port"=>"8000"
     )
 );
