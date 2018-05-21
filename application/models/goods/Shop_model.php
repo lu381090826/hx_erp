@@ -10,6 +10,26 @@ class Shop_model extends HX_Model
 {
 
     private $table = "t_shop";
+    private $fieds = ['Fid',
+        'Fname',
+        'Fowner',
+        'Fowner_mobile',
+        'Fphone',
+        'Faddress',
+        'Femail',
+        'Fweb_home',
+        'Fcode_img',
+        'Fbank_account',
+        'Fbank_name',
+        'Fbank_deposit',
+        'Falipay_account',
+        'Falipay_name',
+        'Foperator',
+        'Fversion',
+        'Fmemo',
+        'Fstatus',
+        'Fcreate_time',
+        'Fmodify_time'];
 
     public function __construct()
     {
@@ -32,7 +52,7 @@ class Shop_model extends HX_Model
         return $this->suc_out_put($ret->result('array'));
     }
 
-    public function get_shop_list($page = 1 , $shop_id = [])
+    public function get_shop_list($page = 1, $shop_id = [])
     {
         $s = "SELECT * FROM {$this->table} WHERE Fstatus = 1";
         $ret = $this->db->query($s);
@@ -68,6 +88,12 @@ class Shop_model extends HX_Model
     private function check_input($request)
     {
         $insert_params = [];
+
+        foreach ($request as $k => $row) {
+            if (in_array('F' . $k, $this->fieds))
+                $insert_params['F' . $k] = $row;
+        }
+
         if (!empty($request['name'])) {
             $insert_params['Fname'] = $request['name'];
         } else {
@@ -88,25 +114,8 @@ class Shop_model extends HX_Model
             show_error("请填写负责人电话");
         }
 
-        if (!empty($request['phone'])) {
-            $insert_params['Fphone'] = $request['phone'];
-        }
-        if (!empty($request['address'])) {
-            $insert_params['Faddress'] = $request['address'];
-        }
-        if (!empty($request['email'])) {
-            $insert_params['Femail'] = $request['email'];
-        }
-        if (!empty($request['web_home'])) {
-            $insert_params['Fweb_home'] = $request['web_home'];
-        }
         $insert_params['Foperator'] = $this->session->uid;
 
-        if (!empty($request['memo'])) {
-            $insert_params['Fmemo'] = $request['memo'];
-        }else{
-            $insert_params['Fmemo'] = '';
-        }
         return $insert_params;
     }
 
@@ -140,13 +149,16 @@ class Shop_model extends HX_Model
         $this->db->update($this->table, $arr, ['Fid' => $request['id']]);
 
         if (isset($request['seller_id'])) {
-            $this->seller_addto_shop($request['seller_id'],$request['id']);
+            $this->seller_addto_shop($request['seller_id'], $request['id']);
         }
     }
 
     public function shop_detail_by_id($id)
     {
-        $s = "SELECT * FROM {$this->table} u  WHERE u.Fstatus = 1 AND Fid = ? LIMIT 1;";
+        $fileds = implode($this->fieds, ',');
+
+        $s = "SELECT  {$fileds} FROM {$this->table} u  WHERE u.Fstatus = 1 AND Fid = ? LIMIT 1;";
+
         $ret = $this->db->query($s, [$id]);
         return $this->suc_out_put($ret->row(0, 'array'));
     }
@@ -166,12 +178,13 @@ class Shop_model extends HX_Model
     }
 
 
-    public function get_user_shop($uid){
+    public function get_user_shop($uid)
+    {
         $s = "SELECT * FROM t_shop_seller  WHERE Fstatus = 1 AND Fseller_id = ? LIMIT 1;";
         $ret = $this->db->query($s, [$uid]);
         $result = $ret->result('array');
         $shop_id = [];
-        foreach ($result as $r){
+        foreach ($result as $r) {
             $shop_id[] = $r['shop_id'];
         }
         $shop_info = $this->get_shop_info_by_shop_id($shop_id);

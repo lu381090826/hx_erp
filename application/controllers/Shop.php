@@ -18,12 +18,17 @@ class shop extends HX_Controller
         $this->load->model('admin/user_model', 'user_m');
         $r['seller_list'] = $this->user_m->get_seller()['result_rows'];
 
-        $this->load->view('goods/shop/addForm',$r);
+        $this->load->view('goods/shop/addForm', $r);
     }
 
     public function shop_add()
     {
         $post = $this->input->post();
+        $file_param_name = 'code_img';
+        if (!empty($_FILES[$file_param_name]['size'])) {
+            $post['code_img'] = upload_file($file_param_name)['normal_path'];
+        }
+
         $this->shop_m->insert_shop($post);
 
         $this->load->helper('url');
@@ -45,7 +50,7 @@ class shop extends HX_Controller
         $this->load->model('admin/user_model', 'user_m');
         $r['seller_list'] = $this->user_m->get_seller();
 
-        $this->load->view('goods/shop/detail',$r['result_rows']);
+        $this->load->view('goods/shop/detail', $r['result_rows']);
     }
 
     public function shop_detail_edit($id)
@@ -60,16 +65,24 @@ class shop extends HX_Controller
         foreach ($r['result_rows']['seller_list'] as &$row) {
             if (array_keys($sellers, ['seller_id' => $row['uid']])) {
                 $row['is_check'] = true;
-            }else{
+            } else {
                 $row['is_check'] = false;
             }
         }
-        $this->load->view('goods/shop/editForm',$r['result_rows']);
+        $this->load->view('goods/shop/editForm', $r['result_rows']);
     }
 
     public function shop_modify()
     {
         $post = $this->input->post();
+
+        $file_param_name = 'code_img';
+        if (!empty($_FILES[$file_param_name]['size'])) {
+            $post['code_img'] = upload_file($file_param_name)['normal_path'];
+        } else {
+            unset($post[$file_param_name]);
+        }
+
         $this->shop_m->update_shop($post);
 
         $this->load->helper('url');
