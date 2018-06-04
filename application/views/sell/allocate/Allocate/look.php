@@ -119,7 +119,7 @@
                 <td>已配数量</td>
                 <td>配货状态</td>
                 </thead>
-                <tr v-for="item in list" v-if="item.spu_id.indexOf(filter) != -1">
+                <tr v-for="item in list" v-if="item.spu_id.indexOf(filter) != -1 && item.num > 0">
                     <td>{{item.spu_id}}</td>
                     <td>{{item.color}}</td>
                     <td>{{item.size}}</td>
