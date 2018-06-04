@@ -115,7 +115,7 @@
                         <td>订单数量</td>
                         <td>报货数量</td><td>完成报货</td>
                         <td>退货数量</td><td>完成退货</td>
-                        <td>报货</td>
+                        <td>已报数量</td><td>报货状态</td><td>报货</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -128,7 +128,14 @@
                         <td>{{item.num_allocated}}</td>
                         <td>{{item.num_refund}}</td>
                         <td>{{item.num_refunded}}</td>
-                        <td><input type="number" class="form-control" placeholder="单价" v-model="item.num" v-on:change="changeNum($event,item,'num')"></td>
+                        <td>{{item.send_num}}</td>
+                        <td>{{item.statusName}}</td>
+                        <td>
+                            <input type="number" class="form-control" placeholder="单价"
+                                   v-model="item.num"
+                                   v-on:change="changeNum($event,item,'num')"
+                                   v-if="item.status != 1">
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -235,6 +242,12 @@
                         return false;
                     }
 
+                    //判断报货数量，不能少于已配数量
+                    if(item.status == 2 && parseInt(item.num) < parseInt(item.send_num)){
+                        alert(item.spu_id+"("+item.sku.color+","+item.sku.size+")，报货数量不能小于已配货数量");
+                        return false;
+                    }
+
                     //累加总配货数
                     sumNum += parseInt(item.num_allocate);
                     sumNum += parseInt(item.num);
@@ -251,6 +264,12 @@
                     alert("配货数量已超出销售总量");
                     return false;
                 }
+
+                //判断已报数量
+                /*if(true){
+                    alert(false);
+                    return false;
+                }*/
 
                 //返回
                 return true;

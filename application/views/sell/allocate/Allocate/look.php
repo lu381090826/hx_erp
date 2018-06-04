@@ -116,6 +116,8 @@
                 <td>订单数量</td>
                 <td>已报总数</td>
                 <td>报货数量</td>
+                <td>已配数量</td>
+                <td>配货状态</td>
                 </thead>
                 <tr v-for="item in list" v-if="item.spu_id.indexOf(filter) != -1">
                     <td>{{item.spu_id}}</td>
@@ -124,6 +126,8 @@
                     <td>{{item.num_order}}</td>
                     <td>{{parseInt(item.num_allocate) + parseInt(item.num)}}</td>
                     <td>{{item.num}}</td>
+                    <td>{{item.send_num}}</td>
+                    <td>{{item.statusName}}</td>
                 </tr>
             </table>
         </div>
