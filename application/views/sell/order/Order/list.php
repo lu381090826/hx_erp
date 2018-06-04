@@ -110,6 +110,7 @@
             "filter":"",
             "statusMap":<?=json_encode($statusMap)?>,
             "isReceipted":null,
+            "shop_id":"<?=$shop["id"]?>",
         },
         created:function() {
             this.search();
@@ -136,6 +137,7 @@
                 var key = this.key;
                 var status = this.status!=""?this.status:null;
                 var isReceipted = this.isReceipted?parseInt(this.isReceipted):null;
+                var shop_id = this.shop_id?parseInt(this.shop_id):null;
 
                 console.log(isReceipted);
                 //Ajax
@@ -148,7 +150,8 @@
                         "start_date":start_date,
                         "end_date":end_date,
                         "status":status,
-                        "isReceipted":isReceipted
+                        "isReceipted":isReceipted,
+                        "shop_id":shop_id
                     },
                     success:function(result) {
                         if(result.state.return_code == 0)

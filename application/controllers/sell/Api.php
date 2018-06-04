@@ -91,6 +91,7 @@ class Api extends CI_Controller {
         $start_date = isset($param["start_date"])?$param["start_date"]:null;
         $end_date = isset($param["end_date"])?$param["end_date"]:null;
         $sort = isset($param["sort"])?(array)json_decode($param["sort"]):[$model->getPk()=>"ASC"];
+        $shop_id = isset($param["shop_id"])?$param["shop_id"]:null;
 
         //设置时区
         date_default_timezone_set('Asia/Shanghai');
@@ -101,6 +102,8 @@ class Api extends CI_Controller {
             $condition["create_at >"] = strtotime($start_date);
         if($end_date)
             $condition["create_at <="] = strtotime($end_date)+86400;
+        if($shop_id)
+            $condition["shop_id"] = $shop_id;
 
         //查询
         $result = $model->searchAll($condition,$sort);
@@ -138,6 +141,7 @@ class Api extends CI_Controller {
         $status = isset($param["status"])?$param["status"]:null;
         $sort = isset($param["sort"])?(array)json_decode($param["sort"]):[$model->getPk()=>"ASC"];
         $isReceipted = isset($param["isReceipted"])?$param["isReceipted"]:null;
+        $shop_id = isset($param["shop_id"])?$param["shop_id"]:null;
 
         //设置时区
         date_default_timezone_set('Asia/Shanghai');
@@ -152,6 +156,8 @@ class Api extends CI_Controller {
             $condition["status"] = $status;
         if($isReceipted)
             $condition["isReceipted"] = $isReceipted;
+        if($shop_id)
+            $condition["shop_id"] = $shop_id;
 
         //查询
         $result = $model->searchLikeJoinAll($key,$condition,$sort);
