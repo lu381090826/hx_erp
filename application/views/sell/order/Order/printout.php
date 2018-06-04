@@ -77,7 +77,7 @@
             <tr><td>农行ICBC：6228 4800 8891 8770 277</td></tr>
             <tr><td>户名：吴江 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 开户行：广州十三行支行</td></tr>
             <tr><td>支付宝：133-2280-7715 &nbsp;&nbsp;&nbsp;&nbsp; 户名：吴江</td></tr>
-            <tr><td>注意：产品如有质量问题，请七天内返回给档口，我们将及时为您代修或换货处理，逾期不受理，钱款请单面点清商店概不负责</td></tr>
+            <tr><td>注意：产品如有质量问题，请七天内返回给档口，我们将及时为您代修或换货处理，逾期不受理，钱款请当面点清商店概不负责</td></tr>
         </table>
 
         <div style="width: 100%;display: table;margin-bottom: 9pt">
