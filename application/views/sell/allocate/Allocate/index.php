@@ -36,10 +36,10 @@
   <form class="am-form">
    <!--DataGrid-->
    <?=ViewComponent::DataGrid($_controller,$searched,[
-       'sell_order_num',"order_num","client_name","client_phone","statusName","total_num",
-
+       'sell_order_num',"client_name","client_phone","statusName","sell_order_total","sumNum","total_num",
 
        //'id','form_id','create_at','create_user_id','status','remark',
+       //'sell_order_num',"order_num","client_name","client_phone","statusName","total_num",
    ],[array('label'=>"详情", 'url'=>site_url("/sell/allocate/Allocate/look/{{id}}")),]
    )?>
    <!--分页条-->

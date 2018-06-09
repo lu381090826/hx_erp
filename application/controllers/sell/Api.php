@@ -98,11 +98,11 @@ class Api extends CI_Controller {
 
         //拼凑查询条件
         $condition = [];
-        if($start_date)
+        if($start_date != null)
             $condition["create_at >"] = strtotime($start_date);
-        if($end_date)
+        if($end_date != null)
             $condition["create_at <="] = strtotime($end_date)+86400;
-        if($shop_id)
+        if($shop_id != null)
             $condition["shop_id"] = $shop_id;
 
         //查询
@@ -148,16 +148,16 @@ class Api extends CI_Controller {
 
         //拼凑查询条件
         $condition = [];
-        if($start_date)
+        if($start_date != null)
             $condition["create_at >"] = strtotime($start_date);
-        if($end_date)
+        if($end_date != null)
             $condition["create_at <="] = strtotime($end_date)+86400;
-        if($status)
-            $condition["status"] = $status;
-        if($isReceipted)
+        if($isReceipted != null)
             $condition["isReceipted"] = $isReceipted;
-        if($shop_id)
+        if($shop_id != null)
             $condition["shop_id"] = $shop_id;
+        if($status != null)
+            $condition["status"] = $status;
 
         //查询
         $result = $model->searchLikeJoinAll($key,$condition,$sort);

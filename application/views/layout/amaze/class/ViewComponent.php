@@ -46,7 +46,15 @@ class ViewComponent
 
             //字段
             foreach ($fields as $field) {
-                $html .= "<td>".$item->{$field}."</td>";
+                if(isset($item->{$field}))
+                    $html .= "<td>".$item->{$field}."</td>";
+                else{
+                    $method = "get".ucfirst($field);
+                    if(method_exists($item,$method))
+                        $html .= "<td>".$item->$method()."</td>";
+                    else
+                        $html .= "<td></td>";
+                }
             }
 
             //按钮

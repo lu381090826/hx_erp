@@ -294,6 +294,36 @@ class BaseModel extends CI_Model {
 
     //endregion
 
+    #region 统计查询
+
+    public function select_sum($field, $condition=[]){
+        //使用sql前所有字段加F
+        $field = $this->addPrefixField($field);
+        $condition = $this->addPrefixKeyValue($condition);
+
+        //查询
+        $this->db->select_sum($field);
+        $this->db->where($condition);
+        $query = $this->db->get($this->table);
+        $result = $query->result();
+        return $result;
+    }
+
+    public function select_avg($field, $condition=[]){
+        //使用sql前所有字段加F
+        $field = $this->addPrefixField($field);
+        $condition = $this->addPrefixKeyValue($condition);
+
+        //查询
+        $this->db->select_avg($field);
+        $this->db->where($condition);
+        $query = $this->db->get($this->table);
+        $result = $query->result();
+        return $result;
+    }
+
+    #endregion
+
     //region 生命周期
 
     /**

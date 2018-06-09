@@ -119,7 +119,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="item in list" v-bind:class="{ danger: parseInt(item.num) + parseInt(item.num_allocate) > item.num_order }"  v-if="item.spu_id.indexOf(filter) != -1 &&  item.num_order > 0">
+                    <tr v-for="item in list" v-bind:class="{ danger: parseInt(item.num) + parseInt(item.num_allocate) > item.num_order }"  v-if="item.spu_id.indexOf(filter) != -1 && item.num_order > 0">
                         <td>{{item.spu_id}}</td>
                         <td>{{item.sku.color}}</td>
                         <td>{{item.sku.size}}</td>
