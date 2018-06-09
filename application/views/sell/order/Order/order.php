@@ -428,19 +428,34 @@
             //this
             var _this = this;
 
-            console.log(this.shop);
-
             //获取当前用户信息
-            $.ajax({
-                url:'<?=site_url($_controller->api."/now_user")?>',
-                async: false,
-                type:"post",
-                dataType:"json",
-                success:function(result) {
-                    if(result.state.return_code == 0)
-                        _this.user = result.data
-                }
-            });
+            if("<?=$model->user_id?>" == ""){
+                $.ajax({
+                    url:'<?=site_url($_controller->api."/now_user")?>',
+                    async: false,
+                    type:"post",
+                    dataType:"json",
+                    success:function(result) {
+                        if(result.state.return_code == 0)
+                            _this.user = result.data
+                    }
+                });
+            }
+            else{
+                $.ajax({
+                    url:'<?=site_url($_controller->api."/user")?>',
+                    data:{
+                      "id":"<?=$model->user_id?>"
+                    },
+                    async: false,
+                    type:"post",
+                    dataType:"json",
+                    success:function(result) {
+                        if(result.state.return_code == 0)
+                            _this.user = result.data
+                    }
+                });
+            }
 
             //载入数据
             this.order_num = '<?=$model->order_num?>';
@@ -467,6 +482,12 @@
             //搜索值修正
             if(this.client)
                 this.clientKey = this.client.id;
+
+            //禁止未关联店铺用户新建
+            if(this.id == "" && this.shop == null){
+                alert("请先关联所属店铺");
+                history.go(-1);
+            }
         },
         mounted:function(){
             //构建插件
@@ -741,7 +762,7 @@
                     return false;
                 }
 
-                //修改是触发
+                //修改时触发
                 if(this.id !=""){
                     for(var key_spu in this.selectList){
                         var spu = this.selectList[key_spu];
@@ -753,6 +774,12 @@
                             }
                         }
                     }
+                }
+
+                //不允许未关联店铺的人下单
+                if(this.id == "" && this.shop == null){
+                    alert("请先关联所属店铺");
+                    return false;
                 }
 
                 return true;
@@ -779,7 +806,6 @@
             changeFloat:function(e,item,attr){
                 //取项属性名
                 var attr = attr || "num";
-                console.log(attr);
                 //设置值
                 if(parseFloat(item[attr]) >= 0)
                     item[attr]=parseFloat(item[attr]);

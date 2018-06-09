@@ -222,6 +222,16 @@ class Api extends CI_Controller {
         $this->apiresult->sentApiSuccess($list);
     }
 
+    public function user(){
+        //参数检测
+        $this->apiresult->checkApiParameter(['id'],-1);
+        $id = $_REQUEST["id"];
+
+        //获取用户信息
+        $user = $this->m_user->get_user_info($id);
+        $this->apiresult->sentApiSuccess($user);
+    }
+
     /**
      * 获取当前用户
      */
