@@ -111,25 +111,24 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <td>款号</td><td>颜色</td><td>尺码</td>
+                        <td>款号 / 颜色 /尺码</td>
                         <td>订单数量</td>
-                        <td>报货数量</td><td>完成报货</td>
-                        <td>退货数量</td><td>完成退货</td>
-                        <td>已报数量</td><td>报货状态</td><td>报货</td>
+                        <td>报货数量</td><!--<td>完成报货</td>-->
+                        <td>退货数量</td><!--<td>完成退货</td>-->
+                        <td>已报数量</td><!--<td>报货状态</td>-->
+                        <td>报货</td>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="item in list" v-bind:class="{ danger: parseInt(item.num) + parseInt(item.num_allocate) > item.num_order }"  v-if="item.spu_id.indexOf(filter) != -1 && item.num_order > 0">
-                        <td>{{item.spu_id}}</td>
-                        <td>{{item.sku.color}}</td>
-                        <td>{{item.sku.size}}</td>
+                        <td>{{item.spu_id}} / {{item.sku.color}} / {{item.sku.size}}</td>
                         <td>{{item.num_order}}</td>
                         <td>{{item.num_allocate}}</td>
-                        <td>{{item.num_allocated}}</td>
+                        <!--<td>{{item.num_allocated}}</td>-->
                         <td>{{item.num_refund}}</td>
-                        <td>{{item.num_refunded}}</td>
+                        <!--<td>{{item.num_refunded}}</td>-->
                         <td>{{item.send_num}}</td>
-                        <td>{{item.statusName}}</td>
+                        <!--<td>{{item.statusName}}</td>-->
                         <td>
                             <input type="number" class="form-control" placeholder="单价"
                                    v-model="item.num"

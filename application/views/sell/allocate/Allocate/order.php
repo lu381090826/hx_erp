@@ -86,15 +86,22 @@
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <td>款号</td><td>颜色</td><td>尺码</td>
-                                        <td>订单数量</td><td>报货数量</td><td>完成报货</td><td>退货数量</td><td>完成退货</td>
+                                        <td>款号 / 颜色 / 尺码</td>
+                                        <td>订单数量</td>
+                                        <td>报货数量</td>
+                                        <!--<td>完成报货</td>-->
+                                        <td>退货数量</td>
+                                        <!--<td>完成退货</td>-->
                                     </tr>
                                 </thead>
                                 <tbody  v-for="item in goods">
                                     <tr v-for="sku in item.skus" v-if="sku.num > 0">
-                                        <td>{{item.spu_id}}</td><td>{{sku.color}}</td><td>{{sku.size}}</td>
+                                        <td>{{item.spu_id}} / {{sku.color}} / {{sku.size}}</td>
                                         <td>{{sku.num}}</td>
-                                        <td>{{sku.num_allocat}}</td><td>{{sku.num_allocated}}</td><td>{{sku.num_refund}}</td><td>{{sku.num_refunded}}</td>
+                                        <td>{{sku.num_allocat}}</td>
+                                        <!--<td>{{sku.num_allocated}}</td>-->
+                                        <td>{{sku.num_refund}}</td>
+                                        <!--<td>{{sku.num_refunded}}</td>-->
                                     </tr>
                                 </tbody>
                             </table>

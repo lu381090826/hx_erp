@@ -112,17 +112,15 @@
         <div class="am-form-group">
             <table class="table table-striped">
                 <thead>
-                <td>款号</td><td>颜色</td><td>尺码</td>
+                <td>款号 / 颜色 / 尺码</td>
                 <td>订单数量</td>
                 <td>已报总数</td>
                 <td>报货数量</td>
-                <td>已配数量</td>
+                <td>已报数量</td>
                 <td>配货状态</td>
                 </thead>
                 <tr v-for="item in list" v-if="item.spu_id.indexOf(filter) != -1 && item.num_order > 0">
-                    <td>{{item.spu_id}}</td>
-                    <td>{{item.color}}</td>
-                    <td>{{item.size}}</td>
+                    <td>{{item.spu_id}} / {{item.color}} / {{item.size}}</td>
                     <td>{{item.num_order}}</td>
                     <td>{{parseInt(item.num_allocate) + parseInt(item.num)}}</td>
                     <td>{{item.num}}</td>
