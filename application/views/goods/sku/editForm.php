@@ -29,7 +29,7 @@ $this->load->view('head');
             <label for="doc-select-1">分类:</label>
             <select id="doc-select-1" name="category_id">
                 <?php foreach ($category_list as $k => $category): ?>
-                    <option value="<?= $k ?>"
+                    <option value="<?= $category['id'] ?>"
                         <?php if ($goods_info['category_id'] == $category['id']): ?>
                             selected="selected"
                         <?php endif; ?>>
@@ -158,6 +158,7 @@ $this->load->view('head');
         <div class="am-form-group">
             <label for="doc-vld-pic">上传小图：</label>
             <input type="file" id="doc-vld-pic" name="pic" class="am-btn am-btn-default am-btn-sm"/>
+            <?php if (!empty($goods_info['pic'])): ?><img style="width: 100px;" src="<?= $goods_info['pic'] ?>"><?php endif; ?>
         </div>
 
         <div class="am-form-group">
