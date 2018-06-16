@@ -2,6 +2,7 @@
 <div class="am-cf am-padding am-padding-bottom-0">
     <select data-am-selected id="subnav">
         <option value="<?=site_url("sell/order/Order")?>">销售订单</option>
+        <option value="<?=site_url("sell/order/Order/deliverys")?>">直接报货</option>
         <option value="<?=site_url("sell/client/Client")?>">客户管理</option>
         <option value="<?=site_url("sell/allocate/Allocate")?>">报货单</option>
         <option value="#" selected>退货单</option>

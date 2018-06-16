@@ -104,6 +104,7 @@ class Api extends CI_Controller {
             $condition["create_at <="] = strtotime($end_date)+86400;
         if($shop_id != null)
             $condition["shop_id"] = $shop_id;
+        $condition["type"] = 0;
 
         //查询
         $result = $model->searchAll($condition,$sort);
@@ -158,6 +159,7 @@ class Api extends CI_Controller {
             $condition["shop_id"] = $shop_id;
         if($status != null)
             $condition["status"] = $status;
+        $condition["type"] = 0;
 
         //查询
         $result = $model->searchLikeJoinAll($key,$condition,$sort);

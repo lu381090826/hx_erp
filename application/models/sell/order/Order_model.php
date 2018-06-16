@@ -13,7 +13,7 @@ class Order_model extends BaseModel{
 	public $id,$order_num,$user_id,$client_id,$shop_id,$total_num,$total_price,$payment,$status,$remark,$create_at,$update_at,$create_user_id,$update_user_id;
 	public $total_amount,$delivery_type,$delivery_addr,$receipt_date,$remark_images;
 	public $isPrinted,$isReceipted;
-	public $allocate_mode;
+	public $allocate_mode,$type;
 
 	/**
 	 * Order_model constructor.
@@ -21,8 +21,11 @@ class Order_model extends BaseModel{
 	function __construct(){
 		$this->load->model('sell/order/OrderSpu_model',"MSpu",true);
 		$this->load->model('sell/order/OrderSku_model',"MSku",true);
+        $this->load->model('sell/allocate/Allocate_model',"m_allocate",true);
 		$this->load->model('sell/allocate/AllocateItem_model',"m_allocate_item",true);
         $this->load->model('sell/refund/RefundItem_model',"m_refund_item",true);
+
+        $this->load->model('admin/User_model',"m_user",true);
 	}
 
 	/**
@@ -36,12 +39,13 @@ class Order_model extends BaseModel{
 			'user_id' => '销售员ID',
 			'client_id' => '客户ID',
             'shop_id' => '店铺ID',
-			'tatol_num' => '合计数量',
+			'total_num' => '合计数量',
 			'total_price' => '合计金额',
 			'total_amount'=> '订单金额',
 			'payment' => '支付方法',
 			'remark' => '备注',
 			'status' => '状态',
+            'statusName' => '状态',
 			'create_at' => '创建时间',
 			'update_at' => '更新时间',
 			'create_user_id' => '创建人ID',
@@ -50,6 +54,9 @@ class Order_model extends BaseModel{
 			'delivery_addr'=>'收货地址',
 			'receipt_date'=>'收款日期',
 			'remark_images'=>'图片备注',
+
+			'creater' => "制单人",
+			'shop' => "需求店铺",
 		];
 	}
 
@@ -229,6 +236,74 @@ class Order_model extends BaseModel{
 			return true;
 		}
 	}
+
+	/** 直接报货 */
+    public function updateDelivery($data){
+        //开始事务
+        $this->db->trans_strict(FALSE);
+        $this->db->trans_begin();
+
+        //保存订单
+        $this->load_safe($data);
+        $this->save();
+
+        //删除所有旧项
+        $this->MSpu->deleteAll(["order_id" => $this->id]);
+        $this->MSku->deleteAll(["order_id" => $this->id]);
+
+        //生成报货单
+        $allocate = $this->m_allocate->_new();
+        $allocate->order_id = $this->id;
+        $allocate->order_num = $this->m_allocate->createOrderNum();
+        $allocate->total_num = $this->total_num;
+        $allocate->remark = "直接报货";
+        $allocate->save();
+
+        //遍历spu
+        foreach($data["selectList"] as $spu_data){
+            //保存SPU
+            unset($spu_data["filter"]);
+            $spu = $this->MSpu->_new();
+            $spu->load_safe($spu_data);
+            $spu->order_id = $this->id;
+            $spu->save();
+            //遍历sku
+            foreach($spu_data["skus"] as $sku_data){
+                //保存SKU
+                unset($sku_data["num_allocat"]);
+                $sku = $this->MSku->_new();
+                $sku->load_safe($sku_data);
+                $sku->order_id = $this->id;
+                $sku->order_spu_id = $spu->id;
+                $sku->save();
+                //保存报货单项
+                $item = $this->m_allocate_item->_new();
+                $item->order_id = $this->id;
+                $item->allocate_id = $allocate->id;
+                $item->order_spu_id = $spu->id;
+                $item->order_sku_id = $sku->id;
+                $item->spu_id = $spu->spu_id;
+                $item->sku_id = $sku->sku_id;
+                $item->num = $sku->num;
+                $item->send_num = $sku->num;
+                $item->status = 0;
+                $item->save();
+            }
+        }
+
+
+        //事务结束处理
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            return false;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            return true;
+        }
+    }
 
 	/**
 	 * 生成销售单号
@@ -693,5 +768,23 @@ class Order_model extends BaseModel{
 	}
 
 	//endregion
+	private $user_info;
+
+	public function getCreater(){
+		if(!$this->user_info)
+            $this->user_info = $this->m_user->get_user_info($this->user_id);
+
+		return $this->user_info["name"];
+	}
+
+	public function getShop(){
+        if(!$this->user_info)
+            $this->user_info = $this->m_user->get_user_info($this->user_id);
+
+        if($this->user_info["shop_info"])
+        	return $this->user_info["shop_info"][0]["name"];
+        else
+        	return "";
+	}
 }
 ?>    
