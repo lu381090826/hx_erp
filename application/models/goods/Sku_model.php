@@ -37,10 +37,10 @@ class Sku_model extends HX_Model
 
     public function get_sku_list_info_by_goods_id($goods_id)
     {
-        $s = "SELECT * FROM {$this->table} WHERE Fgoods_id = ? AND Fstatus >= 1  ORDER BY Fmodify_time DESC";
+        $s = "SELECT * FROM {$this->table} WHERE Fgoods_id = ? AND Fstatus >= 1  ORDER BY Fcreate_time DESC";
         $ret = $this->db->query($s, [$goods_id]);
         $sku_list = [];
-
+var_dump($ret);die;
         $this->load->model('goods/color_model', 'color_m');
         $color_cache = $this->color_m->color_cache();
 
