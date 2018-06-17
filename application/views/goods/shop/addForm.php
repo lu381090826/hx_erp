@@ -47,13 +47,7 @@ $this->load->view('head');
             <input type="text" id="doc-vld-web_home" placeholder="官网" name="web_home"
                    class="am-form-field" autocomplete="off"/>
         </div>
-
-        <div class="am-form-group">
-            <label for="doc-vld-code_img">上传二维码：</label>
-            <input type="file" id="doc-vld-code_img" name="code_img"
-                   class="am-form-field" autocomplete="off"/>
-        </div>
-
+        <hr>
         <div class="am-form-group">
             <label for="doc-vld-bank_account">银行账号：</label>
             <input type="text" id="doc-vld-bank_account" name="bank_account"
@@ -71,7 +65,26 @@ $this->load->view('head');
             <input type="text" id="doc-vld-bank_deposit" name="bank_deposit"
                    class="am-form-field" autocomplete="off"/>
         </div>
+        <div class="am-form-group">
+            <label for="doc-vld-bank_account">银行账号_2：</label>
+            <input type="text" id="doc-vld-bank_account" name="bank_account_2"
+                   class="am-form-field" autocomplete="off"/>
+        </div>
 
+        <div class="am-form-group">
+            <label for="doc-vld-bank_name">银行开户名_2：</label>
+            <input type="text" id="doc-vld-bank_name" name="bank_name_2"
+                   class="am-form-field" autocomplete="off"/>
+        </div>
+
+        <div class="am-form-group">
+            <label for="doc-vld-bank_deposit">开户行_2：</label>
+            <input type="text" id="doc-vld-bank_deposit" name="bank_deposit_2"
+                   class="am-form-field" autocomplete="off"/>
+        </div>
+
+        <hr>
+        <hr>
         <div class="am-form-group">
             <label for="doc-vld-alipay_account">支付宝账号：</label>
             <input type="text" id="doc-vld-alipay_account" name="alipay_account"
@@ -81,6 +94,30 @@ $this->load->view('head');
         <div class="am-form-group">
             <label for="doc-vld-alipay_name">支付宝户名：</label>
             <input type="text" id="doc-vld-alipay_name" name="alipay_name"
+                   class="am-form-field" autocomplete="off"/>
+        </div>
+
+        <div class="am-form-group">
+            <label for="doc-vld-code_img">上传支付宝二维码：</label>
+            <input type="file" id="doc-vld-code_img" name="alipay_code_img"
+                   class="am-form-field" autocomplete="off"/>
+        </div>
+        <hr>
+        <div class="am-form-group">
+            <label for="doc-vld-alipay_account">微信账号：</label>
+            <input type="text" id="doc-vld-alipay_account" name="wx_account"
+                   class="am-form-field" autocomplete="off"/>
+        </div>
+
+        <div class="am-form-group">
+            <label for="doc-vld-alipay_name">微信户名：</label>
+            <input type="text" id="doc-vld-alipay_name" name="wx_name"
+                   class="am-form-field" autocomplete="off"/>
+        </div>
+
+        <div class="am-form-group">
+            <label for="doc-vld-code_img">微信二维码：</label>
+            <input type="file" id="doc-vld-code_img" name="wx_code_img"
                    class="am-form-field" autocomplete="off"/>
         </div>
 
