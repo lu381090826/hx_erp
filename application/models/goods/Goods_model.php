@@ -280,7 +280,7 @@ class Goods_model extends HX_Model
         log_in($this->db->last_query());
         $this->total_num = $ret->row(0, 'array')['count'];
 
-        $s = "SELECT Fgoods_id FROM {$this->table} {$params} ORDER BY Fmodify_time DESC LIMIT ? , ?";
+        $s = "SELECT Fgoods_id FROM {$this->table} {$params} ORDER BY Fcreate_time DESC LIMIT ? , ?";
 
         list($offset, $limit) = parent::pageUtils($request);
 
