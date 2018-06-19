@@ -125,26 +125,32 @@ class Refund extends BaseController {
 
     /**
      * 修改退货单
-     * @param $allocate_id
+     * @param $refund_id
      */
-    public function modify($order_id,$allocate_id){
-        //获取销售单信息
+    public function modify($order_id, $refund_id){
+        //获取订单信息
         $order = $this->m_order->get($order_id);
+        $refund = $this->model->get($refund_id);
 
-        //获取配货列表
-        $allocate = $this->model->get($allocate_id);
-        $list = $allocate->getSkuList();
+        //判断是否可以退货
+        if($refund->status != 0){
+            redirect($this->_controller->views."/look/$refund_id");
+            return;
+        }
+
+        //获取退货列表
+        $list = $refund->getSkuList();
 
         //获取销售员和客户
         $seller = $this->m_user->get_user_info($order->user_id);
         $client = $this->m_client->get($order->client_id);
 
         //生成配货单号
-        $order_num = $allocate->order_num;
+        $order_num = $refund->order_num;
 
         //页面显示
         $this->show("refund",[
-            "id"=>$allocate_id,
+            "id"=>$refund_id,
             "order"=>$order,
             "list"=>$list,
             "order_num"=>$order_num,
@@ -202,8 +208,15 @@ class Refund extends BaseController {
 
         //路由成建立或者修改
         if(isset($data['id']) && $data['id']){
-            //修改表单
-            $bool = $this->model->updateOrder($data);
+            //判断是否可以更新
+            $refund = $this->model->get($data['id']);
+            if($refund->status == 0){   //只有未审核才允许修改
+                //修改表单
+                $bool = $this->model->updateOrder($data);
+            }
+            else{
+                $bool = false;
+            }
         }
         else{
             //建立表单
@@ -211,18 +224,28 @@ class Refund extends BaseController {
         }
 
         //更改订单状态
-        $order_id = $_REQUEST["order_id"];
+        /*$order_id = $_REQUEST["order_id"];
         $order = $this->m_order->get($order_id);
         if($order){
             $order->changeStatus(1);
             $order->save();
-        }
+        }*/
 
         //返回处理结果
         if($bool)
             $this->apiresult->sentApiSuccess();
         else
             $this->apiresult->sentApiError(-1,"fail");
+    }
+
+    /**
+     * 审核
+     */
+    public function review($id){
+        $model = $this->model->get($id);
+        $model->status = 1;
+        $model->save();
+        redirect($this->_controller->views."/look/$id");
     }
 }
     

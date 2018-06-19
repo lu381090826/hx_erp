@@ -15,7 +15,8 @@
     <form class="am-form">
         <!-- 修改按钮 -->
         <div class="am-form-group">
-            <a class="btn btn-success" href="<?=site_url("/sell/refund/Refund/modify")."/$order->id/$refund->id"?>" role="button">修改订单</a>
+            <a class="btn btn-success" href="<?=site_url("/sell/refund/Refund/modify")."/$order->id/$refund->id"?>" role="button" v-if="refund.status == 0">修改订单</a>
+            <a class="btn btn-info" href="<?=site_url("/sell/refund/Refund/review")."/$refund->id"?>" role="button"  v-if="refund.status == 0">审核订单</a>
         </div>
 
         <!-- 退货单信息 -->
