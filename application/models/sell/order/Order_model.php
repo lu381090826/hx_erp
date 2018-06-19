@@ -117,23 +117,27 @@ class Order_model extends BaseModel{
 		return $map[$this->payment];
 	}
 
+    /**
+     * 获取状态映射表
+     * @return object
+     */
+    public function getStatusMap(){
+        return [
+            0=> "待配货",
+            1=> "部分配货",
+            2=> "完成配货",
+            3=> "已作废",
+            4=> "退货",
+        ];
+    }
+
 	/**
 	 * 获取状态名
 	 * @return string
 	 */
 	public function getStatusName(){
-		switch($this->status){
-			case 0:
-				return "待配货";
-			case 1:
-				return "配货中";
-			case 2:
-				return "已配货";
-			case 3:
-				return "已作废";
-			default:
-				return "其他";
-		}
+		$map = $this->getStatusMap();
+		return $map[$this->status];
 	}
 
 	/**
@@ -143,19 +147,6 @@ class Order_model extends BaseModel{
 		$list = $this->getAllocateModeMap();
 		$name = $list[$this->allocate_type];
 		return $name;
-	}
-
-	/**
-	 * 获取状态映射表
-	 * @return object
-	 */
-	public function getStatusMap(){
-		return (object)[
-			0=> "待配货",
-			1=> "配货中",
-			2=> "已配货",
-			3=> "已作废",
-		];
 	}
 
 	/**
