@@ -43,10 +43,6 @@ $this->load->view('head');
             <?= $web_home ?>
         </div>
         <div class="am-form-group">
-            <label>二维码图片</label>
-            <img src="<?= $code_img ?>" style="width:100px">
-        </div>
-        <div class="am-form-group">
             <label>银行账号</label>
             <?= $bank_account ?>
         </div>
@@ -59,12 +55,40 @@ $this->load->view('head');
             <?= $bank_deposit ?>
         </div>
         <div class="am-form-group">
+            <label>银行账号_2</label>
+            <?= $bank_account_2 ?>
+        </div>
+        <div class="am-form-group">
+            <label>银行开户名_2</label>
+            <?= $bank_name_2 ?>
+        </div>
+        <div class="am-form-group">
+            <label>银行开户行_2</label>
+            <?= $bank_deposit_2 ?>
+        </div>
+        <div class="am-form-group">
             <label>支付宝账号</label>
             <?= $alipay_account ?>
         </div>
         <div class="am-form-group">
             <label>支付宝户名</label>
             <?= $alipay_name ?>
+        </div>
+        <div class="am-form-group">
+            <label>支付宝二维码图片</label>
+            <img src="<?= $alipay_code_img ?>" style="width:100px">
+        </div>
+        <div class="am-form-group">
+            <label>微信账号</label>
+            <?= $wx_account ?>
+        </div>
+        <div class="am-form-group">
+            <label>微信户名</label>
+            <?= $wx_name ?>
+        </div>
+        <div class="am-form-group">
+            <label>微信二维码图片</label>
+            <img src="<?= $wx_code_img ?>" style="width:100px">
         </div>
         <div class="am-form-group">
             <label>备注</label>

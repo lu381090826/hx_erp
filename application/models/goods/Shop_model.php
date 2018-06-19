@@ -10,7 +10,8 @@ class Shop_model extends HX_Model
 {
 
     private $table = "t_shop";
-    private $fieds = ['Fid',
+    private $fieds = [
+        'Fid',
         'Fname',
         'Fowner',
         'Fowner_mobile',
@@ -21,15 +22,23 @@ class Shop_model extends HX_Model
         'Fcode_img',
         'Fbank_account',
         'Fbank_name',
+        'Fbank_account_2',
+        'Fbank_name_2',
         'Fbank_deposit',
+        'Fbank_deposit_2',
         'Falipay_account',
         'Falipay_name',
+        'Falipay_code_img',
+        'Fwx_account',
+        'Fwx_name',
+        'Fwx_code_img',
         'Foperator',
         'Fversion',
         'Fmemo',
         'Fstatus',
         'Fcreate_time',
-        'Fmodify_time'];
+        'Fmodify_time',
+    ];
 
     public function __construct()
     {

@@ -11,7 +11,7 @@ $this->load->view('head');
         <legend>添加商品</legend>
         <div class="am-form-group">
             <label for="doc-vld-goods_id">款号<span style="color: red">*</span>：</label>
-            <input type="text" id="doc-vld-goods_id" minlength="1" placeholder="输入" name="goods_id"
+            <input type="number" id="doc-vld-goods_id" minlength="1" placeholder="输入" name="goods_id"
                    class="am-form-field" autocomplete="off"
                    required/>
         </div>

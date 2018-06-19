@@ -24,9 +24,13 @@ class shop extends HX_Controller
     public function shop_add()
     {
         $post = $this->input->post();
-        $file_param_name = 'code_img';
+        $file_param_name = 'alipay_code_img';
         if (!empty($_FILES[$file_param_name]['size'])) {
-            $post['code_img'] = upload_file($file_param_name)['normal_path'];
+            $post['alipay_code_img'] = upload_file($file_param_name)['normal_path'];
+        }
+        $file_param_name = 'wx_code_img';
+        if (!empty($_FILES[$file_param_name]['size'])) {
+            $post['wx_code_img'] = upload_file($file_param_name)['normal_path'];
         }
 
         $this->shop_m->insert_shop($post);
@@ -76,11 +80,13 @@ class shop extends HX_Controller
     {
         $post = $this->input->post();
 
-        $file_param_name = 'code_img';
+        $file_param_name = 'alipay_code_img';
         if (!empty($_FILES[$file_param_name]['size'])) {
-            $post['code_img'] = upload_file($file_param_name)['normal_path'];
-        } else {
-            unset($post[$file_param_name]);
+            $post['alipay_code_img'] = upload_file($file_param_name)['normal_path'];
+        }
+        $file_param_name = 'wx_code_img';
+        if (!empty($_FILES[$file_param_name]['size'])) {
+            $post['wx_code_img'] = upload_file($file_param_name)['normal_path'];
         }
 
         $this->shop_m->update_shop($post);
