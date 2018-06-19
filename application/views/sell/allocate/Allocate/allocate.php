@@ -113,9 +113,9 @@
                     <tr>
                         <td>款号 / 颜色 /尺码</td>
                         <td>订单数量</td>
-                        <td>报货数量</td><!--<td>完成报货</td>-->
+                        <td>已报数量</td><!--<td>完成报货</td>-->
                         <td>退货数量</td><!--<td>完成退货</td>-->
-                        <td>已报数量</td><!--<td>报货状态</td>-->
+                        <td>已配数量</td><!--<td>报货状态</td>-->
                         <td>报货</td>
                     </tr>
                 </thead>
@@ -127,7 +127,7 @@
                         <!--<td>{{item.num_allocated}}</td>-->
                         <td>{{item.num_refund}}</td>
                         <!--<td>{{item.num_refunded}}</td>-->
-                        <td>{{item.send_num}}</td>
+                        <td v-if="item.send_num">{{item.send_num}}</td><td v-else>0</td>
                         <!--<td>{{item.statusName}}</td>-->
                         <td>
                             <input type="number" class="form-control" placeholder="单价"

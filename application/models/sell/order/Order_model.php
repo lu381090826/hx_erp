@@ -453,6 +453,7 @@ class Order_model extends BaseModel{
 
         //获取报配数量和退货数量
         $allocated = $this->m_allocate_item->getAllocateStatus($this->id,$filter_id);
+        $send = $this->m_allocate_item->getSendStatus($this->id,$filter_id);
         $refund = $this->m_refund_item->getRefundStatus($this->id,$filter_id);
 
         //获取
@@ -481,6 +482,7 @@ class Order_model extends BaseModel{
 				$item->num_allocated = $this->getRefundedNum($order_sku);                                     //配货完成数量
 				$item->num_refund = isset($refund[$order_sku->id])?(int)$refund[$order_sku->id]:0;;          //退货数量
 				$item->num_refunded = $this->getRefundedNum($order_sku);                                      //退货完成数量
+                $item->num_send = isset($send[$order_sku->id])?(int)$send[$order_sku->id]:0;        //已配数量
 
                 //添加到列表
                 $list[] = $item;

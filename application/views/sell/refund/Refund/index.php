@@ -25,8 +25,9 @@
         <form class="am-form">
             <!--DataGrid-->
             <?=ViewComponent::DataGrid($_controller,$searched,[
+                "client_name","client_phone","statusName","total_num",
                 //'id','order_id','order_num','create_at','create_user_id','status','remark','total_num',
-                'sell_order_num',"order_num","client_name","client_phone","statusName","total_num",
+                //'sell_order_num',"order_num","client_name","client_phone","statusName","total_num",
             ],[array('label'=>"详情", 'url'=>site_url("/sell/refund/Refund/look/{{id}}")),]
             )?>
             <!--分页条-->

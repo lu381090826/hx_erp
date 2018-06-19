@@ -114,9 +114,9 @@
                 <thead>
                 <td>款号 / 颜色 / 尺码</td>
                 <td>订单数量</td>
-                <td>已报总数</td>
-                <td>报货数量</td>
                 <td>已报数量</td>
+                <td>报货数量</td>
+                <td>已配数量</td>
                 <td>配货状态</td>
                 </thead>
                 <tr v-for="item in list" v-if="item.spu_id.indexOf(filter) != -1 && item.num_order > 0">

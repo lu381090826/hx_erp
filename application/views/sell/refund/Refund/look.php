@@ -18,7 +18,7 @@
             <a class="btn btn-success" href="<?=site_url("/sell/refund/Refund/modify")."/$order->id/$refund->id"?>" role="button">修改订单</a>
         </div>
 
-        <!-- 配货单信息 -->
+        <!-- 退货单信息 -->
         <div class="panel-group" id="accordion_2" role="tablist" aria-multiselectable="true">
             <div class="panel panel-primary">
                 <div class="panel-heading" role="tab" id="heading_2_1" >
@@ -26,7 +26,7 @@
                         <h1 class="panel-title" >
                             <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
                             <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
-                            配货单信息
+                            退货单信息
                         </h1>
                     </a>
                 </div>
@@ -112,15 +112,19 @@
         <div class="am-form-group">
             <table class="table table-striped">
                 <thead>
-                    <td>款号</td><td>颜色</td><td>尺码</td>
+                    <td>款号 / 颜色 / 尺码</td>
                     <td>订单数量</td>
-                    <td>已退总数</td>
+                    <td>已退数量</td>
+                    <td>已报数量</td>
+                    <td>已配数量</td>
                     <td>退货数量</td>
                 </thead>
-                <tr v-for="item in list" v-if="item.spu_id.indexOf(filter) != -1">
-                    <td>{{item.spu_id}}</td><td>{{item.color}}</td><td>{{item.size}}</td>
+                <tr v-for="item in list" v-if="item.spu_id.indexOf(filter) != -1 && item.num_order > 0">
+                    <td>{{item.spu_id}} / {{item.color}} / {{item.size}}</td>
                     <td>{{item.num_order}}</td>
                     <td>{{parseInt(item.num_refund) + parseInt(item.num)}}</td>
+                    <td>{{item.num_allocate}}</td>
+                    <td>{{item.num_send}}</td>
                     <td>{{item.num}}</td>
                 </tr>
             </table>

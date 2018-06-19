@@ -38,7 +38,8 @@ class Allocate extends BaseController {
         $page = isset($param["page"])?$param["page"]:1;
         $size = isset($param["size"])?$param["size"]:20;
         $condition = isset($param["condition"])?(array)json_decode($param["condition"]):[];
-        $sort = isset($param["sort"])?(array)json_decode($param["sort"]):[$model->getPk()=>"ASC"];
+        $sort = isset($param["sort"])?(array)json_decode($param["sort"]):[$model->getPk()=>"DESC"];
+        $sort = isset($param["sort"])?(array)json_decode($param["sort"]):[$model->getPk()=>"DESC"];
 
         //联表查询
         $result = $model->searchLinkSell($page,$size,$condition,$sort);
