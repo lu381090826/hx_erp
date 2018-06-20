@@ -241,8 +241,15 @@
                         return false;
                     }
 
+                    //报货数不能超过订单数量
+                    console.log(item.num_order);
+                    if(parseInt(item.num) +　parseInt(item.num_allocate) > parseInt(item.num_order)){
+                        alert(item.spu_id+"("+item.sku.color+","+item.sku.size+")，报货数量不能大于订单数量");
+                        return false;
+                    }
+
                     //判断报货数量，不能少于已配数量
-                    if(item.status == 2 && parseInt(item.num) < parseInt(item.send_num)){
+                    if(parseInt(item.num) < parseInt(item.send_num)){
                         alert(item.spu_id+"("+item.sku.color+","+item.sku.size+")，报货数量不能小于已配货数量");
                         return false;
                     }
@@ -264,9 +271,9 @@
                     return false;
                 }
 
-                //判断已报数量
+                //判断不能低于以配数量
                 /*if(true){
-                    alert(false);
+                    alert(1);
                     return false;
                 }*/
 
