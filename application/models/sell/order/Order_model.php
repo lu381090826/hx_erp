@@ -541,6 +541,9 @@ class Order_model extends BaseModel{
 		if(isset($params["client_name"]) && !empty($params["client_name"]))
 			$select = $select->like("t_client.Fname",$params["client_name"]);
 
+		//过滤作废状态
+        $select = $select->where("$this->table.Fstatus !=",3);
+
 		//查询表
 		$select = $select->get($this->table);
 
@@ -634,6 +637,9 @@ class Order_model extends BaseModel{
 			$select = $select->like("t_sell_order_spu.Fspu_id",$params["spu_id"]);
 		if(isset($params["client_name"]) && !empty($params["client_name"]))
 			$select = $select->like("t_client.Fname",$params["client_name"]);
+
+        //过滤作废状态
+        $select = $select->where("$this->table.Fstatus !=",3);
 
 		//查询表
 		$select = $select->get($this->table);
