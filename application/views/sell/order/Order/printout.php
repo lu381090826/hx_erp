@@ -29,6 +29,7 @@
 </div>
 
 <!-- 打印内容 -->
+<?php //var_dump($shop) ?>
 <div id="lodop">
     <div style="padding: 0pt 5pt">
         <div style="text-align: center;margin-bottom: 5pt">
@@ -73,17 +74,18 @@
         </table>
 
         <table width="100%" style="font-size: 9pt;margin-bottom: 9pt">
-            <tr><td>工行ICBC：6222 0836 0201 2361 629</td></tr>
-            <tr><td>农行ICBC：6228 4800 8891 8770 277</td></tr>
-            <tr><td>户名：吴江 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 开户行：广州十三行支行</td></tr>
-            <tr><td>支付宝：133-2280-7715 &nbsp;&nbsp;&nbsp;&nbsp; 户名：吴江</td></tr>
+            <tr><td>工行ICBC：<?=$shop["bank_account"]?></td></tr>
+            <tr><td>农行ICBC：<?=$shop["bank_account_2"]?></td></tr>
+            <tr><td>户名：<?=$shop["bank_name"]?> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 开户行：<?=$shop["bank_deposit"]?></td></tr>
+            <tr><td>支付宝：<?=$shop["alipay_account"]?> &nbsp;&nbsp;&nbsp;&nbsp; 户名：<?=$shop["alipay_name"]?></td></tr>
             <tr><td>注意：产品如有质量问题，请七天内返回给档口，我们将及时为您代修或换货处理，逾期不受理，钱款请当面点清商店概不负责</td></tr>
         </table>
 
         <div style="width: 100%;display: table;margin-bottom: 9pt">
             <div style="width: 50%;float: left;text-align: center">
                 <div>
-                    <img src="http://qr.liantu.com/api.php?text=231321321321" style="width: 100px"/>
+                    <img src="<?=$shop["wx_code_img"]?>" style="width: 100px"/>
+                    <!--<img src="http://qr.liantu.com/api.php?text=231321321321" style="width: 100px"/>-->
                 </div>
                 <div style="font-size: 16pt">
                     微信
@@ -91,7 +93,8 @@
             </div>
             <div style="width: 50%;float: right;text-align: center">
                 <div>
-                    <img src="http://qr.liantu.com/api.php?text=231321321321" style="width: 100px"/>
+                    <img src="<?=$shop["alipay_code_img"]?>" style="width: 100px"/>
+                    <!--<img src="http://qr.liantu.com/api.php?text=231321321321" style="width: 100px"/>-->
                 </div>
                 <div style="font-size: 16pt">
                     支付宝
