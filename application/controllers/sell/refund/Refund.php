@@ -177,6 +177,11 @@ class Refund extends BaseController {
         $seller = $this->m_user->get_user_info($order->user_id);
         $client = $this->m_client->get($order->client_id);
 
+        //获取审核人
+        $review = null;
+        if($refund->review_user_id != null)
+            $review = $this->m_user->get_user_info($refund->review_user_id);
+
         //页面显示
         $this->show("look",[
             "refund"=>$refund,
@@ -184,6 +189,7 @@ class Refund extends BaseController {
             "list"=>$list,
             "seller"=>$seller,
             "client"=>$client,
+            "review"=>$review,
         ]);
     }
 
@@ -244,6 +250,8 @@ class Refund extends BaseController {
     public function review($id){
         $model = $this->model->get($id);
         $model->status = 1;
+        $model->review_at = time();
+        $model->review_user_id = $this->session->uid;
         $model->save();
         redirect($this->_controller->views."/look/$id");
     }

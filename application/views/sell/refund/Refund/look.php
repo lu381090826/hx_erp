@@ -40,6 +40,14 @@
                         <div class="am-form-group">
                             <label for="doc-ipt-email-1">备注信息：{{refund.remark}}</label>
                         </div>
+
+                        <div class="am-form-group">
+                            <label for="doc-ipt-email-1">审核人：<?= isset($review["name"]) ? $review["name"] : "" ?></label>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label for="doc-ipt-email-1">审核时间：<?= !empty($refund->review_at) ? date("Y-m-d H:i:s",$refund->review_at) : "" ?></label>
+                        </div>
                     </div>
                 </div>
             </div>

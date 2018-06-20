@@ -16,6 +16,9 @@ class BaseController extends CI_Controller {
         //父类
         parent::__construct();
 
+        //设置时区
+        date_default_timezone_set('PRC');
+
         //环境变量设置
         $this->_controller = (object)array();
         $this->_controller->views = "";
