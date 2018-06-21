@@ -126,7 +126,9 @@
         LODOP.SET_PRINT_PAGESIZE(3,"80mm",0,"");
         LODOP.SET_PRINT_STYLE("FontSize",6);
         LODOP.ADD_PRINT_HTM(0,0,"100%","100%",document.getElementById("lodop").innerHTML);
-        CLODOP.Create_Printer_List(document.getElementById('print-select')); //选择打印机
+
+        //设置打印机
+        LODOP.SET_PRINTER_INDEXA(document.getElementById("print-select").value);
 
         //预览或打印
         if (toPrview)
