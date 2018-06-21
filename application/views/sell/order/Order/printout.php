@@ -19,12 +19,12 @@
 <!-- 打印操作 -->
 <div id="action">
     <form class="am-form-inline" role="form">
-        <div class="am-form-group">
+        <!--<div class="am-form-group">
             <select id="print-select" size="1" class="am-form-field am-input-sm"></select>
         </div>
 
-        <button type="button" class="am-btn am-btn-primary am-btn-sm" onclick="orderPrint(false);">打印</button>
-        <button type="button" class="am-btn am-btn-success am-btn-sm" onclick="orderPrint(true);">预览</button>
+        <button type="button" class="am-btn am-btn-primary am-btn-sm" onclick="orderPrint(false);">打印</button>-->
+        <button type="button" class="am-btn am-btn-success am-btn-sm" onclick="orderPrint(true);">预览打印</button>
     </form>
 </div>
 
