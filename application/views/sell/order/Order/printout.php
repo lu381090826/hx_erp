@@ -130,7 +130,10 @@
         //预览或打印
         if (toPrview)
             LODOP.PREVIEW();
-        else
-            LODOP.PRINT();
+        else{
+            var print = LODOP.PRINT();
+            console.log(print);
+            alert("正在打印订单……");
+        }
     };
 </script>
