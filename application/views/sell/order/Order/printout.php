@@ -126,12 +126,13 @@
         LODOP.SET_PRINT_PAGESIZE(3,"80mm",0,"");
         LODOP.SET_PRINT_STYLE("FontSize",6);
         LODOP.ADD_PRINT_HTM(0,0,"100%","100%",document.getElementById("lodop").innerHTML);
+        CLODOP.Create_Printer_List(document.getElementById('print-select')); //选择打印机
 
         //预览或打印
         if (toPrview)
             LODOP.PREVIEW();
         else{
-            var print = LODOP.PRINTA();
+            var print = LODOP.PRINT();
             console.log(print);
             alert("已请求打印订单……");
         }
