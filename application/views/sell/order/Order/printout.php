@@ -131,9 +131,9 @@
         if (toPrview)
             LODOP.PREVIEW();
         else{
-            var print = LODOP.PRINT();
+            var print = LODOP.PRINTA();
             console.log(print);
-            alert("正在打印订单……");
+            alert("已请求打印订单……");
         }
     };
 </script>
