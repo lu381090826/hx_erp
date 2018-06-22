@@ -152,4 +152,11 @@ class Depot_model extends CI_Model {
     	}
     	return $data ;
     }
+    
+    //查出默认仓库的ID
+    public function get_moren_depot(){
+        $query = $this->db->get_where('depot',array("Ftype"=>'1'));
+        $data = $query->row_array();
+        return $data ;
+    }
 }
