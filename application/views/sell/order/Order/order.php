@@ -182,7 +182,9 @@
                                         <tr>
                                             <td>颜色</td>
                                             <td>尺码</td>
-                                            <td>库存</td>
+                                            <td>仓库未配数量</td>
+                                            <td>仓库已配数量</td>
+                                            <td>仓库库存</td>
                                             <td>数量</td>
                                             <!--<td>操作</td>-->
                                         </tr>
@@ -191,7 +193,9 @@
                                         <tr v-for="sku in item.skus" v-if="sku.color.indexOf(item.filter) != -1">
                                             <td>{{sku.color}}</td>
                                             <td>{{sku.size}}</td>
-                                            <td>0</td>
+                                            <td>{{sku.depot_weipei_count}}</td>
+                                            <td>{{sku.depot_send_count}}</td>
+                                            <td>{{sku.depot_count}}</td>
                                             <td><input type="number" class="form-control" placeholder="数量" v-model="sku.num" v-on:change="changeNum($event,sku,'num')"></td>
                                             <!--<td><a v-on:click="skuDel(item,sku)">删除</a></td>-->
                                         </tr>
@@ -241,8 +245,12 @@
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <td>颜色</td><td>尺码</td><td>库存</td>
-                                            <td>已请求配货数量</td>
+                                            <td>颜色</td>
+                                            <td>尺码</td>
+                                            <td>仓库未配数量</td>
+                                            <td>仓库已配数量</td>
+                                            <td>仓库库存</td>
+                                            <td>报货数量</td>
                                             <td>数量</td><!--<td>操作</td>-->
                                         </tr>
                                     </thead>
@@ -250,7 +258,9 @@
                                         <tr v-for="sku in item.skus" v-if="sku.color.indexOf(item.filter) != -1" v-bind:class="{ danger: parseInt(sku.num) < parseInt(sku.num_allocat)}">
                                             <td>{{sku.color}}</td>
                                             <td>{{sku.size}}</td>
-                                            <td>0</td>
+                                            <td>{{sku.depot_weipei_count}}</td>
+                                            <td>{{sku.depot_send_count}}</td>
+                                            <td>{{sku.depot_count}}</td>
                                             <td>{{sku.num_allocat}}</td>
                                             <td><input type="number" class="form-control" placeholder="数量" v-model="sku.num" v-on:change="changeNum($event,sku,'num')"></td><!--<td><a v-on:click="skuDel(item,sku)">删除</a></td>-->
                                         </tr>

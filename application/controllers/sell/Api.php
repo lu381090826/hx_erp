@@ -10,6 +10,9 @@ class Api extends CI_Controller {
         //父类
         parent::__construct();
 
+        //帮助类
+        $this->load->helper('url');
+
         //类库
         $this->load->library('evon/ApiResult','','apiresult');
 
@@ -21,6 +24,7 @@ class Api extends CI_Controller {
         $this->load->model('goods/Goods_model',"m_goods",true);
         $this->load->model('goods/Sku_model',"m_good_sku",true);
         $this->load->model('admin/User_model',"m_user",true);
+        $this->load->model("depot/api_model","m_depot_api",true);
     }
 
     /**
@@ -214,6 +218,13 @@ class Api extends CI_Controller {
                 $sku_item->size = $sku["size_info"]["size_info"];
                 $sku_item->num = 0;
 
+                //获取库存相关数量
+                $depot_data = $this->m_depot_api->get_sku_id_data($sku_item->sku_id);
+                $sku_item->depot_weipei_count = isset($depot_data["weipei_count"])?$depot_data["weipei_count"]:0;
+                $sku_item->depot_send_count = isset($depot_data["send_count"])?$depot_data["send_count"]:0;
+                $sku_item->depot_count = isset($depot_data["count"])?$depot_data["count"]:0;
+
+                //加入结果
                 $skus[] = $sku_item;
             }
             $item->skus = $skus;

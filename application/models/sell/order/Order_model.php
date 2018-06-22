@@ -24,6 +24,7 @@ class Order_model extends BaseModel{
         $this->load->model('sell/allocate/Allocate_model',"m_allocate",true);
 		$this->load->model('sell/allocate/AllocateItem_model',"m_allocate_item",true);
         $this->load->model('sell/refund/RefundItem_model',"m_refund_item",true);
+        $this->load->model("depot/api_model","m_depot_api",true);
 
         $this->load->model('admin/User_model',"m_user",true);
 	}
@@ -744,6 +745,12 @@ class Order_model extends BaseModel{
 
                     //获取退货完成数量
                     $sku->num_refunded = $this->getRefundedNum($sku);
+
+                    //获取库存相关数量
+					$depot_data = $this->m_depot_api->get_sku_id_data($sku->sku_id);
+                    $sku->depot_weipei_count = isset($depot_data["weipei_count"])?$depot_data["weipei_count"]:0;
+                    $sku->depot_send_count = isset($depot_data["send_count"])?$depot_data["send_count"]:0;
+                    $sku->depot_count = isset($depot_data["count"])?$depot_data["count"]:0;
 
                     //添加sku
                     $spu->skus[] = $sku;
