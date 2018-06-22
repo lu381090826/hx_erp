@@ -215,7 +215,7 @@ class Allocate extends BaseController {
         //更改订单状态
         $order_id = $_REQUEST["order_id"];
         $order = $this->m_order->get($order_id);
-        if($order){
+        if($order && $order->status == 0){
             $order->changeStatus(1);
             $order->save();
         }

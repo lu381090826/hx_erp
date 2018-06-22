@@ -230,12 +230,12 @@ class Refund extends BaseController {
         }
 
         //更改订单状态
-        /*$order_id = $_REQUEST["order_id"];
+        $order_id = $_REQUEST["order_id"];
         $order = $this->m_order->get($order_id);
         if($order){
-            $order->changeStatus(1);
+            $order->changeStatus(4);
             $order->save();
-        }*/
+        }
 
         //返回处理结果
         if($bool)

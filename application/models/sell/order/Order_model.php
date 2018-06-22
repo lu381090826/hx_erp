@@ -128,7 +128,7 @@ class Order_model extends BaseModel{
             1=> "部分配货",
             2=> "完成配货",
             3=> "已作废",
-            4=> "退货",
+            4=> "有退货",
         ];
     }
 
