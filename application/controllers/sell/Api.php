@@ -90,7 +90,7 @@ class Api extends CI_Controller {
         $param = $_REQUEST;
         $start_date = isset($param["start_date"])?$param["start_date"]:null;
         $end_date = isset($param["end_date"])?$param["end_date"]:null;
-        $sort = isset($param["sort"])?(array)json_decode($param["sort"]):[$model->getPk()=>"ASC"];
+        $sort = isset($param["sort"])?(array)json_decode($param["sort"]):[$model->getPk()=>"DESC"];
         $shop_id = isset($param["shop_id"])?$param["shop_id"]:null;
 
         //设置时区
@@ -140,7 +140,7 @@ class Api extends CI_Controller {
         $end_date = isset($param["end_date"])?$param["end_date"]:null;
         $key = isset($param["key"])?$param["key"]:null;
         $status = isset($param["status"])?$param["status"]:null;
-        $sort = isset($param["sort"])?(array)json_decode($param["sort"]):[$model->getPk()=>"ASC"];
+        $sort = isset($param["sort"])?(array)json_decode($param["sort"]):[$model->getPk()=>"DESC"];
         $isReceipted = isset($param["isReceipted"])?$param["isReceipted"]:null;
         $shop_id = isset($param["shop_id"])?$param["shop_id"]:null;
 
