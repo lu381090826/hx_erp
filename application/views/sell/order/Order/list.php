@@ -87,10 +87,10 @@
             <div class="options" v-if="item === selected">
                 <ul class="list-group">
                     <li class="list-group-item" v-on:click="printout(item)">打印</li>
-                    <li class="list-group-item" v-if="item.status != 2" v-on:click="allocate(item)">报货</li>
+                    <li class="list-group-item" v-if="item.status != 2 && item.status != 3" v-on:click="allocate(item)">报货</li>
                     <li class="list-group-item" v-if="item.status == 0" v-on:click="modify(item)">修改</li>
                     <li class="list-group-item" v-if="item.status == 0" v-on:click="scrap(item)">作废</li>
-                    <li class="list-group-item" v-on:click="refund(item)">退货</li>
+                    <li class="list-group-item" v-if="item.status != 0 && item.status != 3" v-on:click="refund(item)">退货</li>
                 </ul>
             </div>
         </div>
