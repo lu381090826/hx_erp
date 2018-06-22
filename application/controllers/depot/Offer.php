@@ -144,4 +144,122 @@ class Offer extends XMG_Controller {
         } 
     
     }
+    
+    //自动审核
+    public function auto_check(){
+        //自动审核减库存
+        $return = $this->offer_model->auto_check();
+        if($return){
+            $this->return_msg(array("result"=>'1',"msg"=>"审核成功"));
+        }
+       else{
+           $this->return_msg(array("result"=>'0',"msg"=>"暂时没有需要配货的报货单"));
+       }
+    }
+    
+    //出库单打印和包裹单打印
+    public function print_odo(){
+        $result = $this->offer_model->print_odo();
+        $this->return_msg(array("result"=>'1',"msg"=>"获取成功","data"=>$result));
+    }
+    
+    //获取默认打印机
+    public function get_print(){
+        $result = $this->offer_model->get_print();
+        $this->return_msg(array("result"=>'1',"msg"=>"获取成功","data"=>$result));
+    }
+    
+    //改变默认打印机
+    public function change_print(){
+        $result = $this->offer_model->change_print();
+        $this->return_msg(array("result"=>'1',"msg"=>"获取成功","data"=>$result));
+    }
+    
+    //条件查询报货单单列表页
+    public function offer_list_where_view(){
+    
+        //读取仓库
+        $back_data = $this->offer_model->get_all_offer_where_list();
+    
+        $page_data = $this->get_page("sell_allocate_item",$back_data['get_count_sql']);
+         
+        $data['page_data'] = $page_data['pageStr'];
+    
+        $data['offer_data'] = $back_data['offer_data'];
+        
+        $data['search_data'] = $back_data['search_data'];
+    
+        $this->load->view("depot/offer_list",$data);
+    }
+    
+    //条件查询出库单列表页
+    public function odo_list_where_view(){
+    
+        //读取仓库
+        $back_data = $this->offer_model->get_all_odo_where_list();
+    
+        $page_data = $this->get_page("odo",$back_data['get_count_sql']);
+         
+        $data['page_data'] = $page_data['pageStr'];
+    
+        $data['odo_data'] = $back_data['odo_data'];
+    
+        $data['search_data'] = $back_data['search_data'];
+    
+        $this->load->view("depot/odo_list",$data);
+    }
+    
+    //退单列表视图
+    public function get_refund_list_view(){
+        //分页
+        $page_data = $this->get_page("sell_refund","");
+        
+        $data['page_data'] = $page_data['pageStr'];
+        
+        if(@$_REQUEST['id']){
+            $data['refund_list'] = $this->offer_model->get_refund_list(@$_REQUEST['id']);
+            $this->load->view("depot/odo_list",$data);
+        }
+        else{
+            //读取报货单
+            $data['refund_data'] = $this->offer_model->get_refund_list($page_data['page']);
+            
+            
+            $this->load->view("depot/refund_list",$data);
+        }
+    }
+    
+    //条件查询退货单单列表页
+    public function get_refund_list_where_view(){
+    
+        //读取仓库
+        $back_data = $this->offer_model->get_refund_where_list();
+    
+        $page_data = $this->get_page("sell_refund",$back_data['get_count_sql']);
+         
+        $data['page_data'] = $page_data['pageStr'];
+    
+        $data['refund_data'] = $back_data['refund_data'];
+    
+        $data['search_data'] = $back_data['search_data'];
+    
+        $this->load->view("depot/refund_list",$data);
+    }
+    
+    public function package_list_view(){
+        //分页
+        $page_data = $this->get_page("package","");
+        
+        $data['page_data'] = $page_data['pageStr'];
+        
+        if(@$_REQUEST['id']){
+            $data['offer_list'] = $this->offer_model->get_odo_list(@$_REQUEST['id']);
+            $this->load->view("depot/odo_list",$data);
+        }
+        else{
+            //读取报货单
+            $data['package_data'] = $this->offer_model->get_package_list($page_data['page']);
+            $this->load->view("depot/package_list",$data);
+        }
+    }
 }
