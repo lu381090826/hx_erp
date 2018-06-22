@@ -40,7 +40,7 @@
  <body>
   <div id="forms" class="mt10" style="margin-top:20px;">
  
- <form  action="/depot/stock/stock_list_where_view" method="get">
+ <form  action="/depot/stock/change_stock_where_view" method="get">
 <a href="/depot/storage/add_storage_view"><input type="button" name="button" class="btn btn82 btn_add"  value="入库单">　</a>
 
 <input type="text" name="search" id="search" value="<?php echo @$search_data['search'];?>"  placeholder="sku" class="input-text lh25" size="20">
@@ -60,20 +60,13 @@
         <div class="box span10 oh">
               <table  border="0" cellpadding="0" cellspacing="0" class="list_table">
               <tr>
-               <th width="5%">款式图</th>
-               <th width="10%">skuid</th>
-               <th width="10%">款号</th>
-               <th width="5%">颜色</th>             
-               <th width="5%">尺寸</th>
-               <th width="10%">当天入库数量</th>
-               <th width="5%">总入库</th>
-               <th width="5%">总出库</th>
-               <th width="5%">总库存</th>
-               <th width="5%">可用库存</th> 
-               <th width="5%">未配数量</th>  
-               <th width="5%">已配数量</th>               
-               <th width="10%">所属仓库</th> 
-               <th width="8%">所属仓位</th>
+               <th width="20%">skuid</th>
+               <th width="20%">款号</th>
+               <th width="10%">颜色</th>             
+               <th width="10%">尺寸</th>
+               <th width="10%">总库存</th>
+               <th width="10%">可用库存</th> 
+               <th width="10%">仓库</th>
                <th width="10%">操作</th>     
               </tr>
  
@@ -81,35 +74,14 @@
            foreach($stock_data as $k=>$v){
            ?>
               <tr class='tr' align='center' id="">  
-                <td ><a href="<?php echo $stock_data[$k]['pic']?>" target="_blank">点击查看</a></td>
                 <td ><?php echo $stock_data[$k]['sku_id']?></td>
                 <td ><?php echo $stock_data[$k]['goods_id']?></td>
                 <td ><?php echo $stock_data[$k]['color']?></td>               
                 <td ><?php echo $stock_data[$k]['size']?></td>
-                <td ><?php echo @$stock_data[$k]['date_count']?></td>
-                <td ><?php echo $stock_data[$k]['his_count']?></td>
-                <td ><?php echo $stock_data[$k]['out_count']?></td>
-                <td ><?php echo $stock_data[$k]['total_count']?></td>
-                <td ><?php echo $stock_data[$k]['count']?></td>
-                <td ><?php echo $stock_data[$k]['weipei_count']?></td>
-                <td ><?php echo $stock_data[$k]['send_count']?></td>                
+                <td id="<?php echo @$stock_data[$k]['id']?>"><?php echo $stock_data[$k]['total_count']?></td>  
+                <td id="count<?php echo @$stock_data[$k]['id']?>"><?php echo $stock_data[$k]['count']?></td>              
                 <td ><?php echo @$stock_data[$k]['depot_id']?></td>
-                <td >
-                <SELECT class="select" id="storage_type" name="storage_type" onchange="change_pos(this.value,'<?php echo $stock_data[$k]['id'];?>')" style="width:80px;">
-                    <OPTION value="">选库位</OPTION>
-                    <?php 
-                      foreach(@$stock_data[$k]['pos_data'] as $pa=>$pv){
-                          if($stock_data[$k]['pos_id']==$stock_data[$k]['pos_data'][$pa]['id']){
-                              echo '<OPTION value="'.$stock_data[$k]['pos_data'][$pa]['id'].'" selected="selected">'.$stock_data[$k]['pos_data'][$pa]['pos_name'].'</OPTION>';
-                          }
-                          else{
-                              echo '<OPTION value="'.$stock_data[$k]['pos_data'][$pa]['id'].'" >'.$stock_data[$k]['pos_data'][$pa]['pos_name'].'</OPTION>';
-                          }                         
-                      }
-                    ?>
-                </SELECT>
-                </td>
-                <td ><a href="javascript:alert('需确认需求后再开发！')">出入库详情</a></td>
+                <td ><input type="text" name="number" id ="<?php echo @$stock_data[$k]['id']?>" value="" onchange="change_count('<?php echo @$stock_data[$k]['id']?>',this.value,'<?php echo $stock_data[$k]['count'];?>','<?php echo $stock_data[$k]['total_count'];?>')" placeholder="输入修正后数量" class="input-text lh25" size="12"></td>
               </tr>
          <?php 
            }
@@ -126,7 +98,7 @@
 	   window.location.href = "/depot/depot/pos_list_view?search="+search
 	   
   }
-   function change_pos(pos_id,id){
+function change_pos(pos_id,id){
 		 $.ajax({
              url:"/depot/stock/change_pos",
              type:"POST",
@@ -140,6 +112,32 @@
              }
          });
 }
+
+function change_count(id,change_count,count,total_count){
+	var data_count =  parseInt(count)+parseInt(change_count)-parseInt(total_count);
+	 $.ajax({
+       url:"/depot/stock/change_stock",
+       type:"POST",
+       data:{"id":id,"change_count":change_count,"total_count":total_count},
+       dataType:"json",
+       async:false,
+       error: function() {
+           //alert('服务器超时，请稍后再试');
+       },
+       success:function(data){   
+           if(data.result==1){
+               
+               
+               $("#"+id).html(change_count);
+               $("#count"+id).html(data_count);
+           }              
+           else{
+               alert('修改失败');
+          }         
+       }
+   });
+}
+
    $("#depot_id").val('<?php echo @$search_data['depot_id'];?>');
    </script>
  </body>

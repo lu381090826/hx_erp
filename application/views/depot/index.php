@@ -118,7 +118,7 @@ function menuScroll(num){
        </div>
     </div>
     <div class="main">
-       <iframe name="right" id="rightMain" src="https://www.baidu.com" frameborder="no" scrolling="auto" width="100%" height="auto" allowtransparency="true"></iframe>
+       <iframe name="right" id="rightMain" src="/depot/offer/offer_list_view" frameborder="no" scrolling="auto" width="100%" height="auto" allowtransparency="true"></iframe>
     </div>
     <div class="bottom">
       <div id="bottom_bg">版权</div>

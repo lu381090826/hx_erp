@@ -276,9 +276,6 @@ function to_print(data) {
 	
     //循环打印次数
         for(var i=0;i<data.length;i++){
-        	//循环打印页数
-            for(var jj=0;jj<data[i].total_page;jj++){
-
             var num=2;
             var fenyeSize=0;
            
@@ -292,7 +289,7 @@ function to_print(data) {
             var lastheght=2;
             //上面的信息
             if(num!=1){
-            var now_page  = jj+1;
+            var now_page  = 1;
             LODOP.ADD_PRINT_TEXT("3.39mm","13mm","77.55mm","9.6mm","第"+now_page+"张/共"+data[i].total_page+"张");
             LODOP.ADD_PRINT_TEXT("3.39mm","64.4mm","77.55mm","9.6mm","韩讯平台销售出库单");
                 LODOP.SET_PRINT_STYLEA(0, "ItemType", 0);
@@ -301,7 +298,7 @@ function to_print(data) {
             }
 
             //数据条数
-            var size = data[i].odo_data[jj].detail_data.length;     
+            var size = data[i].odo_data.length;     
             
             var extendSize=0;
             var table_hegth=(size+1)*25;
@@ -372,17 +369,17 @@ function to_print(data) {
 
             
             for(var k=0;k<size;k++){
-                var sell_order= data[i].odo_data[jj].detail_data[k].sell_order;
-                var allocate_order= data[i].odo_data[jj].detail_data[k].allocate_order;
-                var pos_name = data[i].odo_data[jj].detail_data[k].pos_name;
-                var sku_id = data[i].odo_data[jj].detail_data[k].sku_id;
-                var spu_id = data[i].odo_data[jj].detail_data[k].spu;
-                var color = data[i].odo_data[jj].detail_data[k].color;
-                var sku_size = data[i].odo_data[jj].detail_data[k].size;
-                var name = data[i].odo_data[jj].detail_data[k].client_name;
-                var mobile = data[i].odo_data[jj].detail_data[k].client_phone;
-                var allocate_count = data[i].odo_data[jj].detail_data[k].allocate_count+'/'+data[i].odo_data[jj].detail_data[k].total_send_num;
-                var send_count = data[i].odo_data[jj].detail_data[k].send_count;
+                var sell_order= data[i].odo_data[k].sell_order;
+                var allocate_order= data[i].odo_data[k].allocate_order;
+                var pos_name = data[i].odo_data[k].pos_name;
+                var sku_id = data[i].odo_data[k].sku_id;
+                var spu_id = data[i].odo_data[k].spu;
+                var color = data[i].odo_data[k].color;
+                var sku_size = data[i].odo_data[k].size;
+                var name = data[i].odo_data[k].client_name;
+                var mobile = data[i].odo_data[k].client_phone;
+                var allocate_count = data[i].odo_data[k].allocate_count+'/'+data[i].odo_data[k].total_send_num;
+                var send_count = data[i].odo_data[k].send_count;
             
                 newHeight=(k-lastSize)*5.37+extendSize*fonsize;
                 var SizeTmpt=parseInt(getByteLen(sell_order)/35);
@@ -438,6 +435,76 @@ function to_print(data) {
                 LODOP.ADD_PRINT_LINE(trheight+newHeight-SizeTmpt*fonsize+"mm","208mm",trheight+newHeight+5.37+"mm","208mm",0,1);//配数后竖线
                 
                 LODOP.ADD_PRINT_LINE(trheight+newHeight+5.57+"mm","13mm",trheight+newHeight+5.57+"mm","208mm",0,1);//每条数据后加一横线
+
+                //分页
+                if((trheight+newHeight+5.57)%fenyeSize<=fenyeSize&&(trheight+newHeight-10)%fenyeSize>=(fenyeSize-15)){
+//                     130.5<=140 130.5>=125
+                                                  
+                       LODOP.NewPage();
+                       thHeight=24.5;
+                       lastSize=k;
+                       trheight=21.5;
+                       extendSize=0;  
+                         
+                       now_page++;
+                       LODOP.ADD_PRINT_TEXT("3.39mm","13mm","77.55mm","9.6mm","第"+now_page+"张/共"+data[i].total_page+"张");
+                       LODOP.ADD_PRINT_TEXT("3.39mm","64.4mm","77.55mm","9.6mm","韩讯平台销售出库单");
+                       LODOP.SET_PRINT_STYLEA(0, "ItemType", 0);
+                       LODOP.SET_PRINT_STYLEA(0, "FontSize", 14);
+                       LODOP.SET_PRINT_STYLEA(0, "Bold", 1);      
+
+                       LODOP.ADD_PRINT_TEXT("15mm","13mm","20.13mm","5.37mm","出库单号：");
+                       LODOP.ADD_PRINT_TEXT("15mm","27mm","45.56mm","5.37mm",data[i].odo_sn_data.odo_sn);
+                       
+                       
+                       LODOP.ADD_PRINT_TEXT("15mm","58mm","20.13mm","5.37mm","出库仓库：");
+                       LODOP.ADD_PRINT_TEXT("15mm","73mm","20.13mm","5.37mm",data[i].odo_sn_data.source_depot);
+                       
+                       LODOP.ADD_PRINT_TEXT("15mm","92mm","20.13mm","5.37mm","制单人：");
+                       LODOP.ADD_PRINT_TEXT("15mm","104mm","20.13mm","5.37mm",data[i].odo_sn_data.name);
+
+                       LODOP.ADD_PRINT_TEXT("15mm","115mm","20.13mm","5.37mm","出库日期：");
+                       LODOP.ADD_PRINT_TEXT("15mm","130mm","20.13mm","5.37mm",data[i].odo_sn_data.odo_date);
+                       
+                       LODOP.ADD_PRINT_TEXT("15mm","152mm","20.13mm","5.37mm","出库总数：");
+                       LODOP.ADD_PRINT_TEXT("15mm","167mm","20.13mm","5.37mm",data[i].shop_send_count);
+
+                       LODOP.ADD_PRINT_TEXT("15mm","182mm","20.13mm","5.37mm","收货档口：");
+                       LODOP.ADD_PRINT_TEXT("15mm","197mm","20mm","5.37mm",data[i].shop_name);
+                       
+                       LODOP.ADD_PRINT_TEXT("15mm","210mm","20.13mm","5.37mm","备注：");
+                       LODOP.ADD_PRINT_TEXT("15mm","220mm","80mm","5.37mm",data[i].odo_sn_data.beizhu);            
+
+                       //标题等
+                       LODOP.ADD_PRINT_TEXT("23.02mm","22mm","18mm","5.37mm","销售单号");
+                       LODOP.ADD_PRINT_TEXT("23.02mm","52mm","18mm","5.37mm","报货单号");
+                       LODOP.ADD_PRINT_TEXT("23.02mm","74mm","9mm","5.37mm","库位");
+                       LODOP.ADD_PRINT_TEXT("23.02mm","90mm","18mm","5.37mm","skuid");
+                       LODOP.ADD_PRINT_TEXT("23.02mm","110mm","9mm","5.37mm","款号");
+                       LODOP.ADD_PRINT_TEXT("23.02mm","124mm","9mm","5.37mm","颜色");
+                       LODOP.ADD_PRINT_TEXT("23.02mm","135mm","9mm","5.37mm","尺码");
+                       LODOP.ADD_PRINT_TEXT("23.02mm","146mm","18mm","5.37mm","客户姓名");
+                       LODOP.ADD_PRINT_TEXT("23.02mm","163mm","18mm","5.37mm","客户电话");
+                       LODOP.ADD_PRINT_TEXT("23.02mm","181mm","18mm","5.37mm","报货数量");
+                       LODOP.ADD_PRINT_TEXT("23.02mm","198mm","18mm","5.37mm","配数");
+                       
+                       //表格线
+                       LODOP.ADD_PRINT_LINE("21.31mm","13mm","21.31mm","208.00mm",0,1);// 最上条标题横线            
+//                        LODOP.ADD_PRINT_LINE("27.31mm","13mm","27.31mm","208.00mm",0,1);// 标题下横线        
+                       LODOP.ADD_PRINT_LINE("21.31mm","13mm", "27.11mm", "13mm", 0, 1);// 最左竖线
+                       //LODOP.ADD_PRINT_LINE("31.31mm","25mm", "37.11mm", "25mm", 0, 1);// 行号后竖线
+                       LODOP.ADD_PRINT_LINE("21.31mm","43mm", "27.11mm", "43mm", 0, 1);// 销售单号后竖线
+                       LODOP.ADD_PRINT_LINE("21.31mm","72mm", "27.11mm", "72mm", 0, 1);// 报货单号后竖线
+                       LODOP.ADD_PRINT_LINE("21.31mm","83mm", "27.11mm", "83mm", 0, 1);// 库位后竖线
+                       LODOP.ADD_PRINT_LINE("21.31mm","105mm", "27.11mm", "105mm", 0, 1);// skuid后竖线
+                       LODOP.ADD_PRINT_LINE("21.31mm","121mm", "27.11mm", "121mm", 0, 1);// 款号后竖线
+                       LODOP.ADD_PRINT_LINE("21.31mm","132mm", "27.11mm", "132mm", 0, 1);// 颜色后竖线
+                       LODOP.ADD_PRINT_LINE("21.31mm","142mm", "27.11mm", "142mm", 0, 1);// 尺码后竖线
+                       LODOP.ADD_PRINT_LINE("21.31mm","160mm", "27.11mm", "160mm", 0, 1);// 客户姓名后竖线
+                       LODOP.ADD_PRINT_LINE("21.31mm","180mm", "27.11mm", "180mm", 0, 1);// 客户电话后竖线
+                       LODOP.ADD_PRINT_LINE("21.31mm","195mm", "27.11mm", "195mm", 0, 1);// 报货数量后竖线
+                       LODOP.ADD_PRINT_LINE("21.31mm","208mm", "27.11mm", "208mm", 0, 1);// 配数后竖线
+                }
                         
             }//内循环结束
 
@@ -448,35 +515,32 @@ function to_print(data) {
              LODOP.PRINT();
 
              //包裹单打印
-             for(ii=0;ii<data[i].odo_data[jj].client_data.length;ii++){
+             
+             for(ii=0;ii<data[i].client_data.length;ii++){
                  LODOP=getLodop();  
                  LODOP.PRINT_INIT("韩讯包裹单");
                  LODOP.SET_PRINT_PAGESIZE('1','100mm','100mm',"A4");//一开始用的是像素，后来都改成用mm为单位
                  LODOP.SET_PRINT_STYLE("FontSize",8);
                  
-                 LODOP.ADD_PRINT_TEXT("65.39mm","0.4mm","77.55mm","9.6mm",data[i].odo_data[jj].client_data[ii].print_time);       
+                 LODOP.ADD_PRINT_TEXT("65.39mm","0.4mm","77.55mm","9.6mm",data[i].client_data[ii].print_time);       
                  LODOP.ADD_PRINT_TEXT("70.39mm","0.4mm","90.55mm","9.6mm","数量请当面点清一经离开概不负责！！！");
-                 
-                 var one = jj+1;
-                 var two = ii+1;
-                 LODOP.ADD_PRINT_TEXT("65.39mm","40mm","8mm","9.6mm",one+"/"+two);
 
-//                  alert(data[i].odo_data[jj].client_data[ii].print_time);return;
+                 
                  //循环输出款号 颜色 尺码数据        
                  var height = 5.35;
-                  for(iii=0;iii<data[i].odo_data[jj].client_data[ii].data.length;iii++){
+                  for(iii=0;iii<data[i].client_data[ii].data.length;iii++){
                   newheight = height+iii*4;
-                  LODOP.ADD_PRINT_TEXT(newheight+"mm","50mm","40mm","9.6mm",data[i].odo_data[jj].client_data[ii].data[iii].spu+'/'+data[i].odo_data[jj].client_data[ii].data[iii].color+'/'+data[i].odo_data[jj].client_data[ii].data[iii].size+'('+data[i].odo_data[jj].client_data[ii].data[iii].send_count+')');         
+                  LODOP.ADD_PRINT_TEXT(newheight+"mm","50mm","40mm","9.6mm",data[i].client_data[ii].data[iii].spu+'/'+data[i].client_data[ii].data[iii].color+'/'+data[i].client_data[ii].data[iii].size+'('+data[i].client_data[ii].data[iii].send_count+')');         
                  }
                  
                  //输出合计
                  newheight = newheight+5;
                  LODOP.ADD_PRINT_TEXT(newheight+"mm","50mm","40mm","9.6mm","合计：");      
-                 LODOP.ADD_PRINT_TEXT(newheight+"mm","58mm","40mm","9.6mm",data[i].odo_data[jj].client_data[ii].total_send_count);  
+                 LODOP.ADD_PRINT_TEXT(newheight+"mm","58mm","40mm","9.6mm",data[i].client_data[ii].total_send_count);  
                    
                  LODOP.SET_PRINT_STYLE("FontSize",18);
                  LODOP.SET_PRINT_STYLE("Bold",1);
-                 LODOP.ADD_PRINT_TEXT("5.39mm","0.4mm","48.55mm","9.6mm",data[i].odo_data[jj].client_data[ii].client_name);       
+                 LODOP.ADD_PRINT_TEXT("5.39mm","0.4mm","48.55mm","9.6mm",data[i].client_data[ii].client_name);       
                  LODOP.ADD_PRINT_BARCODE("35mm","0.1mm",110,110,"QRCode","1234567890");
                  LODOP.SET_PRINT_STYLE("FontSize",26);
                  LODOP.SET_PRINT_STYLE("Bold",1);
@@ -486,8 +550,7 @@ function to_print(data) {
                  LODOP.SET_PRINTER_INDEX(package_print_name);
                  LODOP.PRINT();
              }
-
-         }
+             
         }//外循环结束       
         return true;
 };  

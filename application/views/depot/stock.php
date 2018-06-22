@@ -43,27 +43,8 @@
  <form  method="post">
 <a href="/depot/storage/add_storage_view"><input type="button" name="button" class="btn btn82 btn_add"  value="入库单">　</a>
 
-<input type="text" name="search" id="search" value="<?php echo @$search;?>"  placeholder="sku/spu" class="input-text lh25" size="20">
+<input type="text" name="search" id="search" value="<?php echo @$search;?>"  placeholder="sku" class="input-text lh25" size="20">
 
-<SELECT class="select" id="storage_type" name="storage_type" style="width:120px;">
-                    <OPTION value="">按sku显示</OPTION>
-                    <OPTION value="">按spu显示</OPTION>
-</SELECT>
-<SELECT class="select" id="storage_type" name="storage_type" style="width:120px;">
-                    <OPTION value="">大分类</OPTION>
-</SELECT>
-<SELECT class="select" id="storage_type" name="storage_type" style="width:120px;">
-                    <OPTION value="">小分类</OPTION>
-</SELECT>
-<SELECT class="select" id="storage_type" name="storage_type" style="width:120px;">
-                    <OPTION value="">状态</OPTION>
-                    <OPTION value="1">上架</OPTION>
-                    <OPTION value="2">下架</OPTION>
-</SELECT>
-<SELECT class="select" id="storage_type" name="storage_type" style="width:150px;">
-                    <OPTION value="1">按总库存由多到少排列</OPTION>
-                    <OPTION value="2">按总库存由少到多排列</OPTION>
-</SELECT>
 <SELECT class="select" id="storage_type" name="storage_type" style="width:150px;">
                     <OPTION value="">全部仓库</OPTION>
                     <?php 

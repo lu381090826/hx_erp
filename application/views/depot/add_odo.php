@@ -62,13 +62,16 @@
               <tr>
                <th width="10%">销售单号</th>
                <th width="10%">报货单号</th>
+               <th width="10%">客户名字</th>
+               <th width="10%">客户电话</th>
                <th width="10%">sku</th>
                <th width="10%">款号</th>
-               <th width="10%">颜色</th>               
-               <th width="10%">尺码</th>
-               <th width="10%">报货数量</th>
-               <th width="10%">库存数量</th>
-               <th width="10%">配货数量</th>   
+               <th width="5%">颜色</th>               
+               <th width="5%">尺码</th>
+               <th width="8%">报货数量</th>
+               <th width="8%">库存数量</th>
+               <th width="8%">所在库位</th>
+               <th width="8%">配货数量</th>   
               </tr>
               
            <?php 
@@ -77,12 +80,15 @@
               <tr class='tr' align='center' > 
                 <td ><?php echo $odo_data[$k]['Fsell_order']?></td>
                 <td ><?php echo $odo_data[$k]['Fallocate_order']?></td>
+                <td ><?php echo $odo_data[$k]['Fclient_name']?></td>
+                <td ><?php echo $odo_data[$k]['Fclient_phone']?></td>
                 <td ><?php echo $odo_data[$k]['Fsku_id']?></td>
                 <td ><?php echo $odo_data[$k]['Fspu']?></td>
                 <td ><?php echo $odo_data[$k]['Fcolor']?></td>
                 <td ><?php echo $odo_data[$k]['Fsize']?></td>
                 <td ><?php echo $odo_data[$k]['Fallocate_count']?>/<?php echo $odo_data[$k]['Fsend_num']?></td>
                 <td ><?php echo $odo_data[$k]['Fstock_count']?></td>
+                <td ><?php echo $odo_data[$k]['Fpos_name']?></td>
                 <td ><input type="text" name="number<?php echo $k?>" id ="number<?php echo $k?>" value="<?php echo $odo_data[$k]['Fallocate_count']-$odo_data[$k]['Fsend_num'];?>" placeholder="请输入数量" class="input-text lh25" size="8"></td>
               </tr>
          <?php 
