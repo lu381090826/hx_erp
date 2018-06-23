@@ -65,7 +65,7 @@
     <!-- 过滤 -->
     <div class="input-group input-group-lg">
         <span class="input-group-addon"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></span>
-        <input type="text" class="form-control" placeholder="过滤" aria-describedby="" v-model="filter">
+        <input type="text" class="form-control" placeholder="过滤（销售员ID/订单总额）" aria-describedby="" v-model="filter">
     </div>
     <!-- 订单 -->
     <div class="order-list">
