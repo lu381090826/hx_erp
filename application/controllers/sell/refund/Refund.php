@@ -241,7 +241,7 @@ class Refund extends BaseController {
         if($bool)
             $this->apiresult->sentApiSuccess();
         else
-            $this->apiresult->sentApiError(-1,"fail");
+            $this->apiresult->sentApiError(-1,"修改失败，退货单可能存在并发操作等.");
     }
 
     /**
