@@ -157,16 +157,45 @@ class User_model extends HX_Model
         $this->db->update($this->table, $insert_arr, ["Fuid" => $request['uid']]);
     }
 
-    public function get_seller()
+    public function get_seller($shopId = null, $forInsert = false)
     {
         $this->config->load('user_type');
+
+        $noInSellerId = '';
+        if ($forInsert) {
+            //查出已配置店铺的用户进行排除
+            $s = "SELECT Fseller_id FROM t_shop_seller WHERE Fstatus = 1";
+
+            $ret = $this->db->query($s);
+            $haveShopSeller = [];
+            $s = $ret->result('array');
+            foreach ($s as $row) {
+                array_push($haveShopSeller, $row['seller_id']);
+            }
+            $haveShopSeller = array_unique($haveShopSeller);
+            if (!empty($haveShopSeller)) {
+                $noInSellerId = 'and Fuid not in (' . implode($haveShopSeller, ',') . ')';
+            }
+        }
+        $sellerId = '';
+        if (!empty($shopId)) {
+            $s = $this->get_seller_shop($shopId);
+            foreach ($s as $row) {
+                array_push($sellerId, $row['seller_id']);
+            }
+            $sellerId = array_unique($sellerId);
+            if (!empty($sellerId)) {
+                $sellerId = 'and Fuid in (' . implode($sellerId, ',') . ')';
+            }
+        }
+
         $seller_role = $this->config->item('user_type')['seller'];
-        $s = "SELECT * FROM t_user u WHERE Frole_id = ? ORDER BY Fcreate_time DESC ;";
+        $s = "SELECT * FROM t_user u WHERE Frole_id = ? {$sellerId} {$noInSellerId} ORDER BY Fcreate_time DESC ;";
         $ret = $this->db->query($s, [$seller_role]);
         return $this->suc_out_put($ret->result('array'));
     }
 
-    //获取商品所在店铺
+    //获取所在店铺的销售
     public function get_seller_shop($shop_id)
     {
         $s = "SELECT Fseller_id FROM t_shop_seller WHERE Fstatus = 1 AND Fshop_id= ?  ORDER BY Fcreate_time DESC";

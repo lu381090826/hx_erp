@@ -94,7 +94,14 @@ $this->load->view('head');
             <label>备注</label>
             <?= $memo ?>
         </div>
-
+        <div class="am-form-group">
+            <label for="doc-select-1">销售:</label>
+<!--            <select multiple name="seller_id[]" data-am-selected="{searchBox: 1,maxHeight:200}">-->
+                <?php foreach ($seller_list as $s): ?>
+                   （<?=$s['uid']?>）<?= $s['name'] ?>;
+                <?php endforeach; ?>
+<!--            </select>-->
+        </div>
         <div class="am-form-group">
             <label>操作人</label>
             <?= $operator ?>
