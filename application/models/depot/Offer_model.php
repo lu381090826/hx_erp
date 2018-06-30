@@ -15,6 +15,7 @@ class Offer_model extends CI_Model {
         $page_count = ($page_number-1)*15;
         
         $this->db->order_by('Fid', 'DESC');
+        $this->db->where("Fnum >","0");
         $query = $this->db->get('sell_allocate_item','15',$page_count);
         $data = $query->result_array();
         
@@ -338,6 +339,41 @@ class Offer_model extends CI_Model {
 //                 break;
                 
 //             }
+            
+        }
+    
+        return $data ;
+    }
+    
+    public function get_odo_detail_list($page_number = 1){
+        $page_count = ($page_number-1)*15;
+    
+        $this->db->order_by('Fid', 'DESC');
+        $query = $this->db->get('odo_detail','15',$page_count);
+        $data = $query->result_array();
+    
+        foreach($data as $k=>$v){
+    
+            //查客户信息
+            $this->db->select('Fname,Fphone');
+            $query = $this->db->get_where('client',array("Fid"=>$data[$k]['client_id']));
+            $client_data = $query->row_array();
+            $data[$k]['client_name'] = $client_data['name'];
+            $data[$k]['client_phone'] = $client_data['phone'];
+            
+            //查店铺信息
+            $this->db->select('Fname');
+            $query = $this->db->get_where('shop',array("Fid"=>$data[$k]['shop_id']));
+            $shop_data = $query->row_array();
+            
+            $data[$k]['shop_name'] = $shop_data['name'];
+    
+            //查出库单信息
+            $this->db->select('Fodo_date');
+            $query = $this->db->get_where('odo',array("Fodo_sn"=>$data[$k]['odo_sn']));
+            $odo_data = $query->row_array();
+            
+            $data[$k]['odo_date'] = $odo_data['odo_date'];
             
         }
     
@@ -1059,17 +1095,21 @@ class Offer_model extends CI_Model {
   
       $search_data  = array(
           "search"=>@$_REQUEST['search'],
-          "odo_date"=>@$_REQUEST['odo_date'],
+          "start_date"=>@$_REQUEST['start_date'],
+          "end_date"=>@$_REQUEST['end_date'],
           "status"=>@$_REQUEST['status'],        
       );
   
   
       $wherelist = array();
       if(!empty($search_data['search'])){
-          $wherelist[] = "(a.Fodo_sn like '%{$search_data['search']}%' or b.Fsku_id like '%{$search_data['search']}%')";
+          $wherelist[] = "(a.Fodo_sn like '%{$search_data['search']}%' or b.Fsku_id like '%{$search_data['search']}%' or c.Fname like '%{$search_data['search']}%' or c.Fphone like '%{$search_data['search']}%')";
   
-          if(!empty($search_data['odo_date'])){
-              $wherelist[] = "a.Fodo_date = '{$search_data['odo_date']}'";
+          if(!empty($search_data['start_date'])){
+              $wherelist[] = "a.Fodo_date >= '{$search_data['start_date']}'";
+          }
+          if(!empty($search_data['end_date'])){
+              $wherelist[] = "a.Fodo_date <= '{$search_data['end_date']}'";
           }
           if($search_data['status']!==''){
               $wherelist[] = "a.Fstatus = '{$search_data['status']}'";
@@ -1081,13 +1121,16 @@ class Offer_model extends CI_Model {
           //判断查询条件
           $where = isset($where) ? $where : '';
   
-          $get_count_sql = "select a.* from t_odo a,t_odo_detail b where a.Fodo_sn = b.Fodo_sn  and {$where} ";
+          $get_count_sql = "select distinct a.Fodo_sn,a.* from t_odo a,t_odo_detail b,t_client c where a.Fodo_sn = b.Fodo_sn  and {$where} ";
   
           $sql = $get_count_sql."order by a.Fid desc limit {$page_count},15";
       }
       else{
-          if(!empty($search_data['odo_date'])){
-              $wherelist[] = "Fodo_date = '{$search_data['odo_date']}'";
+          if(!empty($search_data['start_date'])){
+              $wherelist[] = "Fodo_date >= '{$search_data['start_date']}'";
+          }
+          if(!empty($search_data['end_date'])){
+              $wherelist[] = "Fodo_date <= '{$search_data['end_date']}'";
           }
           if($search_data['status']!==''){
               $wherelist[] = "Fstatus = '{$search_data['status']}'";
@@ -1105,13 +1148,78 @@ class Offer_model extends CI_Model {
   
       }
 
-  
       //读取报货单
       $check_odo_data = $this->index_model->get_query($sql);
   
   
       $back_data = array(
           "odo_data"=>$check_odo_data,
+          "get_count_sql"=>$get_count_sql,
+          'search_data'=>$search_data
+      );
+  
+      return $back_data;
+  }
+  
+  //查询条件获取 出库详情列表数据
+  public function get_all_odo_detail_where_list(){
+      $page = @isset($_REQUEST['page'])?$_REQUEST['page']:1;
+      $page_count = ($page-1)*15;
+  
+      $search_data  = array(
+          "search"=>@$_REQUEST['search'],
+          "start_date"=>@$_REQUEST['start_date'],
+          "end_date"=>@$_REQUEST['end_date'],
+      );
+  
+  
+      $wherelist = array();
+      if(!empty($search_data['search'])){
+          $wherelist[] = "(a.Fsell_order like '%{$search_data['search']}%' or c.Fname like '%{$search_data['search']}%' or c.Fphone like '%{$search_data['search']}%' or a.Fsku_id like '%{$search_data['search']}%')";
+  
+          if(!empty($search_data['start_date'])){
+              $wherelist[] = "b.Fodo_date >= '{$search_data['start_date']}'";
+          }
+          if(!empty($search_data['end_date'])){
+              $wherelist[] = "b.Fodo_date <= '{$search_data['end_date']}'";
+          }
+          //组装查询条件
+          if(count($wherelist) > 0){
+              $where = implode(' AND ' , $wherelist);
+          }
+          //判断查询条件
+          $where = isset($where) ? $where : '';
+  
+          $get_count_sql = "select b.Fodo_date,c.Fname 'Fclient_name',c.Fphone 'Fclient_phone',d.Fname 'Fshop_name',a.* from t_odo_detail a,t_odo b,t_client c,t_shop d where a.Fodo_sn = b.Fodo_sn and a.Fclient_id = c.Fid and a.Fshop_id = d.Fid and {$where} ";
+  
+          $sql = $get_count_sql."order by a.Fid desc limit {$page_count},15";
+      }
+      else{
+          if(!empty($search_data['start_date'])){
+              $wherelist[] = "b.Fodo_date >= '{$search_data['start_date']}'";
+          }
+          if(!empty($search_data['end_date'])){
+              $wherelist[] = "b.Fodo_date <= '{$search_data['end_date']}'";
+          }
+          //组装查询条件
+          if(count($wherelist) > 0){
+              $where = implode(' AND ' , $wherelist);
+          }
+          //判断查询条件
+          $where = isset($where) ? $where : '';
+  
+          $get_count_sql = "select b.Fodo_date,c.Fname 'Fclient_name',c.Fphone 'Fclient_phone',d.Fname 'Fshop_name',a.* from t_odo_detail a,t_odo b,t_client c,t_shop d where a.Fodo_sn = b.Fodo_sn and a.Fclient_id = c.Fid and a.Fshop_id = d.Fid and {$where} ";
+  
+          $sql = $get_count_sql."order by Fid desc limit {$page_count},15";
+  
+      }
+  
+      //读取报货单
+      $check_odo_detail_data = $this->index_model->get_query($sql);
+  
+  
+      $back_data = array(
+          "odo_detail_data"=>$check_odo_detail_data,
           "get_count_sql"=>$get_count_sql,
           'search_data'=>$search_data
       );

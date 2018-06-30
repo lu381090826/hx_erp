@@ -153,6 +153,24 @@ class Depot_model extends CI_Model {
     	return $data ;
     }
     
+    public function check_supplier($search){
+
+        if($search){
+            $this->db->order_by('Fid', 'DESC');
+            $this->db->select('Fsupplier_name');
+            $this->db->select('Fid');
+            $this->db->or_like('Fsupplier_name',$search);
+            $this->db->or_like('Fname', $search);
+            $query = $this->db->get('supplier');
+            $data = $query->result_array();
+            
+        }
+        else{
+            return false;
+        }
+        return $data ;
+    }
+    
     //查出默认仓库的ID
     public function get_moren_depot(){
         $query = $this->db->get_where('depot',array("Ftype"=>'1'));

@@ -158,12 +158,13 @@ class Stock_model extends CI_Model {
     
          foreach($data as $k=>$v){
             
-            //查这个仓库对应的库位
-//             $query = $this->db->get_where('pos',array("Fdid"=>$data[$k]['depot_id']));
-//             $data[$k]['pos_data'] = $query->result_array();
-            
-
-            
+             //查这个仓库对应的库位
+             $this->db->select('Fpos_name,Fid');
+             $query = $this->db->get_where('pos',array("Fid"=>$data[$k]['pos_id']));
+             $pos_data = $query->row_array();
+             
+             $data[$k]['pos_name'] = $pos_data['pos_name'];
+             
             //查当天入库数量
             $date = date('Y-m-d',time());
             $date1 = date('Y-m-d ',strtotime('+1 day'));
@@ -175,6 +176,7 @@ class Stock_model extends CI_Model {
             $depot_name = $this->depot_model->get_depot($data[$k]['depot_id']);
             
             $data[$k]['depot_id'] = $depot_name['depot_name'];
+            $data[$k]['depot_name'] = $depot_name['depot_name'];
             
             $date_count = '';
             foreach($count_data as $a=>$b){
