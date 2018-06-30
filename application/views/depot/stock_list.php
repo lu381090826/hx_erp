@@ -95,7 +95,7 @@
                 <td ><?php echo $stock_data[$k]['send_count']?></td>                
                 <td ><?php echo @$stock_data[$k]['depot_name']?></td>
                 <td >
-                <input type="text" name="check_pos" id="check_pos" value="<?php echo @$search_data['check_pos'];?>" oninput="check_pos(this.value,'<?php echo $stock_data[$k]['depot_id'];?>','<?php echo $stock_data[$k]['id'];?>')"  placeholder="搜索库位" class="input-text lh25" size="8">
+                <input type="text" name="check_pos" id="check_pos" value="<?php echo @$search_data['check_pos'];?>" onchange="check_pos(this.value,'<?php echo $stock_data[$k]['depot_id'];?>','<?php echo $stock_data[$k]['id'];?>')"  placeholder="搜索库位" class="input-text lh25" size="8">
                 <SELECT class="select" id="storage_type<?php echo $stock_data[$k]['id'];?>" name="storage_type" onchange="change_pos(this.value,'<?php echo $stock_data[$k]['id'];?>')" style="width:80px;">
                     <?php 
                      
