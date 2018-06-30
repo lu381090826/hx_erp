@@ -74,7 +74,6 @@
                <th width="5%">已配数量</th>               
                <th width="8%">所属仓库</th> 
                <th width="15%">所属仓位</th>
-               <th width="8%">操作</th>     
               </tr>
  
            <?php 
@@ -108,7 +107,6 @@
                     ?>
                 </SELECT>
                 </td>
-                <td ><a href="javascript:alert('需确认需求后再开发！')">出入库详情</a></td>
               </tr>
          <?php 
            }
@@ -160,7 +158,7 @@
                  
              }   
              else{
-                 alert('获取失败');
+                 alert('搜索内容不存在');
             }                   
          }
      });

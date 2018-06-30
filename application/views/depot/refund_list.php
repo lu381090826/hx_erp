@@ -39,7 +39,6 @@
                <th width="8%">退货总数</th>
                <th width="15%">备注</th>                          
                <th width="8%">审核状态</th>
-               <th width="8%">审核人</th>
                <th width="8%">操作</th>
               </tr>
  
@@ -55,7 +54,6 @@
                 <td ><?php echo $refund_data[$k]['create_at']?></td>
                 <td ><?php echo $refund_data[$k]['total_num']?></td>
                 <td ><?php echo $refund_data[$k]['remark']?></td>
-                <td ><?php echo $refund_data[$k]['status']?></td>
                 <td ><?php echo $refund_data[$k]['status']?></td>
                 <td >详情</td>
               </tr>

@@ -41,7 +41,6 @@
                   <select name="storage_type" id="storage_type" class="select" >
                   <option value="" >请选择入库类型</option>
                   <option value="1" >供应商采购</option>
-                  <option value="2" >销售退货</option>
                   <option value="3" >调拨入库</option>
                   <option value="4" >其他入库</option>
                   </select>
@@ -54,20 +53,14 @@
                <tr >
                <td class="td_right"><span class="bitian">*</span> 供应商:</td>
                <td>
-               <select name="supplier" id="supplier" class="select" >
+               <select name="supplier" id="supplier" class="select1" >
                <option value="">请选择供应商</option>
-               <?php foreach(@$supplier_data as $k=>$v)
-               {echo '<option value="'.$supplier_data[$k]['id'].'" >'.$supplier_data[$k]['supplier_name'].'</option>';} ?>
                </select>
+               <input type="text" name="check_supplier" id="check_supplier" onchange="get_supplier(this.value)" placeholder="搜索供应商"  value="" class="input-text lh25" size="12">           
                </td>
                
                <td class="td_right"><span class="bitian">*</span> 出货仓库:</td><td><select name="source_depot" id="source_depot" class="select" ><?php foreach(@$depot_data as $k=>$v){echo '<option value="'.$depot_data[$k]['id'].'" >'.$depot_data[$k]['depot_name'].'</option>';} ?></select></td>
-              
-               <td class="td_right"><span class="bitian">*</span> 退单号:</td>
-               <td><select name="return_sn" id="return_sn" class="select1" >
-               <option value="">请选择退单号</option>
-               </select>
-               </td>
+
                
                </tr>
            
@@ -222,6 +215,31 @@ function change(value){
     console.log(value);
 }
 
+function get_supplier(content){
+	 $.ajax({
+         url:"/depot/storage/check_supplier",
+         type:"POST",
+         data:{"content":content},
+         dataType:"json",
+         async:false,
+         error: function() {
+             //alert('服务器超时，请稍后再试');
+         },
+         success:function(data){    
+             if(data.result==1){
+            	 $("#supplier").empty();
+            	 $("#supplier").append("<option value='0'>请选择供应商</option>");
+
+            	 for(var i =0;i<data.data.length;i++){
+            		 $("#supplier").append("<option value='"+data.data[i].id+"'>"+data.data[i].supplier_name+"</option>");
+                }
+             }   
+             else{
+                 alert('搜索内容不存在');
+            }                   
+         }
+     });
+}
  </script>
  </body>
  </html>
