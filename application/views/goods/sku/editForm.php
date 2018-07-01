@@ -59,6 +59,7 @@ $this->load->view('head');
         <div class="am-form-group">
             <label for="doc-select-1">店铺：</label>
             <select id="shop-select" multiple data-am-selected="{searchBox: 1,maxHeight:200}" name="shop_id[]">
+                <option></option>
                 <?php foreach ($shop_list as $shop): ?>
                     <option value="<?= $shop['id'] ?>"
                             <?php if ($shop['is_check']): ?>selected<?php endif; ?>><?= $shop['name'] ?></option>

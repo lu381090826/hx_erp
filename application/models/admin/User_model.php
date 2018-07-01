@@ -122,7 +122,6 @@ class User_model extends HX_Model
             'Fmemo' => '',
         ];
         $this->db->insert($this->table, $insert_arr);
-        var_dump($this->db->last_query());
     }
 
     public function update_user($request)
@@ -181,6 +180,7 @@ class User_model extends HX_Model
                 $noInSellerId = 'and Fuid not in (' . implode($haveShopSeller, ',') . ')';
             }
         }
+        $sellerIdString = '';
         $sellerId = [];
         if (!empty($shopId)) {
             $s = $this->get_seller_shop($shopId);
@@ -189,13 +189,14 @@ class User_model extends HX_Model
             }
             $sellerId = array_unique($sellerId);
             if (!empty($sellerId)) {
-                $sellerId = 'and Fuid in (' . implode($sellerId, ',') . ')';
+                $sellerIdString = 'and Fuid in (' . implode($sellerId, ',') . ')';
             }
         }
 
         $seller_role = $this->config->item('user_type')['seller'];
-        $s = "SELECT * FROM t_user u WHERE Frole_id = ? {$sellerId} {$noInSellerId} ORDER BY Fcreate_time DESC ;";
+        $s = "SELECT * FROM t_user u WHERE Frole_id = ? {$sellerIdString} {$noInSellerId} ORDER BY Fcreate_time DESC ;";
         $ret = $this->db->query($s, [$seller_role]);
+
         return $this->suc_out_put($ret->result('array'));
     }
 

@@ -43,6 +43,7 @@ $this->load->view('head');
             <div class="am-form-group">
                 <label for="doc-select-1">店铺</label>
                 <select id="doc-select-1" name="shop_id" data-am-selected="{searchBox: 1,maxHeight:200}">
+                    <option></option>
                     <?php foreach ((array)$shop_list as $r) { ?>
                         <option value="<?=$r['id'];?>"><?=$r['name'];?></option>
                     <?php } ?>
