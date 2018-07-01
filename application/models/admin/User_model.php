@@ -117,6 +117,7 @@ class User_model extends HX_Model
             'Fpassword' => md5($request['password']),
             'Femail' => $request['email'],
             'Frole_id' => $request['role_id'],
+            'Fshop_id' => $request['shop_id'],
             'Fdk_userid' => isset($request['userid']) ? $request['userid'] : '',
             'Fmemo' => '',
         ];
@@ -146,6 +147,9 @@ class User_model extends HX_Model
         }
         if (!empty($request['role_id'])) {
             $insert_arr['Frole_id'] = $request['role_id'];
+        }
+        if (!empty($request['shop_id'])) {
+            $insert_arr['Fshop_id'] = $request['shop_id'];
         }
         if (!empty($request['memo'])) {
             $insert_arr['Fmemo'] = $request['memo'];

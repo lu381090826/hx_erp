@@ -11,7 +11,7 @@ $this->load->view('head');
         <legend>修改商品</legend>
         <div class="am-form-group">
             <label for="doc-vld-goods_id">款号<span style="color: red">*</span>：</label>
-            <input type="number" id="doc-vld-goods_id" minlength="1" placeholder="输入"
+            <input type="text" id="doc-vld-goods_id" minlength="1" placeholder="输入"
                    name="goods_id" readonly="readonly" class="am-form-field"
                    value="<?= $goods_info['goods_id'] ?>"
             />

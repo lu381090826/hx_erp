@@ -8,6 +8,9 @@ class User extends HX_Controller
         $this->load->model('admin/user_model', 'user_m');
         $user_info = $this->user_m->get_row_by_uid($uid);
 
+        $this->load->model('goods/shop_model', 'shop_m');
+        $user_info['result_rows']['shop_list'] = $this->shop_m->get_shop_list()['result_rows'];
+
         $this->load->library('parser');
         $this->parser->parse('sys/user/detail', $user_info['result_rows']);
     }
@@ -17,6 +20,9 @@ class User extends HX_Controller
     {
         $this->load->model('admin/role_model', 'role_m');
         $data['role_list'] = $this->role_m->get_row_by_pid($this->session->role_id);
+
+        $this->load->model('goods/shop_model', 'shop_m');
+        $data['shop_list'] = $this->shop_m->get_shop_list()['result_rows'];
 
         $this->load->view('sys/user/addForm', $data);
     }
@@ -45,6 +51,9 @@ class User extends HX_Controller
         //获取角色
         $this->load->model('admin/role_model', 'role_m');
         $data['role_list'] = $this->role_m->get_row_by_pid($this->session->role_id);
+
+        $this->load->model('goods/shop_model', 'shop_m');
+        $data['shop_list'] = $this->shop_m->get_shop_list()['result_rows'];
 
 
         $this->load->view('sys/user/addFormFromDingtalk', $data);
@@ -105,10 +114,5 @@ class User extends HX_Controller
 
         $this->load->helper('url');
         redirect("success");
-    }
-
-    public function test()
-    {
-        echo 123;
     }
 }
