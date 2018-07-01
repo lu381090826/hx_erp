@@ -177,7 +177,7 @@ class User_model extends HX_Model
                 $noInSellerId = 'and Fuid not in (' . implode($haveShopSeller, ',') . ')';
             }
         }
-        $sellerId = '';
+        $sellerId = [];
         if (!empty($shopId)) {
             $s = $this->get_seller_shop($shopId);
             foreach ($s as $row) {
