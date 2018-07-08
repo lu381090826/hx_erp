@@ -10,7 +10,13 @@ class Data extends HX_Controller
 
     public function index()
     {
-        $this->load->view('adminV2/index');
+        $this->load->model('goods/goods_model', 'goods_m');
+        $data['goods_count'] = $this->goods_m->get_goods_count();
+
+        $this->load->model('goods/sku_model', 'sku_m');
+        $data['sku_count'] = $this->sku_m->get_sku_count();
+
+        $this->load->view('adminV2/index',$data);
     }
 
     public function export()

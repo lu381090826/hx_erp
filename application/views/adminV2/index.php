@@ -41,7 +41,7 @@
                     </div>
                     <div class="widget-statistic-body">
                         <div class="widget-statistic-value">
-                            100
+                            <?=$goods_count?>
                         </div>
                         <div class="widget-statistic-description">
                         </div>
@@ -56,7 +56,7 @@
                     </div>
                     <div class="widget-statistic-body">
                         <div class="widget-statistic-value">
-                            200
+                            <?=$sku_count?>
                         </div>
                         <div class="widget-statistic-description">
                         </div>
