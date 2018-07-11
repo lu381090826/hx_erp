@@ -136,6 +136,7 @@
             stop_date:"<?= date("Y-m-d")?>",
             spu_id:"",
             client_name:"",
+            shop_id:"<?=$shop_id?>",
 
             //销售单
             list_client:null,
@@ -173,6 +174,7 @@
                         stop_date:this.stop_date,
                         spu_id:this.spu_id,
                         client_name:this.client_name,
+                        shop_id:this.shop_id,
                     },
                     success:function(result) {
                         if(result.state.return_code == 0)
@@ -197,6 +199,7 @@
                     start_date:this.start_date,
                     stop_date:this.stop_date,
                     spu_id:this.spu_id,
+                    shop_id:this.shop_id,
                     client_name:this.client_name,};
                 $("#export input[name='data']").val(JSON.stringify(data));
                 $("#export").submit();

@@ -32,7 +32,16 @@ class Report extends BaseController {
      * index
      */
     public function index(){
-        $this->show("index",[]);
+        //获得用户店铺
+        $uid = $this->session->uid;
+        $user = $this->m_user->get_user_info($uid);
+        $shop = isset($user["shop_info"][0])?$user["shop_info"][0]:null;
+        $shop_id = $shop?$shop["id"]:null;
+
+        //调用视图
+        $this->show("index",[
+            "shop_id" => $shop_id
+        ]);
     }
 
     //导出到Excel
