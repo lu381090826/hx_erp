@@ -132,8 +132,8 @@
         el:"#app",
         data: {
             //查询参数
-            start_date:"",
-            stop_date:"",
+            start_date:"<?=date("Y-m-d")?>",
+            stop_date:"<?= date("Y-m-d")?>",
             spu_id:"",
             client_name:"",
 

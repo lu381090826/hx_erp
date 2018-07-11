@@ -25,7 +25,11 @@
         <!-- 需求店铺 -->
         <div class="form-group">
             <label>需求店铺</label>
-            <div><input type="text" class="form-control" placeholder="制单人" disabled v-model="shop.name"></div>
+            <div>
+            <select class="form-control" v-model="shop_id">
+                <option  v-for="(item,index) in shopList"  :value="item.id">{{item.name}}</option>
+            </select>
+            </div>
         </div>
         <!-- 配货方式 -->
         <div class="form-group">
@@ -263,6 +267,7 @@
         data: {
             //数据
             "id":'<?=$model->id?>',
+            "shop_id":null,
             'order_num':'',
             "user":null,
             "client":null,
@@ -291,7 +296,7 @@
             //是否为旧单
             'isNew':1,
             //店铺信息
-            'shop':<?=json_encode($shop)?>,
+            'shopList':<?=json_encode($shopList)?>
         },
         created:function() {
             //this
@@ -351,12 +356,6 @@
             //搜索值修正
             if(this.client)
                 this.clientKey = this.client.id;
-
-            //禁止未关联店铺用户新建
-            if(this.id == "" && this.shop == null){
-                alert("请先关联所属店铺");
-                history.go(-1);
-            }
         },
         mounted:function(){
             //构建插件
@@ -575,7 +574,7 @@
                         "id":this.id,
                         "order_num":this.order_num,
                         "user_id":this.user.uid,
-                        "shop_id":this.shop?this.shop.id:null,
+                        "shop_id":this.shop_id,
                         "receipt_date":this.receipt_date,
                         "payment":this.payment,
                         "remark":this.remark,
@@ -601,6 +600,12 @@
                 //总报货额
                 var total_price = $("#total_price").val();
 
+                //判断是否选择了需求店铺
+                if(!this.shop_id){
+                    alert("请选择需求店铺");
+                    return false;
+                }
+                //判断报货单是否为空
                 if(this.selectList.length == 0){
                     alert("报货单不能为空");
                     return false;
@@ -636,12 +641,6 @@
                         }
                     }
                 }*/
-
-                //不允许未关联店铺的人下单
-                if(this.id == "" && this.shop == null){
-                    alert("请先关联所属店铺");
-                    return false;
-                }
 
                 return true;
             },

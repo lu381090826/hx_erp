@@ -57,7 +57,7 @@ class Order_model extends BaseModel{
 			'remark_images'=>'图片备注',
 
 			'creater' => "制单人",
-			'shop' => "需求店铺",
+			'shopName' => "需求店铺",
 		];
 	}
 
@@ -707,6 +707,15 @@ class Order_model extends BaseModel{
 		return $list;
 	}
 
+    /**
+     * 获取店铺列表
+     */
+    public function getShopList(){
+        $select = $this->db->get("t_shop");
+        $list = $select->result();
+        return $list;
+    }
+
 	//region 对外接口获取的方法
 
     /**
@@ -774,8 +783,12 @@ class Order_model extends BaseModel{
 	}
 
 	//endregion
+
+	//region 直接报货相关
+
 	private $user_info;
 
+	//获取创建人
 	public function getCreater(){
 		if(!$this->user_info)
             $this->user_info = $this->m_user->get_user_info($this->user_id);
@@ -783,14 +796,27 @@ class Order_model extends BaseModel{
 		return $this->user_info["name"];
 	}
 
+	//获取需求店铺
 	public function getShop(){
-        if(!$this->user_info)
-            $this->user_info = $this->m_user->get_user_info($this->user_id);
-
-        if($this->user_info["shop_info"])
-        	return $this->user_info["shop_info"][0]["name"];
-        else
-        	return "";
+        if($this->shop_id){
+            $select = $this->db->where(["Fid"=>$this->shop_id])->get("t_shop");
+            $row = $select->row();
+            return $row;
+        }
+        else{
+            return null;
+        }
 	}
+
+	//获取需求店铺名
+    public function getShopName(){
+        $shop = $this->getShop();
+		if($shop)
+			return $shop->name;
+		else
+			return null;
+    }
+
+	//endregion
 }
 ?>    

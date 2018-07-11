@@ -27,7 +27,7 @@
         <form class="am-form">
             <!--DataGrid-->
             <?=ViewComponent::DataGrid($_controller,$searched,[
-                'id','creater',"shop",'order_num','total_num','remark','create_at','statusName'
+                'id','creater',"shopName",'order_num','total_num','remark','create_at','statusName'
             ],[
                 ["url"=>"javascript:scrap({{id}})","label"=>"作废"]
             ])?>
