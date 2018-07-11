@@ -24,13 +24,12 @@ class Stock_model extends CI_Model {
         $data = $query->result_array();
         
         foreach($data as $k=>$v){
-            
             //查这个仓库对应的库位
-            $query = $this->db->get_where('pos',array("Fdid"=>$data[$k]['depot_id']));
-            $data[$k]['pos_data'] = $query->result_array();
-            
+            $this->db->select('Fpos_name,Fid');
+            $query = $this->db->get_where('pos',array("Fid"=>$data[$k]['pos_id']));
+            $pos_data = $query->row_array();
 
-            
+            $data[$k]['pos_name'] = $pos_data['pos_name'];
             //查当天入库数量
             $date = date('Y-m-d',time());
             $date1 = date('Y-m-d ',strtotime('+1 day'));
@@ -39,9 +38,10 @@ class Stock_model extends CI_Model {
             $count_data = $query->result_array();
             
             //查仓库
+            $this->db->select('Fdepot_name');
             $depot_name = $this->depot_model->get_depot($data[$k]['depot_id']);
             
-            $data[$k]['depot_id'] = $depot_name['depot_name'];
+            $data[$k]['depot_name'] = $depot_name['depot_name'];
             
             $date_count = '';
             foreach($count_data as $a=>$b){
@@ -53,6 +53,7 @@ class Stock_model extends CI_Model {
             }
             
             //查询该sku_id未配数量
+            $this->db->select('Fnum,Fsend_num');
             $query = $this->db->get_where('sell_allocate_item',array("Fsku_id"=>$data[$k]['sku_id'],"Fstatus !="=>'1'));
             $allocate_sku_id_data = $query->result_array();
             
@@ -66,6 +67,7 @@ class Stock_model extends CI_Model {
             }
             
             //查商品图片
+            $this->db->select('Fpic');
             $query = $this->db->get_where('goods',array("Fgoods_id"=>$data[$k]['goods_id']));
             $goods_data = $query->row_array();
             
@@ -83,6 +85,17 @@ class Stock_model extends CI_Model {
         $this->db->where("Fid",$id);
         $this->db->update('stock_list');
         return true;
+    }
+    
+    public function check_pos(){
+        $depo_id = @$_REQUEST['depot_id'];
+        $content = @$_REQUEST['content'];
+    
+        $sql = "select Fpos_name,Fid from t_pos where Fdid='{$depo_id}' and Fpos_name like '%{$content}%'";
+        
+        $check_data = $this->index_model->get_query($sql);
+
+        return $check_data;
     }
     
     public function get_depot_count($sku_id){
@@ -145,12 +158,13 @@ class Stock_model extends CI_Model {
     
          foreach($data as $k=>$v){
             
-            //查这个仓库对应的库位
-            $query = $this->db->get_where('pos',array("Fdid"=>$data[$k]['depot_id']));
-            $data[$k]['pos_data'] = $query->result_array();
-            
-
-            
+             //查这个仓库对应的库位
+             $this->db->select('Fpos_name,Fid');
+             $query = $this->db->get_where('pos',array("Fid"=>$data[$k]['pos_id']));
+             $pos_data = $query->row_array();
+             
+             $data[$k]['pos_name'] = $pos_data['pos_name'];
+             
             //查当天入库数量
             $date = date('Y-m-d',time());
             $date1 = date('Y-m-d ',strtotime('+1 day'));
@@ -162,6 +176,7 @@ class Stock_model extends CI_Model {
             $depot_name = $this->depot_model->get_depot($data[$k]['depot_id']);
             
             $data[$k]['depot_id'] = $depot_name['depot_name'];
+            $data[$k]['depot_name'] = $depot_name['depot_name'];
             
             $date_count = '';
             foreach($count_data as $a=>$b){

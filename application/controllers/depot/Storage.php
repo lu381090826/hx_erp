@@ -142,12 +142,23 @@ class Storage extends XMG_Controller {
     		//读取仓库
     		$data['depot_data'] = $this->depot_model->get_all_depot();
     		//读取供应商
-    		$data['supplier_data'] = $this->depot_model->get_all_supplier();
+    		//$data['supplier_data'] = $this->depot_model->get_all_supplier();
     		//系统自动生成订单号
     		$data['storage_sn'] = "sn".time();
     		$this->load->view("depot/add_storage",$data);  	
     }
     
+    public function check_supplier(){
+        $content = @$_REQUEST['content'];
+        $back_data = $this->depot_model->check_supplier($content);
+        
+        if(!empty($back_data)){
+            $this->return_msg(array("result"=>'1',"msg"=>"获取成功","data"=>$back_data));
+        }
+        else{
+            $this->return_msg(array("result"=>'0',"msg"=>"获取失败"));
+        }
+    }
     //入库单详情页
     public function storage_list_detail_view(){
         

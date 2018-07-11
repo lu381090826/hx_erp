@@ -23,7 +23,13 @@ class Sku_model extends HX_Model
     {
         return $this->db->update($this->table, ['Fstatus' => 0, 'Fop_uid' => $this->session->uid], ['Fsku_id' => $sku_id]);
     }
+    public function get_sku_count()
+    {
+        $s = "SELECT count(1) as Fcount FROM {$this->table}   WHERE Fstatus = 1";
+        $ret = $this->db->query($s);
 
+        return $ret->row(0, 'array')['count'];
+    }
     public function get_sku_list_by_goods_id($goods_id)
     {
         $s = "SELECT Fsku_id FROM {$this->table} WHERE Fgoods_id = ? AND Fstatus = 1  ORDER BY Fcreate_time DESC";

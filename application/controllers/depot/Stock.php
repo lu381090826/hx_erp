@@ -49,6 +49,22 @@ class Stock extends XMG_Controller {
         }
     }
     
+
+    //查询库位
+    public function check_pos(){
+         
+    
+        $check_data = $this->stock_model->check_pos();
+    
+    
+        if($check_data){
+            $this->return_msg(array("result"=>'1',"msg"=>"获取成功","data"=>$check_data));
+        }
+        else{
+            $this->return_msg(array("result"=>'0',"msg"=>"获取失败"));
+        }
+    }
+    
     //条件查询库存列表页
     public function stock_list_where_view(){
     

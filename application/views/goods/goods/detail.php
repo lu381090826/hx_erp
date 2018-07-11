@@ -102,7 +102,7 @@ $this->load->view('head');
             <label>性别</label>
             <?php if ($sex == 1) { ?>
                 男
-            <?php } else { ?>
+            <?php } else if($sex == 2) { ?>
                 女
             <?php } ?>
         </div>

@@ -35,6 +35,23 @@ $this->load->view('head');
             <td>角色</td>
             <td>{role_name}<input type="hidden" name="role_id" value="{role_id}"></td>
         </tr>
+
+        <tr>
+            <td>店铺</td>
+            <td>
+                <select name="shop_id" data-am-selected="{searchBox: 1,maxHeight:200}">
+                    <option value=""></option>
+                    <?php foreach ((array)$shop_list as $r) { ?>
+                        <option value="<?= $r['id']; ?>"
+                            <?php if (!empty($shop_id) && $shop_id == $r['id']): ?>
+                                selected
+                            <?php endif; ?>
+                        ><?= $r['name']; ?></option>
+                    <?php } ?>
+                </select>
+            </td>
+        </tr>
+
         <tr>
             <td>创建时间</td>
             <td>{create_time}</td>

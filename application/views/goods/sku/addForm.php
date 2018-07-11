@@ -11,7 +11,7 @@ $this->load->view('head');
         <legend>添加商品</legend>
         <div class="am-form-group">
             <label for="doc-vld-goods_id">款号<span style="color: red">*</span>：</label>
-            <input type="number" id="doc-vld-goods_id" minlength="1" placeholder="输入" name="goods_id"
+            <input type="text" id="doc-vld-goods_id" minlength="1" placeholder="输入" name="goods_id"
                    class="am-form-field" autocomplete="off"
                    required/>
         </div>
@@ -50,6 +50,7 @@ $this->load->view('head');
         <div class="am-form-group">
             <label>店铺：</label>
             <select id="shop-select" multiple data-am-selected="{searchBox: 1,maxHeight: 200}" name="shop_id[]">
+                <option></option>
                 <?php foreach ($shop_list as $shop): ?>
                     <option value="<?= $shop['id'] ?>"><?= $shop['name'] ?></option>
                 <?php endforeach; ?>

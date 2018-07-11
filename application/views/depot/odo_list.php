@@ -90,8 +90,9 @@
  
  <form id="print"  action="/depot/offer/odo_list_where_view" method="post">
 
-<input type="text" name="search" id="search" value="<?php echo @$search_data['search'];?>"  placeholder="订单号/sku" class="input-text lh25" size="20">
-<input type="text" name="odo_date" id="odo_date" value="<?php echo @$search_data['odo_date'];?>"  placeholder="出库日期" onClick="SelectDate(this,'yyyy-MM-dd')" readonly="true" class="input-text lh25" size="10">
+<input type="text" name="search" id="search" value="<?php echo @$search_data['search'];?>"  placeholder="出库单号/客户姓名/电话/sku" class="input-text lh25" size="20">
+<input type="text" name="start_date" id="start_date" value="<?php echo @$search_data['start_date'];?>"  placeholder="出库开始日期" onClick="SelectDate(this,'yyyy-MM-dd')" readonly="true" class="input-text lh25" size="12">
+<input type="text" name="end_date" id="end_date" value="<?php echo @$search_data['end_date'];?>"  placeholder="出库结束日期" onClick="SelectDate(this,'yyyy-MM-dd')" readonly="true" class="input-text lh25" size="12">
 <SELECT class="select" id="status" name="status" style="width:120px;">
                     <OPTION value="">全部状态</OPTION>
                     <OPTION value="4">等待打单</OPTION>

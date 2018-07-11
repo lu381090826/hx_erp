@@ -25,6 +25,13 @@ class Goods_model extends HX_Model
         $ret = $this->db->query($s, [$goods_id]);
         return $this->suc_out_put($ret->row(0, 'array'));
     }
+    public function get_goods_count()
+    {
+        $s = "SELECT count(1) as Fcount FROM {$this->table}   WHERE Fstatus = 1";
+        $ret = $this->db->query($s);
+
+        return $ret->row(0, 'array')['count'];
+    }
 
     private function modify_goods_check($request)
     {

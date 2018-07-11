@@ -46,6 +46,22 @@ class Offer extends XMG_Controller {
         $this->load->view("depot/add_odo",$data);
     }
     
+    public function odo_detail_list_view(){
+        //分页
+        $page_data = $this->get_page("odo_detail","");
+        
+        $data['page_data'] = $page_data['pageStr'];
+        
+        if(@$_REQUEST['id']){
+            $data['odo_detail_data'] = $this->offer_model->get_odo_detail_list(@$_REQUEST['id']);
+            $this->load->view("depot/odo_detail_list",$data);
+        }
+        else{
+            //读取出库单详情数据
+            $data['odo_detail_data'] = $this->offer_model->get_odo_detail_list($page_data['page']);
+            $this->load->view("depot/odo_detail_list",$data);
+        }
+    }
     //添加出库单
     public function add_odo(){
          
@@ -190,6 +206,22 @@ class Offer extends XMG_Controller {
         $data['search_data'] = $back_data['search_data'];
     
         $this->load->view("depot/offer_list",$data);
+    }
+    
+    //条件查询出库详情列表页
+    public function odo_detail_list_where_view(){
+    
+        //读取数据
+        $back_data = $this->offer_model->get_all_odo_detail_where_list();
+        $page_data = $this->get_page("odo_detail",$back_data['get_count_sql']);
+         
+        $data['page_data'] = $page_data['pageStr'];
+    
+        $data['odo_detail_data'] = $back_data['odo_detail_data'];
+    
+        $data['search_data'] = $back_data['search_data'];
+    
+        $this->load->view("depot/odo_detail_list",$data);
     }
     
     //条件查询出库单列表页

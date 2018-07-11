@@ -65,16 +65,15 @@
                <th width="10%">款号</th>
                <th width="5%">颜色</th>             
                <th width="5%">尺寸</th>
-               <th width="10%">当天入库数量</th>
+               <th width="5%">当天入库</th>
                <th width="5%">总入库</th>
                <th width="5%">总出库</th>
                <th width="5%">总库存</th>
                <th width="5%">可用库存</th> 
                <th width="5%">未配数量</th>  
                <th width="5%">已配数量</th>               
-               <th width="10%">所属仓库</th> 
-               <th width="8%">所属仓位</th>
-               <th width="10%">操作</th>     
+               <th width="8%">所属仓库</th> 
+               <th width="15%">所属仓位</th>
               </tr>
  
            <?php 
@@ -93,23 +92,21 @@
                 <td ><?php echo $stock_data[$k]['count']?></td>
                 <td ><?php echo $stock_data[$k]['weipei_count']?></td>
                 <td ><?php echo $stock_data[$k]['send_count']?></td>                
-                <td ><?php echo @$stock_data[$k]['depot_id']?></td>
+                <td ><?php echo @$stock_data[$k]['depot_name']?></td>
                 <td >
-                <SELECT class="select" id="storage_type" name="storage_type" onchange="change_pos(this.value,'<?php echo $stock_data[$k]['id'];?>')" style="width:80px;">
-                    <OPTION value="">选库位</OPTION>
+                <input type="text" name="check_pos" id="check_pos" value="<?php echo @$search_data['check_pos'];?>" onchange="check_pos(this.value,'<?php echo $stock_data[$k]['depot_id'];?>','<?php echo $stock_data[$k]['id'];?>')"  placeholder="搜索库位" class="input-text lh25" size="8">
+                <SELECT class="select" id="storage_type<?php echo $stock_data[$k]['id'];?>" name="storage_type" onchange="change_pos(this.value,'<?php echo $stock_data[$k]['id'];?>')" style="width:80px;">
                     <?php 
-                      foreach(@$stock_data[$k]['pos_data'] as $pa=>$pv){
-                          if($stock_data[$k]['pos_id']==$stock_data[$k]['pos_data'][$pa]['id']){
-                              echo '<OPTION value="'.$stock_data[$k]['pos_data'][$pa]['id'].'" selected="selected">'.$stock_data[$k]['pos_data'][$pa]['pos_name'].'</OPTION>';
-                          }
-                          else{
-                              echo '<OPTION value="'.$stock_data[$k]['pos_data'][$pa]['id'].'" >'.$stock_data[$k]['pos_data'][$pa]['pos_name'].'</OPTION>';
-                          }                         
-                      }
+                     
+                     if($stock_data[$k]['pos_name']){
+                         echo '<OPTION value="'.$stock_data[$k]['pos_id'].'" selected="selected">'.$stock_data[$k]['pos_name'].'</OPTION>';
+                     }
+                     else{
+                         echo '<OPTION value="0" >选择库位</OPTION>';
+                     }
                     ?>
                 </SELECT>
                 </td>
-                <td ><a href="javascript:alert('需确认需求后再开发！')">出入库详情</a></td>
               </tr>
          <?php 
            }
@@ -139,6 +136,32 @@
              success:function(data){                          
              }
          });
+}
+   function check_pos(content,depot_id,id){
+		 $.ajax({
+         url:"/depot/stock/check_pos",
+         type:"POST",
+         data:{"content":content,"depot_id":depot_id},
+         dataType:"json",
+         async:false,
+         error: function() {
+             //alert('服务器超时，请稍后再试');
+         },
+         success:function(data){    
+             if(data.result==1){
+            	 $("#storage_type"+id).empty();
+            	 $("#storage_type"+id).append("<option value='0'>选择库位</option>");
+
+            	 for(var i =0;i<data.data.length;i++){
+            		 $("#storage_type"+id).append("<option value='"+data.data[i].id+"'>"+data.data[i].pos_name+"</option>");
+                }
+                 
+             }   
+             else{
+                 alert('搜索内容不存在');
+            }                   
+         }
+     });
 }
    $("#depot_id").val('<?php echo @$search_data['depot_id'];?>');
    </script>
