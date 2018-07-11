@@ -51,9 +51,9 @@
             </div>
         </div>
         <div class="actions-bar">
-            <button type="button" class="am-btn am-btn-primary" v-on:click="search_date">查看日报表</button>
+            <button type="button" class="am-btn am-btn-primary" v-on:click="search_sell">查看日报表</button>
             <button type="button" class="am-btn am-btn-primary" v-on:click="search_client">客户精选</button>
-            <button type="button" class="am-btn am-btn-success" v-on:click="report_date">导出日报表</button>
+            <button type="button" class="am-btn am-btn-success" v-on:click="report_sell">导出日报表</button>
             <button type="button" class="am-btn am-btn-success" v-on:click="report_client">导出客户精选</button>
         </div>
     </form>
@@ -162,10 +162,10 @@
                     }
                 });
             },
-            search_date:function(){
+            search_sell:function(){
                 //Ajax
                 $.ajax({
-                    url:'<?=site_url($_controller->api."/search_report_date")?>',
+                    url:'<?=site_url($_controller->api."/search_report_sell")?>',
                     type:"post",
                     dataType:"json",
                     data:{
@@ -191,9 +191,9 @@
                 $("#export input[name='data']").val(JSON.stringify(data));
                 $("#export").submit();
             },
-            report_date:function(){
+            report_sell:function(){
                 data = {
-                    export_type:"date",
+                    export_type:"sell",
                     start_date:this.start_date,
                     stop_date:this.stop_date,
                     spu_id:this.spu_id,

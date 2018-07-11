@@ -292,10 +292,10 @@ class Api extends CI_Controller {
     }
 
     //客户精选查询
-    public function search_report_date(){
+    public function search_report_sell(){
         $param = $_REQUEST;
 
-        $list = $this->m_order->getReportDate($param);
+        $list = $this->m_order->getReportSell($param);
         $this->apiresult->sentApiSuccess($list);
     }
 

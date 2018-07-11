@@ -536,7 +536,7 @@ class Order_model extends BaseModel{
 		if(isset($params["start_date"]) && !empty($params["start_date"]))
 			$select = $select->where("$this->table.Fcreate_at >=", strtotime($params["start_date"]));
 		if(isset($params["stop_date"]) && !empty($params["stop_date"]))
-			$select = $select->where("$this->table.Fcreate_at <=", strtotime($params["stop_date"]));
+			$select = $select->where("$this->table.Fcreate_at <=", strtotime($params["stop_date"])+86399);
 		if(isset($params["spu_id"]) && !empty($params["spu_id"]))
 			$select = $select->like("t_sell_order_spu.Fspu_id",$params["spu_id"]);
 		if(isset($params["client_name"]) && !empty($params["client_name"]))
@@ -611,7 +611,7 @@ class Order_model extends BaseModel{
 	/**
 	 * 获取日报表
 	 */
-	public function getReportDate($params = array()){
+	public function getReportSell($params = array()){
 		$select = $this->db
 			->select([
 				"t_sell_order_spu.Fspu_id",
@@ -633,7 +633,7 @@ class Order_model extends BaseModel{
 		if(isset($params["start_date"]) && !empty($params["start_date"]))
 			$select = $select->where("$this->table.Fcreate_at >=", strtotime($params["start_date"]));
 		if(isset($params["stop_date"]) && !empty($params["stop_date"]))
-			$select = $select->where("$this->table.Fcreate_at <=", strtotime($params["stop_date"]));
+        	$select = $select->where("$this->table.Fcreate_at <=", strtotime($params["stop_date"])+86399);
 		if(isset($params["spu_id"]) && !empty($params["spu_id"]))
 			$select = $select->like("t_sell_order_spu.Fspu_id",$params["spu_id"]);
 		if(isset($params["client_name"]) && !empty($params["client_name"]))
@@ -647,8 +647,8 @@ class Order_model extends BaseModel{
 
 		//DEBUG
 		//var_dump($select->result());
-		//echo $this->db->last_query();
-		//die;
+        //echo $this->db->last_query();
+        //die;
 
 		//构成返回结果，并遍历添加SKU
 		$list = array();

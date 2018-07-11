@@ -38,8 +38,8 @@ class Report extends BaseController {
     //导出到Excel
     public function export(){
         $param = (array)json_decode($_POST["data"]);
-        if($param["export_type"] == "date"){
-            $this->export_date($param);
+        if($param["export_type"] == "sell"){
+            $this->export_sell($param);
         }
         else{
             $this->export_client($param);
@@ -91,10 +91,10 @@ class Report extends BaseController {
         $this->export_excel($excel);
     }
 
-    //导出日报表
-    private function export_date($param){
+    //导出销售报表
+    private function export_sell($param){
         //获取数据
-        $list = $this->m_order->getReportDate($param);
+        $list = $this->m_order->getReportSell($param);
         //var_dump($list["A1245"]);
         //die;
 
