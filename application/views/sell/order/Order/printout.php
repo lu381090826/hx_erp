@@ -13,14 +13,14 @@
     }
 </style>
 
-<!-- 加载lodop -->
+<!-- 加载lodop 
 <script src="http://<?=$lodop["ip"].":".$lodop["port"]?>/CLodopfuncs.js"></script>
-
+-->
 <!-- 打印操作 -->
 <div id="action">
     <form class="am-form-inline" role="form">
         <div class="am-form-group">
-            <select id="print-select" size="1" class="am-form-field am-input-sm"></select>
+            <select id="print-select" size="1" class="am-form-field am-input-sm"><option value=1>打印一份</option><option value=2>打印二份</option><option value=3>打印三份</option></select>
         </div>
 
         <!--<button type="button" class="am-btn am-btn-primary am-btn-sm" onclick="orderPrint(false);">打印</button>-->
@@ -107,7 +107,7 @@
 </div>
 
 <script>
-    $(function(){
+  /*  $(function(){
         //设置打印列表
         CLODOP.Create_Printer_List(document.getElementById('print-select'));
 
@@ -119,8 +119,46 @@
             }
         })
     })
+*/
+
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) != -1) return c.substring(name.length, c.length);
+    }
+    return "";
+}
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + "; " + expires;
+
+}
+	
+$("#print-select").change(function(){
+	
+	  setCookie("print-select", $(this).val(), 10)  
+	
+})
+
+var printselect= getCookie("print-select");
+ if(printselect!="")
+ {
+	$("#print-select").val(printselect);
+	 
+ }
+
 
     function orderPrint(toPrview){
+ 
+		
+		$.post(window.location.href,{printqty:$("#print-select").val()},function(data){alert(data)})
+		/*
         //初始化内容
         LODOP.PRINT_INITA(30,0,10,10,"订单打印");
         LODOP.SET_PRINT_PAGESIZE(3,"80mm",0,"");
@@ -137,6 +175,6 @@
             var print = LODOP.PRINT();
             console.log(print);
             alert("已请求打印订单……");
-        }
+        }*/
     };
 </script>
