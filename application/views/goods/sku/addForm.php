@@ -87,13 +87,13 @@ $this->load->view('head');
             <div class="am-u-sm-12">
                 <div class="am-u-sm-2 am-padding-left-0">
                     <label>
-                        <input type="radio" name="sex" value="1" checked>
+                        <input type="radio" name="sex" value="1">
                         男
                     </label>
                 </div>
                 <div class="am-u-sm-2 am-padding-left-0 am-padding-right-8" style="float: left">
                     <label>
-                        <input type="radio" name="sex" value="2">
+                        <input type="radio" name="sex" value="2" checked>
                         女
                     </label>
                 </div>
