@@ -106,7 +106,8 @@ $this->load->view('head');
             <label>
                 <select data-am-selected="{maxHeight: 200,searchBox: 1}" name="year">
                     <?php for ($i = 2000; $i < 2030; $i++): ?>
-                        <option value="<?= $i ?>" <?php if ($i == 2017): ?>selected<?php endif; ?>><?= $i ?></option>
+                        <option value="<?= $i ?>"
+                                <?php if ($i == date('Y')): ?>selected<?php endif; ?>><?= $i ?></option>
                     <?php endfor; ?>
                 </select>
             </label>
@@ -128,10 +129,10 @@ $this->load->view('head');
             <label for="doc-vld-brand_id">季节：</label>
             <label>
                 <select data-am-selected="{maxHeight: 200}" name="season">
-                    <option value="1">春</option>
-                    <option value="2">夏</option>
-                    <option value="3">秋</option>
-                    <option value="4">冬</option>
+                    <option value="1" <?php if (date('m') >= 1 && date('m') <= 3): ?>selected<?php endif; ?>>春</option>
+                    <option value="2" <?php if (date('m') >= 4 && date('m') <= 6): ?>selected<?php endif; ?>>夏</option>
+                    <option value="3" <?php if (date('m') >= 7 && date('m') <= 9): ?>selected<?php endif; ?>>秋</option>
+                    <option value="4" <?php if (date('m') >= 10 && date('m') <= 12): ?>selected<?php endif; ?>>冬</option>
                 </select>
             </label>
         </div>
@@ -148,6 +149,7 @@ $this->load->view('head');
                 </div>
                 <div class="am-panel-bd">
                     <label>选择上传的图片</label>
+
                     <div class="file_list">
                         <div class="am-g am-g-fixed">
                             <input type="file" id="doc-vld-pic" name="file_list[]"
@@ -157,7 +159,8 @@ $this->load->view('head');
                                    value="-">
                         </div>
                     </div>
-                    <input type="button" class="am-btn am-btn-success" autocomplete="off" onclick="add_upload_img()" value="+">
+                    <input type="button" class="am-btn am-btn-success" autocomplete="off" onclick="add_upload_img()"
+                           value="+">
                 </div>
 
             </div>

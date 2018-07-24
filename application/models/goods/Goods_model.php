@@ -49,13 +49,13 @@ class Goods_model extends HX_Model
             $insert_params['Fgoods_id'] = $request['goods_id'];
         }
 
-        if (empty($request['price'])) {
+        if (!is_numeric($request['price'])) {
             show_error('价格有误');
         } else {
             $insert_params['Fprice'] = $request['price'];
         }
 
-        if (empty($request['cost'])) {
+        if (!is_numeric($request['cost'])) {
             show_error('成本有误');
         } else {
             $insert_params['Fcost'] = $request['cost'];
