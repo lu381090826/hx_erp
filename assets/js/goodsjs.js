@@ -77,7 +77,8 @@ function goods_show(result) {
 
 function get_category(curr) {
     contentClean();
-
+    all_pages = 1;
+    curr_page = 1;
     $.ajax({
         type: 'get',
         async: false,
