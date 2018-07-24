@@ -103,13 +103,16 @@ class Category_model extends HX_Model
     }
 
     public $cate_list = [];
+    public $has_cate_id = [];
 
     public function showList(&$result, $level = 0)
     {
         foreach ($result as $k => &$row) {
             $row['type'] = str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;', $level) . '|-' . $row['category_name'];
-            $this->cate_list[] = $row;
-
+            if (!in_array($row['id'], $this->has_cate_id)) {
+                $this->cate_list[] = $row;
+                $this->has_cate_id[] = $row['id'];
+            }
             if (!empty($row['children']) && count($row['children']) > 0) {
                 $this->showList($row['children'], $level + 1);
             }
